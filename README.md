@@ -1,2 +1,4 @@
-# SublimeAnthology
-Methalyne blue - The Submime Anthology of Stuff
+# Subliminal
+The methallyne blue analogy of stuff.
+
+Beware: Cool stuff ahead.
