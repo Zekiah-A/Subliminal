@@ -1,4 +1,6 @@
 # Subliminal
+Link: zekiah-a.github.io/Subliminal
+
 The methallyne blue analogy of stuff.
 
 Beware: Cool stuff ahead.
