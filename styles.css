@@ -14,3 +14,9 @@
     width: 30%;
     padding: 10px;
 }
+
+.back {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
