@@ -1,5 +1,5 @@
 # Subliminal
-Link: [zekiah-a.github.io/Subliminal](zekiah-a.github.io/Subliminal)
+Link: [zekiah-a.github.io/Subliminal](https://zekiah-a.github.io/Subliminal)
 
 The methallyne blue analogy of stuff.
 
