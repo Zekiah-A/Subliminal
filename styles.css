@@ -16,9 +16,8 @@
 }
 
 .poem-centre-wide {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+    margin-left: 40%;
+    width: 60%;
     padding: 10px;
 }
 
