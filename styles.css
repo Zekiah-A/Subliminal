@@ -26,3 +26,8 @@
     bottom: 10px;
     left: 10px;
 }
+
+.external-link {
+    font-size: small;
+    color: grey;
+}
