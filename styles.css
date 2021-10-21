@@ -27,6 +27,18 @@
     left: 10px;
 }
 
+.previous {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+}
+
+.next {
+    position: fixed;
+    bottom: 10px;
+    right: 40%;
+}
+
 .external-link {
     font-size: small;
 }
