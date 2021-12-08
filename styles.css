@@ -1,3 +1,18 @@
+@media(prefers-color-scheme: dark) { /* TODO: Dark mode variant for main image. */
+    body {
+        background: #1B1B1B;
+        color: #DADADA;
+    }
+
+    a:link {
+        color: lightblue;
+    }
+
+    a:visited {
+    color: purple;
+    }
+}
+
 .centre {
     text-align: center;
 }
