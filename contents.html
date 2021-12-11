@@ -6,8 +6,24 @@
   <link rel="stylesheet" href="styles.css">
 </head>
  
-<body class="div-centre">
+<body id="contents" class="div-centre">
     <h1>Contents</h1>
+    <!-- Sorry God, for using this forbidden language -->
+    <input type="text" class="searchbar" id="searchbar" onkeyup="search_contents()" placeholder="search poems">
+    <script>
+    function search_contents()
+    {
+      var input = document.getElementById('searchbar').value.toLowerCase()
+      var contents = document.getElementById('contents').getElementsByTagName('a')
+      for( i=0; i < contents.length; i++ )
+      {
+        if (contents[i].text.toLowerCase().includes(input) || contents[i].className == "back")
+          contents[i].hidden = false;
+        else
+          contents[i].hidden = true;
+      }
+    }
+    </script>
     <h3>Volume 1: (Phrenes and Memes)</h3>
     <a href="Volume-1/War-And-Phrenics/besusk.html">1. Besusk - By Zekiah</a>
     <br>
@@ -67,5 +83,4 @@
 
     <a href="index.html" class="back"> <- Back</a>
   </body>
- 
 </html> 
