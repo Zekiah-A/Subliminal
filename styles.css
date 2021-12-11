@@ -11,6 +11,12 @@
     a:visited {
     color: purple;
     }
+
+    .searchbar {
+        background-color: #303030;
+        color: #DADADA;
+        border-radius: 3px;
+    }
 }
 
 .centre {
@@ -52,6 +58,18 @@
     position: fixed;
     bottom: 10px;
     right: 40%;
+}
+
+.searchbar {
+    position: absolute;
+    top: 40px;
+    right: 45%;
+}
+
+@media only screen and (max-width: 1100px) {
+    .searchbar {
+        position: inherit;
+    }
 }
 
 .external-link {
