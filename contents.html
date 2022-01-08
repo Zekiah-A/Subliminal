@@ -13,14 +13,22 @@
     <script>
     function search_contents()
     {
-      var input = document.getElementById('searchbar').value.toLowerCase();
+      var input = document.getElementById('searchbar').value.toLowerCase().trim();
       var contents = document.getElementById('contents').getElementsByTagName('a');
       for( i=0; i < contents.length; i++ )
       {
         if (contents[i].text.toLowerCase().includes(input) || contents[i].className == "back")
+        {
           contents[i].hidden = false;
+          if (contents[i].nextSibling.id == 'addition')
+            contents[i].nextSibling.hidden = false;
+        }
         else
+        {
           contents[i].hidden = true;
+          if (contents[i].nextSibling.id == 'addition')
+            contents[i].nextSibling.hidden = true;
+        }
       }
     }
       </script>
@@ -63,7 +71,7 @@
     <br>
     <a href="Volume-1/War-And-Phrenics/viiiiibraaanium!.html">19. Viiiiibraaanium! - By Zekiah</a>
     <br>
-    <a href="Volume-1/War-And-Phrenics/happy-old-man.html">20. Happy Old Man - By Hanash</a><sup>new</sup>
+    <a href="Volume-1/War-And-Phrenics/happy-old-man.html">20. Happy Old Man - By Hanash</a><sup id="addition">new</sup>
     <br>
     <h3>Volume 2: (Idiots)</h3>
     <a href="Volume-2/Idiots/the-great-prison-of-america.html">1. The Great Prison Of America - By Hanash</a>
@@ -78,7 +86,7 @@
     <br>
     <a href="Volume-2/Idiots/dear-liberals.html">6. Dear, liberals - By Zekiah</a>
     <br>
-    <a href="Volume-2/Idiots/old-man-consequences.html">7. Old Man Consequences - By Zekiah</a><sup>new</sup>
+    <a href="Volume-2/Idiots/old-man-consequences.html">7. Old Man Consequences - By Zekiah</a><sup id="addition">new</sup>
     <br>
     <h3>Other stuff:</h3>
     <a href="Other/a-joke.html">1. A joke (Copypasta) - By Zekiah</a>
