@@ -21,13 +21,29 @@
         {
           contents[i].hidden = false;
           if (contents[i].nextSibling.id == 'addition')
+          {
+            var addition = contents[i].nextSibling;
+            addition.hidden = false;
+            addition.nextSibling.hidden = false;
+          }
+          else
+          {
             contents[i].nextSibling.hidden = false;
+          }
         }
         else
         {
           contents[i].hidden = true;
           if (contents[i].nextSibling.id == 'addition')
+          {
+            var addition = contents[i].nextSibling;
+            addition.hidden = true;
+            addition.nextSibling.hidden = true;
+          }
+          else
+          { /*Remove the next BR as well.*/
             contents[i].nextSibling.hidden = true;
+          }
         }
       }
     }
