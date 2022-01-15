@@ -100,3 +100,10 @@
 #content-warning:target {
     visibility: hidden;
 }
+
+.title-blur {
+    position: sticky;
+    top: 20px;
+    width: 100%;
+    backdrop-filter: blur(5px);
+}
