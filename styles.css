@@ -101,11 +101,32 @@
     visibility: hidden;
 }
 
-.title-blur {
+/*Header bar*/
+.title-blur { /* Fallback for browsers that don't support blur. */
+    position: relative;
     position: sticky;
-    top: 20px;
+    position: -webkit-sticky;
+    top: 0;
     width: 100%;
-    backdrop-filter: blur(5px);
+    padding-top: 20px;
+    background: white;
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    .title-blur {
+        position: relative;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        width: 100%;
+        padding-top: 20px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+}
+
+h2 {
+    margin-top: 0px;
 }
 
 /*Site-Wide font*/
