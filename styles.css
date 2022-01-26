@@ -102,14 +102,15 @@
 }
 
 /*Header bar*/
-.title-blur { /* Fallback for browsers that don't support blur. */
+.title-blur {
     position: relative;
     position: sticky;
     position: -webkit-sticky;
     top: 0;
     width: 100%;
     padding-top: 20px;
-    background: white;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
@@ -120,8 +121,7 @@
         top: 0;
         width: 100%;
         padding-top: 20px;
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        background: white;
     }
 }
 
