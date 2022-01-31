@@ -54,6 +54,27 @@
     }
 }
 
+@media screen and (orientation:landscape) {
+    .poem-centre {
+        margin-left: auto;
+        margin-right: auto;
+        width: 30%;
+        padding: 10px;
+    }
+    
+    .poem-centre-wide {
+        margin-left: 30%;
+        width: 60%;
+        padding: 10px;
+    }
+
+    .searchbar {
+        position: absolute;
+        top: 40px;
+        right: 45%;
+    }
+}
+
 .centre {
     text-align: center;
 }
@@ -71,18 +92,6 @@
     padding: 10px;
 }
 
-.poem-centre {
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
-    padding: 10px;
-}
-
-.poem-centre-wide {
-    margin-left: 30%;
-    width: 60%;
-    padding: 10px;
-}
 
 .back {
     position: fixed;
@@ -100,12 +109,6 @@
     position: fixed;
     bottom: 10px;
     right: 40%;
-}
-
-.searchbar {
-    position: absolute;
-    top: 40px;
-    right: 45%;
 }
 
 .external-link {
