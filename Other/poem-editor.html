@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles.css">
+    <script type="text/javascript">
+        //Make user confirm that they want to leave the page.
+        window.onbeforeunload = function() {
+            return true;
+        };
+
+        //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
+        function download() {
+            var date = new Date();
+            var dateComment = "<!--" + date.toString() + "-->";
+            var newContent = document.getElementById("content").innerHTML.replaceAll("<br>", "<br>\n        ");
+            var title = document.getElementById("title");
+
+            var poemTemplate = 
+            '<!DOCTYPE html>\n' +
+            '<html>\n' +
+            '<head>\n' +
+            '<title>Subliminal</title>\n' +
+            '<meta charset="UTF-8">\n' +
+            '<link rel="stylesheet" href="../../styles.css">\n' +
+            '</head>\n' +
+            '\n' +
+            '<body>\n' +
+            '    <div class="title-blur">\n' +
+            '        <h2 class="centre content">TITLE</h2>\n' +
+            '        <hr>\n' +
+            '    </div>\n' +
+            '    <div class="POEM_STYLE">\n' +
+            '    <p>' +
+            'CONTENT' +
+            '<br>\n' +
+            '    </p>\n' +
+            '    </div>\n' +
+            '    <a href="../../contents.html" class="back"> <- Back</a>\n' +
+            '</body>\n' +
+            'DATE\n' +
+            '</html>\n';
+            var element = document.createElement('a');
+            var finishedTemplate = poemTemplate
+                .replace("TITLE", title.innerHTML)
+                .replace("POEM_STYLE", document.getElementById("main").className.toString())
+                .replace("CONTENT", newContent)
+                .replace("DATE", dateComment);
+            element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedTemplate));
+            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + ".html");
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
+        }
+
+        function format(command, value) {
+            document.execCommand(command, false, value);
+            document.getElementById("content").focus();
+        }
+
+        function formatCustom(tag) {
+            selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
+            document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
+            document.getElementById("content").focus();
+        }
+
+        function formatImage() {
+            console.log(window.opener.document.getElementById("content").selectionStart);
+        }
+
+        function changePageStyle(newStyle)
+        {
+            document.getElementById("main").className = newStyle;
+        }
+    </script>
+    <style>
+        .tool {
+            margin: 1px;
+            height: 23px;
+        }
+    </style>
+</head>
+ <!--TODO: Ability to import webpages and edit them.-->
+<body>
+    <div class="title-blur">
+        <h2 class="centre" id="title" contenteditable="true">Click On Me to Start Editing - By Click On Me to Start Editing</h2>
+        <hr>
+    </div>
+    <div style="position: fixed; top: 90px;">
+    <pre>
+_______________________
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|                     |
+|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+|                     |
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+    </pre>
+    </div>
+    <div id="toolbox" style="position: fixed; top: 115px; left: 16px;">
+        Tools: <br>
+        <input class="tool" onclick="format('bold', null)" type="button" value="Bold"> <br>
+        <input class="tool" onclick="format('italic', null)" type="button" value="Italic"> <br>
+        <input class="tool" onclick="formatCustom('code')" type="button" value="Code (non-toggleable)"> <br>
+        <input class="tool" onclick="format('superscript', null)" type="button" value="Superscript"> <br>
+        <input class="tool" onclick="format('subscript', null)" type="button" value="Subscript"> <br>
+        <input class="tool" onchange="format('foreColor', this.value);" value="#000000" style="height: 32px;" type="color"> <br>
+        <input class="tool" onclick="formatImage()" type="button" value="Image (coming soon)"> <br>
+        <input class="tool" onclick="format('undo', null)" type="button" value="↩ undo">
+        <input class="tool" onclick="format('redo', null)" type="button" value="redo ↪"> <br>
+        <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px;">
+            <option value="poem-centre" selected>Poem Centre</option>
+            <option value="poem-centre-wide">Poem Centre Wide</option>
+            <option value="centre">Centre</option>
+        </select>
+    </div>
+    <div id="main" class="poem-centre">
+        <p id="content" contenteditable="true">
+        Click On Me to Start Editing
+        </p>
+    </div>
+    <!--Should call function that prepares page for download first, and then creates a new fake a to run-->
+    <button id="download-button" class="next"; onclick="download()">Download edited page</button> <!--Would rather have this as an A-->
+    <a href="../contents.html" class="back"> <- Back</a>
+</body>
+</html>
