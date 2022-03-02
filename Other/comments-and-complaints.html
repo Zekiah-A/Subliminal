@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles.css">
+    <script type="text/javascript">
+    var HttpClient = function() {
+        this.get = function(aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function() { 
+                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                    aCallback(anHttpRequest.responseText);
+            }
+
+            anHttpRequest.open( "GET", aUrl, true );            
+            anHttpRequest.send( null );
+        }
+    }
+
+    function getHttp() {
+        var client = new HttpClient();
+        client.get('https://httpstat.us/200', function(response) {
+            console.log(response);
+        });
+    }
+    </script> <!--Should update every 3 seconds, by sending a new GET req, to check for any new comments-->
+</head>
+ 
+<body>
+    <div class="title-blur">
+        <h2 class="centre content">Comments and Complaints</h2>
+        <hr>
+    </div>
+    <div class="div-centre">
+        <p>Here you post anything from coping rants due to not being cool enough for the anthology, to discussing the poems on the anthology and collaborating on new poem ideas. Regardless of that you put here, as long as it's not terrible, it's cool!</p>
+        <em>Name(optional):</em>
+        <input type="text"> <br>
+        <em>Email(optional):</em>
+        <input type="text"> <br>
+        <textarea rows="5" cols="50" style="margin-top: 5px;"></textarea> <br>
+        <button onclick="getHttp()">Post</button>
+
+        <div class="comment">
+            <em>Anonymous said:</em>
+            <p>This is the worst anthology to ever exist! I hate it.</p>
+        </div>
+        <div class="comment">
+            <em>Anonymous said:</em>
+            <p>This is the worst anthology to ever exist! I hate it.</p>
+        </div>
+    </div>
+    <a href="../contents.html" class="back"> <- Back</a>
+</body>
+ 
+</html> 

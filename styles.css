@@ -206,3 +206,10 @@ p, a {
     padding-bottom: 4px;
     grid-gap: 2px;
 }
+
+.comment {
+    border: 1px solid black;
+    margin-top: 15px;
+    min-width: 300px;
+    width: 50%;
+}
