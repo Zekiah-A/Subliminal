@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../styles.css">
+    <script type="text/javascript">
+    var HttpClient = function() {
+        this.get = function(aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function() { 
+                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                    aCallback(anHttpRequest.responseText);
+            }
+
+            anHttpRequest.open( "GET", aUrl, true );            
+            anHttpRequest.send( null );
+        }
+    }
+
+    function getHttp() {
+        var client = new HttpClient();
+        client.get('https://httpstat.us/200', function(response) {
+            console.log(response);
+        });
+    }
+    </script>
+</head>
+ 
+<body>
+    <h1>Comments</h1>
+    <h3>Here you post anything from coping rants due to not being cool enough for the anthology, to discussing the poems on the anthology and collaborating on new poem ideas. Regardless of that you put here, as long as it's not terrible, it's cool!</h3>
+    <button onclick="getHttp()">Post</button>
+
+    <a href="../../contents.html" class="back"> <- Back</a>
+</body>
+ 
+</html> 
