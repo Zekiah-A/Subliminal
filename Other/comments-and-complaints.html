@@ -5,26 +5,27 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles.css">
     <script type="text/javascript">
-    var HttpClient = function() {
-        this.get = function(aUrl, aCallback) {
-            var anHttpRequest = new XMLHttpRequest();
-            anHttpRequest.onreadystatechange = function() { 
-                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-                    aCallback(anHttpRequest.responseText);
-            }
-
-            anHttpRequest.open( "GET", aUrl, true );            
-            anHttpRequest.send( null );
+    //You can use the new fetch() standard along with await
+    (async function(){
+        //code here
+        var res = await fetch("<url here>")
+        var data = await res.json()
+        //assuming data is an array of html data
+        for(var post of data){
+            //TODO: insert post into the dom
         }
-    }
+    })()
 
-    function getHttp() {
-        var client = new HttpClient();
-        client.get('https://localhost:8000', function(response) {
-            console.log(response);
-        });
+    async function getHttp(){
+        var name = //TODO: get name
+        var email = //TODO: get email
+        var message = //TODO: get message
+            
+        //post
+        let res = await fetch("<post url here>", {method: 'POST'})
+        //idk what your post endpoint returns...
     }
-    </script> <!--Should update every 3 seconds, by sending a new GET req, to check for any new comments-->
+    </script>
 </head>
  
 <body>
