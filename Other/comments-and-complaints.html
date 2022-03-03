@@ -8,12 +8,11 @@
     //You can use the new fetch() standard along with await
     (async function(){
         //code here
-        var res = await fetch("<url here>")
-        var data = await res.json()
-        //assuming data is an array of html data
-        for(var post of data){
-            //TODO: insert post into the dom
-        }
+        var res = await fetch("http://localhost:8000")
+
+        var textContent = await res.text();
+        document.getElementById("comments").innerHTML = textContent;
+        console.log(textContent);
     })()
 
     async function getHttp(){
@@ -22,8 +21,9 @@
         var message = document.getElementById("input-contents").value;
             
         //post
-        let res = await fetch("<post url here>", {method: 'POST'})
-        //idk what your post endpoint returns...
+        let res = await fetch("http://localhost:8000", {method: 'POST'});
+
+        //TODO: Send the data as json to the server, to be made into HTML
     }
     </script>
 </head>
@@ -42,13 +42,11 @@
         <textarea rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
         <button onclick="getHttp()">Post</button>
 
-        <div class="comment">
-            <em>Anonymous said:</em>
-            <p>This is the worst anthology to ever exist! I hate it.</p>
-        </div>
-        <div class="comment">
-            <em>Anonymous said:</em>
-            <p>This is the worst anthology to ever exist! I hate it.</p>
+        <div id="comments">
+            <div class="comment">
+                <em>Subliminal Dev Team said:</em>
+                <p>If you can see this, then comments are currently down.</p>
+            </div>
         </div>
     </div>
     <a href="../contents.html" class="back"> <- Back</a>
