@@ -5,30 +5,27 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles.css">
     <script type="text/javascript">
-    //You can use the new fetch() standard along with await
-    (async function(){
-        //code here
-        var res = await fetch("http://localhost:8000")
+    
+    async function getComments() {
+        var res = await fetch("http://localhost:8000");
 
         var textContent = await res.text();
         document.getElementById("comments").innerHTML = textContent;
-        console.log(textContent);
-    })()
+    
+        setTimeout(getComments, 2000);
+    }
 
-    async function getHttp(){
+    async function postComment(){
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
         var message = document.getElementById("input-contents").value;
-            
-        //post
-        let res = await fetch("http://localhost:8000", {method: 'POST'});
-
-        //TODO: Send the data as json to the server, to be made into HTML
+                
+        var res = await fetch("http://localhost:8000", { method: "POST", body: message });
     }
     </script>
 </head>
  
-<body>
+<body onload="getComments()">
     <div class="title-blur">
         <h2 class="centre content">Comments and Complaints</h2>
         <hr>
@@ -40,7 +37,7 @@
         <em>Email(optional):</em>
         <input type="text" id="email"> <br>
         <textarea rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
-        <button onclick="getHttp()">Post</button>
+        <button onclick="postComment()">Post</button>
 
         <div id="comments">
             <div class="comment">
