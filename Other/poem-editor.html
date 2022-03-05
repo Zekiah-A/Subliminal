@@ -14,7 +14,7 @@
         function download() {
             var date = new Date();
             var dateComment = "<!--" + date.toString() + "-->";
-            var newContent = document.getElementById("content").innerHTML.replaceAll("<br>", "<br>\n        ");
+            var newContent = document.getElementById("content").innerHTML.replaceAll("<br>", "<br>\n");
             var title = document.getElementById("title");
 
             var poemTemplate = 

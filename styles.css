@@ -208,8 +208,16 @@ p, a {
 }
 
 .comment {
+    position: relative;
     border: 1px solid black;
     margin-top: 15px;
     min-width: 300px;
     width: 50%;
+}
+
+.comment-date {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    color: black
 }
