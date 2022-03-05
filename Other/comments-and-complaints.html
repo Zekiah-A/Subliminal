@@ -18,9 +18,10 @@
     async function postComment(){
         var name = document.getElementById("name").value;
         var email = document.getElementById("email").value;
-        var message = document.getElementById("input-contents").value;
-                
-        var res = await fetch("http://localhost:8000", { method: "POST", body: message });
+        var inputMessage = document.getElementById("input-contents").value;
+        
+        var comment = `{ "name": "${name}", "email": "${email}", "message": "${inputMessage}" }`;
+        var res = await fetch("http://localhost:8000", { method: "POST", body: comment });
     }
     </script>
 </head>
