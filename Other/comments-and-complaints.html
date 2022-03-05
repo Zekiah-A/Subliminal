@@ -7,7 +7,7 @@
     <script type="text/javascript">
     
     async function getComments() {
-        var res = await fetch("http://localhost:8000");
+        var res = await fetch("http://31.51.47.229:8080");
 
         var textContent = await res.text();
         document.getElementById("comments").innerHTML = textContent;
