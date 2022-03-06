@@ -21,7 +21,7 @@
         var inputMessage = document.getElementById("input-contents").value;
 
         var commentObject = {name: inputName, email: inputEmail, message: inputMessage};
-        var res = await fetch("http://localhost:8000", { method: "POST", body: JSON.stringify(commentObject)});
+        var res = await fetch("https://subliminal-comments.ddns.net", { method: "POST", body: JSON.stringify(commentObject)});
     }
     </script>
 </head>
