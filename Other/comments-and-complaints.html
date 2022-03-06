@@ -7,7 +7,7 @@
     <script type="text/javascript">
     
     async function getComments() {
-        var res = await fetch("http://subliminal-comments.ddns.net");
+        var res = await fetch("https://subliminal-comments.ddns.net");
 
         var textContent = await res.text();
         document.getElementById("comments").innerHTML = textContent;
