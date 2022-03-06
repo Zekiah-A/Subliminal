@@ -65,6 +65,20 @@
         padding: 10px;
         grid-gap: 10px;
     }
+    
+    .comment {
+        z-index: -1; /*Hack to fix blur issues.*/
+        position: relative;
+        border: 1px solid black;
+        margin-top: 15px;
+        width: 100%;
+    }
+    
+    .div-centre {
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 @media screen and (orientation:landscape) {
@@ -99,6 +113,21 @@
         padding: 10px;
         grid-gap: 10px;
     }
+    
+  .comment {
+    z-index: -1; /*Hack to fix blur issues.*/
+    position: relative;
+    border: 1px solid black;
+    margin-top: 15px;
+    min-width: 300px;
+    width: 50%;
+  }
+  
+  .div-centre {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+  }
 }
 
 .centre {
@@ -190,12 +219,6 @@ p, a {
     font-size: 110%;
 }
 
-.div-centre {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-}
-
 /*Moved grid-container to media portrait/landscape quiery, in order to make it reduce on mobile.
   May also query device screen width in pixels, as low res screens do not look good either.*/
 
@@ -207,17 +230,8 @@ p, a {
     grid-gap: 2px;
 }
 
-.comment {
-    position: relative;
-    border: 1px solid black;
-    margin-top: 15px;
-    min-width: 300px;
-    width: 50%;
-}
-
 .comment-date {
     position: absolute;
     top: 0px;
     right: 2px;
-    color: black
 }
