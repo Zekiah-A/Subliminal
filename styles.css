@@ -67,7 +67,7 @@
     }
     
     .comment {
-        z-index: -1; /*Hack to fix blur issues.*/
+        z-index: 0;
         position: relative;
         border: 1px solid black;
         margin-top: 15px;
@@ -75,10 +75,10 @@
     }
     
     .div-centre {
-    margin: auto;
-    width: 100%;
-    padding: 10px;
-  }
+      margin: auto;
+      width: 100%;
+      padding: 10px;
+    }
 }
 
 @media screen and (orientation:landscape) {
@@ -114,20 +114,20 @@
         grid-gap: 10px;
     }
     
-  .comment {
-    z-index: -1; /*Hack to fix blur issues.*/
-    position: relative;
-    border: 1px solid black;
-    margin-top: 15px;
-    min-width: 300px;
-    width: 50%;
-  }
-  
-  .div-centre {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-  }
+    .comment {
+      z-index: 0;
+      position: relative;
+      border: 1px solid black;
+      margin-top: 15px;
+      min-width: 300px;
+      width: 50%;
+    }
+    
+    .div-centre {
+      margin: auto;
+      width: 50%;
+      padding: 10px;
+    }
 }
 
 .centre {
