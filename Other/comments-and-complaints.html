@@ -23,6 +23,15 @@
         var commentObject = {name: inputName, email: inputEmail, message: inputMessage};
         var res = await fetch("https://subliminal-comments.ddns.net", { method: "POST", body: JSON.stringify(commentObject)});
     }
+
+    function onNameInput(input) {
+        if (input.length > 16) {
+            document.getElementById("nameLabel").textContent = `(name too long by ${input.length - 16}, end may be cut off)`;
+        }
+        else {
+            document.getElementById("nameLabel").textContent = "";
+        }
+    }
     </script>
 </head>
  
@@ -34,9 +43,10 @@
     <div class="div-centre">
         <p>Here you post anything from coping rants due to not being cool enough for the anthology, to discussing the poems on the anthology and collaborating on new poem ideas. Regardless of that you put here, as long as it's not illegal, it's cool!</p>
         <em>Name(optional):</em>
-        <input type="text" id="name"> <br>
+        <input oninput="onNameInput(value)" type="text" id="name">
+        <span id="nameLabel" style="color: grey;"></span> <br>
         <em>Email(optional):</em>
-        <input type="text" id="email"> <br>
+        <input oninput="onEmailInput(value)" type="text" id="email"> <br>
         <textarea rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
         <button onclick="postComment()">Post</button>
 
