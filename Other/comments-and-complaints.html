@@ -15,13 +15,14 @@
         setTimeout(getComments, 2000);
     }
 
-    async function postComment(){
+    async function postComment() {
         var inputName = document.getElementById("name").value;
         var inputEmail = document.getElementById("email").value;
         var inputMessage = document.getElementById("input-contents").value;
+        document.getElementById("input-contents").value = "";
 
         var commentObject = {name: inputName, email: inputEmail, message: inputMessage};
-        var res = await fetch("https://subliminal-comments.ddns.net", { method: "POST", body: JSON.stringify(commentObject)});
+        await fetch("https://subliminal-comments.ddns.net", { method: "POST", body: JSON.stringify(commentObject)}); //var res
     }
 
     function onNameInput(input) {
@@ -30,6 +31,19 @@
         }
         else {
             document.getElementById("nameLabel").textContent = "";
+        }
+    }
+
+    function onPostInput(input)
+    {
+        if (input.length <= 2) {
+            document.getElementById("input-contents").style.color = "grey";
+        }
+        else if (input.length > 4096) {
+            document.getElementById("input-contents").style.color = "grey";
+        }
+        else {
+            document.getElementById("input-contents").style.color = "inherit";
         }
     }
     </script>
@@ -47,7 +61,7 @@
         <span id="nameLabel" style="color: grey;"></span> <br>
         <em>Email(optional):</em>
         <input oninput="onEmailInput(value)" type="text" id="email"> <br>
-        <textarea rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
+        <textarea oninput="onPostInput(value)" rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
         <button onclick="postComment()">Post</button>
 
         <div id="comments">
