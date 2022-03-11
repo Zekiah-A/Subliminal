@@ -67,7 +67,6 @@
     }
     
     .comment {
-        z-index: 0;
         position: relative;
         border: 1px solid black;
         margin-top: 15px;
@@ -115,7 +114,6 @@
     }
     
     .comment {
-      z-index: 0;
       position: relative;
       border: 1px solid black;
       margin-top: 15px;
@@ -185,20 +183,8 @@
     visibility: hidden;
 }
 
-/*Header bar*/
-.title-blur {
-    position: relative;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 0;
-    width: 100%;
-    padding-top: 20px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    background: transparent;
-}
-
-@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+@supports ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+    /*Header bar*/
     .title-blur {
         position: relative;
         position: sticky;
@@ -206,6 +192,22 @@
         top: 0;
         width: 100%;
         padding-top: 20px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        background: transparent;
+    }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
+    /*Header bar*/
+    .title-blur {
+        position: relative;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        width: 100%;
+        padding-top: 20px;
+        background: rgba(255, 255, 255, 0.8);
     }
 }
 

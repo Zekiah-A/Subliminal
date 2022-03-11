@@ -50,7 +50,7 @@
 </head>
  
 <body onload="getComments()">
-    <div class="title-blur">
+    <div class="title-blur" style="z-index: 2;">
         <h2 class="centre content">Comments and Complaints</h2>
         <hr>
     </div>
@@ -61,7 +61,7 @@
         <span id="nameLabel" style="color: grey;"></span> <br>
         <em>Email(optional):</em>
         <input oninput="onEmailInput(value)" type="text" id="email"> <br>
-        <textarea oninput="onPostInput(value)" rows="5" cols="50" style="margin-top: 5px;" id="input-contents"></textarea> <br>
+        <textarea oninput="onPostInput(value)" rows="5" cols="50" style="margin-top: 5px;" class="comment" id="input-contents"></textarea> <br>
         <button onclick="postComment()">Post</button>
 
         <div id="comments">
@@ -75,4 +75,4 @@
     <a href="../contents.html" class="back"> <- Back</a>
 </body>
  
-</html> 
+</html>
