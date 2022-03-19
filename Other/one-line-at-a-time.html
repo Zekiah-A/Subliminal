@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles.css">
+    <script>
+        
+
+        function onNameInput(input)
+        {
+            if (input.length > 12) {
+                document.getElementById("name").style.color = "grey";
+            }
+            else {
+                document.getElementById("name").style.color = "inherit";
+            }
+        }
+
+        function onPoemLineInput(input)
+        {
+            if (input.length > 154) { //Amount of characters to fill a line with the thinnest character in the english alphabet (i)
+                document.getElementById("poem-line").style.color = "grey";
+            }
+            else {
+                document.getElementById("poem-line").style.color = "inherit";
+            }
+        }
+    </script>
+</head>
+ 
+<body>
+    <div class="title-blur">
+        <h2 class="centre content"> One line at a time poem - By Everyone </h2>
+        <hr>
+    </div>
+    <div class="div-centre">
+        <p>On this page, you can help build the most epic poem ever, by writing the whatever you see fit as the next line in this massive poem created by the community. Be careful though, as you can only post <strong>one</strong>  line at a time!</p>
+    </div>
+    <div class="poem-centre">
+        <div> <!--This is the template, each line will be a different div, so that we cna save the info, such as name here, for edit history-->
+            <span style="color: gray; font-size: 10px;">[dev team]</span>
+            <span>If you can see this, the one line at a time poem is down.</span>
+            <br>
+        </div>
+        <div style="display: grid; grid-template-columns: min-content auto; column-gap: 2px;">
+            <input id="name" type="text" placeholder="name" oninput="onNameInput(value)" size="4"/>
+            <input id="poem-line" type="text" placeholder="+ poem line" oninput="onPoemLineInput(value)" size="55"/> <br>
+        </div>
+        <button>Add Line</button>
+    </div>
+    <a href="../contents.html" class="back"> <- Back</a>
+</body>
+ 
+</html> 
