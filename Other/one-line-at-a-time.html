@@ -4,12 +4,44 @@
     <title>Subliminal</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles.css">
-    <script>
+    <script type="text/javascript">
+        async function getPoem() {
+            var result = await fetch("http://localhost:8000"/*"https://subliminal-comments.ddns.net/one-line-poem"*/);
+            
+            var textContent = await result.text();
+            document.getElementById("content").innerHTML = textContent;
         
+            setTimeout(getPoem, 2000);
+        }
 
-        function onNameInput(input)
-        {
-            if (input.length > 12) {
+        async function postLine() {
+            var inputName = document.getElementById("name").value;
+            var inputLine = document.getElementById("poem-line").value;
+            document.getElementById("name").value = "";
+            document.getElementById("poem-line").value = "";
+
+            var commentObject = {name: inputName, line: inputLine};
+            let response = await fetch("http://localhost:8000"/*"https://subliminal-comments.ddns.net/one-line-poem"*/, { method: "POST", body: JSON.stringify(commentObject)});
+            if (response.status == 200) {
+                document.getElementById("status-label").textContent = "Sucessfully contributed line to the poem! You must wait until someone else has posted before you can add another.";
+                document.getElementById("status-label").style.color = "green";
+            }
+            else if (response.status == 401) {
+                document.getElementById("status-label").textContent = "Failed to post line to poem. You must wait until someone else has posted before you can add another.";
+                document.getElementById("status-label").style.color = "red";
+            }
+            else if (response.status == 422) {
+                document.getElementById("status-label").textContent = "Failed to post line to poem. Poem line was too short, or server detected it as spam :(.";
+                document.getElementById("status-label").style.color = "red";
+            }
+            else {
+                document.getElementById("status-label").textContent = "Failed to post line to poem. Network error likely encountered: " + response.status;
+                document.getElementById("status-label").style.color = "red";
+            }
+        }
+
+        function onNameInput(input) {
+            if (input.length > 8) {
                 document.getElementById("name").style.color = "grey";
             }
             else {
@@ -17,9 +49,8 @@
             }
         }
 
-        function onPoemLineInput(input)
-        {
-            if (input.length > 154) { //Amount of characters to fill a line with the thinnest character in the english alphabet (i)
+        function onPoemLineInput(input) {
+            if (input.length > 154 || input.length <= 8) { //Amount of characters to fill a line with the thinnest character in the english alphabet (i)
                 document.getElementById("poem-line").style.color = "grey";
             }
             else {
@@ -29,7 +60,7 @@
     </script>
 </head>
  
-<body>
+<body onload="getPoem()">
     <div class="title-blur">
         <h2 class="centre content"> One line at a time poem - By Everyone </h2>
         <hr>
@@ -38,16 +69,20 @@
         <p>On this page, you can help build the most epic poem ever, by writing the whatever you see fit as the next line in this massive poem created by the community. Be careful though, as you can only post <strong>one</strong>  line at a time!</p>
     </div>
     <div class="poem-centre">
-        <div> <!--This is the template, each line will be a different div, so that we cna save the info, such as name here, for edit history-->
-            <span style="color: gray; font-size: 10px;">[dev team]</span>
-            <span>If you can see this, the one line at a time poem is down.</span>
-            <br>
+        <div id="content">
+            <div>
+                <span class="one-line-poem-name" title="subliminal dev team | 0/0/2022">[dev team]</span>
+                <span>If you can see this, the one line at a time poem is down.</span>
+                <br>
+            </div>
         </div>
+        
         <div style="display: grid; grid-template-columns: min-content auto; column-gap: 2px;">
             <input id="name" type="text" placeholder="name" oninput="onNameInput(value)" size="4"/>
             <input id="poem-line" type="text" placeholder="+ poem line" oninput="onPoemLineInput(value)" size="55"/> <br>
         </div>
-        <button>Add Line</button>
+        <button onclick="postLine()">Add Line</button>
+        <p id="status-label"></p>
     </div>
     <a href="../contents.html" class="back"> <- Back</a>
 </body>

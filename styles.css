@@ -237,3 +237,8 @@ p, a {
     top: 0px;
     right: 2px;
 }
+
+.one-line-poem-name {
+    color: gray;
+    font-size: 10px;
+}
