@@ -75,6 +75,14 @@
         {
             document.getElementById("main").className = newStyle;
         }
+
+        //PATCH: To get chrome support for proper <br> based formatting, instead of divs for each line.
+        function checkReturn(event) {
+            if (event.key === 'Enter') {
+                document.execCommand("insertLineBreak");
+                event.preventDefault();
+            }
+        };
     </script>
     <style>
         .tool {
@@ -130,7 +138,7 @@ _______________________
         </select>
     </div>
     <div id="main" class="poem-centre">
-        <p id="content" contenteditable="true">
+        <p id="content" contenteditable="true" onkeydown="checkReturn(event)">
         Click On Me to Start Editing
         </p>
     </div>
