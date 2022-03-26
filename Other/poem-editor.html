@@ -82,7 +82,11 @@
                 document.execCommand("insertLineBreak");
                 event.preventDefault();
             }
-        };
+        }
+
+        function handleBackgroundDrop(event) {
+            var url = URL.createObjectURL(event.files[0]);
+            document.body.style.background = "url(" + url + ") no-repeat";        }
     </script>
     <style>
         .tool {
@@ -98,29 +102,8 @@
         <hr>
     </div>
     <div style="position: fixed; top: 90px;">
-    <pre>
-_______________________
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|                     |
-|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
-|                     |
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    </pre>
     </div>
-    <div id="toolbox" style="position: fixed; top: 115px; left: 16px;">
+    <div id="toolbox" style="position: fixed; top: 115px; left: 16px; border: 1px solid black; width: 160px; padding: 5px;">
         Tools: <br>
         <input class="tool" onclick="format('bold', null)" type="button" value="Bold"> <br>
         <input class="tool" onclick="format('italic', null)" type="button" value="Italic"> <br>
@@ -135,9 +118,12 @@ _______________________
             <option value="poem-centre" selected>Poem Centre</option>
             <option value="poem-centre-wide">Poem Centre Wide</option>
             <option value="centre">Centre</option>
-        </select>
+        </select> <br>
+        Background image: <br>
+        <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 150px;">
+        </div>
     </div>
-    <div id="main" class="poem-centre">
+    <div id="main" class="poem-centre" style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px;">
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)">
         Click On Me to Start Editing
         </p>
