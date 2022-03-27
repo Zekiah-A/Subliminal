@@ -10,6 +10,37 @@
             return true;
         };
 
+        //Load saved poems from local storage
+        window.onload = function() {
+            fetchStorage();
+        }
+
+        function fetchStorage() {
+            document.getElementById("loadDiv").innerHTML = "Load: <br>";
+            for (var i = 0; i < localStorage.length; i++) {
+                var current = localStorage.getItem(localStorage.key(i));
+                document.getElementById("loadDiv").innerHTML += `<input class="tool" onclick="load('${localStorage.key(i)}')" type="button" value="${localStorage.key(i)}"> <br>`;
+            }
+        }
+
+        function save() {
+            var title = document.getElementById("title");
+            var content = document.getElementById("content");
+
+            var saveData = {poemTitle: title.innerHTML, poemContent: content.innerHTML, pageStyle: document.getElementById("main").className};
+            localStorage.setItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-"), JSON.stringify(saveData));
+            
+            //Refresh load box with latest poem. 
+            fetchStorage();
+        }
+
+        function load(key) {
+            var loadObject = JSON.parse(localStorage.getItem(key));
+            var title = document.getElementById("title").innerHTML = loadObject.poemTitle;
+            var content = document.getElementById("content").innerHTML = loadObject.poemContent;
+            document.getElementById("main").className = loadObject.pageStyle;
+        }
+
         //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
         function download() {
             var date = new Date();
@@ -71,8 +102,7 @@
             console.log(window.opener.document.getElementById("content").selectionStart);
         }
 
-        function changePageStyle(newStyle)
-        {
+        function changePageStyle(newStyle) {
             document.getElementById("main").className = newStyle;
         }
 
@@ -86,7 +116,8 @@
 
         function handleBackgroundDrop(event) {
             var url = URL.createObjectURL(event.files[0]);
-            document.body.style.background = "url(" + url + ") no-repeat";        }
+            document.body.style.background = "url(" + url + ") no-repeat";
+        }
     </script>
     <style>
         .tool {
@@ -123,13 +154,20 @@
         <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 150px;">
         </div>
     </div>
+    <div id="toolbox" style="position: fixed; top: 115px; right: 16px; border: 1px solid black; width: 160px; padding: 5px;">
+        Document Management: <br>
+        <input class="tool" onclick="save()" type="button" value="Save draft poem 💾">
+        <div style="margin: 2px; border: 1px solid black; padding: 5px;" id="loadDiv">
+            Load: <br>
+        </div>
+        
+    </div>
     <div id="main" class="poem-centre" style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px;">
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)">
-        Click On Me to Start Editing
+            Click On Me to Start Editing
         </p>
     </div>
-    <!--Should call function that prepares page for download first, and then creates a new fake a to run-->
-    <button id="download-button" class="next"; onclick="download()">Download edited page</button> <!--Would rather have this as an A-->
+    <button id="download-button" class="next"; onclick="download()">Download edited page</button>
     <a href="../contents.html" class="back"> <- Back</a>
 </body>
 </html>
