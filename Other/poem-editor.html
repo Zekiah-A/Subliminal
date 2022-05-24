@@ -113,6 +113,12 @@
                 event.preventDefault();
             }
         }
+        //PATCH: Stop pasting weird formatted text that could break things.
+        function checkPaste(event) {
+          event.preventDefault();
+          const text = event.clipboardData.getData('text/plain');
+          document.execCommand("insertHTML", false, text);
+        }
 
         function handleBackgroundDrop(event) {
             var url = URL.createObjectURL(event.files[0]);
@@ -162,7 +168,7 @@
         </div>
     </div>
     <div id="main" class="poem-centre">
-        <p id="content" contenteditable="true" onkeydown="checkReturn(event)">
+        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
             Click On Me to Start Editing
         </p>
     </div>
