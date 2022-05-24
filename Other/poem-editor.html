@@ -7,6 +7,7 @@
     <script type="text/javascript">
         //Make user confirm that they want to leave the page.
         window.onbeforeunload = function() {
+            save();
             return true;
         };
 
@@ -115,9 +116,9 @@
         }
         //PATCH: Stop pasting weird formatted text that could break things.
         function checkPaste(event) {
-          event.preventDefault();
-          const text = event.clipboardData.getData('text/plain');
-          document.execCommand("insertHTML", false, text);
+            event.preventDefault();
+            const text = event.clipboardData.getData('text/plain');
+            document.execCommand("insertHTML", false, text);
         }
 
         function handleBackgroundDrop(event) {
@@ -135,7 +136,7 @@
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
     <div class="title-blur">
-        <h2 class="centre" id="title" contenteditable="true">Click On Me to Start Editing - By Click On Me to Start Editing</h2>
+        <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste" onkeydown="if(event.key === 'Enter')return;" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
         <hr>
     </div>
     <div style="position: fixed; top: 90px;">
