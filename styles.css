@@ -221,6 +221,12 @@ p, a {
     font-size: 110%;
 }
 
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 /*Moved grid-container to media portrait/landscape quiery, in order to make it reduce on mobile.
   May also query device screen width in pixels, as low res screens do not look good either.*/
 

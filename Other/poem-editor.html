@@ -58,7 +58,7 @@
             '<link rel="stylesheet" href="../../styles.css">\n' +
             '</head>\n' +
             '\n' +
-            '<body>\n' +
+            '<body style="background-image: url(\'POEM_BACKGROUND\');">\n' +
             '    <div class="title-blur">\n' +
             '        <h2 class="centre content">TITLE</h2>\n' +
             '        <hr>\n' +
@@ -75,6 +75,7 @@
             '</html>\n';
             var element = document.createElement('a');
             var finishedTemplate = poemTemplate
+                .replace("POEM_BACKGROUND", document.body.style.background)
                 .replace("TITLE", title.innerHTML)
                 .replace("POEM_STYLE", document.getElementById("main").className.toString())
                 .replace("CONTENT", newContent)
@@ -121,9 +122,10 @@
             document.execCommand("insertHTML", false, text);
         }
 
-        function handleBackgroundDrop(event) {
-            var url = URL.createObjectURL(event.files[0]);
-            document.body.style.background = "url(" + url + ") no-repeat";
+        function handleBackgroundDrop(event) {            
+            const reader = new FileReader();
+            var url = reader.readAsDataURL(event.files[0]);
+            document.body.style.background = "url(" + url + ")";
         }
     </script>
     <style>
