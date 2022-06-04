@@ -18,5 +18,5 @@ All events, characters and actions depicted within these texts are fictitious, a
 These poems are not intended to shape religious, political or moral views, and are intended to be for entertainment purposes only. 
 
 ### License:
-The content of this site itself is licensed under the [Creative Commons Attribution-NonCommercial 4.0 license](https://creativecommons.org/licenses/by-nc/4.0/legalcode) and the underlying source code used to format and display that content is licensed under the [GNU GPL-3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
-Summaries of these licenses are available at [CC BY-NC](https://creativecommons.org/licenses/by-nc/4.0/) and [GPL-3](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)).
+The content of this site itself is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode) and the underlying source code used to format and display that content is licensed under the [GNU GPL-3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+Summaries of these licenses are available at [CC BY-NC-ND](https://creativecommons.org/licenses/by-nc-nd/4.0/) and [GPL-3](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)).
