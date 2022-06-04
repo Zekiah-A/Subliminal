@@ -124,9 +124,9 @@
 
         function handleBackgroundDrop(event) {            
             const reader = new FileReader();
+            reader.readAsDataURL(event.files[0]);
             reader.onloadend = () => {
-                var url = reader.readAsDataURL(event.files[0]);
-                document.body.style.background = "url(" + url + ")";
+                document.body.style.background = "url(" + reader.result + ")";
             }
         }
     </script>
