@@ -126,7 +126,7 @@
             const reader = new FileReader();
             reader.readAsDataURL(event.files[0]);
             reader.onloadend = () => {
-                document.body.style.background = "url(" + reader.result + ")";
+                document.body.style.background = `url('${reader.result}')`;
             }
         }
     </script>
