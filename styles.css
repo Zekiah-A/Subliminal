@@ -1,8 +1,21 @@
+@media(prefers-color-scheme: light) {
+    body {
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+        background: initial !important;
+        color: initial !important;
+    }
+}
+
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) { /* TODO: Dark mode variant for main image. */
     body {
         background: #1B1B1B;
         color: #DADADA;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
     }
 
     a:link {
@@ -219,12 +232,6 @@ h2 {
 p, a {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 110%;
-}
-
-body {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 /*Moved grid-container to media portrait/landscape quiery, in order to make it reduce on mobile.
