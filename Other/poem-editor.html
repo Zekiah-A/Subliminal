@@ -119,6 +119,7 @@
         function checkPaste(event) {
             event.preventDefault();
             const text = event.clipboardData.getData('text/plain');
+            text.replace("\n", "<br>")
             document.execCommand("insertHTML", false, text);
         }
 
@@ -140,7 +141,7 @@
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
     <div class="title-blur">
-        <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste" onkeydown="if(event.key === 'Enter')return;" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
+        <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter')return;" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
         <hr>
     </div>
     <div style="position: fixed; top: 90px;">
@@ -177,7 +178,7 @@
             Click On Me to Start Editing
         </p>
     </div>
-    <button id="download-button" class="next"; onclick="download()">Download edited page</button>
+    <button id="download-button" style="position: absolute; right: 20%; bottom: 10px;"; onclick="download()">Download edited page</button>
     <a href="../contents.html" class="back"> <- Back</a>
 </body>
 </html>
