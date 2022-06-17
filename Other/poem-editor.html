@@ -141,7 +141,7 @@
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
     <div class="title-blur">
-        <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter')return;" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
+        <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter') event.preventDefault(); return false;;" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
         <hr>
     </div>
     <div style="position: fixed; top: 90px;">
