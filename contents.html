@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
  
-<body id="contents" class="contents-div-centre">
+<body id="contents" class="contents-div-centre" onkeydown="if (!searchbar.hasFocus()) { searchbar.focus(); searchbar.value += event.key; }">
     <h1>Contents</h1>
     <!-- Sorry God, for using this forbidden language -->
     <input type="text" class="searchbar" id="searchbar" onkeyup="search_contents()" placeholder="search poems">
