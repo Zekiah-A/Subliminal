@@ -164,8 +164,11 @@
 
     .searchbar {
         position: absolute;
-        top: 40px;
-        right: 45%;
+        transform: translateX(-50%);
+        left: 50%;
+        width: 60%;
+        line-height: 2;
+        position: sticky;
     }
 
     .contents-div-centre {
