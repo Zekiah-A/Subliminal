@@ -136,6 +136,12 @@
             margin: 1px;
             height: 23px;
         }
+        .text-tools {
+            position: fixed; top: 115px; left: 16px; border: 1px solid black; width: 160px; padding: 5px;
+        }
+        .document-tools {
+            position: fixed; top: 115px; right: 16px; border: 1px solid black; width: 160px; padding: 5px;
+        }
     </style>
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
@@ -146,7 +152,7 @@
     </div>
     <div style="position: fixed; top: 90px;">
     </div>
-    <div id="toolbox" style="position: fixed; top: 115px; left: 16px; border: 1px solid black; width: 160px; padding: 5px;">
+    <div class="text-tools">
         Tools: <br>
         <input class="tool" onclick="format('bold', null)" type="button" value="Bold"> <br>
         <input class="tool" onclick="format('italic', null)" type="button" value="Italic"> <br>
@@ -166,7 +172,7 @@
         <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 150px;">
         </div>
     </div>
-    <div id="toolbox" style="position: fixed; top: 115px; right: 16px; border: 1px solid black; width: 160px; padding: 5px;">
+    <div id="toolbox" class="document-tools">
         Document Management: <br>
         <input class="tool" onclick="save()" type="button" value="Save draft poem 💾">
         <div style="margin: 2px; border: 1px solid black; padding: 5px;" id="loadDiv">
