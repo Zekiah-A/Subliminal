@@ -163,12 +163,11 @@
     }
 
     .searchbar {
-        position: absolute;
-        transform: translateX(-50%);
+        position: sticky;
         left: 50%;
+        transform: translateX(-50%);
         width: 60%;
         line-height: 2;
-        position: sticky;
     }
 
     .contents-div-centre {
