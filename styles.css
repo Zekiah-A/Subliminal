@@ -106,7 +106,7 @@
 @media screen and (orientation:portrait) {
     .searchbar {
         position: fixed;
-        width: 100%;
+        width: calc(100% - 20px);
         padding-left: 10px;
         padding-right: 10px;
         line-height: 200%;
