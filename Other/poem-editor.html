@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles.css">
     <script type="text/javascript">
+        let poemTags = []
+
         //Make user confirm that they want to leave the page.
         window.onbeforeunload = function() {
             save();
@@ -18,16 +20,26 @@
 
         function fetchStorage() {
             document.getElementById("loadDiv").innerHTML = "Load: <br>";
-            for (var i = 0; i < localStorage.length; i++) {
-                var current = localStorage.getItem(localStorage.key(i));
+            for (let i = 0; i < localStorage.length; i++) {
+                let current = localStorage.getItem(localStorage.key(i));
                 document.getElementById("loadDiv").innerHTML += `<input class="tool" onclick="load('${localStorage.key(i)}')" type="button" value="${localStorage.key(i)}"> <br>`;
             }
         }
 
         function save() {
-            var title = document.getElementById("title");
-            var content = document.getElementById("content");
-            var saveData = {poemTitle: title.innerHTML, poemContent: content.innerHTML, pageStyle: document.getElementById("main").className, pageBackground: document.body.style.background};
+            let title = document.getElementById("title");
+            let content = document.getElementById("content");
+            let saveData = {
+                summary: summaryArea.value, //meta description
+                tags: poemTags.toString(), //meta keywords
+                title: title.innerHTML.split("- By")[0].trim(), //meta title
+                cWarning: cWarningCheckbox.checked, //content warning
+                cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
+                fullTitle: title.innerHTML, //poem header title
+                poemContent: content.innerHTML, //poem html
+                pageStyle: document.getElementById("main").className, //poem visual format
+                pageBackground: document.body.style.background //poem background image
+            }
             localStorage.setItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-"), JSON.stringify(saveData));
             
             //Refresh load box with latest poem. 
@@ -35,52 +47,51 @@
         }
 
         function load(key) {
-            var loadObject = JSON.parse(localStorage.getItem(key));
-            document.getElementById("title").innerHTML = loadObject.poemTitle;
-            document.getElementById("content").innerHTML = loadObject.poemContent;
+            let loadObject = JSON.parse(localStorage.getItem(key));
+            summaryArea.value = loadObject.summary;
+            for(let t of loadObject.tags.split(",")) { 
+                addPoemTag(t)
+            }
+            cWarningCheckbox.checked = loadObject.cWarning
+            cWarningNotesInput.value = loadObject.cWarningAdditions
+            title.innerHTML = loadObject.fullTitle;
+            content.innerHTML = loadObject.poemContent;
             document.body.style.background = loadObject.pageBackground;
             document.getElementById("main").className = loadObject.pageStyle;
         }
 
         //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
-        function download() {
-            var date = new Date();
-            var dateComment = "<!--" + date.toString() + "-->";
-            var newContent = document.getElementById("content").innerHTML.replaceAll("<br>", "<br>\n");
-            var title = document.getElementById("title");
+        async function download() {
+            save()
+            let loadObject = JSON.parse(localStorage.getItem(key));
+            let poemTemplate = await (await fetch("poem-template.html")).toString()
+            let cWTemplate = await (await fetch("content-warning-template.html")).toString()
 
-            var poemTemplate = 
-            '<!DOCTYPE html>\n' +
-            '<html>\n' +
-            '<head>\n' +
-            '<title>Subliminal</title>\n' +
-            '<meta charset="UTF-8">\n' +
-            '<link rel="stylesheet" href="../../styles.css">\n' +
-            '</head>\n' +
-            '\n' +
-            '<body style="background: POEM_BACKGROUND">\n' +
-            '    <div class="title-blur">\n' +
-            '        <h2 class="centre content">TITLE</h2>\n' +
-            '        <hr>\n' +
-            '    </div>\n' +
-            '    <div class="POEM_STYLE">\n' +
-            '    <p>' +
-            'CONTENT' +
-            '<br>\n' +
-            '    </p>\n' +
-            '    </div>\n' +
-            '    <a href="../../contents" class="back"> <- Back</a>\n' +
-            '</body>\n' +
-            'DATE\n' +
-            '</html>\n';
-            var element = document.createElement('a');
-            var finishedTemplate = poemTemplate
-                .replace("POEM_BACKGROUND", document.body.style.background)
-                .replace("TITLE", title.innerHTML)
-                .replace("POEM_STYLE", document.getElementById("main").className.toString())
-                .replace("CONTENT", newContent)
-                .replace("DATE", dateComment);
-            element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedTemplate));
+            let finishedCWTemplate
+            if (loadObject.cWarning === true) {
+                let nts = loadObject.cWarningAdditions;
+                nts = "|".concat(nts)
+                for (let i = 0; i < nts.length; i++) {
+                    if (i % 30 != 0) return
+                    nts = nts.substring(0, i) + "|\n" + nts.substring(i, nts.length)
+                }
+                finishedCWTemplate = cWTemplate
+                .replace("ADDITIONAL_NOTES", nts)
+            }
+
+            let finishedPoemTemplate = poemTemplate
+                .replace("NAME", loadObject.title)
+                .replace("SUMMARY", loadObject.summary)
+                .replace("TAGS", loadObject.tags)
+                .replace("POEM_BACKGROUND", loadObject.pageBackground)
+                .replace("TITLE", loadObject.fullTitle)
+                .replace("POEM_STYLE", loadObject.pageStyle)
+                .replace("CONTENT", loadObject.poemContent)
+                .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
+                .replace("DATE", Date.now())
+
+            let element = document.createElement('a')
+            element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
             element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + "");
             element.style.display = 'none';
             document.body.appendChild(element);
@@ -130,6 +141,13 @@
                 document.body.style.background = `url('${reader.result}')`;
             }
         }
+
+        function addPoemTag(tagName) {
+            poemTags.push(tagName)
+            let newTag = document.createElement("button");
+            newTag.value = tagName;
+            tagContainer.appendChild(newContent);
+        }
     </script>
     <style>
         .tool {
@@ -164,6 +182,11 @@
             z-index: -1;
         }
 
+        #poem-tags > button {
+            border-radius: 40px;
+            height: 24;
+        }
+
         @media screen and (orientation:portrait) {
             .text-tools { position: inherit !important; width: calc(100% - 12px); } 
             .document-tools { position: inherit !important; width: calc(100% - 12px); }
@@ -196,7 +219,15 @@
         </select> <br>
         Background image: <br>
         <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
-        </div>
+        Poem summary: <br>
+        <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px;"></textarea>
+        Poem tags: <br>
+        <div id="tagContainer"></div>
+        <input type="text" style="width: calc(100% - 5px); height: 24px;" onkeypress="addPoemTag(this.value); this.value = '';">
+        Content Warning: <br>
+        <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true"/>
+        <label for="cWarningCheckbox"> Enabled</label><br>
+        <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled>
     </div>
     <div id="toolbox" class="document-tools">
         Document Management: <br>
