@@ -27,7 +27,7 @@
         width: 100%;
         height: 100%;
         background:rgb(255, 255, 255, 0.2);
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(15px);
         content: center;
         visibility: visible;
     }
@@ -64,7 +64,7 @@
         width: 100%;
         height: 100%;
         background:rgba(30, 30, 30, 0.2);
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(15px);
         content: center;
         visibility: visible;
     }
@@ -196,6 +196,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-size: x-large;
+    font-family: monospace;
+}
+
+.warning-centre a {
+    font-size: x-large !important;
+    font-family: monospace !important;
 }
 
 .back {
