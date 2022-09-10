@@ -16,7 +16,7 @@
       padding-left: 5px;
     }
 
-    @media screen and (orientation:landscape) {
+    @media screen and (orientation:portrait) {
       .grid-container {
         display: grid;
         grid-template-columns: auto;
@@ -25,7 +25,7 @@
       }
     }
 
-    @media screen and (orientation:portrait) {
+    @media screen and (orientation:landscape) {
       .grid-container {
         display: grid;
         grid-template-columns: auto auto;
@@ -58,12 +58,12 @@
     function toggleCollapsed(sectionId) {
       if (collapsedSections.has(sectionId)) { //uncollapse
         document.getElementById(sectionId).style.transform = "initial"
-        document.getElementById(sectionId).parentElement.style.height = "5%"
+        document.getElementById(sectionId).parentElement.style.height = "auto"
         collapsedSections.delete(sectionId)
         return
       } //collapse
       document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
-      document.getElementById(sectionId).parentElement.style.height = "auto"
+      document.getElementById(sectionId).parentElement.style.height = "5%"
       collapsedSections.add(sectionId)
     } 
     </script>
