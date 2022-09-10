@@ -9,16 +9,38 @@
       font-size: small;
       cursor: pointer;
     }
+
     .section-body {
       border-radius: 10px;
       border-left: 2px solid grey;
       padding-left: 5px;
     }
 
-    /* --when collapsed
-    transform: translateY(-40%) scaleY(0.2);
-    transform: initial;
-    */
+    @media screen and (orientation:landscape) {
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto;
+        padding: 10px;
+        grid-gap: 10px;
+      }
+    }
+
+    @media screen and (orientation:portrait) {
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        padding: 10px;
+        grid-gap: 10px;
+      }
+    }
+
+    .grid-sub-container {
+      display: grid;
+      grid-template-columns: 20% auto;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      grid-gap: 2px;
+    }
   </style>
 </head>
  
@@ -28,32 +50,7 @@
     <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value.toLowerCase().trim())" placeholder="search poems">
     <script>
     function searchContents(input) {
-      let contents = document.body.getElementsByTagName('a');
-      for(let i = 0; i < contents.length; i++ ) {
-        if (contents[i].text.toLowerCase().includes(input) || contents[i].className == "back") {
-          contents[i].style.display="initial";
-          if (contents[i].nextSibling.id == 'addition') {
-            let addition = contents[i].nextSibling;
-            addition.style.display="initial";
-            addition.nextSibling.style.display="initial";
-          }
-          else {
-            contents[i].nextSibling.style.display="initial";
-          }
-        }
-        else
-        {
-          contents[i].style.display = "none";
-          if (contents[i].nextSibling.id == 'addition') {
-            let addition = contents[i].nextSibling;
-            addition.style.display = "none";
-            addition.nextSibling.style.display = "none";
-          }
-          else { /*Remove the next BR as well.*/
-            contents[i].nextSibling.style.display = "none";
-          }
-        }
-      }
+
     }
 
     let collapsedSections = new Set()
@@ -61,10 +58,12 @@
     function toggleCollapsed(sectionId) {
       if (collapsedSections.has(sectionId)) { //uncollapse
         document.getElementById(sectionId).style.transform = "initial"
+        document.getElementById(sectionId).parentElement.style.height = "5%"
         collapsedSections.delete(sectionId)
         return
       } //collapse
       document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
+      document.getElementById(sectionId).parentElement.style.height = "auto"
       collapsedSections.add(sectionId)
     } 
     </script>
@@ -155,7 +154,7 @@
           </div>
         </div>
         <div class="grid-sub-container">
-          <span class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</span> <br>
+          <span class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</span>
           <div id="section-3" class="section-body">
             <a href="Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
             <br>

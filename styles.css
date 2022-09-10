@@ -6,72 +6,69 @@
         color: initial !important;
     }
 
-    @supports ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
-        /*Header bar*/
-        .title-blur {
-            position: relative;
-            position: sticky;
-            position: -webkit-sticky;
-            top: 0;
-            width: 100%;
-            padding-top: 20px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            background: transparent;
-        }
+    /*Header bar*/
+    .title-blur {
+        position: relative;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        width: 100%;
+        padding-top: 20px;
+        backdrop-filter: blur(5px);
+        background: transparent;
     }
-    
-    @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
-        /*Header bar*/
-        .title-blur {
-            position: relative;
-            position: sticky;
-            position: -webkit-sticky;
-            top: 0;
-            width: 100%;
-            padding-top: 20px;
-            background: rgba(255, 255, 255, 0.8);
-        }
+
+    #content-warning {
+        position: fixed;
+        padding: 0;
+        margin: 0;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        background:rgb(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        content: center;
+        visibility: visible;
     }
 }
 
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) { /* TODO: Dark mode variant for main image. */
     body {
-        background: #1B1B1B;
+        background: rgb(30, 30, 30);
         color: #DADADA;
         background-size: cover !important;
         background-repeat: no-repeat !important;
         background-attachment: fixed !important;
     }
 
-    @supports ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
-        /*Header bar*/
-        .title-blur {
-            position: relative;
-            position: sticky;
-            position: -webkit-sticky;
-            top: 0;
-            width: 100%;
-            padding-top: 20px;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            background: transparent;
-        }
+    /*Header bar*/
+    .title-blur {
+        position: relative;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        width: 100%;
+        padding-top: 20px;
+        backdrop-filter: blur(5px);
+        background: transparent;
+    }
+
+    #content-warning {
+        position: fixed;
+        padding: 0;
+        margin: 0;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        background:rgba(30, 30, 30, 0.2);
+        backdrop-filter: blur(5px);
+        content: center;
+        visibility: visible;
     }
     
-    @supports not ((-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px))) {
-        /*Header bar*/
-        .title-blur {
-            position: relative;
-            position: sticky;
-            position: -webkit-sticky;
-            top: 0;
-            width: 100%;
-            padding-top: 20px;
-            background: rgba(30, 30, 30, 0.8);
-        }
-    }
 
     a:link {
         color: lightblue;
@@ -96,7 +93,7 @@
         left:0;
         width: 100%;
         height: 100%;
-        background:#1B1B1B;
+        background: rgb(30, 30, 30);
         content: center;
         visibility: visible;
     }
@@ -132,13 +129,6 @@
         padding: 10px;
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: auto;
-        padding: 10px;
-        grid-gap: 10px;
-    }
-    
     .comment {
         position: relative;
         border: 1px solid black;
@@ -182,13 +172,6 @@
         padding: 10px;
     }
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: auto auto;
-        padding: 10px;
-        grid-gap: 10px;
-    }
-    
     .comment {
       position: relative;
       border: 1px solid black;
@@ -237,28 +220,6 @@
     font-size: small;
 }
 
-#content-warning
-{
-    position: fixed;
-    padding: 0;
-    margin: 0;
-    top:0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    background:rgb(255, 255, 255);
-    /*PROPOSAL: background blur, needs patches for browsers with no blur support
-    background:rgb(255, 255, 255, 0.7);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);*/
-    content: center;
-    visibility: visible;
-}
-
-#content-warning:target {
-    visibility: hidden;
-}
-
 h2 {
     margin-top: 0px;
 }
@@ -267,17 +228,6 @@ h2 {
 p, a {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 110%;
-}
-
-/*Moved grid-container to media portrait/landscape quiery, in order to make it reduce on mobile.
-  May also query device screen width in pixels, as low res screens do not look good either.*/
-
-.grid-sub-container {
-    display: grid;
-    grid-template-columns: 20% auto;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    grid-gap: 2px;
 }
 
 .comment-date {
@@ -289,4 +239,8 @@ p, a {
 .one-line-poem-name {
     color: gray;
     font-size: 10px;
+}
+
+#content-warning:target {
+    visibility: hidden;
 }
