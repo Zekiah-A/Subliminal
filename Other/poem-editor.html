@@ -9,9 +9,9 @@
 
         //Make user confirm that they want to leave the page.
         window.onbeforeunload = function() {
-            save();
-            return true;
-        };
+            if (confirm("Save and exit?")) save()
+            return true
+        }
 
         //Load saved poems from local storage
         window.onload = function() {
@@ -144,9 +144,9 @@
 
         function addPoemTag(tagName) {
             poemTags.push(tagName)
-            let newTag = document.createElement("button");
-            newTag.value = tagName;
-            tagContainer.appendChild(newContent);
+            let newTag = document.createElement("button")
+            newTag.value = tagName
+            tagContainer.appendChild(newTag)
         }
     </script>
     <style>
