@@ -84,7 +84,9 @@
     .searchbar {
         background-color: #30303048;
         color: #DADADA;
-        border-radius: 3px;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, .20);
+        backdrop-filter: blur(5px);
     }
 
     #content-warning
@@ -109,11 +111,8 @@
         width: calc(100% - 40px);
         padding-left: 10px;
         padding-right: 10px;
-        line-height: 200%;
+        line-height: 40px;
         top: 10px;
-        background-color: rgba(255, 255, 255, .20);
-        backdrop-filter: blur(5px);
-        border-radius: 5px;
     }
 
     .poem-centre {
@@ -171,15 +170,12 @@
     }
 
     .searchbar {
-        position: fixed;
+        position: sticky;
         left: 50%;
         transform: translateX(-50%);
         width: 50%;
         line-height: 200%;
-        top: 10px;
-        background-color: rgba(255, 255, 255, .20);
-        backdrop-filter: blur(5px);
-        border-radius: 5px;
+        top: 2px;
     }
 
     .contents-div-centre {
