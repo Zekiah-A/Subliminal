@@ -148,6 +148,7 @@
             background-color: rgba(255, 255, 255, .2);
             backdrop-filter: blur(5px);
             box-shadow: 0px 2px 4px gray;
+            z-index: -1;
         }
         .document-tools {
             position: fixed;
@@ -160,6 +161,7 @@
             background-color: rgba(255, 255, 255, .2);
             backdrop-filter: blur(5px);
             box-shadow: 0px 2px 4px gray;
+            z-index: -1;
         }
 
         @media screen and (orientation:portrait) {
@@ -170,7 +172,7 @@
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
-    <div class="title-blur">
+    <div class="title-blur" style="z-index: 2;">
         <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
         <hr>
     </div>
