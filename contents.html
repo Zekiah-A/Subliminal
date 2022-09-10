@@ -4,49 +4,69 @@
   <title>Subliminal</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .section-span {
+      font-size: small;
+      cursor: pointer;
+    }
+    .section-body {
+      border-radius: 10px;
+      border-left: 2px solid grey;
+      padding-left: 5px;
+    }
+
+    /* --when collapsed
+    transform: translateY(-40%) scaleY(0.2);
+    transform: initial;
+    */
+  </style>
 </head>
  
 <body id="contents" class="contents-div-centre" onkeydown="if(document.activeElement != searchbar) { searchbar.focus(); }">
     <h1 style="margin-top: 40px; margin-bottom: 0px;">Contents</h1>
     <!-- Sorry God, for using this forbidden language -->
-    <input type="text" class="searchbar" id="searchbar" onkeyup="search_contents()" placeholder="search poems">
+    <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value.toLowerCase().trim())" placeholder="search poems">
     <script>
-    function search_contents()
-    {
-      var input = document.getElementById('searchbar').value.toLowerCase().trim();
-      var contents = document.getElementById('contents').getElementsByTagName('a');
-      for( i=0; i < contents.length; i++ )
-      {
-        if (contents[i].text.toLowerCase().includes(input) || contents[i].className == "back")
-        {
-          contents[i].hidden = false;
-          if (contents[i].nextSibling.id == 'addition')
-          {
-            var addition = contents[i].nextSibling;
-            addition.hidden = false;
-            addition.nextSibling.hidden = false;
+    function searchContents(input) {
+      let contents = contents.getElementsByTagName('a');
+      for(let i = 0; i < contents.length; i++ ) {
+        if (contents[i].text.toLowerCase().includes(input) || contents[i].className == "back") {
+          contents[i].style.display="initial";
+          if (contents[i].nextSibling.id == 'addition') {
+            let addition = contents[i].nextSibling;
+            addition.style.display="initial";
+            addition.nextSibling.style.display="initial";
           }
-          else
-          {
-            contents[i].nextSibling.hidden = false;
+          else {
+            contents[i].nextSibling.style.display="initial";
           }
         }
         else
         {
-          contents[i].hidden = true;
-          if (contents[i].nextSibling.id == 'addition')
-          {
-            var addition = contents[i].nextSibling;
-            addition.hidden = true;
-            addition.nextSibling.hidden = true;
+          contents[i].style.display = "none";
+          if (contents[i].nextSibling.id == 'addition') {
+            let addition = contents[i].nextSibling;
+            addition.style.display = "none";
+            addition.nextSibling.style.display = "none";
           }
-          else
-          { /*Remove the next BR as well.*/
-            contents[i].nextSibling.hidden = true;
+          else { /*Remove the next BR as well.*/
+            contents[i].nextSibling.style.display = "none";
           }
         }
       }
     }
+
+    let collapsedSections = new Set()
+    //style.display = "none"; //style.display="initial"
+    function toggleCollapsed(sectionId) {
+      if (collapsedSections.has(sectionId)) { //uncollapse
+        document.getElementById(sectionId).style.transform = "initial"
+        collapsedSections.delete(sectionId)
+        return
+      } //collapse
+      document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
+      collapsedSections.add(sectionId)
+    } 
     </script>
 
     <div class="grid-container">
@@ -55,10 +75,8 @@
       <div>
         <h3>Volume 1: (Phrenes and Memes)</h3>
         <div class="grid-sub-container">
-          <div> <!-- PROPOSAL: style="border-right: double;">-->
-            <span style="font-size: small;">War and Phrenics:</span>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-1')">War and Phrenics:</span>
+          <div id="section-1" class="section-body">
             <a href="Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
             <br>
             <a href="Volume-1/War-And-Phrenics/the-sitting-down-of-the-opacity-brigade">2. The sitting down of the opacity brigade - By Bushi</a>
@@ -88,10 +106,8 @@
           </div>      
         </div>
         <div class="grid-sub-container">
-          <div>
-            <span style="font-size: small;">Really Stupid Stuff:</span>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-2')">Really Stupid Stuff:</span>
+          <div id="section-2" class="section-body">
             <a href="Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
             <br>
             <a href="Volume-1/Really-Stupid-Stuff/sylable-of-obamama">2. Sylable Of Obamama - By Bushi</a>
@@ -139,10 +155,8 @@
           </div>
         </div>
         <div class="grid-sub-container">
-          <div>
-            <span style="font-size: small;">Parodies and Adaptations:</span> <br>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</span> <br>
+          <div id="section-3" class="section-body">
             <a href="Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
             <br>
             <a href="Volume-1/Parodies-And-Adaptations/stuff-on-the-iso">2. Stuff On The Iso - By Zekiah</a>
@@ -167,10 +181,8 @@
       <div>
         <h3>Volume 2: (Idiots and Revelations)</h3>
         <div class="grid-sub-container">
-          <div>
-            <span style="font-size: small;">Idiots:</span>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-4')">Idiots:</span>
+          <div id="section-4" class="section-body">
             <a href="Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
             <br>
             <a href="Volume-2/Idiots/industrial-society">2. Industrial Society - By Bushi</a>
@@ -220,10 +232,8 @@
          </div>
         </div>
         <div class="grid-sub-container">
-          <div>
-            <span style="font-size: small;">Sublime and Revelation:</span>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-5')">Sublime and Revelation:</span>
+          <div id="section-5" class="section-body">
             <a href="Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
             <br>
             <a href="Volume-2/Sublime-And-Revelation/chiss">2. Chiss - By Zekiah</a>
@@ -237,10 +247,8 @@
          </div>
         </div>
         <div class="grid-sub-container">
-          <div>
-            <span style="font-size: small;">Tales and Tomes:</span>
-          </div>
-          <div style="border-radius: 10px; border-left: 2px solid grey; padding-left: 5px;">
+          <span class="section-span" onclick="toggleCollapsed('section-6')">Tales and Tomes:</span>
+          <div id="section-6" class="section-body">
             <a href="Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
             <br>
             <a href="Volume-2/Tales-And-Tomes/the-burial-of-herr-fischer-vi">2. The Burial of Herr Fischer VI - By Bushi</a><sup id="addition">new</sup>
