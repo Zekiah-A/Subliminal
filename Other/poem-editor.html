@@ -205,13 +205,13 @@
     </div>
     <div class="text-tools">
         Tools: <br>
-        <input class="tool" onclick="format('bold', null)" type="button" value="Bold"> <br>
-        <input class="tool" onclick="format('italic', null)" type="button" value="Italic"> <br>
-        <input class="tool" onclick="formatCustom('code')" type="button" value="Code (non-toggleable)"> <br>
-        <input class="tool" onclick="format('superscript', null)" type="button" value="Superscript"> <br>
+        <input class="tool" onclick="format('bold', null)" type="button" value="Bold">
+        <input class="tool" onclick="format('italic', null)" type="button" value="Italic">
+        <input class="tool" onclick="formatCustom('code')" type="button" value="Code" disabled> <br>
+        <input class="tool" onclick="format('superscript', null)" type="button" value="Superscript">
         <input class="tool" onclick="format('subscript', null)" type="button" value="Subscript"> <br>
         <input class="tool" onchange="format('foreColor', this.value);" value="#000000" style="height: 32px;" type="color"> <br>
-        <input class="tool" onclick="formatImage()" type="button" value="Image (coming soon)"> <br>
+        <input class="tool" onclick="formatImage()" type="button" value="Image" disabled> <br>
         <input class="tool" onclick="format('undo', null)" type="button" value="↩ undo">
         <input class="tool" onclick="format('redo', null)" type="button" value="redo ↪"> <br>
         <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px;">
@@ -222,10 +222,10 @@
         Background image: <br>
         <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         Poem summary: <br>
-        <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px;"></textarea>
+        <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px; width: calc(100% - 5px); height: 50px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
-        <input type="text" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (event.key == 'Enter') { addPoemTag(this.value); this.value = ''; }">
+        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (event.key == 'Enter') { addPoemTag(this.value); this.value = ''; }">
         Content Warning: <br>
         <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true"/>
         <label for="cWarningCheckbox"> Enabled</label><br>
@@ -237,7 +237,7 @@
         <div style="margin: 2px; border: 1px solid black; padding: 5px;" id="loadDiv">
             Load: <br>
         </div>
-        <button id="download-button" onclick="download()" style="position: relative; height: 24px;">Download edited page<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);"><path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path></svg></button>        
+        <button id="download-button" onclick="download()" style="position: relative; height: 32px;">Download edited page<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);"><path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path></svg></button>        
     </div>
     <div id="main" class="poem-centre">
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
