@@ -82,11 +82,9 @@
     }
 
     .searchbar {
-        background-color: #30303048;
         color: #DADADA;
-        border-radius: 5px;
         background-color: rgba(255, 255, 255, .20);
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(10px);
     }
 
     #content-warning
