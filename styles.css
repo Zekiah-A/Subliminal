@@ -236,3 +236,16 @@ p, a {
 #content-warning:target {
     visibility: hidden;
 }
+
+
+/*Hide poem title and back button when this page is inside of the preview window iframe*/
+@media screen and (width: 250px) {
+    @media screen and (height: 400px) {
+        .title-blur {
+            display: none !important;
+        }
+        .back {
+            display: none !important;
+        }
+    }
+}
