@@ -134,13 +134,35 @@
     <style>
         .tool {
             margin: 1px;
-            height: 23px;
+            height: 24px;
+            max-width: 100%;
         }
         .text-tools {
-            position: fixed; top: 115px; left: 16px; border: 1px solid black; width: 160px; padding: 5px;
+            position: fixed;
+            top: 115px;
+            left: 16px;
+            border: 1px solid black;
+            width: 160px;
+            padding: 5px;
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, .2);
+            backdrop-filter: blur(5px);
         }
         .document-tools {
-            position: fixed; top: 115px; right: 16px; border: 1px solid black; width: 160px; padding: 5px;
+            position: fixed;
+            top: 115px;
+            right: 16px;
+            border: 1px solid black;
+            width: 180px;
+            padding: 5px;
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, .2);
+            backdrop-filter: blur(5px);
+        }
+
+        @media screen and (orientation:portrait) {
+            .text-tools { position: inherit !important; width: calc(100% - 15px); } 
+            .document-tools { position: inherit !important; width: calc(100% - 15px); }
         }
     </style>
 </head>
@@ -169,7 +191,7 @@
             <option value="centre">Centre</option>
         </select> <br>
         Background image: <br>
-        <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 150px;">
+        <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         </div>
     </div>
     <div id="toolbox" class="document-tools">
@@ -178,7 +200,7 @@
         <div style="margin: 2px; border: 1px solid black; padding: 5px;" id="loadDiv">
             Load: <br>
         </div>
-        <button id="download-button" onclick="download()" style="position: absolute; right: 20%; bottom: 10px; padding-top:0px; ">Download edited page<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="24px" style="transform: translateY(8px);"><path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path></svg></button>        
+        <button id="download-button" onclick="download()" style="position: absolute; right: 20%; bottom: 10px; padding-top:0px;">Download edited page<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);"><path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path></svg></button>        
     </div>
     <div id="main" class="poem-centre">
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
