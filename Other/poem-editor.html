@@ -69,7 +69,7 @@
             '<br>\n' +
             '    </p>\n' +
             '    </div>\n' +
-            '    <a href="../../contents.html" class="back"> <- Back</a>\n' +
+            '    <a href="../../contents" class="back"> <- Back</a>\n' +
             '</body>\n' +
             'DATE\n' +
             '</html>\n';
@@ -81,7 +81,7 @@
                 .replace("CONTENT", newContent)
                 .replace("DATE", dateComment);
             element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedTemplate));
-            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + ".html");
+            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + "");
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
@@ -185,6 +185,6 @@
         </p>
     </div>
     <button id="download-button" style="position: absolute; right: 20%; bottom: 10px;"; onclick="download()">Download edited page</button>
-    <a href="../contents.html" class="back"> <- Back</a>
+    <a href="../contents" class="back"> <- Back</a>
 </body>
 </html>
