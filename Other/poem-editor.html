@@ -49,10 +49,12 @@
         function load(key) {
             let loadObject = JSON.parse(localStorage.getItem(key));
             summaryArea.value = loadObject.summary;
+            poemTags = []
             for(let t of loadObject.tags.split(",")) { 
                 addPoemTag(t)
             }
             cWarningCheckbox.checked = loadObject.cWarning
+            cWarningNotesInput.disabled = loadObject.cWarning ? false : true
             cWarningNotesInput.value = loadObject.cWarningAdditions
             title.innerHTML = loadObject.fullTitle;
             content.innerHTML = loadObject.poemContent;
