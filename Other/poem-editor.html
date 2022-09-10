@@ -9,7 +9,7 @@
 
         //Make user confirm that they want to leave the page.
         window.onbeforeunload = function() {
-            if (confirm("Save and exit?")) save()
+            if (confirm("Save before exiting?")) save()
             return true
         }
 
@@ -223,7 +223,7 @@
         <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
-        <input type="text" style="width: calc(100% - 5px); height: 24px;" onkeypress="addPoemTag(this.value); this.value = '';">
+        <input type="text" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (event.key == 'Enter') { addPoemTag(this.value); this.value = ''; }">
         Content Warning: <br>
         <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true"/>
         <label for="cWarningCheckbox"> Enabled</label><br>
