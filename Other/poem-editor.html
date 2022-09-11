@@ -8,13 +8,13 @@
         let poemTags = []
 
         //Make user confirm that they want to leave the page.
-        window.onbeforeunload = function() {
+        window.onbeforeunload = () => {
             if (confirm("Save before exiting?")) save()
             return true
         }
 
         //Load saved poems from local storage
-        window.onload = function() {
+        window.onload = () => {
             fetchStorage();
         }
 
@@ -150,7 +150,16 @@
             poemTags.push(tagName)
             let newTag = document.createElement("button")
             newTag.innerText = tagName
+            newTag.onclick = () => { removePoemTag(tagName) }
             tagContainer.appendChild(newTag)
+        }
+
+        function removePoemTag(tagName) {
+            poemTags.splice(poemTags.indexOf(tagName), 1)
+            for (let t of tagContainer.children) {
+                if (t.innerText == tagName)
+                    tagContainer.removeChild(t)
+            }
         }
     </script>
     <style>
@@ -186,7 +195,7 @@
             z-index: 1;
         }
 
-        #poem-tags > button {
+        #poem-tags button {
             border-radius: 40px;
             height: 24;
         }
@@ -227,7 +236,7 @@
         <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px; width: calc(100% - 5px); height: 50px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
-        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (event.key == 'Enter') { addPoemTag(this.value); this.value = ''; }">
+        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (this.value.trim() == '') return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { this.spaces++; if (this.spaces < 2) return; add(); this.spaces = 0 }">
         Content Warning: <br>
         <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true"/>
         <label for="cWarningCheckbox"> Enabled</label><br>
