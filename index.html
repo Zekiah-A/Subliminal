@@ -10,14 +10,38 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     .fixed {
-      position: fixed;
-      top: 30%;
-      left: 65%;
       border-style: double;
       vertical-align: middle;
       text-align: center;
-      height: 42vh;
+      height: calc(100% - 40px);
+      width: 100%;
+      overflow:scroll;
+      margin-bottom: 5px;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      border-radius: 2px;
+    }
+
+    .fixed::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fixed-container {
+      position: fixed;
+      top: 30%;
+      left: 65%;
+      height: 46vh;
       width: 18vh;
+    }
+
+    .slide-link {
+      text-decoration: none;
+      padding: 2px 6px 2px 6px;
+      color: rgb(50, 50, 50);
+      background-color: #eeeeee;
+      border: 1px solid rgb(50, 50, 50);
+      border-radius: 2px;
     }
   </style>
 </head>
@@ -38,10 +62,17 @@
     <a href="disclaimer">-> *Disclaimer*</a>
   </div>
 
-  <div class="fixed">
-    <a href="https://rplace.tk"> <!--https://discord.gg/juhqU5ETtT-->
-    <img alt="sussy 'advert' here" src="Resources/Advert2.png" style="height: 100%; width: 100%;">
-    </a>
+  <div class="fixed-container">
+    <div class="fixed">
+      <a href="https://rplace.tk">
+        <img id="advert1" alt="A fun game to play in your free time" src="Resources/Advert2.png" style="height: 100%; width: 100%;">
+      </a>
+      <a href="https://discord.gg/juhqU5ETtT">
+        <img id="advert2" alt="An interesting discord server" src="Resources/Advert1.png" style="height: 100%; width: 100%;">
+      </a>
+    </div>
+    <a class="slide-link" href="#advert1">1</a>
+    <a class="slide-link" href="#advert2">2</a>
   </div>
 
 </body>
