@@ -8,12 +8,14 @@
     .section-span {
       font-size: small;
       cursor: pointer;
+      transition: height .5s;
     }
 
     .section-body {
       border-radius: 10px;
       border-left: 2px solid grey;
       padding-left: 5px;
+      transition: transform .5s;
     }
 
     @media screen and (orientation:portrait) {
@@ -86,7 +88,7 @@
         return
       } //collapse
       document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
-      document.getElementById(sectionId).parentElement.style.height = "5%"
+      document.getElementById(sectionId).parentElement.style.height = document.getElementById(sectionId).style.height;
       collapsedSections.add(sectionId)
     } 
     </script>
