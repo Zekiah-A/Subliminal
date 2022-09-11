@@ -50,6 +50,9 @@
             let loadObject = JSON.parse(localStorage.getItem(key));
             summaryArea.value = loadObject.summary;
             poemTags = []
+            while (tagContainer.firstChild) {
+                tagContainer.removeChild(tagContainer.firstChild);
+            }
             for(let t of loadObject.tags.split(",")) { 
                 addPoemTag(t)
             }
@@ -77,8 +80,7 @@
                     if (i % 30 != 0) return
                     nts = nts.substring(0, i) + "|\n" + nts.substring(i, nts.length)
                 }
-                finishedCWTemplate = cWTemplate
-                .replace("ADDITIONAL_NOTES", nts)
+                finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", nts)
             }
 
             let finishedPoemTemplate = poemTemplate
