@@ -70,8 +70,8 @@
         async function download() {
             save()
             let loadObject = JSON.parse(localStorage.getItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-")));
-            let poemTemplate = await (await fetch("poem-template.html")).text()
-            let cWTemplate = await (await fetch("content-warning-template.html")).text()
+            let poemTemplate = await (await fetch("poem-template.html")).text().toString()
+            let cWTemplate = await (await fetch("content-warning-template.html")).text().toString()
 
             let finishedCWTemplate
             if (loadObject.cWarning === true) {
@@ -197,8 +197,8 @@
         }
 
         #poem-tags button {
-            border-radius: 40px;
-            height: 24;
+            border-radius: 4px;
+            margin: 2px;
         }
 
         @media screen and (orientation:portrait) {
@@ -234,7 +234,7 @@
         Background image: <br>
         <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         Poem summary: <br>
-        <textarea id="summaryArea" type="text" style="min-width: calc(100% - 5px); min-height: 50px; width: calc(100% - 5px); height: 50px;"></textarea>
+        <textarea id="summaryArea" type="text" maxlength="160" style="min-height: 50px; width: calc(100% - 5px); height: 50px; max-width: calc(100% - 5px); max-height: 150px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
         <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (this.value.trim() == '') return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { this.spaces++; if (this.spaces < 2) return; add(); this.spaces = 0 }">
