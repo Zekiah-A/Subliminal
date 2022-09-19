@@ -70,15 +70,15 @@
         async function download() {
             save()
             let loadObject = JSON.parse(localStorage.getItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-")));
-            let poemTemplate = await (await (await fetch("poem-template.html")).text()).toString()
-            let cWTemplate = await (await (await fetch("content-warning-template.html")).text()).toString()
+            let poemTemplate = await (await fetch("poem-template.html")).text()
+            let cWTemplate = await (await fetch("content-warning-template.html")).text()
 
             let finishedCWTemplate
             if (loadObject.cWarning === true) {
                 let nts = loadObject.cWarningAdditions;
-                nts = "|".concat(nts)
+                nts = "| ".concat(nts)
                 for (let i = 0; i < nts.length; i++) {
-                    if (i % 30 != 0) return
+                    if (i % 30 != 0) continue //TODO: improve this!
                     nts = nts.substring(0, i) + "|\n" + nts.substring(i, nts.length)
                 }
                 finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", nts)
@@ -94,6 +94,8 @@
                 .replace("CONTENT", loadObject.poemContent)
                 .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
                 .replace("DATE", Date.now())
+
+            console.log("a" + finishedPoemTemplate)
 
             let element = document.createElement('a')
             element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
