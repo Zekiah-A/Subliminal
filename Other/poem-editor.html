@@ -75,14 +75,15 @@
 
             let finishedCWTemplate
             if (loadObject.cWarning === true) {
-                let nts = loadObject.cWarningAdditions;
-                nts = "| ".concat(nts)
-                for (let i = 0; i < nts.length; i++) {
-                    if (i % 30 != 0) continue //TODO: improve this!
-                    nts = nts.substring(0, i) + "|\n" + nts.substring(i, nts.length)
-                    i = 0
+                //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
+                let chunks = loadObject.cWarningAdditions.match(/.{1,55}/g), cwInsert = ""
+                for (let chunk of chunks) {
+                    chunk.padEnd(55 - chunk.length) //if not taking up a whole line (is 55 chars long), pad spaces to line up
+                    chunk = "| ".concat(chunk) //add pipe start
+                    chunk = chunk.concat(" |") //add pipe end
+                    cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
                 }
-                finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", nts)
+                finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", cwInsert)
             }
 
             let finishedPoemTemplate = poemTemplate
