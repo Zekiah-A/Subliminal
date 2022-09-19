@@ -80,6 +80,7 @@
                 for (let i = 0; i < nts.length; i++) {
                     if (i % 30 != 0) continue //TODO: improve this!
                     nts = nts.substring(0, i) + "|\n" + nts.substring(i, nts.length)
+                    i = 0
                 }
                 finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", nts)
             }
@@ -91,7 +92,7 @@
                 .replace("POEM_BACKGROUND", loadObject.pageBackground)
                 .replace("TITLE", loadObject.fullTitle)
                 .replace("POEM_STYLE", loadObject.pageStyle)
-                .replace("CONTENT", loadObject.poemContent)
+                .replace("CONTENT", loadObject.poemContent.replaceAll("<br>", "<br>\n"))
                 .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
                 .replace("DATE", Date.now())
 
