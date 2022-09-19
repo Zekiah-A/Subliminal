@@ -70,8 +70,8 @@
         async function download() {
             save()
             let loadObject = JSON.parse(localStorage.getItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-")));
-            let poemTemplate = await (await fetch("poem-template.html")).text().toString()
-            let cWTemplate = await (await fetch("content-warning-template.html")).text().toString()
+            let poemTemplate = await (await (await fetch("poem-template.html")).text()).toString()
+            let cWTemplate = await (await (await fetch("content-warning-template.html")).text()).toString()
 
             let finishedCWTemplate
             if (loadObject.cWarning === true) {
