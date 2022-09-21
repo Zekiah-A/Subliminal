@@ -95,13 +95,13 @@
                 .replace("POEM_STYLE", loadObject.pageStyle)
                 .replace("CONTENT", loadObject.poemContent.replaceAll("<br>", "<br>\n"))
                 .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
-                .replace("DATE", Date.now())
+                .replace("DATE", "<!--" + Date.now().toString() + "-->")
 
             console.log("a" + finishedPoemTemplate)
 
             let element = document.createElement('a')
             element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
-            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + "");
+            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + ".html");
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
