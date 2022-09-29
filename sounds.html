@@ -1,6 +1,7 @@
 <html><head>
     <title>Subliminal Sounds</title>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="Resources/SoundsLogo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sounds at subliminal!">
     <meta name="keywords" content="Spotify, Music, Sounds, Subliminal, Lyrics">
@@ -15,6 +16,15 @@
             border-right: 1px solid #242424;
             display: flex;
             flex-direction: column;
+        }
+        .side-header-container {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            padding: 8px;
+            column-gap: 8px;
+            justify-content: center;
+            align-content: center;
         }
         .side-button {
             padding: 4px;
@@ -37,15 +47,17 @@
         .side-title {
             color: white;
             font-size: 20px;
-            padding: 12px;
             user-select: none;
+            margin: 0px;
         }
         .side-motto {
             color: white;
-            position: absolute;
-            top: 50px;
-            left: 12px;
             font-style: italic;
+            opacity: 0.6;
+        }
+        .side-logo {
+            height: 50%;
+            align-self: center;
             opacity: 0.6;
         }
         .main-content-page {
@@ -127,8 +139,13 @@
 <body style="background-color: #1c1c1c;display: flex;flex-direction: column;overflow: hidden;height: 100%;width: 100%;padding: 0px;margin: 0px;/*! scale: 111; */">
     <div style="flex-grow: 1;display: flex;flex-direction: row;">
         <side>
-            <h1 class="side-title">Subliminal sounds</h1>
-            <span class="side-motto">Sound, unhinged</span>
+            <div class="side-header-container">
+                <img class="side-logo" src="Resources/SoundsLogo.png">
+                <div style="align-self: center;">
+                    <h1 class="side-title">Subliminal sounds</h1>
+                    <span class="side-motto">Sound, unhinged</span>
+                </div>
+            </div>
             <a class="side-button" href="#home" style="display: flex;align-items: center;">
                 <svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24" style="fill: white;opacity: 0.6;/*! scale: 2.5; */display: inline;">
                    <path d="M14.5 2.134a1 1 0 011 0l6 3.464a1 1 0 01.5.866V21a1 1 0 01-1 1h-6a1 1 0 01-1-1V3a1 1 0 01.5-.866zM16 4.732V20h4V7.041l-4-2.309zM3 22a1 1 0 01-1-1V3a1 1 0 012 0v18a1 1 0 01-1 1zm6 0a1 1 0 01-1-1V3a1 1 0 012 0v18a1 1 0 01-1 1z"></path>
