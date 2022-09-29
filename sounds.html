@@ -1,5 +1,4 @@
-<html>
-<head>
+<html><head>
     <title>Subliminal Sounds</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +6,119 @@
     <meta name="keywords" content="Spotify, Music, Sounds, Subliminal, Lyrics">
     <link rel="stylesheet" href="styles.css">
     <style>
-        .side {
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        side {
+            width: 256px;
+            background-color: black;
+            border-right: 1px solid #242424;
             display: flex;
-            row-gap: 10px;
-            padding: 16px;
+            flex-direction: column;
+        }
+        .side-button {
+            padding: 12px;
+            border-radius: 4px;
+            color: lightgray;
+            height: fit-content;
+            margin: 8px 8px 0px 8px;
+            line-height: 16px;
+            user-select: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .side-button:hover {
+            color: white;
+        }
+        .side-button:focus {
+            background-color: #d3d3d33b;
+        }
+        .side-title {
+            color: white;
+            font-size: 20px;
+            padding: 12px;
+            user-select: none;
+        }
+        input[type="range"] {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translateY(-50%) translateX(-50%);
+            width: 60%;
+            border: none;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+            overflow: clip;
+            height: 4px;
+            border-radius: 4px;
+        }
+        input[type="range"]::-moz-range-thumb {
+            appearance: none;
+            height: 100%;
+            background: #096BB1;
+            cursor: pointer;
+            transform: translateX(-10px);
+            width: 20px;
+            box-shadow: -1010px 0px 0px 1000px #096bb1;
+            border: none;
+            border-radius: 0px 10px 10px 0px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            height: 100%;
+            background: #096BB1;
+            cursor: pointer;
+            transform: translateX(-10px);
+            width: 20px;
+            box-shadow: -1010px 0px 0px 1000px #096bb1;
+            border: none;
+            border-radius: 0px 10px 10px 0px;
+        }
+        #playButton {
+            color: black;
+            background-color: white;
+            border-radius: 100%;
+            width: 40px;
+            height: 40px;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            margin: 4px;
+            transition: scale(0.2s);
+        }
+        playButton:hover {
+            scale: 1.1;
         }
     </style>
 </head>
    
-<body style="background-color: #1c1c1c;">
-    <div class="side" style="height: calc(100% - 96px);width: 256px;background-color: black;left: 0;top: 0;position: absolute;border-right: 1px solid #242424;">
-        <h1 style="color: white; position: absolute; left: 50%; transform: translateX(-50%);">Subliminal sounds</h1>
-        <div style="transform: translateX(-50%);/* top: 120px; */background-color: #d3d3d33b;padding: 12px;border-radius: 8px;color: white;height: fit-content;flex: 1 0 auto;">Home</div>
+<body style="background-color: #1c1c1c;display: flex;flex-direction: column;overflow: hidden;height: 100%;width: 100%;padding: 0px;margin: 0px;/*! scale: 111; */">
+    <div style="flex-grow: 1;display: flex;flex-direction: row;">
+        <side>
+            <h1 class="side-title">Subliminal sounds</h1>
+            <a class="side-button" href="#home">Home</a>
+            <a href="#search" class="side-button">Search</a>
+            <a href="#library" class="side-button">Your Library</a>
+        </side>
+    <div id="mainContent" style="flex-grow: 1;"></div></div>
+    <div style="background-color: #303030;width: 100%;height: 96px;box-shadow: 0px 0px 16px 0px #00000040;border-bottom: 2px solid #007bd3;border-top: 1px solid #3c3c3c;align-self: flex-end;position: relative;display: flex;flex-direction: row;justify-content: center;align-content: center;">
+        <div style="width: 300px; display: flex;">
+            <img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0" style="height: calc(100% - 16px);padding: 8px;display: inline;">
+            <div style="align-self: top;">
+                <p style="padding: 2px;line-height: 0px;color: white;">Song Name</p>
+                <p style="padding: 2px;line-height: 0px;color: white;">Song Artist</p>
+            </div>
+        </div>
+        <div style="position: relative;width: 100%;align-self: center;">
+            <div style="position: absolute;left: 50%;top: 40%;display: flex;flex-direction: row;align-items: center;justify-content: center;transform: translateX(-50%) translateY(-50%);">
+                <div>__Back__</div>
+                <div id="playButton"></div>
+                <div>__Pause__</div>
+            </div>
+        </div>
+        <input type="range" id="progressBar">
+        <div>Other things</div>
     </div>
-    <div style="background-color: #303030;width: 100%;height: 96px;position: absolute;bottom: 0px;left: 0px;box-shadow: 0px 0px 16px 0px #00000040;border-bottom: 2px solid #007bd3;border-top: 1px solid #3c3c3c;"></div>
 </body>
 </html>
