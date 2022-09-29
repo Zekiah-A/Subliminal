@@ -26,6 +26,7 @@
             user-select: none;
             cursor: pointer;
             text-decoration: none;
+            height: 30px;
         }
         .side-button:hover {
             color: white;
@@ -86,6 +87,9 @@
             cursor: pointer;
             margin: 4px;
             transition: scale(0.2s);
+            display: flex;
+            justify-content: center;
+            align-content: center;
         }
         #playButton:hover {
             scale: 1.1;
@@ -97,7 +101,7 @@
     <div style="flex-grow: 1;display: flex;flex-direction: row;">
         <side>
             <h1 class="side-title">Subliminal sounds</h1>
-            <a class="side-button" href="#search" style="display: flex;align-items: center;/*! justify-content: center; */">
+            <a class="side-button" href="#search" style="display: flex;align-items: center;">
                 <svg role="img" height="24" width="24" aria-hidden="true" viewBox="0 0 24 24" style="fill: white;opacity: 0.6;/*! scale: 2.5; */display: inline;">
                    <path d="M14.5 2.134a1 1 0 011 0l6 3.464a1 1 0 01.5.866V21a1 1 0 01-1 1h-6a1 1 0 01-1-1V3a1 1 0 01.5-.866zM16 4.732V20h4V7.041l-4-2.309zM3 22a1 1 0 01-1-1V3a1 1 0 012 0v18a1 1 0 01-1 1zm6 0a1 1 0 01-1-1V3a1 1 0 012 0v18a1 1 0 01-1 1z"></path>
                 </svg> 
@@ -122,9 +126,9 @@
         </side>
         <div id="mainContent" style="flex-grow: 1;--background-noise: url(&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1IiBkPSJNMCAwaDMwMHYzMDBIMHoiLz48L3N2Zz4=&quot;);background: linear-gradient(#6eb2f947 4%, #fff0 30%);display: flex;flex-direction: column;position: relative;">
             <div style="position: absolute;width: 100%;height: 100%;top: 0px;left: 0px;overflow: scroll;">
-               <div style="height: 4vh;display: flex;align-content: center;/*! justify-content: center; */position: relative;">
+               <div style="height: 4vh;display: flex;align-content: center;position: relative;">
                </div>
-               <div style="height: 30vh;display: flex;align-content: center;/*! justify-content: center; */position: relative;">
+               <div style="height: 30vh;display: flex;align-content: center;position: relative;">
                   <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
                </div>
                <div style="backdrop-filter: blur(15px) contrast(1.05) saturate(1.6);height: 800px;border-radius: 16px;">__Content:__</div>
