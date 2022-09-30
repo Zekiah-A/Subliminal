@@ -1,0 +1,18 @@
+# Defines a lyric file that can be read, and converted into a lyrics page on subliminal music
+
+# This is a comment, it will be ignored by the subliminal lyric system, must be on a new line, blank lines are also ignored.
+
+#No additional marks = a normal, new line
+0:00 Walking through
+
+#+ denotes an amendment to the last line, such as revealing more text at the end of the last line after a given time
+0:01 + a town
+
+#! denotes an off screen graphic, that will be displayed to the side of the lyrics as they are being played
+0:02 ! 🏙️
+
+1:03 When my ears are blasted
+1:03.05 ! 💣
+1:03.08 + out!
+
+1:04 'Cause I can't stand the language 
