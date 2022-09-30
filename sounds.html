@@ -77,6 +77,12 @@
             opacity: 1;
             /*display: block;*/
         }
+        .main-content-page-topsection {
+          height: 4vh;
+          display: flex;
+          align-content: center;
+          position: relative;
+        }
 
         input[type="range"] {
             border: none;
@@ -108,6 +114,14 @@
             box-shadow: -1010px 0px 0px 1000px #096bb1;
             border: none;
             border-radius: 0px 10px 10px 0px;
+        }
+        input[type="text"] {
+          height: 100%;
+          border-radius: 96px;
+          margin: 8px;
+          padding: 4px;
+          border: 1px solid #242424;
+          background-color: white;
         }
 
         #playButton {
@@ -174,6 +188,7 @@
         <div id="mainContent" style="flex-grow: 1;--background-noise: url(&quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1IiBkPSJNMCAwaDMwMHYzMDBIMHoiLz48L3N2Zz4=&quot;);background: linear-gradient(#6eb2f947 4%, #fff0 30%);display: flex;flex-direction: column;position: relative;">
             <!--Home page, only visible when current anchor is #home-->
             <div id="home" class="main-content-page">
+               <div class="main-content-page-topsection"></div>
                 <div style="height: 100vh;display: flex;align-content: center;position: relative;flex-direction: column;">
                     <h2 style="color: white;margin: 16px;">We have some cool stuff for you</h2>
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Latest sounds</a>
@@ -182,13 +197,14 @@
             </div> 
             <!--Search page, only visible when current anchor is #search-->
             <div id="search" class="main-content-page">
-
+               <div class="main-content-page-topsection" style="flex-direction: row;">
+                  <input type="text" placeholder="🔍 Search">
+                  <div style="flex-grow: 1;"></div>
+                </div>
             </div> 
             <!--Liked page, only visible when current anchor is #liked-->
             <div id="liked" class="main-content-page">
-               <div style="height: 4vh;display: flex;align-content: center;position: relative;">
-
-                </div>
+               <div class="main-content-page-topsection"></div>
                <div style="height: 30vh;display: flex;align-content: center;position: relative;">
                   <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
                </div>
