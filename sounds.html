@@ -281,4 +281,37 @@
         </div>
     </div>
 </body>
+<script>
+    const lyricLineMode = {
+        Line: 0,
+        Addition: 1,
+        Graphic: 2
+    }
+
+    //This gives us the seconds from a subliminal (max hour mins seconds) lyric time 
+    let lyricTimeToSecs = lyTime => 
+        lyTime.split(":",3) //1. split by ':'                       
+        .map(lyTime => Number(lyTime)) //2. convert items to nunbers ("" converts to 0)
+        .reduce((total, current) => total * 60 + current, 0) //3. starting left, read number, add to total * 60
+
+    function applyLyricFile(lyrics) {
+        let lines = lyrics.split("\n")
+
+        for (let i = 0; i < lyrics.split("\n"); i++) {
+            let line = lines[i]
+
+            //Skip all blank or comment lines
+            if (!line.trim() || line[0] == "#") continue
+            //Get the seconds from the time stamp at the start of the lyric
+            let seconds = lyricTimeToSecs(line.split(" ")[0])
+            //Set the type of this lyric, i.e, lyric, addition, or graphic
+            let mode = 
+                line.split(" ")[1][0] == "\\" ? lyricLineMode.Line 
+                : line.split(" ")[1][0] == "+" ? lyricLineMode.Addition
+                : line.split(" ")[1][0] == "!" ? lyricLineMode.Graphic 
+                : lyricLineMode.Line
+
+        }
+    }
+</script>
 </html>
