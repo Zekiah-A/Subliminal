@@ -322,7 +322,7 @@
         .reduce((total, current) => total * 60 + current, 0) //3. starting left, read number, add to total * 60
 
     function lyricFileToElements(lyrics) {
-        let lines = lyrics.split("\n"), element = []
+        let lines = lyrics.split("\n"), elements = []
 
         for (let i = 0; i < lyrics.split("\n"); i++) {
             let line = lines[i]
@@ -364,7 +364,8 @@
         return elements
     }
 
-    for (let el of lyricFileToElements(await (await fetch("Resources/example.lyric")).text())) {
+    let example = await (await fetch("Resources/example.lyric")).text()
+    for (let el of lyricFileToElements(example)) {
         lyricsLines.appendchild(el)
     }
 </script>
