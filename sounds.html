@@ -158,7 +158,7 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        #lyricLines span {
+        #lyricsLines span {
             font-size: 300%;
             font-weight: bolder;
             display: block;
@@ -177,10 +177,10 @@
             color: #333333;
             opacity: 0.6;
         }
-        #lyricLines span[mode="addition"] {
+        #lyricsLines span[mode="addition"] {
             display: inline;
         }
-        #lyricLines span[mode="addition"][status="later"] {
+        #lyricsLines span[mode="addition"][status="later"] {
             display: none;
         }
     </style>
@@ -334,7 +334,8 @@
             let milliseconds = lyricTimeToSecs(line.split(" ")[0]) * 1000
 
             let el = document.createElement("span")
-            el.innerText = line.split(" ")[2]
+            let formattedLineText = line.split(" ")[1]
+
             el.setAttribute("time", milliseconds)
             el.setAttribute("status", "later")
 
@@ -343,24 +344,27 @@
                 //lyric line is an addition
                 case "+":
                     el.setAttribute("mode", "addition")
+                    line = line.replace("+", "")
                     break
                 //lyric line is a graphic
                 case "!":
                     el.setAttribute("mode", "graphic")
+                    fline = line.replace("!", "")
                     break
                 //lyric line mode is a normal line, but it starts with a special character that must be escaped
                 case "\\":
-                    line = line.replace("\\", "")                    
+                    line = line.replace("\\", "")
+                    break         
             }
 
+            el.innerText = formattedLineText
             elements.push[el]
         }
 
         return elements
     }
 
-    let lyricFileTest = await (await fetch("Resources/example.lyric")).text()
-    for (let el of lyricFileToElements(lyricFileTest)) {
+    for (let el of lyricFileToElements(await (await fetch("Resources/example.lyric")).text())) {
         lyricsLines.appendchild(el)
     }
 </script>
