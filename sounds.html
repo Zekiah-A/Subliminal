@@ -92,19 +92,27 @@
             grid-template-rows: auto auto;
             row-gap: 16px;
         }
-        .home-genres-grid div { 
+        .home-genres-grid > div { 
             background: linear-gradient(rgba(66, 66, 66, 0.2), rgba(47, 47, 47, 0.2));
             border-radius: 4px;
             box-shadow: 0px 8px 16px #00000038;
-            display: inline;
             width: 100%;
             height: 96px;
             color: white;
             font-weight: bold;
+            display: flex;
+            flex-direction: row;
+            column-gap: 16px;
+            max-width: 100%;
+            overflow: hidden;
+            backdrop-filter: contrast(0.8);
         }
-        .home-genres-grid div img {
+        .home-genres-grid > div img {
             height: 100%;
             border-radius: 4px;
+        }
+        .home-genres-grid > div span {
+            line-height: 96px;
         }
 
         input[type="range"] {
@@ -186,6 +194,7 @@
             display: block;
             align-self: center;
             margin: 0px;
+            cursor: pointer;
         }
         #lyricsLines span[status="later"] {
             color: #333333;
@@ -246,14 +255,14 @@
             <div id="home" class="main-content-page">
                <div class="main-content-page-topsection"></div>
                 <div style="height: 100vh;display: flex;align-content: center;position: relative;flex-direction: column;">
-                    <h1 style="color: white;margin: 16px;">We have some cool stuff for you</h1>
+                    <h1 style="color: white;margin: 16px;">Good day, see what's new...</h1>
                     <div class="home-genres-grid">
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">Nasm's thingssss</div>
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">SussZ audios</div>
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">Unintelligable earrape</div>
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">Old time classics</div>
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">Master pieces</div>
-                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0">RSS productions</div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>Nasm's things</span></div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>SussZ audios</span></div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>Unintelligable earrape</span></div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>Old time classics</span></div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>Master pieces</span></div>
+                        <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>RSS productions</span></div>
                      </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Latest sounds</a>
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
