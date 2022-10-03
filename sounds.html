@@ -261,6 +261,9 @@
             --decorative-base: #fff;
             --decorative-subdued: #292929;
         }
+
+        inner-card: background-color: var(--card-color,#333)
+        card-box-shadow: box-shadow: 0 8px 24px rgba(0,0,0,.5);
         */
     </style>
 </head>
@@ -321,33 +324,29 @@
                         margin-right: 32px;
                         height: 20vw;
                     ">
-                    <div style="
-                        background: linear-gradient(#2a2a2a, #1c1c1c);
-                        flex: 1 1 0;
-                        border-radius: 8px;
-                        box-shadow: 1px 1px 24px black;
-                    ">Keskiiviko</div>
-                    <div style="
-                        flex: 1 1 0;
-                        border-radius: 8px;
-                        background: linear-gradient(#2a2a2a, #1c1c1c);
-                        box-shadow: 1px 1px 24px black;
-                    ">Vittu mikko</div><div style="
-                        flex: 1 1 0;
-                        border-radius: 8px;
-                        background: linear-gradient(#2a2a2a, #1c1c1c);
-                        box-shadow: 1px 1px 24px black;
-                    ">The long master piece</div><div style="
-                        flex: 1 1 0;
-                        border-radius: 8px;
-                        background: linear-gradient(#2a2a2a, #1c1c1c);
-                        box-shadow: 1px 1px 24px black;
-                    ">Cool adaptation no copyright</div><div style="
-                        flex: 1 1 0;
-                        border-radius: 8px;
-                        background: linear-gradient(#2a2a2a, #1c1c1c);
-                        box-shadow: 1px 1px 24px black;
-                    ">Ode to BOY</div></div>
+                        <div style="
+                            background: #181818;
+                            flex: 1 1 0;
+                            border-radius: 8px;
+                        ">Keskiiviko</div>
+                        <div style="
+                            flex: 1 1 0;
+                            border-radius: 8px;
+                            background: #181818;
+                        ">Vittu mikko</div><div style="
+                            flex: 1 1 0;
+                            border-radius: 8px;
+                            background: #181818;
+                        ">The long master piece</div><div style="
+                            flex: 1 1 0;
+                            border-radius: 8px;
+                            background: #181818;
+                        ">Cool adaptation no copyright</div><div style="
+                            flex: 1 1 0;
+                            border-radius: 8px;
+                            background: #181818;
+                        ">Ode to BOY</div>
+                    </div>
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
                 </div>
             </div> 
@@ -381,7 +380,7 @@
                 <canvas style="position: absolute;top: 0;width: 100%;height: 100%;pointer-events: none;"></canvas>
             </div>                         
             <!--Liked page, only visible when current anchor is #liked-->
-            <div id="liked" class="main-content-page" style="background: linear-gradient(#6eb2f947 4%, #fff0 30%);">
+            <div id="liked" class="main-content-page" style="background: linear-gradient(#5038a0 4%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
                <div style="height: 30vh;display: flex;align-content: center;position: relative;">
                   <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
