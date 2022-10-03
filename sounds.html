@@ -339,7 +339,6 @@
                         <div>The long master piece</div>
                         <div>Cool adaptation no copyright</div>
                         <div>Ode to BOY</div>
-                        <div>Ode to BOY</div>
                      </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
                 </div>
@@ -484,12 +483,11 @@
     addEventListener('resize', (event) => {
         for (let elementRef of cardGrids) {
             //A card should have a 3H : 2W ratio, with max width preferably being around 200px, the maximum column count should be around 5
-            let elemWidth = Number(elementRef.style.width.slice(0, -2))
-            let columns = Math.floor(elemWidth / 200)
-            let rowCount = Math.floor(Math.floor(elemWidth / 200) / 5)
+            let columns = Math.floor(elementRef.offsetWidth / 200)
+            let rowCount = Math.floor(Math.floor(elementRef.offsetWidth / 200) / 5)
             let columnCount = Math.floor(columns / rowCount)
-            let gridGap = elemWidth / (columnCount + 1)
-            let height = 1.5 * elemWidth // 3 / 2, keeps 3:2 ratio
+            let gridGap = elementRef.offsetWidth / (columnCount + 1)
+            let height = 1.5 * elementRef.offsetWidth // 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
             elementRef.style.gridTemplateRows = `repeat(2, ${height})`
             elementRef.style.columnGap = gridGap + "px"
