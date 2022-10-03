@@ -486,7 +486,7 @@
             let columnCount = Math.floor(elementRef.offsetWidth / 200)
             let rowCount = Math.ceil(elementRef.childElementCount / columnCount)
             let gridGap = Math.floor((elementRef.offsetWidth - ((columnCount + 1) * 200)) / columnCount) //assume columns are 200
-            let height = 1.5 * (elementRef.offsetWidth / ((columnCount * 200) + (columnCount * gridGap))) // 3 / 2, keeps 3:2 ratio
+            let height = 1.5 * elementRef.children[0].offsetWidth //dirty, non mathematical way, 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
             elementRef.style.gridTemplateRows = `repeat(2, ${height}px)`
             elementRef.style.columnGap = gridGap + "px"
