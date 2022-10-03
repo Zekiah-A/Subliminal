@@ -484,7 +484,7 @@
         for (let elementRef of cardGrids) {
             //A card should have a 3H : 2W ratio, with max width preferably being around 200px, the maximum column count should be around 5
             let columnCount = Math.floor(elementRef.offsetWidth / 200)
-            let rowCount = Math.ceil(elementRef.childElementCount / columns)
+            let rowCount = Math.ceil(elementRef.childElementCount / columnCount)
             let gridGap = elementRef.offsetWidth - ((columnCount + 1) * 200) //assume columns are 200
             let height = 1.5 * (elementRef.offsetWidth / (columnCount + columnCount * gridGap)) // 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
