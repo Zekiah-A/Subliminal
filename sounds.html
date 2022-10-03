@@ -482,7 +482,7 @@
 
     let example = await (await fetch("Resources/example.lyric")).text()
     for (let el of lyricFileToElements(example)) {
-        lyricsLines.appendchild(el)
+        lyricsLines.appendChild(el)
     }
 
     function onCardsGridResize(elementRef) {
