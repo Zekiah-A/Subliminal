@@ -480,11 +480,6 @@
         return elements
     }
 
-    let example = await (await fetch("Resources/example.lyric")).text()
-    for (let el of lyricFileToElements(example)) {
-        lyricsLines.appendChild(el)
-    }
-
     function onCardsGridResize(elementRef) {
         //A card should have a 3H : 2W ratio, with max width preferably being around 200px, the maximum column count should be around 5
         let elemWidth = Number(elementRef.style.width.slice(0, -2))
@@ -498,5 +493,14 @@
         elementRef.style.columnGap = gridGap + "px"
         elementRef.style.rowGap = gridGap + "px"
     }
+
+    async function testLyricLoad() {
+        let example = await (await fetch("Resources/example.lyric")).text()
+        for (let el of lyricFileToElements(example)) {
+            lyricsLines.appendChild(el)
+        }
+    }
+
+    testLyricLoad()
 </script>
 </html>
