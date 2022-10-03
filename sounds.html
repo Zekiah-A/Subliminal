@@ -376,7 +376,7 @@
             <div id="liked" class="main-content-page" style="background: linear-gradient(#5038a0 4%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
                <div style="height: 30vh;display: flex;align-content: center;position: relative;">
-                  <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
+                  <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96px; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
                </div>
                <div style="backdrop-filter: blur(15px) contrast(1.05) saturate(1.6);height: 800px;border-radius: 16px;padding: 24px;color: white;">
                     <div style="display: flex;width: 100%;flex-direction: row;">
@@ -487,9 +487,9 @@
             let rowCount = Math.floor(Math.floor(elementRef.offsetWidth / 200) / 5)
             let columnCount = Math.floor(columns / rowCount)
             let gridGap = elementRef.offsetWidth / (columnCount + 1)
-            let height = 1.5 * elementRef.offsetWidth // 3 / 2, keeps 3:2 ratio
+            let height = 1.5 * (elementRef.offsetWidth / (columnCount + columnCount * rowGap)) // 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
-            elementRef.style.gridTemplateRows = `repeat(2, ${height})`
+            elementRef.style.gridTemplateRows = `repeat(2, ${height}px)`
             elementRef.style.columnGap = gridGap + "px"
             elementRef.style.rowGap = gridGap + "px"
         }
