@@ -128,6 +128,23 @@
         .home-genres-grid > div span {
             line-height: 96px;
         }
+        .home-cards-grid {
+            display: grid;
+            column-gap: 32px;
+            margin-left: 32px;
+            margin-right: 32px;
+            grid-template-columns: repeat(5, minmax(0,1fr));
+            grid-template-rows: repeat(2, minmax(400px,1fr));
+            row-gap: 32px;
+        }
+        .home-cards-grid > div {
+            border-radius: 8px;
+            background:#181818;
+            transition: background-color .3s ease;
+        }
+        .home-cards-grid > div:hover {
+            background:#282828;
+        }
 
         input[type="range"] {
             border: none;
@@ -316,37 +333,14 @@
                         <div><img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0"><span>RSS productions</span></div>
                      </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Recent listens</a>
-                    <div style="
-                        display: flex;
-                        column-gap: 32px;
-                        flex-direction: row;
-                        margin-left: 32px;
-                        margin-right: 32px;
-                        height: 20vw;
-                    ">
-                        <div style="
-                            background: #181818;
-                            flex: 1 1 0;
-                            border-radius: 8px;
-                        ">Keskiiviko</div>
-                        <div style="
-                            flex: 1 1 0;
-                            border-radius: 8px;
-                            background: #181818;
-                        ">Vittu mikko</div><div style="
-                            flex: 1 1 0;
-                            border-radius: 8px;
-                            background: #181818;
-                        ">The long master piece</div><div style="
-                            flex: 1 1 0;
-                            border-radius: 8px;
-                            background: #181818;
-                        ">Cool adaptation no copyright</div><div style="
-                            flex: 1 1 0;
-                            border-radius: 8px;
-                            background: #181818;
-                        ">Ode to BOY</div>
-                    </div>
+                    <div class=".home-cards-grid">
+                        <div style="background:#181818;border-radius:8px;transition:background-color .3s ease">Keskiiviko</div>
+                        <div style="">Vittu mikko</div>
+                        <div style="border-radius:8px;background:#181818;transition:background-color .3s ease">The long master piece</div>
+                        <div style="border-radius:8px;background:#181818;transition:background-color .3s ease">Cool adaptation no copyright</div>
+                        <div style="border-radius:8px;background:#181818;transition:background-color .3s ease">Ode to BOY</div>
+                        <div style="border-radius:8px;background:#181818;transition:background-color .3s ease">Ode to BOY</div>
+                     </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
                 </div>
             </div> 
