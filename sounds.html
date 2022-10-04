@@ -512,8 +512,8 @@
         }      
     }
 
-    addEventListener("resize", resizeCardGrids())
-    addEventListener("orientationchange", resizeCardGrids())
+    addEventListener("resize", resizeCardGrids, false)
+    addEventListener("orientationchange", resizeCardGrids, false)
 
     async function testLyricLoad() {
         let example = await (await fetch("Resources/example.lyric")).text()
