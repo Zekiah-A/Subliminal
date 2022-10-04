@@ -438,7 +438,7 @@
     function lyricFileToElements(lyrics) {
         let lines = lyrics.split("\n"), elements = []
 
-        for (let i = 0; i < lyrics.split("\n"); i++) {
+        for (let i = 0; i < lines.length; i++) {
             let line = lines[i]
 
             //Skip all blank or comment lines
