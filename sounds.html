@@ -22,13 +22,6 @@
             padding: 0px;
             margin: 0px;
         }
-        side {
-            width: 256px;
-            background-color: black;
-            border-right: 1px solid #242424;
-            display: flex;
-            flex-direction: column;
-        }
         p, span, h1, h2, h3, h4 {
             user-select: none;
         }
@@ -189,6 +182,33 @@
             outline: none;
         }
 
+        #side {
+            width: 256px;
+            background-color: black;
+            border-right: 1px solid #242424;
+            display: flex;
+            flex-direction: column;
+        }
+        #mainContent {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        /*on mobile, give nav a 100% width when it is opened, and hide when collapsed, making the main content 100% of the width*/
+        @media (orientation: portrait) {
+            #side {
+                display: none;
+                width: 0%;
+            }
+            #side:target {
+                width: 100%;
+            }
+            #mainContent:target-within { /*may not be necessary, but for good measure*/
+                width: 100%;
+            }
+        }
+
         #playButton {
             color: black;
             background-color: white;
@@ -288,7 +308,7 @@
    
 <body>
     <div style="flex-grow: 1;display: flex;flex-direction: row;">
-        <side>
+        <div id="side">
             <div class="side-header-container">
                 <img class="side-logo" src="Resources/SoundsLogo.png">
                 <div style="align-self: center;">
@@ -318,8 +338,8 @@
                </div>
                <span>Liked songs</span>
             </a>
-        </side>
-        <div id="mainContent" style="flex-grow: 1; display: flex; flex-direction: column; position: relative;">
+        </div>
+        <div id="mainContent">
             <!--Home page, only visible when current anchor is #home-->
             <div id="home" class="main-content-page" style="background: linear-gradient(#ffffff47 2%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
