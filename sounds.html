@@ -481,7 +481,7 @@
     //Card grids, such as those inheriting home-cards-grid css class
     const cardGrids = [homeRecentCards]
 
-    addEventListener('resize', (event) => {
+    function resizeCardGrids() {
         for (let elementRef of cardGrids) {
             //A card should have a 3H : 2W ratio, with max width preferably being around 200px, the maximum column count should be around 5
             let columnCount = Math.floor(elementRef.offsetWidth / 200)
@@ -489,8 +489,13 @@
             let height = 1.5 * elementRef.children[0].offsetWidth //non mathematical slightly dirty hack // 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
             elementRef.style.gridTemplateRows = `repeat(${rowCount}, ${height}px)`
-        }
-    });
+            //let gridGap = (elementRef.offsetWidth - (elementRef.children[0].offsetWidth * columnCount)) / (columnCount + 1)
+            //elementRef.style.columnGap = gridGap + "px"
+        }      
+    }
+
+    addEventListener("resize", resizeCardGrids())
+    addEventListener("orientationchange", resizeCardGrids())
 
     async function testLyricLoad() {
         let example = await (await fetch("Resources/example.lyric")).text()
@@ -500,5 +505,6 @@
     }
 
     testLyricLoad()
+    resizeCardGrids()
 </script>
 </html>
