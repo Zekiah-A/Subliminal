@@ -448,7 +448,8 @@
             let milliseconds = lyricTimeToSecs(line.split(" ")[0]) * 1000
 
             let el = document.createElement("span")
-            let formatted = (line.split(" ").slice(1)).toString()
+            let formatted = line.substring(line.indexOf(" ") + 1)
+
 
             el.setAttribute("time", milliseconds)
             el.setAttribute("status", "later")
