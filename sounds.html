@@ -449,7 +449,7 @@
 
             let el = document.createElement("span")
             let formatted = line.substring(line.indexOf(" ") + 1)
-
+            //TBC: test if str.split(' ').slice(1).join(' ') faster
 
             el.setAttribute("time", milliseconds)
             el.setAttribute("status", "later")
