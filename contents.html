@@ -121,10 +121,20 @@
 
       </iframe>
     </div>
-    <script>
-    function searchContents(input) {  }
-
+    <script> 
     let collapsedSections = new Set()
+
+    let stringToHtml = text => {
+      let htmlObject = document.createElement('div')
+      htmlObject.innerHTML = text
+      return htmlObject.firstChild
+    }
+
+    let searchContents = contents => {
+      //search through poem, authors, etc
+      return null
+    }
+
     //style.display = "none"; //style.display="initial"
     function toggleCollapsed(sectionId) {
       if (collapsedSections.has(sectionId)) { //uncollapse
@@ -140,11 +150,11 @@
 
     async function getPurgatoryEntries() {
       let entries = []
-      //fetch, process, put into template
+      //fetch, process, put into template, push
       return entries
     }
 
-    for (let entry of getPurgatoryEntries("https://server.poemanthology.org")) {
+    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {
       purgatoryFlex.appendChild(entry)
     }
     
