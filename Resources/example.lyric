@@ -1,18 +1,27 @@
 # Defines a lyric file that can be read, and converted into a lyrics page on subliminal music
+# this format is less capable than that used for official/verified lyrics created with the editor,
+# however, it is highly user friendly.
 
 # This is a comment, it will be ignored by the subliminal lyric system, must be on a new line, blank lines are also ignored.
 
-#No additional marks = a normal, new line
+# No additional marks = a normal, new line
 0:00 Walking through
 
-#+ denotes an amendment to the last line, such as revealing more text at the end of the last line after a given time
+# + denotes an amendment to the last line, such as revealing more text at the end of the last line after a given time
 0:01 + a town
 
-#! denotes an off screen graphic, that will be displayed to the side of the lyrics as they are being played
+# ! denotes an off screen graphic, that will be displayed to the side of the lyrics as they are being played
+# as it is a graphic, it will disappear at the next lyric
 0:02 ! 🏙️
 
 1:03 When my ears are blasted
-1:03.05 ! 💣
+
+# Link denotes a graphic that is loaded as an image/video/gif
+1:03.5 ! https://media.tenor.com/WJZhnnnFKCUAAAAS/explosion-boom.gif
+
+# Background denotes the gradient (2 colours) / colour (1 colour) background colour of the lyrics
+1.03.5 ! background #000000 #FF0000
+
 1:03.08 + out!
 
-1:04 'Cause I can't stand the language 
+1:04 'Cause I can't stand the language

@@ -12,13 +12,17 @@
         * {
             font-family: Arial, Helvetica, sans-serif;
         }
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
         body {
             background-color: #121212;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            height: 100%;
+            width: 100%;
             padding: 0px;
             margin: 0px;
         }
@@ -514,7 +518,7 @@
         <div style="flex: 0.4;display: flex;flex-direction: row;column-gap: 16px;"></div> <!--Hacky - find a real way to prefer align this to the left-->
         <div style="flex: 0.6;display: flex;flex-direction: row;column-gap: 16px;">
             <a href="#lyrics" style="align-self: center;"> <!--keroke button-->
-                <svg color="white" role="img" height="16" width="16" viewBox="0 0 16 16" style="fill: white;opacity: 0.6;"><path d="M13.426 2.574a2.831 2.831 0 00-4.797 1.55l3.247 3.247a2.831 2.831 0 001.55-4.797zM10.5 8.118l-2.619-2.62A63303.13 63303.13 0 004.74 9.075L2.065 12.12a1.287 1.287 0 001.816 1.816l3.06-2.688 3.56-3.129zM7.12 4.094a4.331 4.331 0 114.786 4.786l-3.974 3.493-3.06 2.689a2.787 2.787 0 01-3.933-3.933l2.676-3.045 3.505-3.99z" style=""></path></svg>
+                <svg color="white" role="img" height="16" width="16" viewBox="0 0 16 16" style="fill: white;opacity: 0.6;"><path d="M13.426 2.574a2.831 2.831 0 00-4.797 1.55l3.247 3.247a2.831 2.831 0 001.55-4.797zM10.5 8.118l-2.619-2.62A63303.13 63303.13 0 004.74 9.075L2.065 12.12a1.287 1.287 0 001.816 1.816l3.06-2.688 3.56-3.129zM7.12 4.094a4.331 4.331 0 114.786 4.786l-3.974 3.493-3.06 2.689a2.787 2.787 0 01-3.933-3.933l2.676-3.045 3.505-3.99z"></path></svg>
             </a>
             <a href="#queue" style="align-self: center;">
                 <svg role="img" height="16" width="16" viewBox="0 0 16 16" style="fill: white;opacity: 0.6;"><path d="M15 15H1v-1.5h14V15zm0-4.5H1V9h14v1.5zm-14-7A2.5 2.5 0 013.5 1h9a2.5 2.5 0 010 5h-9A2.5 2.5 0 011 3.5zm2.5-1a1 1 0 000 2h9a1 1 0 100-2h-9z"></path></svg>
@@ -570,12 +574,11 @@
                 //lyric line mode is a normal line, but it starts with a special character that must be escaped
                 case "\\":
                     formatted = formatted.replace("\\", "")
-                    elements.push(document.createElement("br"))
+                    if (i != 0) elements.push(document.createElement("br"))
                     break
                 default:
-                    elements.push(document.createElement("br"))
+                    if (i != 0) elements.push(document.createElement("br"))
                     break
-
             }
 
             el.innerText = formatted
@@ -583,6 +586,15 @@
         }
 
         return elements
+    }
+
+    class LyricsEffect {
+        duration = 0
+        
+    }
+
+    function playLyricsEffect(name, effect) {
+
     }
 
     function resizeCardGrids() {
