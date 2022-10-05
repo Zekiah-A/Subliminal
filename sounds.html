@@ -336,6 +336,13 @@
         #lyricsLines span[mode="addition"][status="later"] {
             display: none;
         }
+        #lyricsCanvas {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
         /*
         .encore-dark-theme, .encore-dark-theme .encore-base-set {
@@ -451,6 +458,7 @@
             </div> 
             <!--Lyrics page-->
             <div id="lyrics" class="main-content-page" style="background: linear-gradient(#624b4b, pink);">
+                <canvas id="lyricsCanvas"></canvas>
                 <div class="main-content-page-topsection" style="flex-direction: row;backdrop-filter: blur(16px) contrast(1.05) saturate(1.2);padding: 8px;margin-bottom: 32px;">
                    <h2 style=" color: white; margin: 8px;align-self: center;">Filthy French</h2>
                    <div style="width: 1px;background-color: gray;opacity: 0.6;"></div>
@@ -462,7 +470,6 @@
                 <div style="width: 20%;position: fixed;left: 80%;opacity: 0.6;">
                    <img src="Resources/SoundsLogo.png"><img>
                 </div>
-                <canvas style="position: absolute;top: 0;width: 100%;height: 100%;pointer-events: none;"></canvas>
             </div>                         
             <!--Liked page, only visible when current anchor is #liked-->
             <div id="liked" class="main-content-page" style="background: linear-gradient(#5038a0 4%, #fff0 30%);">
@@ -520,6 +527,9 @@
     </div>
 </body>
 <script>
+    //Card grids, such as those inheriting home-cards-grid css class
+    const cardGrids = [homeRecentCards]
+
     //This gives us the seconds from a subliminal (max hour mins seconds) lyric time 
     let lyricTimeToSecs = lyTime => 
         lyTime.split(":",3) //1. split by ':'                       
@@ -527,7 +537,7 @@
         .reduce((total, current) => total * 60 + current, 0) //3. starting left, read number, add to total * 60
 
     function lyricFileToElements(lyrics) {
-        let lines = lyrics.split("\n"), elements = []
+        let lines = lyrics.split("\n"), elements = [], elementsF = []
 
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i]
@@ -560,7 +570,12 @@
                 //lyric line mode is a normal line, but it starts with a special character that must be escaped
                 case "\\":
                     formatted = formatted.replace("\\", "")
-                    break         
+                    elements.push(document.createElement("br"))
+                    break
+                default:
+                    elements.push(document.createElement("br"))
+                    break
+
             }
 
             el.innerText = formatted
@@ -569,9 +584,6 @@
 
         return elements
     }
-
-    //Card grids, such as those inheriting home-cards-grid css class
-    const cardGrids = [homeRecentCards]
 
     function resizeCardGrids() {
         for (let elementRef of cardGrids) {
@@ -586,8 +598,6 @@
         }      
     }
 
-    addEventListener("resize", resizeCardGrids, false)
-    addEventListener("orientationchange", resizeCardGrids, false)
 
     async function testLyricLoad() {
         let example = await (await fetch("Resources/example.lyric")).text()
@@ -595,6 +605,9 @@
             lyricsLines.appendChild(el)
         }
     }
+
+    addEventListener("resize", resizeCardGrids, false)
+    addEventListener("orientationchange", resizeCardGrids, false)
 
     testLyricLoad()
     resizeCardGrids()
