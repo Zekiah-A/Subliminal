@@ -14,14 +14,14 @@
 # as it is a graphic, it will disappear at the next lyric
 0:02 ! 🏙️
 
-1:03 When my ears are blasted
+0:03 When my ears are blasted
 
 # Link denotes a graphic that is loaded as an image/video/gif
-1:03.5 ! https://media.tenor.com/WJZhnnnFKCUAAAAS/explosion-boom.gif
+0:03.5 ! https://media.tenor.com/WJZhnnnFKCUAAAAS/explosion-boom.gif
 
 # Background denotes the gradient (2 colours) / colour (1 colour) background colour of the lyrics
-1.03.5 ! background #000000 #FF0000
+0.03.5 ! background #000000 #FF0000
 
-1:03.08 + out!
+0:03.08 + out!
 
-1:04 'Cause I can't stand the language
+0:04 'Cause I can't stand the language

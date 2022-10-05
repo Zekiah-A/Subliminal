@@ -38,6 +38,7 @@
             align-content: center;
             margin-bottom: 16px;
             margin-top: 16px;
+            white-space: nowrap;
         }
         .side-button {
             padding: 4px;
@@ -281,6 +282,7 @@
             flex-direction: row;
             justify-content: center;
             justify-content: space-evenly;
+            white-space: nowrap;
         }
         #playButton {
             color: black;
@@ -313,6 +315,7 @@
             left: 50%;
             transform: translateX(-50%);
             padding-left: 15%;
+            white-space: nowrap;
         }
         #lyricsLines span {
             font-size: 300%;
@@ -531,8 +534,32 @@
     </div>
 </body>
 <script>
+    const clientPackets = {
+        SyncHost: 0,
+        SyncZombie: 1,
+        UnsyncZombie: 2,
+        Play: 3,
+        Time: 4,
+        Lyrics: 5,
+        Search: 6,
+        Purgatory: 7,
+        Approve: 8,
+        Veto: 9,
+        SearchRandom: 10,
+        SongInfo: 11
+    }
+    const serverPackets = {
+        StartPlay: 0,
+        EndPlay: 1,
+        SetInfo: 2,
+        SetTime: 3,
+        RetPurgatory: 4,
+        RetRandom: 5,
+        RetLyrics: 6
+    }
     //Card grids, such as those inheriting home-cards-grid css class
     const cardGrids = [homeRecentCards]
+    const socket = new WebSocket("wss://server.poemanthology.org:80")
 
     //This gives us the seconds from a subliminal (max hour mins seconds) lyric time 
     let lyricTimeToSecs = lyTime => 
@@ -588,14 +615,13 @@
         return elements
     }
 
-    class LyricsEffect {
+    /*class LyricsEffect {
         duration = 0
-        
     }
 
     function playLyricsEffect(name, effect) {
 
-    }
+    }*/
 
     function resizeCardGrids() {
         for (let elementRef of cardGrids) {
