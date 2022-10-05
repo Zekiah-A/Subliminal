@@ -539,8 +539,8 @@
 
     function resizeCardGrids() {
         for (let elementRef of cardGrids) {
-            //A card should have a 3H : 2W ratio, with max width preferably being around 200px, the maximum column count should be around 5
-            let columnCount = Math.min(Math.floor(elementRef.offsetWidth / 200), elementRef.childElementCount)
+            //A card should have a 3H : 2W ratio, with max width preferably being around 200px, on portrait, 100px, the maximum column count should be around 5
+            let columnCount = Math.min(Math.floor(elementRef.offsetWidth / (window.innerHeight > window.innerWidth ? 100 : 200)), elementRef.childElementCount)
             let rowCount = Math.ceil(elementRef.childElementCount / columnCount)
             let height = 1.5 * elementRef.children[0].offsetWidth //non mathematical slightly dirty hack // 3 / 2, keeps 3:2 ratio
             elementRef.style.gridTemplateColumns = `repeat(${columnCount}, minmax(0px, 1fr))`
