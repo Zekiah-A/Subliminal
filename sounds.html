@@ -143,7 +143,25 @@
         .home-cards-grid > div:hover {
             background:#282828;
         }
-
+        .home-cards-grid > div > img {
+            width: calc(100% - 34px);
+            margin: 16px;
+            border-radius: 8px;
+            border: 1px solid gray;
+            box-shadow: 0px 0px 8px 0px #00000047;
+        }
+        @media (orientation: portrait) {
+            .home-genres-grid {
+                margin: 16px;
+                column-gap: 8px;
+                grid-template-columns: auto auto;
+                grid-template-rows: auto auto auto;
+                row-gap: 8px;
+            }
+            .home-genres-grid > div {
+                height: 84px;
+            }
+        }
         input[type="range"] {
             border: none;
             appearance: none;
@@ -213,9 +231,10 @@
               flex-direction: column;
             }
             #side {
-                height: 10%;
+                height: 78px;
                 width: 100%;
                 overflow: hidden;
+                transition: height .5s;
             }
             #side:target {
                 display: flex;
@@ -236,14 +255,29 @@
               border-radius: 4px;
               z-index: 1;
             }
-            #sideBurger > svg { fill: white; opacity: 0.6;}
-            
+            #sideBurger > svg {
+                fill: white; opacity: 0.6;
+            }
             #mainContent:target-within { /*may not be necessary, but for good measure*/
                 width: 100%;
                 flex-grow: 1;
             }
         }
 
+        #playerBar {
+            background-color: #303030;
+            width: 100%;
+            height: 96px;
+            box-shadow: 0px 0px 16px 0px #00000040;
+            border-bottom: 2px solid #007bd3;
+            border-top: 1px solid #3c3c3c;
+            align-self: flex-end;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            justify-content: space-evenly;
+        }
         #playButton {
             color: black;
             background-color: white;
@@ -395,11 +429,11 @@
                      </div>                     
                      <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;position: relative;">Recent listens<span style="position: absolute;right: 32px;top: 50%;transform: translateY(-50%);opacity: 0.6;">SEE MORE</span></a>
                     <div id="homeRecentCards" class="home-cards-grid">
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" style="width: calc(100% - 34px); margin: 16px; border-radius: 8px; border: 1px solid gray; box-shadow: 0px 0px 8px 0px #00000047;">Keskiiviko</div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" style="width: calc(100% - 34px); margin: 16px; border-radius: 8px; border: 1px solid gray; box-shadow: 0px 0px 8px 0px #00000047;">Vittu mikko</div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" style="width: calc(100% - 34px); margin: 16px; border-radius: 8px; border: 1px solid gray; box-shadow: 0px 0px 8px 0px #00000047;">The long master piece</div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" style="width: calc(100% - 34px); margin: 16px; border-radius: 8px; border: 1px solid gray; box-shadow: 0px 0px 8px 0px #00000047;">Cool adaptation no copyright</div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" style="width: calc(100% - 34px); margin: 16px; border-radius: 8px; border: 1px solid gray; box-shadow: 0px 0px 8px 0px #00000047;">Ode to BOY</div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png">Keskiiviko</div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png">Vittu mikko</div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png">The long master piece</div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png">Cool adaptation no copyright</div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png">Ode to BOY</div>
                      </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
                 </div>
@@ -433,7 +467,7 @@
             <!--Liked page, only visible when current anchor is #liked-->
             <div id="liked" class="main-content-page" style="background: linear-gradient(#5038a0 4%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
-               <div style="height: 30vh;display: flex;align-content: center;position: relative;">
+               <div style="height: 30vh;display: flex;align-content: center;position: relative; overflow: hidden;">
                   <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96px; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
                </div>
                <div style="backdrop-filter: blur(15px) contrast(1.05) saturate(1.6);height: 800px;border-radius: 16px;padding: 24px;color: white;">
@@ -448,7 +482,7 @@
             </div>
          </div>         
     </div>
-    <div style="background-color: #303030;width: 100%;height: 96px;box-shadow: 0px 0px 16px 0px #00000040;border-bottom: 2px solid #007bd3;border-top: 1px solid #3c3c3c;align-self: flex-end;position: relative;display: flex;flex-direction: row;justify-content: center;/*! align-content: center; */justify-content: space-evenly;/*! align-content: space-between; */">
+    <div id="playerBar">
         <div style="display: flex;flex: 1;">
             <img src="https://i.scdn.co/image/ab67616d00004851472fbc1d5743c7d3c75b9ec0" draggable="false" style="height: calc(100% - 16px);padding: 8px;display: inline;">
             <div style="align-self: top;">
