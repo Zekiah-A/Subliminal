@@ -81,6 +81,7 @@
         color: #DADADA;
         background-color: rgba(255, 255, 255, .20);
         backdrop-filter: blur(10px);
+        z-index: 1;
     }
 }
 
@@ -93,6 +94,7 @@
         padding-right: 10px;
         line-height: 40px;
         top: 10px;
+        z-index: 1;
     }
 
     .poem-centre {
@@ -149,6 +151,7 @@
         width: 50%;
         line-height: 200%;
         top: 2px;
+        z-index: 1;
     }
 
     .contents-div-centre {

@@ -47,7 +47,7 @@
     <a href="../../contents" class="back"> <- Back</a>
 </body>
 <script>
-    async function init() {
+    async function initialise() {
         const params = new URLSearchParams(document.location.search)
         const hash = params.get("poemid")
         let poemData = await (await fetch("https://server.poemanthology.org/")).json()
@@ -62,6 +62,6 @@
         document.body.style.background = poemData.background
     }
     
-    init()
+    initialise()
 </script>
 </html>
