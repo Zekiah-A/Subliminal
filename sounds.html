@@ -646,8 +646,10 @@
 
     addEventListener("resize", resizeCardGrids, false)
     addEventListener("orientationchange", resizeCardGrids, false)
-
-    testLyricLoad()
-    resizeCardGrids()
+    
+    setTimeout(() => {
+        testLyricLoad()
+        resizeCardGrids()
+    }, 1000);
 </script>
 </html>
