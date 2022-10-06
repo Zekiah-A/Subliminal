@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subliminal - NAME</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../styles.css">
+  <meta name="description" content="A poem awaiting judgement, located in the forsaken, subliminal poem purgatory.">
+  <meta name="keywords" content="TAGS">
+</head>
+ 
+<body>
+    <div class="title-blur">
+        <h2 id="poemTitle" class="centre content">TITLE</h2>
+        <hr>
+    </div>
+    <div id="poemMain">
+        <p id="poemContent">
+            CONTENT
+        </p>
+    </div>
+    <div id="content-warning">
+        <pre class="warning-centre">
+  ___________________________________________________________
+  | Disclaimer: This is a poem in the subliminal poem       |
+  | purgatory, created in the <a href="./poem-editor">poem editor</a>, and awaiting     |
+  | approval or rejection to be added to the site, we can't |
+  | confirm that the events within this poem are fictional, |
+  | and shouldn't be taken as moral, political, or religious|
+  | advice, or represents the beliefs of the author in any  |
+  | way.                                                    |
+  |                                                         |
+  | If this poem is unironically bad, not even a poem, or   |
+  | you just don't like it for any reason feel free to VETO |
+  | by pressing the VETO button at the bottom of the screen |
+  | likewise, if it's great, APPROVE it!                    |
+  |                                                         |
+  | If you are concerned as to if there is illegal content  |
+  | contained within this submission, please report via the |
+  | report button, and we will investigate ASAP.            |
+  |                                                         |
+  | <a class="continue" href="#content-warning">Continue -></a>                                             |
+  | <a href="./disclaimer">See Disclaimer -></a>                                       |
+  |                                                         |
+  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+        </pre>
+    </div>  
+    <a href="../../contents" class="back"> <- Back</a>
+</body>
+<script>
+    async function init() {
+        const params = new URLSearchParams(document.location.search)
+        const hash = params.get("poemid")
+        let poemData = await (await fetch("https://server.poemanthology.org/")).json()
+        
+        //Set up title and url bar for vanity
+        window.history.replaceState(null, "Title", "/" + poemData.name);  
+        document.title = "Subliminal - " + poemData.title
+
+        //Place poem data into the DOM
+        poemContent.innerText = poemData.content
+        poemMain.class = poemData.pageStyle
+        document.body.style.background = poemData.background
+    }
+    
+    init()
+</script>
+</html>
