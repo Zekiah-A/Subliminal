@@ -166,6 +166,34 @@
                     tagContainer.removeChild(t)
             }
         }
+
+
+        let ctx = signCanvas.getContext('2d')
+        signCanvas.height = 200
+        signCanvas.width = 300
+        signCanvas.addEventListener('mousedown', function(e) {
+            let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+            this.down = true
+            this.X = relativeX 
+            this.Y = relativeY 
+            this.color = 'rgb(0, 0, 0)'
+        }, 0);
+        signCanvas.addEventListener('mouseup', function() {
+            this.down = false  
+        }, 0);
+        signCanvas.addEventListener('mousemove', function(e) {
+        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+            if (!this.down) return  
+            ctx.beginPath()
+            ctx.moveTo(this.X, this.Y)
+            ctx.lineCap = 'round'
+            ctx.lineWidth = 3
+            ctx.lineTo(relativeX , relativeY )
+            ctx.strokeStyle = this.color
+            ctx.stroke()
+            this.X = relativeX
+            this.Y = relativeY
+        }, 0)
     </script>
     <style>
         .tool {
@@ -254,7 +282,7 @@
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
-    <div id="licenseAgreePopup">
+    <div id="licenseAgreePopup" style="visibility: hidden;">
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
         <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
@@ -330,34 +358,3 @@
     <a href="../contents" class="back"> <- Back</a>
 </body>
 </html>
-
-<!--
-    var canvas = document.getElementById('signCanvas');
-    var ctx = canvas.getContext('2d');
-    canvas.height = 200;
-    canvas.width = 300;
-    canvas.addEventListener('mousedown', function(e) {
-      this.down = true;  
-      this.X = e.offsetX ;
-      this.Y = e.offsetY ;
-      this.color = 'rgb(0, 0, 0)';
-    }, 0);
-    canvas.addEventListener('mouseup', function() {
-      this.down = false;      
-    }, 0);
-    canvas.addEventListener('mousemove', function(e) {
-      this.style.cursor = 'pointer';
-      if(this.down) {
-          ctx.beginPath();
-          ctx.moveTo(this.X, this.Y);
-          ctx.lineCap = 'round';
-          ctx.lineWidth = 3;
-          ctx.lineTo(e.offsetX , e.offsetY );
-          ctx.strokeStyle = this.color;
-          ctx.stroke();
-
-         this.X = e.offsetX - canvas.width ;
-         this.Y = e.offsetY - canvas.height ;
-      }
-    }, 0);
--->
