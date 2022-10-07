@@ -205,6 +205,47 @@
             margin: 2px;
         }
 
+        #licenseAgreePopup {
+            position:absolute;
+            left:50%;
+            top:50%;
+            transform:translate(-50%,-50%);
+            border-radius:8px;
+            padding:8px;
+            box-shadow:0 0 16px #000;
+            z-index:3;
+            backdrop-filter:blur(16px);
+            width: 50%;
+        }
+        #signCanvas {
+            background:#f2f2f2;
+            width:50%;
+            height:50%;
+            border-radius:4px
+        }
+        .sign-container {
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-content:center;
+            row-gap:4px;
+            align-items:center;
+            user-select:none;
+        }
+        .sign-buttons {
+            display:flex;
+            column-gap:8px;
+            width:50%;
+        }
+        .sign-buttons div {
+            font-family: Arial, Helvetica, sans-serif;
+            border-radius:4px;
+            padding:8px;
+            width:100px;
+            text-align:center;
+            cursor:pointer;
+        }
+        
         @media screen and (orientation:portrait) {
             .text-tools { position: inherit !important; width: calc(100% - 12px); } 
             .document-tools { position: inherit !important; width: calc(100% - 12px); }
@@ -213,22 +254,22 @@
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
-    <div id="licenseAgreePopup" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;padding:8px;box-shadow:0 0 16px #000;z-index:2;backdrop-filter:blur(16px)">
+    <div id="licenseAgreePopup">
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
-        <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0</p>
-        <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, it's not our fault, you agree that you WILLINGLY chose to upload it here. We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
-        <p>NOTE: You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
-        <p>If you think the terms we have laid out here are reasonable, and agree to all, please<strong>sign</strong>below</p>
-        <div style="display:flex;flex-direction:column;justify-content:center;align-content:center;row-gap:4px;align-items:center;user-select:none">
-           <canvas style="background:#f2f2f2;width:50%;height:50%;border-radius:4px"></canvas>
-           <div style="display:flex;column-gap:8px;width:50%">
-              <div style="border-radius:4px;background-color:#8ad783;padding:8px;width:100px;cursor:pointer;text-align:center">Smooth</div>
-              <div style="border-radius:4px;background-color:#ff5d5d;padding:8px;width:100px;text-align:center;cursor:pointer">Clear</div>
-              <div style="border-radius:4px;background-color:#f2f2f2;padding:8px;width:100px;box-shadow:0 0 3px #000;text-align:center;cursor:pointer">Submit</div>
+        <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
+        <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here, however we will always try . We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
+        <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
+        <p>If you think the terms we have laid out here are reasonable, and agree to all, please <strong>sign</strong> below.</p>
+        <div class="sign-container">
+           <canvas id="signCanvas"></canvas>
+           <div class="sign-buttons">
+              <div style="background-color:#8ad783;">Smooth</div>
+              <div style="background-color:#ff5d5d;">Clear</div>
+              <div style="background-color:#f2f2f2;box-shadow:0 0 3px #000;">Submit</div>
            </div>
         </div>
-        <p style="opacity:.6"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
+        <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
      </div>
      
     <div class="title-blur" style="z-index: 2;">
