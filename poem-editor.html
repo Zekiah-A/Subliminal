@@ -185,7 +185,7 @@
     <a href="../contents" class="back"> <- Back</a>
 </body>
 <script>
-    const poemTags = []
+    let poemTags = []
     const ctx = signCanvas.getContext('2d')
 
     //Make user confirm that they want to leave the page.
@@ -220,7 +220,7 @@
             pageStyle: main.className, //poem visual format
             pageBackground: document.body.style.background //poem background image
         }
-        localStorage.setItem(formatDash(title.innerText), JSON.stringify(saveData))
+        localStorage.setItem(formatDash(poemName.innerText), JSON.stringify(saveData))
         
         //Refresh load box with latest poem. 
         fetchStorage()
@@ -248,7 +248,7 @@
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
     async function download() {
         save()
-        let loadObject = JSON.parse(localStorage.getItem(formatDash(title.innerText)));
+        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)));
         let poemTemplate = await (await fetch("Other/poem-template.html")).text()
         let cWTemplate = await (await fetch("Other/content-warning-template.html")).text()
 
@@ -266,7 +266,7 @@
         }
 
         let finishedPoemTemplate = poemTemplate
-            .replace("NAME", loadObject.title)
+            .replace("NAME", loadObject.poemName)
             .replace("SUMMARY", loadObject.summary)
             .replace("TAGS", loadObject.tags)
             .replace("POEM_BACKGROUND", loadObject.pageBackground)
@@ -278,7 +278,7 @@
 
         let element = document.createElement('a')
         element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
-        element.setAttribute('download', formatDash(title.innerText) + ".html");
+        element.setAttribute('download', formatDash(poemName.innerText) + ".html");
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
