@@ -241,7 +241,7 @@
             font-family: Arial, Helvetica, sans-serif;
             border-radius:4px;
             padding:8px;
-            width:100px;
+            flex-grow: 1;
             text-align:center;
             cursor:pointer;
         }
@@ -270,7 +270,7 @@
            </div>
         </div>
         <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
-     </div>
+    </div>
      
     <div class="title-blur" style="z-index: 2;">
         <h2 class="centre" id="title" contenteditable="true" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" >Click On Me to Start Editing - By Click On Me to Start Editing</h2>
@@ -330,3 +330,34 @@
     <a href="../contents" class="back"> <- Back</a>
 </body>
 </html>
+
+<!--
+    var canvas = document.getElementById('signCanvas');
+    var ctx = canvas.getContext('2d');
+    canvas.height = 200;
+    canvas.width = 300;
+    canvas.addEventListener('mousedown', function(e) {
+      this.down = true;  
+      this.X = e.offsetX ;
+      this.Y = e.offsetY ;
+      this.color = 'rgb(0, 0, 0)';
+    }, 0);
+    canvas.addEventListener('mouseup', function() {
+      this.down = false;      
+    }, 0);
+    canvas.addEventListener('mousemove', function(e) {
+      this.style.cursor = 'pointer';
+      if(this.down) {
+          ctx.beginPath();
+          ctx.moveTo(this.X, this.Y);
+          ctx.lineCap = 'round';
+          ctx.lineWidth = 3;
+          ctx.lineTo(e.offsetX , e.offsetY );
+          ctx.strokeStyle = this.color;
+          ctx.stroke();
+
+         this.X = e.offsetX - canvas.width ;
+         this.Y = e.offsetY - canvas.height ;
+      }
+    }, 0);
+-->
