@@ -5,196 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="../styles.css">
-    <script type="text/javascript">
-        let poemTags = []
-
-        //Make user confirm that they want to leave the page.
-        window.onbeforeunload = () => {
-            if (confirm("Save before exiting?")) save()
-            return true
-        }
-
-        //Load saved poems from local storage
-        window.onload = () => {
-            fetchStorage();
-        }
-
-        function fetchStorage() {
-            document.getElementById("loadDiv").innerHTML = "Load: <br>";
-            for (let i = 0; i < localStorage.length; i++) {
-                let current = localStorage.getItem(localStorage.key(i));
-                document.getElementById("loadDiv").innerHTML += `<input class="tool" onclick="load('${localStorage.key(i)}')" type="button" value="${localStorage.key(i)}"> <br>`;
-            }
-        }
-
-        function save() {
-            let title = document.getElementById("title");
-            let content = document.getElementById("content");
-            let saveData = {
-                summary: summaryArea.value, //meta description
-                tags: poemTags.toString(), //meta keywords
-                title: title.innerHTML.split("- By")[0].trim(), //meta title
-                cWarning: cWarningCheckbox.checked, //content warning
-                cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
-                fullTitle: title.innerHTML, //poem header title
-                poemContent: content.innerHTML, //poem html
-                pageStyle: document.getElementById("main").className, //poem visual format
-                pageBackground: document.body.style.background //poem background image
-            }
-            localStorage.setItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-"), JSON.stringify(saveData));
-            
-            //Refresh load box with latest poem. 
-            fetchStorage();
-        }
-
-        function load(key) {
-            let loadObject = JSON.parse(localStorage.getItem(key));
-            summaryArea.value = loadObject.summary;
-            poemTags = []
-            while (tagContainer.firstChild) {
-                tagContainer.removeChild(tagContainer.firstChild);
-            }
-            for(let t of loadObject.tags.split(",")) { 
-                addPoemTag(t)
-            }
-            cWarningCheckbox.checked = loadObject.cWarning
-            cWarningNotesInput.disabled = loadObject.cWarning ? false : true
-            cWarningNotesInput.value = loadObject.cWarningAdditions
-            title.innerHTML = loadObject.fullTitle;
-            content.innerHTML = loadObject.poemContent;
-            document.body.style.background = loadObject.pageBackground;
-            document.getElementById("main").className = loadObject.pageStyle;
-        }
-
-        //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
-        async function download() {
-            save()
-            let loadObject = JSON.parse(localStorage.getItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-")));
-            let poemTemplate = await (await fetch("Other/poem-template.html")).text()
-            let cWTemplate = await (await fetch("Other/content-warning-template.html")).text()
-
-            let finishedCWTemplate
-            if (loadObject.cWarning === true) {
-                //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
-                let chunks = loadObject.cWarningAdditions.match(/.{1,55}/g), cwInsert = ""
-                for (let chunk of chunks) {
-                    chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
-                    chunk = "| ".concat(chunk) //add pipe start
-                    chunk = chunk.concat(" |") //add pipe end
-                    cwInsert = cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
-                }
-                finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", cwInsert)
-            }
-
-            let finishedPoemTemplate = poemTemplate
-                .replace("NAME", loadObject.title)
-                .replace("SUMMARY", loadObject.summary)
-                .replace("TAGS", loadObject.tags)
-                .replace("POEM_BACKGROUND", loadObject.pageBackground)
-                .replace("TITLE", loadObject.fullTitle)
-                .replace("POEM_STYLE", loadObject.pageStyle)
-                .replace("CONTENT", loadObject.poemContent.replaceAll("<br>", "<br>\n"))
-                .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
-                .replace("DATE", "<!--" + Date.now().toString() + "-->")
-
-            console.log("a" + finishedPoemTemplate)
-
-            let element = document.createElement('a')
-            element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
-            element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + ".html");
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-            confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
-        }
-
-        function format(command, value) {
-            document.execCommand(command, false, value);
-            document.getElementById("content").focus();
-        }
-
-        function formatCustom(tag) {
-            selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
-            document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
-            document.getElementById("content").focus();
-        }
-
-        function formatImage() {
-            console.log(window.opener.document.getElementById("content").selectionStart);
-        }
-
-        function changePageStyle(newStyle) {
-            document.getElementById("main").className = newStyle;
-        }
-
-        //PATCH: To get chrome support for proper <br> based formatting, instead of divs for each line.
-        function checkReturn(event) {
-            if (event.key === 'Enter') {
-                document.execCommand("insertLineBreak");
-                event.preventDefault();
-            }
-        }
-        //PATCH: Stop pasting weird formatted text that could break things.
-        function checkPaste(event) {
-            event.preventDefault();
-            const text = event.clipboardData.getData('text/plain');
-            text.replace("\n", "<br>")
-            document.execCommand("insertHTML", false, text);
-        }
-
-        function handleBackgroundDrop(event) {            
-            const reader = new FileReader();
-            reader.readAsDataURL(event.files[0]);
-            reader.onloadend = () => {
-                document.body.style.background = `url('${reader.result}')`;
-            }
-        }
-
-        function addPoemTag(tagName) {
-            poemTags.push(tagName)
-            let newTag = document.createElement("button")
-            newTag.innerText = tagName
-            newTag.onclick = () => { removePoemTag(tagName) }
-            tagContainer.appendChild(newTag)
-        }
-
-        function removePoemTag(tagName) {
-            poemTags.splice(poemTags.indexOf(tagName), 1)
-            for (let t of tagContainer.children) {
-                if (t.innerText == tagName)
-                    tagContainer.removeChild(t)
-            }
-        }
-
-
-        let ctx = signCanvas.getContext('2d')
-        signCanvas.height = 200
-        signCanvas.width = 300
-        signCanvas.addEventListener('mousedown', function(e) {
-            let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
-            this.down = true
-            this.X = relativeX 
-            this.Y = relativeY 
-            this.color = 'rgb(0, 0, 0)'
-        }, 0);
-        signCanvas.addEventListener('mouseup', function() {
-            this.down = false  
-        }, 0);
-        signCanvas.addEventListener('mousemove', function(e) {
-        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
-            if (!this.down) return  
-            ctx.beginPath()
-            ctx.moveTo(this.X, this.Y)
-            ctx.lineCap = 'round'
-            ctx.lineWidth = 3
-            ctx.lineTo(relativeX , relativeY )
-            ctx.strokeStyle = this.color
-            ctx.stroke()
-            this.X = relativeX
-            this.Y = relativeY
-        }, 0)
-    </script>
     <style>
         .tool {
             margin: 1px;
@@ -290,7 +100,7 @@
         <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
         <p>If you think the terms we have laid out here are reasonable, and agree to all, please <strong>sign</strong> below.</p>
         <div class="sign-container">
-           <canvas id="signCanvas"></canvas>
+           <canvas height="200" width="300" id="signCanvas"></canvas>
            <div class="sign-buttons">
               <div style="background-color:#8ad783;">Smooth</div>
               <div style="background-color:#ff5d5d;">Clear</div>
@@ -357,4 +167,191 @@
     </div>
     <a href="../contents" class="back"> <- Back</a>
 </body>
+<script>
+    let poemTags = []
+
+    //Make user confirm that they want to leave the page.
+    window.onbeforeunload = () => {
+        if (confirm("Save before exiting?")) save()
+        return true
+    }
+
+    //Load saved poems from local storage
+    window.onload = () => {
+        fetchStorage();
+    }
+
+    function fetchStorage() {
+        document.getElementById("loadDiv").innerHTML = "Load: <br>";
+        for (let i = 0; i < localStorage.length; i++) {
+            let current = localStorage.getItem(localStorage.key(i));
+            document.getElementById("loadDiv").innerHTML += `<input class="tool" onclick="load('${localStorage.key(i)}')" type="button" value="${localStorage.key(i)}"> <br>`;
+        }
+    }
+
+    function save() {
+        let title = document.getElementById("title");
+        let content = document.getElementById("content");
+        let saveData = {
+            summary: summaryArea.value, //meta description
+            tags: poemTags.toString(), //meta keywords
+            title: title.innerHTML.split("- By")[0].trim(), //meta title
+            cWarning: cWarningCheckbox.checked, //content warning
+            cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
+            fullTitle: title.innerHTML, //poem header title
+            poemContent: content.innerHTML, //poem html
+            pageStyle: document.getElementById("main").className, //poem visual format
+            pageBackground: document.body.style.background //poem background image
+        }
+        localStorage.setItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-"), JSON.stringify(saveData));
+        
+        //Refresh load box with latest poem. 
+        fetchStorage();
+    }
+
+    function load(key) {
+        let loadObject = JSON.parse(localStorage.getItem(key));
+        summaryArea.value = loadObject.summary;
+        poemTags = []
+        while (tagContainer.firstChild) {
+            tagContainer.removeChild(tagContainer.firstChild);
+        }
+        for(let t of loadObject.tags.split(",")) { 
+            addPoemTag(t)
+        }
+        cWarningCheckbox.checked = loadObject.cWarning
+        cWarningNotesInput.disabled = loadObject.cWarning ? false : true
+        cWarningNotesInput.value = loadObject.cWarningAdditions
+        title.innerHTML = loadObject.fullTitle;
+        content.innerHTML = loadObject.poemContent;
+        document.body.style.background = loadObject.pageBackground;
+        document.getElementById("main").className = loadObject.pageStyle;
+    }
+
+    //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
+    async function download() {
+        save()
+        let loadObject = JSON.parse(localStorage.getItem(title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-")));
+        let poemTemplate = await (await fetch("Other/poem-template.html")).text()
+        let cWTemplate = await (await fetch("Other/content-warning-template.html")).text()
+
+        let finishedCWTemplate
+        if (loadObject.cWarning === true) {
+            //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
+            let chunks = loadObject.cWarningAdditions.match(/.{1,55}/g), cwInsert = ""
+            for (let chunk of chunks) {
+                chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
+                chunk = "| ".concat(chunk) //add pipe start
+                chunk = chunk.concat(" |") //add pipe end
+                cwInsert = cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
+            }
+            finishedCWTemplate = cWTemplate.replace("ADDITIONAL_NOTES", cwInsert)
+        }
+
+        let finishedPoemTemplate = poemTemplate
+            .replace("NAME", loadObject.title)
+            .replace("SUMMARY", loadObject.summary)
+            .replace("TAGS", loadObject.tags)
+            .replace("POEM_BACKGROUND", loadObject.pageBackground)
+            .replace("TITLE", loadObject.fullTitle)
+            .replace("POEM_STYLE", loadObject.pageStyle)
+            .replace("CONTENT", loadObject.poemContent.replaceAll("<br>", "<br>\n"))
+            .replace("CONTENT_WARNING", finishedCWTemplate ? finishedCWTemplate : "")
+            .replace("DATE", "<!--" + Date.now().toString() + "-->")
+
+        console.log("a" + finishedPoemTemplate)
+
+        let element = document.createElement('a')
+        element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(finishedPoemTemplate));
+        element.setAttribute('download', title.innerText.split("- By")[0].trim().toLowerCase().replaceAll(" ", "-") + ".html");
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
+    }
+
+    function format(command, value) {
+        document.execCommand(command, false, value);
+        document.getElementById("content").focus();
+    }
+
+    function formatCustom(tag) {
+        selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
+        document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
+        document.getElementById("content").focus();
+    }
+
+    function formatImage() {
+        console.log(window.opener.document.getElementById("content").selectionStart);
+    }
+
+    function changePageStyle(newStyle) {
+        document.getElementById("main").className = newStyle;
+    }
+
+    //PATCH: To get chrome support for proper <br> based formatting, instead of divs for each line.
+    function checkReturn(event) {
+        if (event.key === 'Enter') {
+            document.execCommand("insertLineBreak");
+            event.preventDefault();
+        }
+    }
+    //PATCH: Stop pasting weird formatted text that could break things.
+    function checkPaste(event) {
+        event.preventDefault();
+        const text = event.clipboardData.getData('text/plain');
+        text.replace("\n", "<br>")
+        document.execCommand("insertHTML", false, text);
+    }
+
+    function handleBackgroundDrop(event) {            
+        const reader = new FileReader();
+        reader.readAsDataURL(event.files[0]);
+        reader.onloadend = () => {
+            document.body.style.background = `url('${reader.result}')`;
+        }
+    }
+
+    function addPoemTag(tagName) {
+        poemTags.push(tagName)
+        let newTag = document.createElement("button")
+        newTag.innerText = tagName
+        newTag.onclick = () => { removePoemTag(tagName) }
+        tagContainer.appendChild(newTag)
+    }
+
+    function removePoemTag(tagName) {
+        poemTags.splice(poemTags.indexOf(tagName), 1)
+        for (let t of tagContainer.children) {
+            if (t.innerText == tagName)
+                tagContainer.removeChild(t)
+        }
+    }
+
+    let ctx = signCanvas.getContext('2d')
+    signCanvas.addEventListener('mousedown', function(e) {
+        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+        this.down = true
+        this.X = relativeX 
+        this.Y = relativeY 
+        this.color = 'rgb(0, 0, 0)'
+    }, 0);
+    signCanvas.addEventListener('mouseup', function() {
+        this.down = false  
+    }, 0);
+    signCanvas.addEventListener('mousemove', function(e) {
+        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+        if (!this.down) return  
+        ctx.beginPath()
+        ctx.moveTo(this.X, this.Y)
+        ctx.lineCap = 'round'
+        ctx.lineWidth = 3
+        ctx.lineTo(relativeX , relativeY )
+        ctx.strokeStyle = this.color
+        ctx.stroke()
+        this.X = relativeX
+        this.Y = relativeY
+    }, 0)
+</script>
 </html>
