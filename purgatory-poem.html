@@ -49,7 +49,7 @@
 <script>
     async function initialise() {
         const params = new URLSearchParams(document.location.search)
-        const hash = params.get("poemid")
+        const hash = params.get("poemId")
         let poemData = await (await fetch("https://server.poemanthology.org/")).json()
         
         //Set up title and url bar for vanity
