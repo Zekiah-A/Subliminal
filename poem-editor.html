@@ -85,8 +85,21 @@
         }
         
         @media screen and (orientation:portrait) {
-            .text-tools { position: inherit !important; width: calc(100% - 12px); } 
-            .document-tools { position: inherit !important; width: calc(100% - 12px); }
+            .text-tools {
+                position: inherit !important;
+                width: calc(100% - 12px);
+            }
+
+            .document-tools {
+                position: inherit !important;
+                width: calc(100% - 12px);
+                margin-top: 16px;
+            }
+
+            #licenseAgreePopup {
+                width: calc(100% - 32px);
+                height: calc(100% - 32px);
+            }
         }
     </style>
 </head>
@@ -96,16 +109,16 @@
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
         <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
-        <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here, however we will always try . We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
+        <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here. We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
         <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
         <p>If you think the terms we have laid out here are reasonable, and agree to all, please <strong>sign</strong> below.</p>
         <div class="sign-container">
-           <canvas height="200" width="300" id="signCanvas"></canvas>
-           <div class="sign-buttons">
-              <div style="background-color:#8ad783; pointer-events: none; opacity: 0.6;">Smooth</div>
-              <div style="background-color:#ff5d5d;" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-              <div style="background-color:#f2f2f2;box-shadow:0 0 3px #000;" onclick="licenseAgreePopup.style.visibility = 'hidden';">Submit</div>
-           </div>
+           <canvas height="100" width="300" id="signCanvas"></canvas>
+            <div class="sign-buttons">
+                <div style="background-color:#f2f2f2; pointer-events: none; opacity: 0.2;">Smooth</div>
+                <div style="background-color:#f2f2f2;" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
+                <div style="background-color:#f2f2f2;" onclick="licenseAgreePopup.style.visibility = 'hidden';">Submit</div>
+            </div>
         </div>
         <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
     </div>
@@ -336,10 +349,10 @@
         this.X = relativeX 
         this.Y = relativeY 
         this.color = 'rgb(0, 0, 0)'
-    }, 0);
+    })
     signCanvas.addEventListener('mouseup', function() {
         this.down = false  
-    }, 0);
+    })
     signCanvas.addEventListener('mousemove', function(e) {
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return  
@@ -352,6 +365,6 @@
         ctx.stroke()
         this.X = relativeX
         this.Y = relativeY
-    }, 0)
+    })
 </script>
 </html>
