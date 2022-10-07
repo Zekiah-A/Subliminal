@@ -125,9 +125,9 @@
      
     <div class="title-blur" style="z-index: 2;">
         <div style="display: flex;">
-            <h2 id="poemName" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
+            <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
             <h2 class="centre" style="display: inline;">&nbsp;- By&nbsp;</h2>
-            <h2 id="poemAuthor" onpaste="checkPaste()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: left;" contenteditable="true">Click On Me to Start Editing</h2>
+            <h2 id="poemAuthor" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: left;" contenteditable="true">Click On Me to Start Editing</h2>
         </div>
         <hr>
     </div>
@@ -324,7 +324,7 @@
     }
     //PATCH: Stop pasting weird formatted text that could break things.
     function checkPaste(event) {
-        event.preventDefault();
+        event.preventDefault()
         const text = event.clipboardData.getData('text/plain')
         text.replace("\n", "<br>")
         document.execCommand("insertText", false, text)
