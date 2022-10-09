@@ -327,7 +327,8 @@
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify(loadObject)
         }).then(res => {
-            console.log("Completed.", res);
+            console.log("Completed ", res)
+            window.location.href = "./contents?purgatorynew=true"
         })
     }
 

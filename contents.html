@@ -82,6 +82,7 @@
       position: relative;
       cursor: pointer;
       max-width: 200px;
+      transition: scale 1s, rotate 1s;
     }
     entry h4 {
       text-align: center;
@@ -109,6 +110,11 @@
       margin-left: 8px;
       margin-right: 8px;
     }
+    .entry-new {
+      rotate: 10deg;
+      scale: 1.1;
+      background-color: #fdfdfd;
+    }
   </style>
 </head>
  
@@ -121,45 +127,6 @@
 
       </iframe>
     </div>
-    <script> 
-    let collapsedSections = new Set()
-
-    let stringToHtml = text => {
-      let htmlObject = document.createElement('div')
-      htmlObject.innerHTML = text
-      return htmlObject.firstChild
-    }
-
-    let searchContents = contents => {
-      //search through poem, authors, etc
-      return null
-    }
-
-    //style.display = "none"; //style.display="initial"
-    function toggleCollapsed(sectionId) {
-      if (collapsedSections.has(sectionId)) { //uncollapse
-        document.getElementById(sectionId).style.transform = "initial"
-        document.getElementById(sectionId).parentElement.style.height = "auto"
-        collapsedSections.delete(sectionId)
-        return
-      } //collapse
-      document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
-      document.getElementById(sectionId).parentElement.style.height = document.getElementById(sectionId).style.height;
-      collapsedSections.add(sectionId)
-    } 
-
-    async function getPurgatoryEntries() {
-      let entries = []
-      //fetch, process, put into template, push
-      return entries
-    }
-
-    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {
-      purgatoryFlex.appendChild(entry)
-    }
-    
-    </script>
-
     <h3 style="margin-bottom: 0px;">Poem Purgatory:</h3>
     <div id="purgatoryFlex">
       <entry poemid="1872764817422354" onclick="window.location.href = './purgatory-poem.html?poemid=' + this.getAttribute('poemid');">
@@ -387,4 +354,48 @@
 
     <a href="index" class="back"> <- Back</a>
   </body>
+  <script> 
+    let collapsedSections = new Set()
+
+    let stringToHtml = text => {
+      let htmlObject = document.createElement('div')
+      htmlObject.innerHTML = text
+      return htmlObject.firstChild
+    }
+
+    let searchContents = contents => {
+      //search through poem, authors, etc
+      return null
+    }
+
+    //style.display = "none"; //style.display="initial"
+    function toggleCollapsed(sectionId) {
+      if (collapsedSections.has(sectionId)) { //uncollapse
+        document.getElementById(sectionId).style.transform = "initial"
+        document.getElementById(sectionId).parentElement.style.height = "auto"
+        collapsedSections.delete(sectionId)
+        return
+      } //collapse
+      document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
+      document.getElementById(sectionId).parentElement.style.height = document.getElementById(sectionId).style.height;
+      collapsedSections.add(sectionId)
+    } 
+
+    async function getPurgatoryEntries() {
+      let entries = []
+      //fetch, process, put into template, push
+      return entries
+    }
+
+    const params = new URLSearchParams(document.location.search)
+
+    if (params.get("purgatorynew")) {
+      purgatoryFlex.children[0].classList.add("entry-new")
+      setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 1000)
+    }
+
+    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {
+      purgatoryFlex.appendChild(entry)
+    }
+  </script>
 </html>
