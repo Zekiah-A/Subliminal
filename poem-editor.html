@@ -111,7 +111,7 @@
         }
 
         .button-tooltip {
-            display: none;
+            opacity: 0;
             position: absolute;
             background-color: white;
             border-radius: 4px;
@@ -121,16 +121,22 @@
             z-index: 1;
             top: 0px;
             pointer-events: none;
+            transition: opacity 0.5s;
         }
 
         .management-button:hover .button-tooltip {
-            display: block !important;
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        .button-tooltip:hover {
+            opacity: 1;
         }
     </style>
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
 <body>
-    <div id="licenseAgreePopup" style="visibility: hidden;">
+    <div id="licenseAgreePopup" style="display: none;">
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
         <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
@@ -142,7 +148,7 @@
             <div class="sign-buttons">
                 <div style="background-color:#f2f2f2; pointer-events: none; opacity: 0.2;">Smooth</div>
                 <div style="background-color:#f2f2f2;" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-                <div style="background-color:#f2f2f2;" onclick="licenseAgreePopup.style.visibility = 'hidden';">Submit</div>
+                <div style="background-color:#f2f2f2;" onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); upload();">Submit</div>
             </div>
         </div>
         <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
@@ -197,7 +203,7 @@
               <path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path>
            </svg>
         </button>
-        <button onclick="upload()" class="management-button">
+        <button onclick="licenseAgreePopup.style.display = 'block';" class="management-button">
             <div name="tooltip" class="button-tooltip">This will send your poem to the <strong>poem purgatory</strong> section of the site, where anyone can view it immediately.<br><br><em>Note: Anyone will be able to rate your poem, if it gets enough approvals, it will officially be added to the site.</em></div>
             Upload to site 📨
         </button>
@@ -274,7 +280,7 @@
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
     async function download() {
         save()
-        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)));
+        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
         let poemTemplate = await (await fetch("Other/poem-template.html")).text()
         let cWTemplate = await (await fetch("Other/content-warning-template.html")).text()
 
@@ -312,13 +318,16 @@
         confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
     }
 
-    function upload(){
+    function upload() {
+        save()
+        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
+
         fetch("https://server.poemanthology.org:81", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ test: "Hello World!" })
+            body: JSON.stringify(loadObject)
         }).then(res => {
-            console.log("Request complete! response:", res);
+            console.log("Completed.", res);
         })
     }
 
