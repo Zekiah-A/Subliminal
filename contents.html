@@ -82,7 +82,7 @@
       position: relative;
       cursor: pointer;
       max-width: 200px;
-      transition: scale 1s, rotate 1s;
+      transition: scale 1s, rotate 1s background-color 1s;
     }
     entry h4 {
       text-align: center;
@@ -96,6 +96,7 @@
       font-size: 16px;
     }
     entry .preview::after {
+      opacity: 1;
       width: 100%;
       height: 100%;
       top: 0;
@@ -103,6 +104,7 @@
       position: absolute;
       background: linear-gradient(#f2f2f2, transparent, #f2f2f2);
       content: "";
+      transition: opacity 1s;
     }
     entry .info {
       display: flex;
@@ -114,6 +116,10 @@
       rotate: 10deg;
       scale: 1.1;
       background-color: #fdfdfd;
+    }
+
+    .entry-new .preview::after {
+      opacity: 0 !important;
     }
   </style>
 </head>
@@ -358,7 +364,7 @@
     let collapsedSections = new Set()
 
     let stringToHtml = text => {
-      let htmlObject = document.createElement('div')
+      let htmlObject = document.createElement('temp')
       htmlObject.innerHTML = text
       return htmlObject.firstChild
     }
@@ -383,6 +389,9 @@
 
     async function getPurgatoryEntries() {
       let entries = []
+      //let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
+      //entryTemplate.id = 
+
       //fetch, process, put into template, push
       return entries
     }
@@ -394,7 +403,7 @@
       setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 1000)
     }
 
-    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {
+    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {      
       purgatoryFlex.appendChild(entry)
     }
   </script>
