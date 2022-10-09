@@ -103,6 +103,13 @@
             }
         }
 
+        .management-button {
+            position: relative;
+            height: 32px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
         .button-tooltip {
             display: none;
             position: absolute;
@@ -116,15 +123,8 @@
             pointer-events: none;
         }
 
-        .management-button {
-            position: relative;
-            height: 32px;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        management-button:hover > button-tooltip {
-            display: block;
+        management-button:hover button-tooltip {
+            display: block !important;
         }
     </style>
 </head>
