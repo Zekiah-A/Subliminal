@@ -242,10 +242,10 @@
     //format title to subliminal title format, used in poem save files
     let formatDash = (text) => text.trim().toLowerCase().replaceAll(" ", "-")
 
-    let stringToHtml = text => {
-      let htmlObject = document.createElement('temp')
+    let pageToHtml = text => {
+      let htmlObject = document.createElement('body')
       htmlObject.innerHTML = text
-      return htmlObject.firstChild
+      return htmlObject
     }
 
     function fetchStorage() {
@@ -443,7 +443,7 @@
         let tempKey = crypto.randomUUID()
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
             let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
-            let poemHtml = stringToHtml(data)
+            let poemHtml = pageToHtml(data)
             let json = {
                 summary: null,
                 tags: null,
@@ -461,7 +461,7 @@
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             //WIP
         }
-        
+
         originalContent.innerHTML = JSON.parse(localStorage.getItem(tempKey)).poemContent
         load(tempKey)
     }
