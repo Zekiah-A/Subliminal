@@ -196,16 +196,19 @@
         Document Management: <br>
         <input class="tool" onclick="save()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;margin-top: 8px;">
         <div style="margin: 2px;border: 1px solid black;padding: 5px;margin-top: 8px;" id="loadDiv">Load: <br></div>
-        <button onclick="download()" class="management-button">
+        <button id="downloadButton" onclick="download()" class="management-button">
             <div name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</div>
             Download edited page
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);">
               <path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path>
            </svg>
         </button>
-        <button onclick="licenseAgreePopup.style.display = 'block';" class="management-button">
+        <button id="uploadButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button">
             <div name="tooltip" class="button-tooltip">This will send your poem to the <strong>poem purgatory</strong> section of the site, where anyone can view it immediately.<br><br><em>Note: Anyone will be able to rate your poem, if it gets enough approvals, it will officially be added to the site.</em></div>
             Upload to site 📨
+        </button>
+        <button id="amendButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button" style="display: none;">
+            <div name="tooltip" class="button-tooltip">This will send the changes to your current poem to the <strong>poem purgatory</strong> section of the site, if approved, that poem will be amended with your changes.</div>Propose poem changes ✋
         </button>
      </div>
     <div id="main" class="poem-centre">
@@ -216,8 +219,10 @@
     <a href="../contents" class="back"> <- Back</a>
 </body>
 <script>
-    let poemTags = []
     const ctx = signCanvas.getContext('2d')
+    const params = new URLSearchParams(document.location.search)
+    const edit = params.get("edit")
+    let poemTags = []
 
     //Make user confirm that they want to leave the page.
     window.onbeforeunload = () => {
@@ -225,11 +230,14 @@
         return true
     }
 
-    //Load saved poems from local storage
-    window.onload = () => fetchStorage()
-
     //format title to subliminal title format, used in poem save files
     let formatDash = (text) => text.trim().toLowerCase().replaceAll(" ", "-")
+
+    let stringToHtml = text => {
+      let htmlObject = document.createElement('temp')
+      htmlObject.innerHTML = text
+      return htmlObject.firstChild
+    }
 
     function fetchStorage() {
         document.getElementById("loadDiv").innerHTML = "Load: <br>";
@@ -413,5 +421,39 @@
         this.X = relativeX
         this.Y = relativeY
     })
+
+    if (edit) {
+        downloadButton.setAttribute("disabled")
+        uploadButton.setAttribute("disabled")
+        amendButton.style.display = 'block'
+        loadDiv.innerText = "Load:\n\nLoading poems is disabled, as you are in poem amendment mode."
+        
+        //Load up amendment poem
+        let tempKey = crypto.randomUUID()
+        if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
+            let poemHtml = stringToHtml(await (await fetch(window.location.protocol + "//" + window.location.hostname + edit))).text()
+            let json = {
+                summary: null,
+                tags: null,
+                cWarning: null,
+                cWarningAdditions: null,
+                poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
+                poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
+                poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
+                pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
+                pageBackground: poemHtml.body.style.background //poem background image
+            }
+            localStorage.setItem(tempKey, JSON.stringify(json))
+        }
+        else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
+            //WIP
+        }
+        
+        load(tempKey)
+    }
+    else {
+        //Load saved poems from local storage
+        fetchStorage()
+    }
 </script>
 </html>
