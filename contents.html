@@ -127,7 +127,7 @@
 <body class="contents-div-centre" onkeydown="if(document.activeElement != searchbar) { searchbar.focus(); }">
     <h1 style="margin-top: 40px; margin-bottom: 0px;">Contents</h1>
     <!-- Sorry God, for using this forbidden language -->
-    <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value.toLowerCase().trim())" placeholder="search poems">
+    <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
     <div class="poem-preview">
       <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance.html">
 
@@ -369,10 +369,16 @@
       return htmlObject.firstChild
     }
 
-    let searchContents = contents => {
+    function searchContents(value) {
       //search through poem, authors, etc
-      let items = document.querySelectorAll(".section-body a")
-      return null
+      document.querySelectorAll(".section-body a").forEach((elem) => {
+        if (!value.toLowerCase().trim()) elem.style.display = 'initial'
+        if (!elem.textContent.toLowerCase().includes('value')) elem.style.display = 'none'
+      })
+      document.querySelectorAll(".section-body br").forEach((lnb) => {
+        if (!value.toLowerCase().trim()) lnb.style.display = 'initial'
+        else lnb.style.display = 'none'
+      })
     }
 
     //style.display = "none"; //style.display="initial"
