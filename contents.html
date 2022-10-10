@@ -410,7 +410,8 @@
 
     if (params.get("purgatorynew")) {
       purgatoryFlex.children[0].classList.add("entry-new")
-      setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 1000)
+      window.scrollTo(0, 0)
+      setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 10)
     }
 
     for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {      
