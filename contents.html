@@ -372,11 +372,13 @@
     function searchContents(value) {
       //search through poem, authors, etc
       document.querySelectorAll(".section-body a").forEach((elem) => {
-        if (!value.toLowerCase().trim()) elem.style.display = 'initial'
+        elem.style.display = 'inline-block'
+        if (!value.toLowerCase().trim()) return
         if (!elem.textContent.toLowerCase().includes('value')) elem.style.display = 'none'
       })
       document.querySelectorAll(".section-body br").forEach((lnb) => {
-        if (!value.toLowerCase().trim()) lnb.style.display = 'initial'
+        lnb.style.display = 'inline-block'          
+        if (!value.toLowerCase().trim()) return
         else lnb.style.display = 'none'
       })
     }
