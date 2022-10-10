@@ -463,6 +463,7 @@
         content.innerHTML = json.poemContent
         main.className = json.pageStyle
         document.body.style.background = json.pageBackground
+        originalContent.innerText = json.poemContent
     }
 
     if (edit) amendMode() //enter poem amendment mode
