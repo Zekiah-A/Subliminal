@@ -431,7 +431,8 @@
         //Load up amendment poem
         let tempKey = crypto.randomUUID()
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
-            let poemHtml = stringToHtml((await (await fetch(window.location.protocol + "//" + window.location.hostname + edit)).text()).toString())
+            let data = await (await fetch(window.location.protocol + "//" + window.location.hostname + edit)).text()
+            let poemHtml = stringToHtml(data)
             let json = {
                 summary: null,
                 tags: null,
@@ -441,7 +442,8 @@
                 poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
                 poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
                 pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
-                pageBackground: poemHtml.body.style.background //poem background image
+                pageBackground: poemHtml.body.style.background, //poem background image
+                amending: edit
             }
             localStorage.setItem(tempKey, JSON.stringify(json))
         }
