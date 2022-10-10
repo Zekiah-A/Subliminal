@@ -431,7 +431,7 @@
         //Load up amendment poem
         let tempKey = crypto.randomUUID()
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
-            let poemHtml = stringToHtml(await (await fetch(window.location.protocol + "//" + window.location.hostname + edit))).text()
+            let poemHtml = stringToHtml(await (await fetch(window.location.protocol + "//" + window.location.hostname + edit)).text())
             let json = {
                 summary: null,
                 tags: null,
@@ -448,7 +448,7 @@
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             //WIP
         }
-        
+
         load(tempKey)
     }
     else {
