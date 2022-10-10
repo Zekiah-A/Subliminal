@@ -445,10 +445,10 @@
             let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
             let poemHtml = pageToHtml(data)
             let json = {
-                summary: null,
-                tags: null,
-                cWarning: null,
-                cWarningAdditions: null,
+                summary: "", //This data is unrecoverable, with poems Web1.0, therefore we use default values
+                tags: [], // ^
+                cWarning: "", // ^
+                cWarningAdditions: "", // ^
                 poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
                 poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
                 poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
