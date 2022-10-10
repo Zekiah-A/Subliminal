@@ -453,8 +453,8 @@
                 poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
                 poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
                 pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
-                pageBackground: poemHtml.body.style.background, //poem background image
-                amending: edit
+                pageBackground: poemHtml.style.background, //poem background image
+                amends: edit
             }
             localStorage.setItem(tempKey, JSON.stringify(json))
         }
