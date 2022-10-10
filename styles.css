@@ -206,6 +206,13 @@ hr {
     left: 10px;
 }
 
+.edit {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.4;
+}
+
 .previous {
     position: fixed;
     bottom: 10px;
