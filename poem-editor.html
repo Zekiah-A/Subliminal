@@ -132,6 +132,14 @@
         .button-tooltip:hover {
             opacity: 1;
         }
+
+        #originalContent {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.2;
+            user-select: none;
+            margin: 0px;
+        }
     </style>
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
@@ -215,6 +223,7 @@
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
             Click On Me to Start Editing
         </p>
+        <p id="originalContent" style="display: none;">This was the original poem<br>we are writing over<br> haha</p>
     </div>
     <a href="../contents" class="back"> <- Back</a>
 </body>
@@ -425,8 +434,10 @@
     async function amendMode() {
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
-        amendButton.style.display = 'block'
+        amendButton.style.display = "block"
         loadDiv.innerText = "Load:\n\nLoading poems is disabled, as you are in poem amendment mode."
+        originalContent.style.display = "block"
+        originalContent.style.top = content.offsetTop + "px"
         
         //Load up amendment poem
         let tempKey = crypto.randomUUID()
@@ -450,7 +461,8 @@
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             //WIP
         }
-
+        
+        originalContent.innerHTML = JSON.parse(localStorage.getItem(tempKey)).poemContent
         load(tempKey)
     }
 
