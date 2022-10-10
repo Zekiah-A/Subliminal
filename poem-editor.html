@@ -431,7 +431,7 @@
         //Load up amendment poem
         let tempKey = crypto.randomUUID()
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
-            let data = await (await fetch(window.location.protocol + "//" + window.location.hostname + edit)).text()
+            let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
             let poemHtml = stringToHtml(data)
             let json = {
                 summary: null,
