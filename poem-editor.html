@@ -140,6 +140,11 @@
             user-select: none;
             margin: 0px;
         }
+        /* patches for if the poem is in centre style */
+        .centre > #originalContent {
+            width: 100%;
+            margin-top: -18px;
+        }
     </style>
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
@@ -371,8 +376,9 @@
     //PATCH: To get chrome support for proper <br> based formatting, instead of divs for each line.
     function checkReturn(event) {
         if (event.key === 'Enter') {
-            document.execCommand("insertLineBreak");
-            event.preventDefault();
+            document.execCommand("insertLineBreak")
+            if (edit) 
+            event.preventDefault()
         }
     }
     //PATCH: Stop pasting weird formatted text that could break things.
