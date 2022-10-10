@@ -422,7 +422,7 @@
         this.Y = relativeY
     })
 
-    if (edit) {
+    async function amendMode() {
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
         amendButton.style.display = 'block'
@@ -453,9 +453,8 @@
 
         load(tempKey)
     }
-    else {
-        //Load saved poems from local storage
-        fetchStorage()
-    }
+
+    if (edit) amendMode() //enter poem amendment mode
+    else fetchStorage() //Load saved poems from local storage
 </script>
 </html>
