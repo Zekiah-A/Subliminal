@@ -23,7 +23,7 @@
     async function initialise() {
         const params = new URLSearchParams(document.location.search)
         const path = params.get("path")
-        const poemData = await (await fetch("https://server.poemanthology.org:81")).json()
+        const poemData = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + path + ".json")).json()
         
         //Set up title and url bar for vanity
         window.history.replaceState(null, "Title", "/" + path)
@@ -33,7 +33,6 @@
         poemContent.innerText = poemData.content
         poemMain.class = poemData.pageStyle
         document.body.style.background = poemData.background
-        
     }
     
     initialise()
