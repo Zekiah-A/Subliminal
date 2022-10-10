@@ -442,20 +442,28 @@
         //Load up amendment poem
         let json = {}
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
-            let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
-            let poemHtml = pageToHtml(data)
-            json = {
-                //Summary, tags, content warning, etc is unrecoverable with poems web1.0, so we use default values
-                poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
-                poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
-                poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
-                pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
-                pageBackground: poemHtml.style.background, //poem background image
-                amends: edit
+            const version = params.get("version")
+            
+            if (version == "2") {
+                
+            }
+            else {
+                let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
+                let poemHtml = pageToHtml(data)
+                json = {
+                    //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
+                    poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
+                    poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
+                    poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
+                    pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
+                    pageBackground: poemHtml.style.background, //poem background image
+                    amends: edit
+                }
             }
         }
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             //WIP
+            
         }
 
         poemName.innerText = json.poemName
@@ -463,7 +471,7 @@
         content.innerHTML = json.poemContent
         main.className = json.pageStyle
         document.body.style.background = json.pageBackground
-        originalContent.innerText = json.poemContent
+        originalContent.innerHTML = json.poemContent
     }
 
     if (edit) amendMode() //enter poem amendment mode
