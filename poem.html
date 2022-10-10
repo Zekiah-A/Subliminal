@@ -26,7 +26,7 @@
         const poemData = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + path + ".json")).json()
         
         //Set up title and url bar for vanity
-        window.history.replaceState(null, "Title", "/" + path)
+        window.history.replaceState(null, "Title", path)
         document.title = "Subliminal - " + poemData.title
 
         //Place poem data into the DOM
