@@ -297,15 +297,15 @@
             }
         }
 
-        if (loadObject.summary) summaryArea.value = loadObject.summary
-        if (loadObject.cWarning) cWarningCheckbox.checked = loadObject.cWarning
+        summaryArea.value = loadObject.summary || ""
+        cWarningCheckbox.checked = loadObject.cWarning || ""
         cWarningNotesInput.disabled = loadObject.cWarning ? false : true
-        if (loadObject.cWarningAdditions) cWarningNotesInput.value = loadObject.cWarningAdditions
-        if (loadObject.poemName) poemName.innerText = loadObject.poemName
-        if (loadObject.poemAuthor) poemAuthor.innerText = loadObject.poemAuthor
-        if (loadObject.poemContent) content.innerHTML = loadObject.poemContent
-        if (loadObject.pageBackground) document.body.style.background = loadObject.pageBackground
-        if (loadObject.pageStyle) main.className = loadObject.pageStyle
+        cWarningNotesInput.value = loadObject.cWarningAdditions || ""
+        poemName.innerText = loadObject.poemName || "undefined"
+        poemAuthor.innerText = loadObject.poemAuthor || "undefined"
+        content.innerHTML = loadObject.poemContent || "undefined"
+        document.body.style.background = loadObject.pageBackground || ""
+        main.className = loadObject.pageStyle || "poem-centre"
     }
 
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
@@ -467,7 +467,7 @@
                 //pathname + '.json'
                 json = await data.json()
                 json.amends = edit
-                
+
                 poemTags = []
                 while (tagContainer.firstChild) {
                     tagContainer.removeChild(tagContainer.firstChild)
