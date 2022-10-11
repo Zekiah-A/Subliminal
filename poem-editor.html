@@ -352,6 +352,7 @@
     function uploadCurrent() {
         saveCurrent()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
+        upload(loadObject)
     }
 
     function upload(poemJson) {
