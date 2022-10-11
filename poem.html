@@ -31,7 +31,7 @@
 
         //Place poem data into the DOM
         poemTitle.innerText = poemData.poemName + " -By " + poemData.poemAuthor
-        poemContent.innerText = poemData.poemContent
+        poemContent.innerHTML = poemData.poemContent
         poemMain.class = poemData.pageStyle
         document.body.style.background = poemData.pageBackground
     }
