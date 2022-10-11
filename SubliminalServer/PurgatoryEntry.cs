@@ -16,11 +16,11 @@ public abstract record PurgatoryEntry
     string PageBackground
 )
 {
-    public string Guid;
-    public int Approves;
-    public int Vetoes;
-    public int AdminApproves;
-    public long DateCreated;
+    public string Guid { get; set; }
+    public int Approves { get; set; }
+    public int Vetoes { get; set; }
+    public int AdminApproves { get; set; }
+    public long DateCreated { get; set; }
 }
 
 /* Never modified by client, only used internally
