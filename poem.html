@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="../../styles.css">
   <meta name="description" content="">
   <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
  
 <body style="background: initial;">
@@ -49,7 +51,7 @@
         }
 
         //Place poem data into the DOM
-        poemTitle.innerText = poemData.poemName + " -By " + poemData.poemAuthor
+        poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
         poemContent.innerHTML = poemData.poemContent
         poemMain.class = poemData.pageStyle
         document.body.style.background = poemData.pageBackground
