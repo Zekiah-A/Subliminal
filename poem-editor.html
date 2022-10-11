@@ -454,6 +454,7 @@
 
             let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit))
             if (version == "2") {
+                //pathname + '.json'
                 json = data.json()
                 poemTags = []
                 while (tagContainer.firstChild) {
@@ -468,6 +469,7 @@
                 summaryArea.value = loadObject.summary
             }
             else {
+                //"/poem?path=" + edit
                 let poemHtml = pageToHtml(data.text())
                 json = {
                     //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
