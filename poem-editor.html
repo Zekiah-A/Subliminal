@@ -208,7 +208,7 @@
     </div>
     <div id="toolbox" class="document-tools">
         Document Management: <br>
-        <input class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;margin-top: 8px;">
+        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;margin-top: 8px;">
         <div style="margin: 2px;border: 1px solid black;padding: 5px;margin-top: 8px;" id="loadDiv">Load: <br></div>
         <button id="downloadButton" onclick="download()" class="management-button">
             <div name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</div>
@@ -452,6 +452,7 @@
     async function amendMode() {
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
+        saveButton.setAttribute("disabled", true)
         amendButton.style.display = "block"
         loadDiv.innerText = "Load:\n\nLoading poems is disabled, as you are in poem amendment mode."
         originalContent.style.display = "block"

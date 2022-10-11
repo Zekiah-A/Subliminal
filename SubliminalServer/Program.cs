@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http.Json;
 using SubliminalServer;
 using WatsonWebsocket;
 
@@ -38,7 +39,11 @@ builder.Services.AddCors(options =>
               .WithOrigins("https://zekiah-a.github.io/", "*");
     });
 });
-
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+});
 
 var httpServer = builder.Build();
 httpServer.Urls.Add($"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}");
