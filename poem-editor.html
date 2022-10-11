@@ -459,7 +459,7 @@
                 while (tagContainer.firstChild) {
                     tagContainer.removeChild(tagContainer.firstChild)
                 }
-                for(let t of loadObject.tags.split(",")) {
+                for(let t of json.tags.split(",")) {
                     addPoemTag(t)
                 }
                 cWarningCheckbox.checked = json.cWarning
