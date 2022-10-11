@@ -299,7 +299,7 @@
 
         if (loadObject.summary) summaryArea.value = loadObject.summary
         if (loadObject.cWarning) cWarningCheckbox.checked = loadObject.cWarning
-        if (loadObject.cWarning) cWarningNotesInput.disabled = loadObject.cWarning ? false : true
+        cWarningNotesInput.disabled = loadObject.cWarning ? false : true
         if (loadObject.cWarningAdditions) cWarningNotesInput.value = loadObject.cWarningAdditions
         if (loadObject.poemName) poemName.innerText = loadObject.poemName
         if (loadObject.poemAuthor) poemAuthor.innerText = loadObject.poemAuthor
@@ -466,6 +466,8 @@
             if (version == "2") {
                 //pathname + '.json'
                 json = await data.json()
+                json.amends = edit
+                
                 poemTags = []
                 while (tagContainer.firstChild) {
                     tagContainer.removeChild(tagContainer.firstChild)
