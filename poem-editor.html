@@ -84,7 +84,7 @@
             cursor:pointer;
             /*box-shadow: 0px 4px 16px #00000059;*/
         }
-        
+
         @media screen and (orientation:portrait) {
             .text-tools {
                 position: inherit !important;
@@ -99,7 +99,8 @@
 
             #licenseAgreePopup {
                 width: calc(100% - 32px);
-                height: calc(100% - 32px);
+                top: 0px;
+                transform: translateX(-50%);
             }
         }
 
@@ -166,7 +167,7 @@
         </div>
         <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
     </div>
-     
+
     <div class="title-blur" style="z-index: 2;">
         <div style="display: flex;">
             <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
@@ -228,7 +229,7 @@
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
             Click On Me to Start Editing
         </p>
-        <p id="originalContent" style="display: none;">This was the original poem<br>we are writing over<br> haha</p>
+        <p id="originalContent" style="display: none;"></p>
     </div>
     <a href="../contents" class="back"> <- Back</a>
 </body>
@@ -274,8 +275,8 @@
             pageBackground: document.body.style.background //poem background image
         }
         localStorage.setItem(formatDash(poemName.innerText), JSON.stringify(saveData))
-        
-        //Refresh load box with latest poem. 
+
+        //Refresh load box with latest poem.
         fetchStorage()
     }
 
@@ -286,7 +287,7 @@
         while (tagContainer.firstChild) {
             tagContainer.removeChild(tagContainer.firstChild)
         }
-        for(let t of loadObject.tags.split(",")) { 
+        for(let t of loadObject.tags.split(",")) {
             addPoemTag(t)
         }
         cWarningCheckbox.checked = loadObject.cWarning
@@ -346,7 +347,7 @@
 
         fetch("https://server.poemanthology.org:81", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' }, 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loadObject)
         }).then(res => {
             console.log("Completed ", res)
@@ -377,7 +378,7 @@
     function checkReturn(event) {
         if (event.key === 'Enter') {
             document.execCommand("insertLineBreak")
-            if (edit) 
+            if (edit)
             event.preventDefault()
         }
     }
@@ -389,7 +390,7 @@
         document.execCommand("insertText", false, text)
     }
 
-    function handleBackgroundDrop(event) {            
+    function handleBackgroundDrop(event) {
         const reader = new FileReader();
         reader.readAsDataURL(event.files[0]);
         reader.onloadend = () => {
@@ -398,6 +399,7 @@
     }
 
     function addPoemTag(tagName) {
+        if (!tagName) return
         poemTags.push(tagName)
         let newTag = document.createElement("button")
         newTag.innerText = tagName
@@ -416,16 +418,16 @@
     signCanvas.addEventListener('mousedown', function(e) {
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
-        this.X = relativeX 
-        this.Y = relativeY 
+        this.X = relativeX
+        this.Y = relativeY
         this.color = 'rgb(0, 0, 0)'
     })
     signCanvas.addEventListener('mouseup', function() {
-        this.down = false  
+        this.down = false
     })
     signCanvas.addEventListener('mousemove', function(e) {
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
-        if (!this.down) return  
+        if (!this.down) return
         ctx.beginPath()
         ctx.moveTo(this.X, this.Y)
         ctx.lineCap = 'round'
@@ -444,18 +446,29 @@
         loadDiv.innerText = "Load:\n\nLoading poems is disabled, as you are in poem amendment mode."
         originalContent.style.display = "block"
         originalContent.style.top = content.offsetTop + "px"
-        
+
         //Load up amendment poem
         let json = {}
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
             const version = params.get("version")
-            
+
+            let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit))
             if (version == "2") {
-                
+                json = data.json()
+                poemTags = []
+                while (tagContainer.firstChild) {
+                    tagContainer.removeChild(tagContainer.firstChild)
+                }
+                for(let t of loadObject.tags.split(",")) {
+                    addPoemTag(t)
+                }
+                cWarningCheckbox.checked = json.cWarning
+                cWarningNotesInput.disabled = json.cWarning ? false : true
+                cWarningNotesInput.value = json.cWarningAdditions
+                summaryArea.value = loadObject.summary
             }
             else {
-                let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)).text()
-                let poemHtml = pageToHtml(data)
+                let poemHtml = pageToHtml(data.text())
                 json = {
                     //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
                     poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
@@ -469,7 +482,6 @@
         }
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             //WIP
-            
         }
 
         poemName.innerText = json.poemName
