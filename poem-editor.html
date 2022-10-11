@@ -452,10 +452,10 @@
         if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
             const version = params.get("version")
 
-            let data = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit))
+            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)
             if (version == "2") {
                 //pathname + '.json'
-                json = data.json()
+                json = await data.json()
                 poemTags = []
                 while (tagContainer.firstChild) {
                     tagContainer.removeChild(tagContainer.firstChild)
@@ -470,7 +470,7 @@
             }
             else {
                 //"/poem?path=" + edit
-                let poemHtml = pageToHtml(data.text())
+                let poemHtml = pageToHtml(await data.text())
                 json = {
                     //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
                     poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
