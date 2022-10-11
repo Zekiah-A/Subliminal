@@ -33,10 +33,6 @@
         const path = params.get("path")
         const poemData = await (await fetch(window.location.protocol + "\/\/" + window.location.hostname + path + ".json")).json()
         
-        //Set up title and url bar for vanity
-        window.history.replaceState(null, "Title", path)
-        document.title = "Subliminal - " + poemData.poemName
-
         if (poemData.cWarning === true) {
             const cWarningHtml = stringToHtml(await (await fetch("./Other/content-warning-template.html")).text())
             //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
@@ -49,6 +45,10 @@
             }
             document.body.insertBefore(cWarningHtml.replace("ADDITIONAL_NOTES", cwInsert), back)
         }
+
+        //Set up title and url bar for vanity
+        window.history.replaceState(null, "Title", path)
+        document.title = "Subliminal - " + poemData.poemName
 
         //Place poem data into the DOM
         poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
