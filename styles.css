@@ -1,79 +1,120 @@
 body {
     margin: 0px;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
 }
 hr {
     margin: 8px;
 }
+/*Header bar*/
+.title-blur {
+    position: relative;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    width: 100%;
+    padding-top: 20px;
+    backdrop-filter: blur(5px);
+    background: transparent;
+}
 
-@media(prefers-color-scheme: light) {
-    body {
-        background-size: cover !important;
-        background-repeat: no-repeat !important;
-        background-attachment: fixed !important;
-        color: initial !important;
-    }
 
-    /*Header bar*/
-    .title-blur {
-        position: relative;
-        position: sticky;
-        position: -webkit-sticky;
-        top: 0;
-        width: 100%;
-        padding-top: 20px;
-        backdrop-filter: blur(5px);
-        background: transparent;
-    }
+.centre {
+    text-align: center;
+}
 
-    #content-warning {
-        position: fixed;
-        padding: 0;
-        margin: 0;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        background:rgb(255, 255, 255, 0.2);
-        backdrop-filter: blur(15px);
-        content: center;
-        visibility: visible;
-    }
+.warning-centre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: x-large;
+    font-family: monospace;
+}
+
+.warning-centre a {
+    font-size: x-large !important;
+    font-family: monospace !important;
+}
+
+.back {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+
+.edit {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.4;
+}
+
+.previous {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+}
+
+.next {
+    position: fixed;
+    bottom: 10px;
+    right: 40%;
+}
+
+.external-link {
+    font-size: small;
+}
+
+h2 {
+    margin-top: 0px;
+}
+
+/*Site-Wide font*/
+p, a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 110%;
+}
+
+.comment-date {
+    position: absolute;
+    top: 0px;
+    right: 2px;
+}
+
+.one-line-poem-name {
+    color: gray;
+    font-size: 10px;
+}
+
+#content-warning {
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background:rgb(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    content: center;
+    visibility: visible;
+}
+
+#content-warning:target {
+    visibility: hidden;
 }
 
 /*Dark Mode Optimisations*/
-@media(prefers-color-scheme: dark) { /* TODO: Dark mode variant for main image. */
+@media(prefers-color-scheme: dark) {
     body {
         background: rgb(30, 30, 30);
         color: #DADADA;
-        background-size: cover !important;
-        background-repeat: no-repeat !important;
-        background-attachment: fixed !important;
-    }
-
-    /*Header bar*/
-    .title-blur {
-        position: relative;
-        position: sticky;
-        position: -webkit-sticky;
-        top: 0;
-        width: 100%;
-        padding-top: 20px;
-        backdrop-filter: blur(5px);
-        background: transparent;
     }
 
     #content-warning {
-        position: fixed;
-        padding: 0;
-        margin: 0;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        background:rgba(30, 30, 30, 0.2);
-        backdrop-filter: blur(15px);
-        content: center;
-        visibility: visible;
+        background:rgba(30, 30, 30, 0.2) !important;
     }
 
     a:link {
@@ -179,90 +220,5 @@ hr {
       margin: auto;
       width: 50%;
       padding: 10px;
-    }
-}
-
-.centre {
-    text-align: center;
-}
-
-.warning-centre {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: x-large;
-    font-family: monospace;
-}
-
-.warning-centre a {
-    font-size: x-large !important;
-    font-family: monospace !important;
-}
-
-.back {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-}
-
-.edit {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    opacity: 0.4;
-}
-
-.previous {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-}
-
-.next {
-    position: fixed;
-    bottom: 10px;
-    right: 40%;
-}
-
-.external-link {
-    font-size: small;
-}
-
-h2 {
-    margin-top: 0px;
-}
-
-/*Site-Wide font*/
-p, a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 110%;
-}
-
-.comment-date {
-    position: absolute;
-    top: 0px;
-    right: 2px;
-}
-
-.one-line-poem-name {
-    color: gray;
-    font-size: 10px;
-}
-
-#content-warning:target {
-    visibility: hidden;
-}
-
-
-/*Hide poem title and back button when this page is inside of the preview window iframe*/
-@media screen and (width: 250px) {
-    @media screen and (height: 400px) {
-        .title-blur {
-            display: none !important;
-        }
-        .back {
-            display: none !important;
-        }
     }
 }
