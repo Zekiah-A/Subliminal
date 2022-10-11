@@ -51,7 +51,7 @@
                     cwInsert = cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
                 }
             }
-            cWarningHtml.getElementsByTagName("pre")[0].innerText = cWarningHtml.getElementsByTagName("pre")[0].innerText.replace("ADDITIONAL_NOTES", cwInsert)
+            cWarningHtml.getElementsByTagName("pre")[0].innerHTML = cWarningHtml.getElementsByTagName("pre")[0].innerHTML.replace("ADDITIONAL_NOTES", cwInsert)
             document.body.insertBefore(cWarningHtml, back)
         }
 
