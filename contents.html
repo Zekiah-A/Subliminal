@@ -136,7 +136,7 @@
     </div>
     <h3 style="margin-bottom: 0px;">Poem Purgatory:</h3>
     <div id="purgatoryFlex">
-      <entry poemid="1872764817422354" onclick="window.location.href = './purgatory-poem.html?poemid=' + this.getAttribute('poemid');">
+      <entry guid="1872764817422354" onclick="window.location.href = './purgatory-poem.html?guid=' + this.getAttribute('guid');">
         <div class="preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
         <h4 name="poemName">Poem name</h4>
         <div class="info">
@@ -399,7 +399,8 @@
 
     async function getPurgatoryEntries() {
       let entries = []
-      //let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
+      let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
+      let entryNew = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
       //entryTemplate.id = 
 
       //fetch, process, put into template, push
