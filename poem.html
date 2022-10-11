@@ -41,8 +41,9 @@
         if (poemData.cWarning === true) {
             let cWarningHtml = stringToHtml(await (await fetch(window.location.protocol + '\/\/' + window.location.hostname + "/Other/content-warning-template.html")).text())
             //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
+            let cwInsert = ""
             if (poemData.cWarningAdditions) {
-                let chunks = poemData.cWarningAdditions.match(/.{1,55}/g), cwInsert = ""
+                let chunks = poemData.cWarningAdditions.match(/.{1,55}/g)
                 for (let chunk of chunks) {
                     chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
                     chunk = "| ".concat(chunk) //add pipe start
