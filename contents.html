@@ -383,7 +383,7 @@
       collapsedSections.add(sectionId)
     } 
 
-    async function getPurgatoryEntries() {
+    async function addPurgatoryEntries() {
       let entries = []
       let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
       let entryNew = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
@@ -398,10 +398,9 @@
         newE.getElementById("_poemAuthor").innerText = "By " + entryData.poemAuthor.substring(0, 6) + "..."
         newE.getElementById("_approves").innerText = entryData.approves
         newE.getElementById("_vetoes").innerText = entryData.vetoes
-        entries.push(newE)
-      }
 
-      return entries
+        purgatoryFlex.appendChild(entry)
+      }      
     }
 
     const params = new URLSearchParams(document.location.search)
@@ -412,8 +411,6 @@
       setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 10)
     }
 
-    for (let entry of getPurgatoryEntries("https://server.poemanthology.org:81")) {      
-      purgatoryFlex.appendChild(entry)
-    }
+    addPurgatoryEntries()
   </script>
 </html>
