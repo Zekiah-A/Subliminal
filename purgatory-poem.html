@@ -51,7 +51,7 @@
     async function initialise() {
         const params = new URLSearchParams(document.location.search)
         const guid = params.get("guid")
-        let poemData = await (await fetch("https://server.poemanthology.org:81/" + guid)).json()
+        let poemData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
         
         //Set up title and url bar for vanity
         window.history.replaceState(null, "Title", "/" + poemData.name);  
@@ -60,7 +60,7 @@
         //Place poem data into the DOM
         poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
         poemContent.innerHTML = poemData.poemContent
-        poemMain.class = poemData.pageStyle
+        poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
 
         //Probably useless since pages are procedurally generated...
