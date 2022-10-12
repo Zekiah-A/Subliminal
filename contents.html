@@ -403,14 +403,18 @@
       }
     }
 
-
-    addPurgatoryEntries()
-
-    if (params.get("purgatorynew")) {
-      if (!purgatoryFlex.children[0]) return
+    function checkPurgatoryNew() {
+      if (!params.get("purgatorynew") || !purgatoryFlex.children[0]) return
+      
       purgatoryFlex.children[0].classList.add("entry-new")
       window.scrollTo(0, 0)
-      setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 10)
+      setTimeout(() => {
+        purgatoryFlex.children[0].classList.remove("entry-new")
+      }, 100)
     }
+
+
+    addPurgatoryEntries()
+    checkPurgatoryNew()
   </script>
 </html>
