@@ -58,7 +58,7 @@
         //Place poem data into the DOM
         poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
         poemContent.innerHTML = poemData.poemContent
-        poemMain.class = poemData.pageStyle
+        poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
 
         //Probably useless since pages are procedurally generated...
