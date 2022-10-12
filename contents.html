@@ -401,20 +401,13 @@
 
         purgatoryFlex.appendChild(newE)
       }
-    }
 
-    function checkPurgatoryNew() {
       if (!params.get("purgatorynew") || !purgatoryFlex.children[0]) return
-      
       purgatoryFlex.children[0].classList.add("entry-new")
       window.scrollTo(0, 0)
-      setTimeout(() => {
-        purgatoryFlex.children[0].classList.remove("entry-new")
-      }, 100)
+      setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 100)
     }
 
-
     addPurgatoryEntries()
-    checkPurgatoryNew()
   </script>
 </html>
