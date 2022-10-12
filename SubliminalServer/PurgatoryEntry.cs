@@ -2,9 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace SubliminalServer;
 
-public abstract record PurgatoryEntry
+public record PurgatoryEntry
 (
-    string Author,
     string Summary,
     string Tags,
     bool CWarning,
@@ -13,7 +12,8 @@ public abstract record PurgatoryEntry
     string PoemAuthor,
     string PoemContent,
     string PageStyle,
-    string PageBackground
+    string PageBackground,
+    bool Amends
 )
 {
     public string Guid { get; set; }
