@@ -62,7 +62,7 @@ httpServer.UseCors(policy =>
 
 
 httpServer.MapGet("/PurgatoryNew", () =>
-    purgatoryDir.GetFiles().Take(10) //WIP
+    Directory.GetFiles(purgatoryDir.Name).Take(10).Select(file => Path.GetFileName(file)).ToArray()
 );
 
 httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
