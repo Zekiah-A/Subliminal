@@ -27,12 +27,12 @@ if (!File.Exists(configFile))
 var config = File.ReadAllLines(configFile).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
 
 //Purgatory
-if (!Directory.Exists(purgatoryDir))
+if (!Directory.Exists(purgatoryDir.Name))
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine("[WARN] Could not find purgatory directory, creating.");
     Console.ResetColor();
-    Directory.CreateDirectory(purgatoryDir);
+    Directory.CreateDirectory(purgatoryDir.Name);
 }
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,11 +62,11 @@ httpServer.UseCors(policy =>
 
 
 httpServer.MapGet("/PurgatoryNew", () =>
-    Directory.GetFiles(purgatoryDir).Take(10) //WIP
+    Directory.GetFiles(purgatoryDir.Name).Take(10) //WIP
 );
 
 httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
-    File.ReadAllTextAsync(Path.Join(purgatoryDir, guid))
+    File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
@@ -78,7 +78,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.AdminApproves = 0;
     entry.DateCreated = new DateTimeOffset().ToUnixTimeSeconds();
     
-    await using var createStream = File.Create(Path.Join(purgatoryDir, guid.ToString()));
+    await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
     await createStream.DisposeAsync();
 });
