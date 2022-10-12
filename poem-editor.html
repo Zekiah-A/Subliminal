@@ -281,8 +281,8 @@
     }
 
     function loadKey(key) {
-        let loadObject = JSON.parse(localStorage.getItem(key))
-        load(loadObject)
+        let poemJson = JSON.parse(localStorage.getItem(key))
+        load(poemJson)
     }
 
     function load(poemJson) {
@@ -291,21 +291,21 @@
             tagContainer.removeChild(tagContainer.firstChild)
         }
 
-        if (loadObject.tags) {
-            for(let t of loadObject.tags.split(",")) {
+        if (poemJson.tags) {
+            for(let t of poemJson.tags.split(",")) {
                 addPoemTag(t)
             }
         }
 
-        summaryArea.value = loadObject.summary || ""
-        cWarningCheckbox.checked = loadObject.cWarning || ""
-        cWarningNotesInput.disabled = loadObject.cWarning ? false : true
-        cWarningNotesInput.value = loadObject.cWarningAdditions || ""
-        poemName.innerText = loadObject.poemName || "undefined"
-        poemAuthor.innerText = loadObject.poemAuthor || "undefined"
-        content.innerHTML = loadObject.poemContent || "undefined"
-        document.body.style.background = loadObject.pageBackground || ""
-        main.className = loadObject.pageStyle || "poem-centre"
+        summaryArea.value = poemJson.summary || ""
+        cWarningCheckbox.checked = poemJson.cWarning || ""
+        cWarningNotesInput.disabled = poemJson.cWarning ? false : true
+        cWarningNotesInput.value = poemJson.cWarningAdditions || ""
+        poemName.innerText = poemJson.poemName || "undefined"
+        poemAuthor.innerText = poemJson.poemAuthor || "undefined"
+        content.innerHTML = poemJson.poemContent || "undefined"
+        document.body.style.background = poemJson.pageBackground || ""
+        main.className = poemJson.pageStyle || "poem-centre"
     }
 
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
