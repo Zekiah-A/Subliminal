@@ -348,6 +348,7 @@
     <a href="index" class="back"> <- Back</a>
   </body>
   <script> 
+    const params = new URLSearchParams(document.location.search)
     let collapsedSections = new Set()
 
     let stringToHtml = text => {
@@ -398,18 +399,18 @@
         newE.querySelector("#_approves").innerText = entryData.approves || 0
         newE.querySelector("#_vetoes").innerText = entryData.vetoes || 0
 
-        purgatoryFlex.appendChild(entry)
+        purgatoryFlex.appendChild(newE)
       }
     }
 
-    const params = new URLSearchParams(document.location.search)
+
+    addPurgatoryEntries()
 
     if (params.get("purgatorynew")) {
+      if (!purgatoryFlex.children[0]) return
       purgatoryFlex.children[0].classList.add("entry-new")
       window.scrollTo(0, 0)
       setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 10)
     }
-
-    addPurgatoryEntries()
   </script>
 </html>
