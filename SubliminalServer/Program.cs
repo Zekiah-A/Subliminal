@@ -7,7 +7,14 @@ using SubliminalServer;
 using WatsonWebsocket;
 
 //Webserver configuration
-const string configFile =  "config.txt";
+var configFile =  "config.txt";
+var purgatoryDir = new DirectoryInfo(@"Purgatory");
+var defaultJsonOptions = new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true
+};
+
 if (!File.Exists(configFile))
 {
 	File.WriteAllText(configFile, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
@@ -20,12 +27,12 @@ if (!File.Exists(configFile))
 var config = File.ReadAllLines(configFile).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
 
 //Purgatory
-if (!Directory.Exists("Purgatory"))
+if (!Directory.Exists(purgatoryDir))
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine("[WARN] Could not find purgatory directory, creating.");
     Console.ResetColor();
-    Directory.CreateDirectory("Purgatory");
+    Directory.CreateDirectory(purgatoryDir);
 }
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,22 +53,20 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 var httpServer = builder.Build();
-httpServer.Urls.Add($"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}");
-httpServer.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials());
-
-var defaultJsonOptions = new JsonSerializerOptions
-{
-    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    WriteIndented = true
-};
+httpServer.Urls.Add(
+    $"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}"
+);
+httpServer.UseCors(policy => 
+    policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
+);
 
 
 httpServer.MapGet("/PurgatoryNew", () =>
-    Directory.GetFiles("Purgatory").Take(10) //WIP
+    Directory.GetFiles(purgatoryDir).Take(10) //WIP
 );
 
 httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
-    File.ReadAllTextAsync(Path.Join("Purgatory", guid))
+    File.ReadAllTextAsync(Path.Join(purgatoryDir, guid))
 );
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
@@ -73,7 +78,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.AdminApproves = 0;
     entry.DateCreated = new DateTimeOffset().ToUnixTimeSeconds();
     
-    await using var createStream = File.Create(Path.Join("Purgatory", guid.ToString()));
+    await using var createStream = File.Create(Path.Join(purgatoryDir, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
     await createStream.DisposeAsync();
 });

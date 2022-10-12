@@ -390,7 +390,7 @@
 
       for (let entry of entriesNew)
       {
-        let entryData = await (await fetch("https://server.poemanthology.org:81/" + entry)).json()
+        let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData.guid)
         newE.querySelector("#_poemPreview").innerText = entryData.poemContent.substring(0, 55) || "unknown"
