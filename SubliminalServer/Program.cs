@@ -49,6 +49,13 @@ var httpServer = builder.Build();
 httpServer.Urls.Add($"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}");
 httpServer.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials());
 
+var defaultJsonOptions = new JsonSerializerOptions
+{
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true
+};
+
+
 httpServer.MapGet("/PurgatoryNew", () =>
     Directory.GetFiles("Purgatory").Take(10) //WIP
 );
@@ -67,7 +74,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.DateCreated = new DateTimeOffset().ToUnixTimeSeconds();
     
     await using var createStream = File.Create(Path.Join("Purgatory", guid.ToString()));
-    await JsonSerializer.SerializeAsync(createStream, entry);
+    await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
     await createStream.DisposeAsync();
 });
 

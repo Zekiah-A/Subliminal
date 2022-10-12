@@ -384,23 +384,22 @@
     } 
 
     async function addPurgatoryEntries() {
-      let entries = []
-      let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
-      let entryNew = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
-      
-      for (let entry of entryNew)
+      let entryTemplate = await (await fetch("./Other/purgatory-entry-template")).text()
+      let entriesNew = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
+
+      for (let entry of entriesNew)
       {
-        let entryData = await (await fetch(entry)).json()
-        let newE = entryTemplate.valueOf()
+        let entryData = await (await fetch("https://server.poemanthology.org:81/" + entry)).json()
+        let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData.guid)
-        newE.getElementById("_poemPreview").innerText = entryData.poemContent.substring(0, 55)
-        newE.getElementById("_poemName").innerText = entryData.poemName.substring(0, 14)
-        newE.getElementById("_poemAuthor").innerText = "By " + entryData.poemAuthor.substring(0, 6) + "..."
-        newE.getElementById("_approves").innerText = entryData.approves
-        newE.getElementById("_vetoes").innerText = entryData.vetoes
+        newE.querySelector("#_poemPreview").innerText = entryData.poemContent.substring(0, 55) || "unknown"
+        newE.querySelector("#_poemName").innerText = entryData.poemName.substring(0, 14) || "unknown"
+        newE.querySelector("#_poemAuthor").innerText = "By " + (entryData.poemAuthor || "unknown").substring(0, 6) + "..."
+        newE.querySelector("#_approves").innerText = entryData.approves || 0
+        newE.querySelector("#_vetoes").innerText = entryData.vetoes || 0
 
         purgatoryFlex.appendChild(entry)
-      }      
+      }
     }
 
     const params = new URLSearchParams(document.location.search)
