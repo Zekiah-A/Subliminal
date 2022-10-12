@@ -136,21 +136,7 @@
     </div>
     <h3 style="margin-bottom: 0px;">Poem Purgatory:</h3>
     <div id="purgatoryFlex">
-      <entry guid="1872764817422354" onclick="window.location.href = './purgatory-poem.html?guid=' + this.getAttribute('guid');">
-        <div class="preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-        <h4 name="poemName">Poem name</h4>
-        <div class="info">
-          <span name="poemAuthor" style="flex: 2;">By Author</span>
-          <div style="flex: 1;">
-            <svg viewBox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg" height="16"><path clip-rule="evenodd" d="m8 .200001c.17143 0 .33468.073332.44854.201491l7.19996 8.103998c.157.17662.1956.42887.0988.64437-.0968.21551-.3111.35414-.5473.35414h-3.4v5.496c0 .3314-.2686.6-.6.6h-6.4c-.33137 0-.6-.2686-.6-.6v-5.496h-3.4c-.236249 0-.450507-.13863-.547314-.35414-.096807-.2155-.058141-.46775.09877-.64437l7.200004-8.103998c.11386-.128159.27711-.201491.44854-.201491zm-5.86433 8.103999h2.66433c.33137 0 .6.26863.6.6v5.496h5.2v-5.496c0-.33137.2686-.6.6-.6h2.6643l-5.8643-6.60063" fill-rule="evenodd"></path></svg>
-            <span name="approvals">0</span>
-          </div>
-          <div style="flex: 1;">
-            <svg viewBox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg" height="16" style="rotate: 180deg;"><path clip-rule="evenodd" d="m8 .200001c.17143 0 .33468.073332.44854.201491l7.19996 8.103998c.157.17662.1956.42887.0988.64437-.0968.21551-.3111.35414-.5473.35414h-3.4v5.496c0 .3314-.2686.6-.6.6h-6.4c-.33137 0-.6-.2686-.6-.6v-5.496h-3.4c-.236249 0-.450507-.13863-.547314-.35414-.096807-.2155-.058141-.46775.09877-.64437l7.200004-8.103998c.11386-.128159.27711-.201491.44854-.201491zm-5.86433 8.103999h2.66433c.33137 0 .6.26863.6.6v5.496h5.2v-5.496c0-.33137.2686-.6.6-.6h2.6643l-5.8643-6.60063" fill-rule="evenodd"></path></svg>
-            <span name="vetoes">0</span>
-          </div>
-        </div>
-      </entry>
+
     </div>
     <div class="grid-container">
       <a href="Other/comments-and-complaints">[Beta] Comments and Complaints</a>
@@ -367,7 +353,7 @@
     let stringToHtml = text => {
       let htmlObject = document.createElement('temp')
       htmlObject.innerHTML = text
-      return htmlObject.firstChild
+      return htmlObject.firstElementChild
     }
 
     function searchContents(value) {
@@ -401,9 +387,20 @@
       let entries = []
       let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
       let entryNew = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
-      //entryTemplate.id = 
+      
+      for (let entry of entryNew)
+      {
+        let entryData = await (await fetch(entry)).json()
+        let newE = entryTemplate.valueOf()
+        newE.setAttribute("guid", entryData.guid)
+        newE.getElementById("_poemPreview").innerText = entryData.poemContent.substring(0, 55)
+        newE.getElementById("_poemName").innerText = entryData.poemName.substring(0, 14)
+        newE.getElementById("_poemAuthor").innerText = "By " + entryData.poemAuthor.substring(0, 6) + "..."
+        newE.getElementById("_approves").innerText = entryData.approves
+        newE.getElementById("_vetoes").innerText = entryData.vetoes
+        entries.push(newE)
+      }
 
-      //fetch, process, put into template, push
       return entries
     }
 
