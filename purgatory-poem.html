@@ -53,8 +53,7 @@
         const guid = params.get("guid")
         let poemData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
         
-        //Set up title and url bar for vanity
-        window.history.replaceState(null, "Title", "/" + poemData.poemName);  
+        //Set up title for vanity
         document.title = "Subliminal - " + poemData.poemName
 
         //Place poem data into the DOM
