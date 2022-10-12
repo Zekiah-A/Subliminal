@@ -393,11 +393,11 @@
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData.guid)
-        newE.querySelector("#_poemPreview").innerText = entryData.poemContent.substring(0, 55) || "unknown"
-        newE.querySelector("#_poemName").innerText = entryData.poemName.substring(0, 14) || "unknown"
-        newE.querySelector("#_poemAuthor").innerText = "By " + (entryData.poemAuthor || "unknown").substring(0, 6) + "..."
-        newE.querySelector("#_approves").innerText = entryData.approves || 0
-        newE.querySelector("#_vetoes").innerText = entryData.vetoes || 0
+        newE.querySelector("#_poemPreview").textContent = entryData.poemContent.substring(0, 55).replace(/<[^>]*>?/gm, "") || "unknown"
+        newE.querySelector("#_poemName").textContent = entryData.poemName.substring(0, 14).replace(/<[^>]*>?/gm, "") || "unknown"
+        newE.querySelector("#_poemAuthor").textContent = "By " + (entryData.poemAuthor || "unknown").substring(0, 6).replace(/<[^>]*>?/gm, "") + "..."
+        newE.querySelector("#_approves").textContent = entryData.approves || 0
+        newE.querySelector("#_vetoes").textContent = entryData.vetoes || 0
 
         purgatoryFlex.appendChild(newE)
       }
