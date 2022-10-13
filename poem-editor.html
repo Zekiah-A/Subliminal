@@ -248,8 +248,7 @@
 
     //Make user confirm that they want to leave the page.
     window.onbeforeunload = () => {
-        if (confirm("Save before exiting?")) saveCurrent()
-        return true
+        return "If you forgot, press cancel and 'save poem draft' to save before exiting!"
     }
 
     //format title to subliminal title format, used in poem save files
@@ -368,7 +367,8 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poemJson)
         }).then(res => {
-            console.log("Completed ", res)
+            console.log("Upload sucessful, redirecting.")
+            window.onbeforeunload = () => {} 
             window.location.href = "./contents?purgatorynew=true"
         })
     }
