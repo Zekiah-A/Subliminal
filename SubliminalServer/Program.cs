@@ -66,6 +66,7 @@ httpServer.MapGet("/PurgatoryNew", () =>
         .Take(10)
         .Select(file => new FileInfo(file))
         .OrderBy(file => file.CreationTime)
+        .Reverse()
         .Select(file => file.Name)
         .ToArray()
 );
