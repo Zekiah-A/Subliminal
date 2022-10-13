@@ -34,7 +34,7 @@ hr {
 }
 
 .warning-centre a {
-    font-size: x-large !important;
+    font-size: x-large ;
     font-family: monospace !important;
 }
 
@@ -175,6 +175,14 @@ p, a {
       margin: auto;
       width: 100%;
       padding: 10px;
+    }
+
+    .warning-centre {
+        font-size: 2.6vw !important;
+    }
+    
+    .warning-centre a {
+        font-size: 1em;
     }
 }
 
