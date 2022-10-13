@@ -433,6 +433,7 @@
     }
 
     function signCanvasDown(e) {
+        e.preventDefault()
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
         this.X = relativeX
@@ -441,9 +442,11 @@
     }
 
     function signCanvasDrag(e) {
+        e.preventDefault()
         this.down = false
     }
     function signCanvasUp(e) {
+        e.preventDefault()
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return
         ctx.beginPath()
