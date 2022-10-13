@@ -67,7 +67,7 @@
     #purgatoryFlex {
       display: flex;
       max-width: 100%;
-      margin: 8px;
+      padding: 8px;
       flex-direction: row;
       column-gap: 16px;
       overflow-x: scroll;
@@ -87,6 +87,11 @@
     entry h4 {
       text-align: center;
       font-size: 20px;
+      max-width: 100%;
+      margin-left: 8px;
+      margin-right: 8px;
+      overflow: hidden;
+      white-space: nowrap;
     }
     entry .preview {
       margin: 16px;
@@ -370,9 +375,9 @@
     <a href=".">AQGay (Lyrics) - By Zekiah (as SussZ)</a>
     <br><br> <!--https://sounds.poemanthology.org/-->
     <a href="/sounds" class="sounds-button">Listen on subliminal sounds!</a>
-    <br><br><br>
+    <br><br>
     what are you doing down here? lol
-
+    <br><br>
     <a href="index" class="back"> <- Back</a>
   </body>
   <script> 
@@ -421,8 +426,8 @@
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData.guid)
-        newE.querySelector("#_poemPreview").textContent = entryData.poemContent.substring(0, 55).replace(/<[^>]*>?/gm, "") || "unknown"
-        newE.querySelector("#_poemName").textContent = entryData.poemName.substring(0, 14).replace(/<[^>]*>?/gm, "") || "unknown"
+        newE.querySelector("#_poemPreview").textContent = entryData.poemContent.substring(0, 56).replace(/<[^>]*>?/gm, " ") || "unknown"
+        newE.querySelector("#_poemName").textContent = entryData.poemName.substring(0, 32).replace(/<[^>]*>?/gm, " ") || "unknown"
         newE.querySelector("#_poemAuthor").textContent = "By " + (entryData.poemAuthor || "unknown").substring(0, 6).replace(/<[^>]*>?/gm, "") + "..."
         newE.querySelector("#_approves").textContent = entryData.approves || 0
         newE.querySelector("#_vetoes").textContent = entryData.vetoes || 0
