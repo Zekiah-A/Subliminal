@@ -3,7 +3,7 @@
 <head>
   <title>Subliminal</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="styles.css">
   <style>
     .section-span {
@@ -121,6 +121,32 @@
 
     .entry-new .preview::after {
       opacity: 0 !important;
+    }
+
+    .sounds-button{
+      background: #F2F2F2;
+      padding: 15px;
+      border-radius: 4px;
+      color: black;
+      text-decoration: none;
+    }
+
+    @media(prefers-color-scheme: dark) {
+      entry {
+        background-color: #373737;
+      }
+
+      entry .preview::after {
+        background: linear-gradient(#373737, transparent, #373737);
+      }
+
+      .sounds-button {
+        background: #373737;
+      }
+
+      .entry-new {
+        background-color: #606060;
+      }
     }
   </style>
 </head>
@@ -341,7 +367,7 @@
     <br>
     <a href=".">AQGay (Lyrics) - By Zekiah (as SussZ)</a>
     <br><br> <!--https://sounds.poemanthology.org/-->
-    <a href="/sounds" style="background: #F2F2F2; padding: 15px; border-radius: 4px; color: black; text-decoration: none;">Listen on subliminal sounds!</a>
+    <a href="/sounds" class="sounds-button">Listen on subliminal sounds!</a>
     <br><br><br>
     what are you doing down here? lol
 
