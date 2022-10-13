@@ -440,12 +440,12 @@
         this.color = 'rgb(0, 0, 0)'
     }
 
-    function signCanvasDrag(e) {
+    function signCanvasUp(e) {
         this.down = false
         e.preventDefault()
     }
 
-    function signCanvasUp(e) {
+    function signCanvasDrag(e) {
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return
         ctx.beginPath()
