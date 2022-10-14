@@ -1,6 +1,8 @@
 using System;
 
-public enum RatingType
+namespace SubliminalServer;
+
+public enum PurgatoryRatingType
 {
     Approve,
     Veto,
