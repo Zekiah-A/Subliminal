@@ -60,7 +60,7 @@ httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
 
-httpServer.MapPost("/PurgatoryRate", async (PoemRating rating) => {
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     await using var openStream = File.OpenRead(target);
     var entry = await JsonSerializer.DeserialiseAsync<PoemEntry>(openStream);
@@ -68,13 +68,17 @@ httpServer.MapPost("/PurgatoryRate", async (PoemRating rating) => {
 
     switch (rating.Type)
     {
-        case RatingType.Approve:
+        case PurgatoryRatingType.Approve:
+            entry.Approves++;
             break;
-        case RatingType.Veto:
+        case PurgatoryRatingType.Veto:
+            entry.Vetoes++;
             break;
-        case RatingType.UndoApprove:
+        case PurgatoryRatingType.UndoApprove:
+            entry.Approves--;
             break;
-        case RatingType.UndoVeto:
+        case PurgatoryRatingType.UndoVeto:
+            entry.Vetoes++;
             break;
     }
 
