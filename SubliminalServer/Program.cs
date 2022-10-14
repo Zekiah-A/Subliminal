@@ -60,13 +60,28 @@ httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
 
-httpServer.MapGet("/PurgatoryApprove/{guid}", (string guid) => {
-    var target = Path.Join(purgatoryDir.Name, guid);
+httpServer.MapPost("/PurgatoryRate", async (PoemRating rating) => {
+    var target = Path.Join(purgatoryDir.Name, rating.Guid);
+    await using var openStream = File.OpenRead(target);
+    var entry = await JsonSerializer.DeserialiseAsync<PoemEntry>(openStream);
+    await openStream.DisposeAsync();
 
-});
+    switch (rating.Type)
+    {
+        case RatingType.Approve:
+            break;
+        case RatingType.Veto:
+            break;
+        case RatingType.UndoApprove:
+            break;
+        case RatingType.UndoVeto:
+            break;
+    }
 
-httpServer.MapGet("/PurgatoryVeto/{guid}", (string guid) => {
-    
+    //TODO overwrite old file instead of making new
+    await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
+    await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
+    await createStream.DisposeAsync();
 });
 
 httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) => {
