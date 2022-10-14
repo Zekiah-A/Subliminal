@@ -1,7 +1,9 @@
 using System;
 
+namespace SubliminalServer;
+
 public record PurgatoryRating
 (
    string Guid,
-   RatingType Type
+   PurgatoryRatingType Type
 );
