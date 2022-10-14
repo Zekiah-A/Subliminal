@@ -60,6 +60,18 @@ httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
 
+httpServer.MapGet("/PurgatoryApprove/{guid}", (string guid) => {
+    var target = Path.Join(purgatoryDir.Name, guid);
+
+});
+
+httpServer.MapGet("/PurgatoryVeto/{guid}", (string guid) => {
+    
+});
+
+httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) => {
+    
+});
 
 httpServer.MapGet("/PurgatoryNew", () =>
     Directory.GetFiles(purgatoryDir.Name)
