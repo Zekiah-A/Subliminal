@@ -66,21 +66,17 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     var entry = await JsonSerializer.DeserialiseAsync<PoemEntry>(openStream);
     await openStream.DisposeAsync();
 
-    switch (rating.Type)
+    entry.Approves = rating.Type switch
     {
-        case PurgatoryRatingType.Approve:
-            entry.Approves++;
-            break;
-        case PurgatoryRatingType.Veto:
-            entry.Vetoes++;
-            break;
-        case PurgatoryRatingType.UndoApprove:
-            entry.Approves--;
-            break;
-        case PurgatoryRatingType.UndoVeto:
-            entry.Vetoes++;
-            break;
-    }
+        PurgatoryRatingType.Approve => entry.Approves + 1,
+        PurgatoryRatingType.UndoApprove => entry.Approves - 1
+    };
+
+    entry.Vetoes = rating.Type switch
+    {
+        PurgatoryRatingType.Veto => entry.Approves + 1,
+        PurgatoryRatingType.UndoVeto => entry.Approves - 1
+    };
 
     //TODO overwrite old file instead of making new
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
