@@ -63,7 +63,7 @@ httpServer.UseCors(policy =>
 httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     await using var openStream = File.OpenRead(target);
-    var entry = await JsonSerializer.DeserialiseAsync<PoemEntry>(openStream);
+    var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream);
     await openStream.DisposeAsync();
 
     entry.Approves = rating.Type switch
@@ -79,7 +79,7 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     };
 
     //TODO overwrite old file instead of making new
-    await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
+    await using var createStream = File.Create(Path.Join(purgatoryDir.Name, entry.Guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
     await createStream.DisposeAsync();
 });
