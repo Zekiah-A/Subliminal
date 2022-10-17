@@ -427,8 +427,7 @@
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData?.guid)
-        newE.querySelector("#_poemPreview").textContent = (entryData?.poemContent
-          .substring(0, 56)
+        newE.querySelector("#_poemPreview").textContent = (entryData.poemContent?.substring(0, 56)
           .replace(/<[^>]*>?/gm, " ")
           .replace(/\s+/g, " ")
           .trim()
