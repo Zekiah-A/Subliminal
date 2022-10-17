@@ -128,6 +128,15 @@
             margin-top: -18px;
         }
 
+        .tool-header {
+            background-color: #d3d3d363;
+            width: calc(100% - 16px);
+            display: block;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
         @media screen and (orientation:portrait) {
             .text-tools {
                 position: inherit !important;
@@ -186,7 +195,7 @@
     <div style="position: fixed; top: 90px;">
     </div>
     <div class="text-tools">
-        Tools: <br>
+        <span class="tool-header">Tools:</span>
         <input class="tool" onclick="format('bold', null)" type="button" value="Bold">
         <input class="tool" onclick="format('italic', null)" type="button" value="Italic">
         <input class="tool" onclick="formatCustom('code')" type="button" value="Code" disabled> <br>
@@ -214,8 +223,8 @@
         <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled>
     </div>
     <div id="toolbox" class="document-tools">
-        Document Management: <br>
-        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;margin-top: 8px;">
+        <span class="tool-header">Document Management:</span>
+        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;">
         <div style="margin: 2px;border: 1px solid black;padding: 5px;margin-top: 8px;" id="loadDiv">Load: <br></div>
         <button id="downloadButton" onclick="download()" class="management-button">
             <div name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</div>
