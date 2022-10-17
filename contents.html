@@ -426,7 +426,13 @@
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData.guid)
-        newE.querySelector("#_poemPreview").textContent = entryData.poemContent.substring(0, 56).replace(/<[^>]*>?/gm, " ") || "unknown"
+        newE.querySelector("#_poemPreview").textContent = (entryData.poemContent
+          .substring(0, 56)
+          .replace(/<[^>]*>?/gm, " ") || "unknown"
+          .replace(/\s+/g, " ")
+          .trim()
+          .padEnd(56, "&nbsp;")
+        )  
         newE.querySelector("#_poemName").textContent = entryData.poemName.substring(0, 32).replace(/<[^>]*>?/gm, " ") || "unknown"
         newE.querySelector("#_poemAuthor").textContent = "By " + (entryData.poemAuthor || "unknown").substring(0, 6).replace(/<[^>]*>?/gm, "") + "..."
         newE.querySelector("#_approves").textContent = entryData.approves || 0
