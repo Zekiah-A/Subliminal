@@ -129,7 +129,7 @@
         }
 
         .tool-header {
-            background-color: #d3d3d363;
+            background-color: #f2f2f2;
             width: calc(100% - 16px);
             display: block;
             padding: 8px;
@@ -196,11 +196,13 @@
     </div>
     <div class="text-tools">
         <span class="tool-header">Tools:</span>
-        <input class="tool" onclick="format('bold', null)" type="button" value="Bold">
-        <input class="tool" onclick="format('italic', null)" type="button" value="Italic">
-        <input class="tool" onclick="formatCustom('code')" type="button" value="Code" disabled> <br>
+        <div style="display: flex; column-gap: 4px;">
+            <input class="tool" onclick="format('bold', null)" type="button" value="Bold" style="flex-grow: 1;">
+            <input class="tool" onclick="format('italic', null)" type="button" value="Italic" style="flex-grow: 1;">
+            <input class="tool" onclick="formatCustom('code')" type="button" value="Code" disabled="" style="flex-grow: 1;">
+        </div>
         <input class="tool" onclick="format('superscript', null)" type="button" value="Superscript">
-        <input class="tool" onclick="format('subscript', null)" type="button" value="Subscript"> <br>
+        <input class="tool" onclick="format('subscript', null)" type="button" value="Subscript">
         <input class="tool" onchange="format('foreColor', this.value);" value="#000000" style="height: 32px;" type="color"> <br>
         <input class="tool" onclick="formatImage()" type="button" value="Image" disabled> <br>
         <input class="tool" onclick="format('undo', null)" type="button" value="↩ undo">
