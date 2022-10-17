@@ -69,13 +69,15 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     entry.Approves = rating.Type switch
     {
         PurgatoryRatingType.Approve => entry.Approves + 1,
-        PurgatoryRatingType.UndoApprove => entry.Approves - 1
+        PurgatoryRatingType.UndoApprove => entry.Approves - 1,
+        _ => entry.Approves
     };
 
     entry.Vetoes = rating.Type switch
     {
         PurgatoryRatingType.Veto => entry.Approves + 1,
-        PurgatoryRatingType.UndoVeto => entry.Approves - 1
+        PurgatoryRatingType.UndoVeto => entry.Approves - 1,
+        _ => entry.Vetoes
     };
 
     //TODO overwrite old file instead of making new
