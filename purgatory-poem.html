@@ -21,8 +21,8 @@
         <!-- WIP approve/veto buttons -->  
         <div style="user-select: none; display: flex;position: absolute;left: 50%;transform: translateX(-50%);width: 300px;row-gap: 8px;flex-direction: column;padding: 32px;padding-top: 16px;">
             <div style="display: flex;column-gap: 8px;">
-                <a href="#content-warning" onclick="ratePoem(localStorage.approved.has(guid) ? ratingType.UndoApprove : ratingType.Approve)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Approve</a>
-                <a href="#content-warning" onclick="ratePoem(localStorage.vetoed.has(guid) ? ratingType.UndoVeto : ratingType.Veto)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Veto</a>
+                <a href="#content-warning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Approve</a>
+                <a href="#content-warning" onclick="ratePoem(/*localStorage.vetoed.has(guid) ? ratingType.UndoVeto : */ratingType.Veto)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Veto</a>
             </div>
             <a href="#" style="color: #ff0606;text-align: center;">⚠ Report poem content</a>
         </div>
@@ -82,12 +82,12 @@
             let ratingName = Object.keys(ratingType)
                 .find(key => ratingType[key] === rating)
 
-            switch(ratingName) {
+            /*switch(ratingName) {
                 case "Approve": localStorage.approved.add(guid); break;
                 case "Veto": localStorage.vetoed.add(guid); break;
                 case "UndoApprove": localStorage.approved.delete(guid); break;
                 case "UndoVeto": localStorage.vetoed.delete(guid); break;
-            }
+            }*/
         })
     }
 
