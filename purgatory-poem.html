@@ -21,7 +21,8 @@
         <!-- WIP approve/veto buttons -->  
         <div style="user-select: none; display: flex;position: absolute;left: 50%;transform: translateX(-50%);width: 300px;row-gap: 8px;flex-direction: column;padding: 32px;padding-top: 16px;">
             <div style="display: flex;column-gap: 8px;">
-                <a href="#" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Approve</a><a href="#" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Veto</a>
+                <a href="#content-warning" onclick="ratePoem(localStorage.approved.has(guid) ? ratingType.UndoApprove : ratingType.Approve)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Approve</a>
+                <a href="#content-warning" onclick="ratePoem(localStorage.vetoed.has(guid) ? ratingType.UndoVeto : ratingType.Veto)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Veto</a>
             </div>
             <a href="#" style="color: #ff0606;text-align: center;">⚠ Report poem content</a>
         </div>
@@ -57,9 +58,47 @@
     <a href="javascript: window.location.href = '../../poem-editor?edit=' + guid;" class="edit"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg></a>
 </body>
 <script>
+    const params = new URLSearchParams(document.location.search)
+    const guid = params.get("guid")
+    const ratingType = {
+        Approve: 0,
+        Veto: 1,
+        UndoApprove: 2,
+        UndoVeto: 3
+    }
+
+    function ratePoem(rating) {
+        let ratingObject = {
+            guid: guid.toString(),
+            purgatoryRating: rating
+        }
+     
+        fetch("https://server.poemanthology.org:81/PurgatoryRate", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(ratingObject)
+        }).then(res => {
+            alert('Rating success!')
+            let ratingName = Object.keys(ratingType)
+                .find(key => ratingType[key] === rating)
+
+            switch(ratingName) {
+                case "Approve": localStorage.approved.add(guid); break;
+                case "Veto": localStorage.vetoed.add(guid); break;
+                case "UndoApprove": localStorage.approved.delete(guid); break;
+                case "UndoVeto": localStorage.vetoed.delete(guid); break;
+            }
+        })
+    }
+
     async function initialise() {
-        const params = new URLSearchParams(document.location.search)
-        const guid = params.get("guid")
+        //init localstorage
+        if (!localStorage.getItem('approved')) 
+            localStorage.approved = new Set()
+        if (!localStorage.getItem('vetoed'))
+            localStorage.vetoed = new Set()
+
+        //fetch poem data
         let poemData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
         
         //Set up title for vanity
