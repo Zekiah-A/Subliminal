@@ -223,13 +223,27 @@
             <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 41px top 18px, darkgray, white) repeat scroll 0% 0%; padding: 1px;">
                 <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">redo ↪</div>
             </div>
-            <div style="background-color: #f2f2f2;">B</div>
-            <div style="background-color: #f2f2f2;">I</div>
-            <div style="background-color: #f2f2f2;">C</div>
-            <div style="background-color: #f2f2f2;">Sub</div>
-            <div style="background-color: #f2f2f2;">Sup</div>
-            <div style="background-color: #f2f2f2;"><div style="background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px;"></div></div>
-            <div style="background-color: #f2f2f2;">🖼️</div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">B</div>
+            </div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">I</div>
+            </div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">C</div>
+            </div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">Sub</div>
+            </div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">Sup</div>
+            </div>
+            <div style="background-color: #f2f2f2;">
+                <div style="background-color: red; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
+            </div>
+            <div style="padding: 1px;">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">🖼️</div>
+            </div>
         </div>
         <hr>
     </div>
@@ -571,10 +585,16 @@
     if (edit) amendMode() //enter poem amendment mode
     else fetchStorage() //Load saved poems from local storage
 
+    formattingToolbar.addEventListener("mousemove", event => {
+        for (let button of formattingToolbar.children) {
+            button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY -  + 'px, darkgray, white)'
+        }
+    })
+    /* Alternative button-per-button method
     for (let button of formattingToolbar.children) {
         button.addEventListener("mousemove", event => {
             button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'
         })
-    }
+    }*/
 </script>
 </html>
