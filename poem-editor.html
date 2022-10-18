@@ -347,7 +347,7 @@
         }
 
         if (poemJson.tags) {
-            for(let t of poemJson.tags.split(",")) {
+            for(let t of poemJson.tags?.split(",")) {
                 addPoemTag(t)
             }
         }
@@ -529,21 +529,8 @@
                 //pathname + '.json'
                 json = await data.json()
                 json.amends = edit
-
-                poemTags = []
-                while (tagContainer.firstChild) {
-                    tagContainer.removeChild(tagContainer.firstChild)
-                }
-                for(let t of json.tags.split(",")) {
-                    addPoemTag(t)
-                }
-                cWarningCheckbox.checked = json.cWarning
-                cWarningNotesInput.disabled = json.cWarning ? false : true
-                cWarningNotesInput.value = json.cWarningAdditions
-                summaryArea.value = json.summary
             }
-            else {
-                //"/poem?path=" + edit
+            /*else { //DEPRECATED: Maybe this can be refitted for loading up downloaded poem HTML files
                 let poemHtml = pageToHtml(await data.text())
                 json = {
                     //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
@@ -554,10 +541,11 @@
                     pageBackground: poemHtml.style.background, //poem background image
                     amends: edit
                 }
-            }
+            }*/
         }
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
-            //WIP
+            json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + edit)).json()
+            json.amends = edit
         }
 
         load(json)
