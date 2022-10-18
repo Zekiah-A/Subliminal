@@ -13,7 +13,7 @@
         }
         .text-tools {
             position: fixed;
-            top: 115px;
+            top: 136px;
             left: 16px;
             border: 1px solid black;
             width: 160px;
@@ -26,7 +26,7 @@
         }
         .document-tools {
             position: fixed;
-            top: 115px;
+            top: 136px;
             right: 16px;
             border: 1px solid black;
             width: 180px;
@@ -193,21 +193,26 @@
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.
         <div style="display: flex;padding-left: 8px;padding-right: 8px;column-gap: 8px;">
+            <div style="height: 32px;width: 72px;line-height: 32px;text-align: center;background-color: #f2f2f2;border-radius: 4px;box-shadow: 0px 0px 4px grey;">↩ undo</div>
+            <div style="height: 32px;width: 72px;line-height: 32px;text-align: center;background-color: #f2f2f2;border-radius: 4px;box-shadow: 0px 0px 4px grey;">redo ↪</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">B</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">I</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">C</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">Sub</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">Sup</div>
             <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">
-               <div style=" background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px; "></div>
+                <div style=" background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px; "></div>
             </div>
+            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">🖼️</div>
         </div>
+        <hr>
         -->
     </div>
     <div style="position: fixed; top: 90px;">
     </div>
     <div class="text-tools">
         <span class="tool-header">Tools:</span>
+        <!--
         <div style="display: flex; column-gap: 4px;">
             <input class="tool" onclick="format('bold', null)" type="button" value="Bold" style="flex-grow: 1;">
             <input class="tool" onclick="format('italic', null)" type="button" value="Italic" style="flex-grow: 1;">
@@ -219,6 +224,7 @@
         <input class="tool" onclick="formatImage()" type="button" value="Image" disabled> <br>
         <input class="tool" onclick="format('undo', null)" type="button" value="↩ undo">
         <input class="tool" onclick="format('redo', null)" type="button" value="redo ↪"> <br>
+        -->
         <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px;">
             <option value="poem-centre" selected>Poem Centre</option>
             <option value="poem-centre-wide">Poem Centre Wide</option>
