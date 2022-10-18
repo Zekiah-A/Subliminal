@@ -13,7 +13,7 @@
         }
         .text-tools {
             position: fixed;
-            top: 136px;
+            top: 146px;
             left: 16px;
             border: 1px solid black;
             width: 160px;
@@ -26,7 +26,7 @@
         }
         .document-tools {
             position: fixed;
-            top: 136px;
+            top: 146px;
             right: 16px;
             border: 1px solid black;
             width: 180px;
@@ -223,15 +223,16 @@
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.-->
         <div id="formattingToolbar">
-            <div style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
-            <div style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
-            <div><div>B</div></div>
-            <div><div>I</div></div>
-            <div><div>C</div></div>
-            <div><div>Sub</div></div>
-            <div><div>Sup</div></div>
+            <div onclick="format('undo', null)" style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
+            <div onclick="format('redo', null)" style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
+            <div onclick="format('bold', null)"><div>B</div></div>
+            <div onclick="format('italic', null)"><div>I</div></div>
+            <div onclick="formatCustom('code')"><div>C</div></div>
+            <div onclick="format('superscript', null)"><div>Sup</div></div>
+            <div onclick="format('subscript', null)"><div>Sub</div></div>
             <div>
-                <div style=" background-color: red; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
+                <input class="tool" onchange="format('foreColor', this.value);" value="#000000" style="opacity: 0;position: absolute;" type="color">
+                <div style=" background-color: black; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
             <div><div>🖼️</div></div>
         </div>
@@ -241,19 +242,6 @@
     </div>
     <div class="text-tools">
         <span class="tool-header">Tools:</span>
-        <!--
-        <div style="display: flex; column-gap: 4px;">
-            <input class="tool" onclick="format('bold', null)" type="button" value="Bold" style="flex-grow: 1;">
-            <input class="tool" onclick="format('italic', null)" type="button" value="Italic" style="flex-grow: 1;">
-            <input class="tool" onclick="formatCustom('code')" type="button" value="Code" disabled="" style="flex-grow: 1;">
-        </div>
-        <input class="tool" onclick="format('superscript', null)" type="button" value="Superscript">
-        <input class="tool" onclick="format('subscript', null)" type="button" value="Subscript"> <br>
-        <input class="tool" onchange="format('foreColor', this.value);" value="#000000" style="height: 32px;" type="color"> <br>
-        <input class="tool" onclick="formatImage()" type="button" value="Image" disabled> <br>
-        <input class="tool" onclick="format('undo', null)" type="button" value="↩ undo">
-        <input class="tool" onclick="format('redo', null)" type="button" value="redo ↪"> <br>
-        -->
         <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px;">
             <option value="poem-centre" selected>Poem Centre</option>
             <option value="poem-centre-wide">Poem Centre Wide</option>
@@ -577,7 +565,7 @@
 
     formattingToolbar.addEventListener("mousemove", event => {
         for (let button of formattingToolbar.children) {
-            button.style.background = 'radial-gradient(at left ' + (event.offsetX - button.offsetLeft) + 'px top ' + (event.offsetY - button.offsetTop) + 'px, darkgray, white)'
+            button.style.background = 'radial-gradient(at left ' + (event.pageX - button.offsetLeft) + 'px top ' + (event.PageY - button.offsetTop) + 'px, darkgray, white)'
         }
     })
     /* Alternative button-per-button method
