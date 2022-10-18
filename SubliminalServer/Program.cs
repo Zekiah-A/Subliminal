@@ -19,14 +19,11 @@ var defaultJsonOptions = new JsonSerializerOptions
 
 if (!File.Exists(configFile))
 {
-
-
-
-
-
-un this program again!", configFile);
-        Console.ResetColor();
-        Environment.Exit(0);
+	File.WriteAllText(configFile, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
+	Console.ForegroundColor = ConsoleColor.Green;
+	Console.WriteLine("[LOG]: Config created! Please check {0} and run this program again!", configFile);
+	Console.ResetColor();
+	Environment.Exit(0);
 }
 
 var config = File.ReadAllLines(configFile).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
@@ -37,7 +34,8 @@ Console.ForegroundColor = ConsoleColor.Yellow;
 if (!Directory.Exists(purgatoryDir.Name))
 {
     Console.WriteLine("[WARN] Could not find purgatory directory, creating.");
-    Directory.CreateDirectory(purgatoryDir.Name);                       }
+    Directory.CreateDirectory(purgatoryDir.Name);
+}
 if (!Directory.Exists(purgatoryBackupDir.Name))
 {
         Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
