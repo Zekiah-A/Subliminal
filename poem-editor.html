@@ -221,7 +221,6 @@
             <h2 id="poemAuthor" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: left;" contenteditable="true">Click On Me to Start Editing</h2>
         </div>
         <hr>
-        <!--TODO: Implement windows torch-like button border hover effect.-->
         <div id="formattingToolbar">
             <div onclick="format('undo', null)" style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
             <div onclick="format('redo', null)" style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
@@ -565,7 +564,7 @@
 
     formattingToolbar.addEventListener("mousemove", event => {
         for (let button of formattingToolbar.children) {
-            button.style.background = 'radial-gradient(at left ' + (event.pageX - button.offsetLeft) + 'px top ' + (event.PageY - button.offsetTop) + 'px, darkgray, white)'
+            button.style.background = 'radial-gradient(at left ' + (event.offsetX - button.offsetLeft) + 'px top ' + (event.offsetY - button.offsetTop) + 'px, darkgray, white)'
         }
     })
     /* Alternative button-per-button method
