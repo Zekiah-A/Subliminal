@@ -37,6 +37,12 @@
             box-shadow: 0px 2px 4px gray;
             z-index: 1;
         }
+        .formatting-toolbar {
+            display: flex;padding-left: 8px;padding-right: 8px;column-gap: 8px;
+        }
+        .formatting-toolbar > div {
+            height: 32px; width: 32px; min-width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey;
+        }
 
         #poem-tags button {
             border-radius: 4px;
@@ -137,6 +143,8 @@
             margin-bottom: 4px;
         }
 
+
+
         @media screen and (orientation:portrait) {
             .text-tools {
                 position: inherit !important;
@@ -192,18 +200,16 @@
         </div>
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.-->
-        <div style="display: flex;padding-left: 8px;padding-right: 8px;column-gap: 8px;">
-            <div style="height: 32px;width: 72px;line-height: 32px;text-align: center;background-color: #f2f2f2;border-radius: 4px;box-shadow: 0px 0px 4px grey;">↩ undo</div>
-            <div style="height: 32px;width: 72px;line-height: 32px;text-align: center;background-color: #f2f2f2;border-radius: 4px;box-shadow: 0px 0px 4px grey;">redo ↪</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">B</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">I</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">C</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">Sub</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">Sup</div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">
-                <div style=" background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px; "></div>
-            </div>
-            <div style=" height: 32px; width: 32px; line-height: 32px; text-align: center; background-color: #f2f2f2; border-radius: 4px; box-shadow: 0px 0px 4px grey; ">🖼️</div>
+        <div class="formatting-toolbar">
+            <div style="width: 72px; min-width: 72px;">↩ undo</div>
+            <div style="width: 72px; min-width: 72px;">redo ↪</div>
+            <div>B</div>
+            <div>I</div>
+            <div>C</div>
+            <div>Sub</div>
+            <div>Sup</div>
+            <div><div style="background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px;"></div></div>
+            <div>🖼️</div>
         </div>
         <hr>
     </div>
