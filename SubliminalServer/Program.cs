@@ -38,7 +38,7 @@ if (!Directory.Exists(purgatoryDir.Name))
 }
 if (!Directory.Exists(purgatoryBackupDir.Name))
 {
-        Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
+    Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
     Directory.CreateDirectory(purgatoryBackupDir.Name);
 }
 
@@ -57,9 +57,43 @@ builder.Services.AddCors(options =>
 });
 builder.Services.Configure<JsonOptions>(options =>
 {
-    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.Camel
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+});
+
+var httpServer = builder.Build();
+httpServer.Urls.Add(
+    $"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Por$
+);
+httpServer.UseCors(policy =>
+    policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
+);
+
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
+    var target = Path.Join(purgatoryDir.Name, rating.Guid);
+    if (!File.Exists(target)) return;
+
+    await using var openStream = File.OpenRead(target);
+    var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream, defaultJsonOptions);
+
+    entry.Approves = rating.Type switch
+    {
+        PurgatoryRatingType.Approve => entry.Approves + 1,
+        PurgatoryRatingType.UndoApprove => entry.Approves - 1,
+        _ => entry.Approves
+    };
+
+    entry.Vetoes = rating.Type switch
+    {
+        PurgatoryRatingType.Veto => entry.Vetoes + 1,
+        PurgatoryRatingType.UndoVeto => entry.Vetoes - 1,
+        _ => entry.Vetoes
+    };
+
+    await using var stream = new FileStream(target, FileMode.Truncate);
     await JsonSerializer.SerializeAsync(stream, entry, defaultJsonOptions);
 });
+
 
 httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) => {
 
@@ -86,7 +120,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.Approves = 0;
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
-    entry.DateCreated = new DateTimeOffset().ToUnixTimeSeconds();
+    entry.DateCreated = DateTime.Now.ToString(); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.Name, guid.ToString()));
