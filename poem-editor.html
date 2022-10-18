@@ -58,6 +58,12 @@
             border-radius: 4px;
             /*box-shadow: 0px 0px 4px grey;*/
             user-select: none;
+            padding: 1px;
+        }
+        #formattingToolbar > div > div {
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            pointer-events: none;
         }
 
         #poem-tags button {
@@ -217,33 +223,17 @@
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.-->
         <div id="formattingToolbar">
-            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 60px top 16px, darkgray, white) repeat scroll 0% 0%; padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">↩ undo</div>
+            <div style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
+            <div style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
+            <div><div>B</div></div>
+            <div><div>I</div></div>
+            <div><div>C</div></div>
+            <div><div>Sub</div></div>
+            <div><div>Sup</div></div>
+            <div>
+                <div style=" background-color: red; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
-            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 41px top 18px, darkgray, white) repeat scroll 0% 0%; padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">redo ↪</div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">B</div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">I</div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">C</div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">Sub</div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">Sup</div>
-            </div>
-            <div style="background-color: #f2f2f2;">
-                <div style="background-color: red; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
-            </div>
-            <div style="padding: 1px;">
-                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">🖼️</div>
-            </div>
+            <div><div>🖼️</div></div>
         </div>
         <hr>
     </div>
@@ -587,7 +577,7 @@
 
     formattingToolbar.addEventListener("mousemove", event => {
         for (let button of formattingToolbar.children) {
-            button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY -  + 'px, darkgray, white)'
+            button.style.background = 'radial-gradient(at left ' + (event.offsetX - button.offsetLeft) + 'px top ' + (event.offsetY - button.offsetTop) + 'px, darkgray, white)'
         }
     })
     /* Alternative button-per-button method
