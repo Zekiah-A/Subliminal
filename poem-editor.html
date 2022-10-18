@@ -314,12 +314,6 @@
       return htmlObject
     }
 
-    formattingToolbar.children.forEach(button => {
-        button.addEventListener("mousemove", event => {
-            button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'
-        })
-    })
-
     function fetchStorage() {
         document.getElementById("loadDiv").innerHTML = "Load: <br>";
         for (let i = 0; i < localStorage.length; i++) {
@@ -576,5 +570,11 @@
 
     if (edit) amendMode() //enter poem amendment mode
     else fetchStorage() //Load saved poems from local storage
+
+    for (let button of formattingToolbar.children) {
+        button.addEventListener("mousemove", event => {
+            button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'
+        })
+    }
 </script>
 </html>
