@@ -41,6 +41,8 @@
             display: flex;
             padding-left: 8px;
             padding-right: 8px;
+            padding-top: 1px;
+            padding-bottom: 1px;
             column-gap: 8px;
             max-width: 100%;
             overflow-x: scroll;
@@ -51,9 +53,10 @@
             min-width: 32px;
             line-height: 32px;
             text-align: center;
-            background-color: #f2f2f2;
+            /*background-color: #f2f2f2;*/
             border-radius: 4px;
             /*box-shadow: 0px 0px 4px grey;*/
+            user-select: none;
         }
 
         #poem-tags button {
@@ -213,15 +216,19 @@
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.-->
         <div class="formatting-toolbar">
-            <div style="width: 72px; min-width: 72px;">↩ undo</div>
-            <div style="width: 72px; min-width: 72px;">redo ↪</div>
-            <div>B</div>
-            <div>I</div>
-            <div>C</div>
-            <div>Sub</div>
-            <div>Sup</div>
-            <div><div style="background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px;"></div></div>
-            <div>🖼️</div>
+            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 60px top 16px, darkgray, white) repeat scroll 0% 0%; padding: 1px;" onmousemove="this.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">↩ undo</div>
+            </div>
+            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 41px top 18px, darkgray, white) repeat scroll 0% 0%; padding: 1px;" onmousemove="this.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'">
+                <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">redo ↪</div>
+            </div>
+            <div style="background-color: #f2f2f2;">B</div>
+            <div style="background-color: #f2f2f2;">I</div>
+            <div style="background-color: #f2f2f2;">C</div>
+            <div style="background-color: #f2f2f2;">Sub</div>
+            <div style="background-color: #f2f2f2;">Sup</div>
+            <div style="background-color: #f2f2f2;"><div style="background-color: red; width: calc(100% - 8px); height: calc(100% - 8px); margin: 4px;"></div></div>
+            <div style="background-color: #f2f2f2;">🖼️</div>
         </div>
         <hr>
     </div>
