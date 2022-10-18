@@ -37,7 +37,8 @@
             box-shadow: 0px 2px 4px gray;
             z-index: 1;
         }
-        .formatting-toolbar {
+
+        #formattingToolbar {
             display: flex;
             padding-left: 8px;
             padding-right: 8px;
@@ -47,7 +48,7 @@
             max-width: 100%;
             overflow-x: scroll;
         }
-        .formatting-toolbar > div {
+        #formattingToolbar > div {
             height: 32px;
             width: 32px;
             min-width: 32px;
@@ -215,11 +216,11 @@
         </div>
         <hr>
         <!--TODO: Implement windows torch-like button border hover effect.-->
-        <div class="formatting-toolbar">
-            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 60px top 16px, darkgray, white) repeat scroll 0% 0%; padding: 1px;" onmousemove="this.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'">
+        <div id="formattingToolbar">
+            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 60px top 16px, darkgray, white) repeat scroll 0% 0%; padding: 1px;">
                 <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">↩ undo</div>
             </div>
-            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 41px top 18px, darkgray, white) repeat scroll 0% 0%; padding: 1px;" onmousemove="this.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'">
+            <div style="width: 72px; min-width: 72px; background: rgba(0, 0, 0, 0) radial-gradient(at left 41px top 18px, darkgray, white) repeat scroll 0% 0%; padding: 1px;">
                 <div style="background-color: #f2f2f2;border-radius: 4px;pointer-events: none;">redo ↪</div>
             </div>
             <div style="background-color: #f2f2f2;">B</div>
@@ -312,6 +313,12 @@
       htmlObject.innerHTML = text
       return htmlObject
     }
+
+    formattingToolbar.children.forEach(button => {
+        button.addEventListener("mousemove", event => {
+            button.style.background = 'radial-gradient(at left ' + event.offsetX + 'px top ' + event.offsetY + 'px, darkgray, white)'
+        })
+    })
 
     function fetchStorage() {
         document.getElementById("loadDiv").innerHTML = "Load: <br>";
