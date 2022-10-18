@@ -46,7 +46,7 @@
             padding-bottom: 1px;
             column-gap: 8px;
             max-width: 100%;
-            overflow-x: scroll;
+            overflow-x: visible;
         }
         #formattingToolbar > div {
             height: 32px;
@@ -191,11 +191,15 @@
             .sign-buttons {
                 width: 100%;
             }
+
+            #formattingToolbar {
+                overflow-x: scroll;
+            }
         }
     </style>
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
-<body>
+<body style="max-width: 100%; overflow-x: hidden; overflow-y: scroll;">
     <div id="licenseAgreePopup" style="display: none;">
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
@@ -224,9 +228,9 @@
         <div id="formattingToolbar">
             <div onclick="format('undo', null)" style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
             <div onclick="format('redo', null)" style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
-            <div onclick="format('bold', null)"><div>B</div></div>
-            <div onclick="format('italic', null)"><div>I</div></div>
-            <div onclick="formatCustom('code')"><div>C</div></div>
+            <div onclick="format('bold', null)"><div style="font-weight: bold;">B</div></div>
+            <div onclick="format('italic', null)"><div style="font-style: italic;">I</div></div>
+            <div onclick="formatCustom('code')"><div style="font-family: monospace;">C</div></div>
             <div onclick="format('superscript', null)"><div>Sup</div></div>
             <div onclick="format('subscript', null)"><div>Sub</div></div>
             <div>
