@@ -7,6 +7,34 @@
   <meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <style>
+    .rating-container {
+        user-select: none;
+        display: flex;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        row-gap: 8px;
+        flex-direction: column;
+        padding: 32px;
+        padding-top: 16px;
+    }
+
+    .rating-container > div {
+        display: flex;
+        column-gap: 8px;
+    }
+
+    .rate-button {
+        background-color: var(--button-opqaque);
+        border-radius: 4px;
+        text-align: center;
+        line-height: 48px;
+        height: 48px;
+        flex: 1 1 0px;
+    }
+  </style>
 </head>
  
 <body>
@@ -18,17 +46,16 @@
         <p id="poemContent">
             CONTENT
         </p>
-        <!-- WIP approve/veto buttons -->  
-        <div style="user-select: none; display: flex;position: absolute;left: 50%;transform: translateX(-50%);width: 300px;row-gap: 8px;flex-direction: column;padding: 32px;padding-top: 16px;">
-            <div style="display: flex;column-gap: 8px;">
-                <a href="#content-warning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Approve</a>
-                <a href="#content-warning" onclick="ratePoem(/*localStorage.vetoed.has(guid) ? ratingType.UndoVeto : */ratingType.Veto)" style="background-color: #f2f2f2;border-radius: 4px;text-align: center;line-height: 48px;height: 48px;flex: 1 1 0px;">Veto</a>
+        <div class="rating-container">
+            <div>
+                <a href="#contentWarning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" class="rate-button">Approve</a>
+                <a href="#contentWarning" onclick="ratePoem(/*localStorage.vetoed.has(guid) ? ratingType.UndoVeto : */ratingType.Veto)" class="rate-button">Veto</a>
             </div>
-            <a href="#" style="color: #ff0606;text-align: center;">⚠ Report poem content</a>
+            <a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
         </div>
     </div>
 
-    <div id="content-warning">
+    <div id="contentWarning">
         <pre class="warning-centre">
   ___________________________________________________________
   | Disclaimer: This is a poem in the subliminal poem       |
@@ -48,7 +75,7 @@
   | contained within this submission, please report via the |
   | report button, and we will investigate ASAP.            |
   |                                                         |
-  | <a class="continue" href="#content-warning">Continue -></a>                                             |
+  | <a class="continue" href="#contentWarning">Continue -></a>                                             |
   | <a href="./disclaimer">See Disclaimer -></a>                                       |
   |                                                         |
   ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
