@@ -13,9 +13,9 @@
     }
 
     .section-body {
-      border-radius: 10px;
+      /*border-radius: 10px;
       border-left: 2px solid grey;
-      padding-left: 5px;
+      padding-left: 5px;*/
       transition: transform .5s;
     }
 
@@ -40,9 +40,11 @@
     .grid-sub-container {
       display: grid;
       grid-template-columns: 20% auto;
-      padding-top: 4px;
-      padding-bottom: 4px;
       grid-gap: 2px;
+      border-radius: 8px;
+      margin: 8px;
+      padding: 8px;
+      background-color: var(--panel-transparent);
     }
 
     .poem-preview {
@@ -78,7 +80,7 @@
       min-width: 200px;
       height: 200px;
       border-radius: 4px;
-      background-color: #f2f2f2;
+      background-color: var(--button-opaque);
       position: relative;
       cursor: pointer;
       max-width: 200px;
@@ -108,7 +110,7 @@
       top: 0;
       left: 0;
       position: absolute;
-      background: linear-gradient(#f2f2f2, transparent, #f2f2f2);
+      background: linear-gradient(var(--button-opaque), transparent, var(--button-opaque));
       content: "";
       transition: opacity 1s;
     }
@@ -146,42 +148,30 @@
       padding-right:12px;
       padding-top:4px;
       padding-bottom:4px;
-      background-color: #f2f2f2b8;
+      background-color: var(--button-transparent);
       border-radius:32px;
       user-select: none;
       pointer-events: none;
     }
 
-    .sounds-button{
-      background: #F2F2F2;
+    .sounds-button {
+      background: var(--button-opaque);
       padding: 15px;
       border-radius: 4px;
       color: black;
       text-decoration: none;
     }
-    
+
     @media(prefers-color-scheme: dark) {
-      entry {
-        background-color: #373737;
-      }
-
-      entry .preview::after {
-        background: linear-gradient(#373737, transparent, #373737);
-      }
-
-      .sounds-button {
-        background: #373737;
-      }
-
       .entry-new {
         background-color: #606060;
       }
-
-      #filtersBar > div > div {
-        background-color: #373737b8;
+      
+      .sounds-button {
+        color: #DADADA;
       }
     }
-  </style>
+    </style>
 </head>
  
 <body class="contents-div-centre" onkeydown="if(document.activeElement != searchbar) { searchbar.focus(); }">

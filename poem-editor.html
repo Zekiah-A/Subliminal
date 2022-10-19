@@ -59,7 +59,7 @@
             padding: 1px;
         }
         #formattingToolbar > div > div {
-            background-color: #f2f2f2b8;
+            background-color: var(--button-transparent);
             border-radius: 4px;
             pointer-events: none;
         }
@@ -82,7 +82,7 @@
             width: 50%;
         }
         #signCanvas {
-            background:#f2f2f2;
+            background: var(--button-opaque);
             width:50%;
             height:50%;
             border-radius:4px
@@ -108,7 +108,7 @@
             flex-grow: 1;
             text-align:center;
             cursor:pointer;
-            /*box-shadow: 0px 4px 16px #00000059;*/
+            background-color: var(--button-opaque);
         }
 
         .management-button {
@@ -155,14 +155,13 @@
         }
 
         .tool-header {
-            background-color: #f2f2f2;
+            background-color: var(--button-opaque);
             width: calc(100% - 16px);
             display: block;
             padding: 8px;
             border-radius: 4px;
             margin-bottom: 4px;
         }
-
 
 
         @media screen and (orientation:portrait) {
@@ -186,6 +185,7 @@
             #signCanvas {
                 width: 100%;
             }
+
             .sign-buttons {
                 width: 100%;
             }
@@ -208,9 +208,9 @@
         <div class="sign-container">
            <canvas height="100" width="300" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
             <div class="sign-buttons">
-                <div style="background-color:#f2f2f2; pointer-events: none; opacity: 0.2;">Smooth</div>
-                <div style="background-color:#f2f2f2;" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-                <div style="background-color:#f2f2f2;" onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
+                <div style="pointer-events: none; opacity: 0.2;">Smooth</div>
+                <div onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
+                <div onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
             </div>
         </div>
         <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>

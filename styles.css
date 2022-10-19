@@ -1,6 +1,6 @@
 :root {
     --button-transparent: #f2f2f2b8;
-    --button-opqaque: #f2f2f2;
+    --button-opaque: #f2f2f2;
     --panel-transparent: #f2f2f240;
     --background-opaque: #ffffff;
     --background-transparent: #ffffff33;
@@ -9,7 +9,7 @@
 @media(prefers-color-scheme: dark) {
     :root {
         --button-transparent: #373737b8;
-        --button-opqaque: #373737;
+        --button-opaque: #373737;
         --panel-transparent: #37373740;
         --background-opaque: #1e1e1e;
         --background-transparent: #1e1e1e33;
