@@ -556,9 +556,10 @@
 
     formattingToolbar.addEventListener("mousemove", event => {
         for (let button of formattingToolbar.children) {
-            button.style.background = 'radial-gradient(at left ' + (event.offsetX - button.offsetLeft) + 'px top ' + (event.offsetY - button.offsetTop) + 'px, darkgray, white)'
+            button.style.background = 'radial-gradient(at left ' + (event.screenX - button.offsetLeft) + 'px top ' + (event.screenY - button.offsetTop) + 'px, darkgray, white)'
         }
     })
+
     /* Alternative button-per-button method
     for (let button of formattingToolbar.children) {
         button.addEventListener("mousemove", event => {
