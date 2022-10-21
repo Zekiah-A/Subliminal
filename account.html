@@ -13,6 +13,30 @@
 			margin:16px;
 			background:var(--button-opaque);
 			border-radius:8px;
+			display: flex;
+			flex-direction: row;
+			column-gap: 16px;
+		}
+		.poem-card .poem-preview {
+			position: relative;
+			margin: 0px;
+			padding: 8px;
+			overflow: hidden;
+		}
+		.poem-card .poem-preview::after {
+			opacity: 1;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			position: absolute;
+			background: linear-gradient(var(--button-opaque), transparent, var(--button-opaque));
+			content: '';
+			display: inline;			
+		}
+		.poem-card .remove {
+			opacity: 0.2;
+			cursor: pointer;
 		}
 
 		#profileImage {
@@ -51,9 +75,11 @@
 		<br>
 		<h2>Recent works:</h2>
 		<div id="recentWorks">
-		<div class="poem-card"></div>
-		<div class="poem-card"></div>
-		<div class="poem-card"></div>
+			<div class="poem-card">
+				<h4>London</h4>
+				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+				<div class="remove"><svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"></path></svg></div>
+			</div>
 		</div>
 		<br>
 		<h2>Private account info:</h2>
@@ -61,9 +87,11 @@
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
 		<h2>Draft poems:</h2>
 		<div id="draftPoems">
-		<div class="poem-card"></div>
-		<div class="poem-card"></div>
-		<div class="poem-card"></div>
+			<div class="poem-card">
+				<h4>London</h4>
+				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+				<div class="remove"><svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"></path></svg></div>
+			</div>
 		</div>
 		<br>
 		<h2>Subliminal account agreement:</h2>
