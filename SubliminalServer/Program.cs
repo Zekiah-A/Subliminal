@@ -128,12 +128,16 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
 });
 
-httpServer.MapPost("/Signup" async (AccountSignupInfo info) => {
+httpServer.MapPost("/Signup", async (AccountSignupInfo info) => {
     
 });
 
-httpServer.MapPost("/Signin" async (AccountSigninInfo info) => {
+httpServer.MapPost("/Signin", async (AccountSigninInfo info) => {
 
 });
+
+httpServer.mapGet("/AccountData", async (string id) => {
+    //if length is x, then it is a public account data, if y, then is own private data.
+}) 
 
 httpServer.Run();
