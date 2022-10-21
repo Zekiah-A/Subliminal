@@ -180,6 +180,7 @@
       <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
       <input type="button" value="Login  to Subliminal" onclick="loginPopup.style.display = 'block';">
   </div>
+  <!--TODO: Switch to cleaner syste,-->
   <div id="loginPopup" style="display: none; position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;padding:8px;box-shadow:0 0 16px #000;z-index:3;backdrop-filter:blur(16px);width:400px">
     <h2>Login to Subliminal:</h2>
     <div id="loginPopupSignin">
@@ -198,12 +199,12 @@
       </div>
     </div>
     <div id="loginPopupCode" style="display: none">
-      <p>Your account code is the key to acessing your account, keep it private!</p>
+      <p>Your account code is the key for acessing your account, keep it private!</p>
       <span>Code:&nbsp;</span><span style="background:gray;border-radius:4px;color:gray">00000000</span>
       <p>or</p>
       <div style="width:200px;height:200px;background-color:gray;border-radius:4px"></div>
       <br>
-      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Close</div>
+      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1" onclick="loginPopup.style.display = 'none';">Close</div>
     </div>
   </div>
   <div class="poem-preview">
