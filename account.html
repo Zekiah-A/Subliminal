@@ -78,12 +78,12 @@
 			<img id="profileImage" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
 			<div style="flex-direction:column">
 				<p style="font-family:Arial,Helvetica,sans-serif;font-size:42px;margin-top:0;white-space:pre;margin-bottom:0">I'm Zekiah, ohyesecond</p>
-				<p contenteditable="true">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
+				<p style="width: 442px; line-break: anywhere;" contenteditable="true">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
 					<div>
-						🌍&nbsp;<span>Planet of Earth, Milky Way</span>
+						🌍&nbsp;<span contenteditable="true">Planet of Earth, Milky Way</span>
 					</div>
-					<div>📌&nbsp;<span>Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+					<div>📌&nbsp;<span contenteditable="true">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
 				</div>
 			</div>
 		</div>
@@ -95,7 +95,7 @@
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
 			</div>
 		</div>
-		<br><br><br><br><br>
+		<br><br><br><br><br> <!--TEMP-->
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
@@ -106,7 +106,7 @@
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
 			</div>
 		</div>
-		<br>
+		<br><br><br><br><br> <!--TEMP-->
 		<hr>
 		<h1>Account agreement:</h1>
 		<h2>Privacy &amp; Security:</h2>
@@ -140,10 +140,15 @@
 	<a href="index" class="back"> &lt;- Back</a>
 </body>
 <script>
-	const accountID = 
+	const accountID = localStorage.get("accountCode")
 
 	async function initialise() {
+		if (!accountID) {
+			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
+			return
+		}
 
+		
 	}
 
 	initialise()
