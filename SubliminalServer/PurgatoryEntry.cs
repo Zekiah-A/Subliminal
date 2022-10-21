@@ -43,7 +43,7 @@ public record PurgatoryEntry
     "poemName": "Test",
     "poemAuthor": "Zekiah",
     "poemContent": "Example",
-    "pageStyle": "centre-wide",
+    "pageStyle": "poem-centre-wide",
     "pageBackground": ""
 }
  */
