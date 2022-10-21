@@ -178,25 +178,33 @@
   <div style="display: flex;margin-top: 40px;column-gap: 8px;">
       <h1 style="margin-bottom: 0px;margin-top: 0px;">Contents</h1>
       <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-      <input type="button" value="Login  to Subliminal">
+      <input type="button" value="Login  to Subliminal" onclick="loginPopup.style.display = 'block';">
   </div>
   <div id="loginPopup" style="display: none; position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;padding:8px;box-shadow:0 0 16px #000;z-index:3;backdrop-filter:blur(16px);width:400px">
     <h2>Login to Subliminal:</h2>
-    <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
-    <div style="display:flex;column-gap:8px;margin-top:8px">
-      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">I don't have an account</div>
-      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Login</div>
+    <div id="loginPopupSignin">
+      <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
+      <div style="display:flex;column-gap:8px;margin-top:8px">
+        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">I don't have an account</div>
+        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Login</div>
+      </div>
     </div>
-    <input type="text" placeholder="Pen name" style="width:calc(100% - 8px);display:block;line-height:200%"><input id="coolPromise" type="checkbox"><label for="coolPromise">I promise to be a cool member of subliminal</label>
-    <div style="display:flex;column-gap:8px;margin-top:8px">
-       <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Create account</div>
+    <div id="loginPopupSignup" style="display: none;">
+      <input type="text" placeholder="Pen name" style="width:calc(100% - 8px);display:block;line-height:200%">
+      <input id="coolPromise" type="checkbox">
+      <label for="coolPromise">I promise to be a cool member of subliminal</label>
+      <div style="display:flex;column-gap:8px;margin-top:8px">
+        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Create account</div>
+      </div>
     </div>
-    <p>Your account code is the key to acessing your account, keep it private!</p>
-    <span style="">Code:&nbsp;</span><span style="background:gray;border-radius:4px;color:gray">00000000</span>
-    <p>or</p>
-    <div style="width:200px;height:200px;background-color:gray;border-radius:4px"></div>
-    <br>
-    <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Close</div>
+    <div id="loginPopupCode" style="display: none">
+      <p>Your account code is the key to acessing your account, keep it private!</p>
+      <span>Code:&nbsp;</span><span style="background:gray;border-radius:4px;color:gray">00000000</span>
+      <p>or</p>
+      <div style="width:200px;height:200px;background-color:gray;border-radius:4px"></div>
+      <br>
+      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Close</div>
+    </div>
   </div>
   <div class="poem-preview">
       <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance.html">
