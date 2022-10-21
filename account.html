@@ -60,38 +60,36 @@
 <body>
 	<div class="div-centre">
 		<h1>Account</h1>
-		<div class="profile-top">
-			<div id="profileBadges">📛🔰✅</div>
-			<div id="profileJoinDate">21/10/2022</div>
-			<h2 contenteditable="true">Lord zekiah the three'st</h2>
+		<!--
+		<div style="text-align:center;border-radius:8px;display:flex;column-gap:8px;margin-top:16px;margin-bottom:16px;width:150%;transform:translateX(-13.5%);">
+			<div id="profileBadges" style="font-size:24px">📛</div>
+			<div id="profileJoinDate" style="font-size:24px">21/10/2022</div>
+			<h1 style="flex-grow:1;margin:0;font-family:Arial,Helvetica,sans-serif" contenteditable="true">Lord Zekiah<br></h1>
 		</div>
+		-->
 		<div style="display:flex;column-gap:16px">
-		<img id="profileImage" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
+			<img id="profileImage" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
 			<div style="flex-direction:column">
-               <h3 style="font-family:Arial,Helvetica,sans-serif">Biography:</h3>
-               <p style="display:inline" contenteditable="true">I am zekiah, I live in a society, this is one of the sites ever, and I write some of the poems ever.</p>
-				<div style="display:flex;column-gap:16px;">
-               	    <div style="display:inline;">
-						<h3 style="font-family:Arial,Helvetica,sans-serif">Location:</h3>
-						<p style="display:inline" contenteditable="true">Planet of Earth, Milky Way</p>
-               	    </div>
-					<div style="display:inline;">
-						<h3 style="font-family:Arial,Helvetica,sans-serif">Liked poems:</h3>
-						<p style="display:inline" contenteditable="true">Poem1, Poem2, Poem3, Poem4, Poem5</p>
+				<p style="font-family:Arial,Helvetica,sans-serif;font-size:42px;margin-top:0;white-space:pre;margin-bottom:0">I'm Zekiah, ohyesecond</p>
+				<p contenteditable="true">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
+				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
+					<div>
+						🌍&nbsp;<span>Planet of Earth, Milky Way</span>
 					</div>
-              	 </div>
-           	</div>
-       	</div>
+					<div>📌<span>Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+				</div>
+			</div>
+		</div>
 		<br>
-
 		<h2>Recent works:</h2>
 		<div id="recentWorks">
 			<div class="poem-card">
 				<h4>London</h4>
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+				<div class="remove"></div>
 			</div>
 		</div>
-		<br>
+		<br><br><br><br><br>
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
@@ -100,16 +98,20 @@
 			<div class="poem-card">
 				<h4>London</h4>
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+				<div class="remove">
+					<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+						<path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"></path>
+					</svg>
+				</div>
 			</div>
 		</div>
 		<br>
-		
 		<h2>Subliminal account agreement:</h2>
 		<hr>
 		<h2>Privacy &amp; Security:</h2>
 		<p>While other things on this site may be, account security is no joke here, this site has no tracking, external
 			cookies, etc, and never will, and the same principle goes for accounts, we will NEVER ever sell, share, or
-			process ANYTHING related to private information/accounts. Every non-public account detail is sha256 encrypted
+			process ANYTHING related to personal information/accounts. Every non-public account detail is sha256 encrypted
 			using your account code, with your account code being encrypted too! This means that it is impossible for us,
 			or anyone else to ever acess any account detail without your account code, which can not be exfiltrated from
 			our servers due to itself being encrypted, however, it also means that your account code is very important for
@@ -119,21 +121,21 @@
 		<p>This site aims to be a place for freedom of expresion through the medium of poetry. While we can not claim
 			responsibility for if you fall under punishment, penilisation, or persecution by an institution, government, or
 			other individual as a result of a work submitted here, we will always try to protect you whenever we can. This
-			means, never allowing your private info to be shared with anyone but you, ensuring that minimal information
+			means, never allowing your personal info to be shared with anyone but you, ensuring that minimal information
 			can be shared in the case of a sipoena, and allowing you to remove any data you have uploaded here on request.
 		</p>
 		<p>If you use this site, with the explicit purpose to publicly post illegal, or plain morally objectable content,
 			your account may be removed, or IP blocked from submitting content to the site. It is both impossible, and
-			against our values to use any of your private information against you, but, if you publicly post something
-			such as your location, others can, and may forward this on to relevant authorities. Anything posted publicly
-			can be used against you.
+			against our values to use any of your personal information against you, but, if you publicly post something
+			such as your location in a work you upload, others can, and may forward this on to relevant authorities. If you
+			post something publicly, people can see use it.
 		</p>
 		<h2>Being subliminal:</h2>
 		<p>The final thing we'd like to note, is that this is a cool place. This site is supposed to be fun, experimental,
 			a bit wacky, so feel free to join in with our community, commenting, annotating, rating, or submitting your own
 			poems, no matter what you do here, if it is making subliminal a better place, we are all for it!
 		</p>
-   </div>
-   <a href="index" class="back"> &lt;- Back</a>
+	</div>
+	<a href="index" class="back"> &lt;- Back</a>
 </body>
 </html>
