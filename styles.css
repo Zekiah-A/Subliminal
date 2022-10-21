@@ -236,6 +236,7 @@ p, a {
         line-height: 200%;
         top: 2px;
         z-index: 1;
+        flex-grow: 1;
     }
 
     .contents-div-centre {
