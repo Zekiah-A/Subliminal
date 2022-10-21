@@ -229,9 +229,9 @@ p, a {
     }
 
     .searchbar {
-        position: sticky;
+        /*position: sticky;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%);*/
         width: 50%;
         line-height: 200%;
         top: 2px;

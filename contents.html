@@ -175,9 +175,20 @@
 </head>
  
 <body class="contents-div-centre" onkeydown="if(document.activeElement != searchbar) { searchbar.focus(); }">
-    <h1 style="margin-top: 40px; margin-bottom: 0px;">Contents</h1>
-    <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-    <div class="poem-preview">
+  <div style="display: flex;margin-top: 40px;column-gap: 8px;">
+      <h1 style="margin-bottom: 0px;margin-top: 0px;">Contents</h1>
+      <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
+      <input type="button" value="Login  to Subliminal">
+  </div>
+  <div id="loginPopup" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;padding:8px;box-shadow:0 0 16px #000;z-index:3;backdrop-filter:blur(16px);width:400px">
+    <h2>Login to this crappy site:</h2>
+    <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
+    <div style="display:flex;column-gap:8px;margin-top:8px">
+       <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">I don't have an account</div>
+       <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Login</div>
+    </div>
+  </div>
+  <div class="poem-preview">
       <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance.html">
 
       </iframe>
