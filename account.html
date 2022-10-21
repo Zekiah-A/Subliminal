@@ -24,12 +24,12 @@
 		.poem-card {
 			width:calc(100% - 32px);
 			height:64px;
-			margin:16px;
 			background:var(--button-opaque);
 			border-radius:8px;
 			display: flex;
 			flex-direction: row;
 			column-gap: 16px;
+			padding: 4px;
 		}
 		.poem-card .poem-preview {
 			position: relative;
@@ -51,8 +51,13 @@
 
 		#profileImage {
 			border-radius:4px;
-			transform: rotateX(25deg) rotateY(-5deg) rotateZ(-5deg);
 			cursor: pointer;
+		}
+
+		#recentWorks {
+			display: flex;
+			flex-direction: column;
+			row-gap: 16px;
 		}
    </style>
 </head>
@@ -86,7 +91,6 @@
 			<div class="poem-card">
 				<h4>London</h4>
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
-				<div class="remove"></div>
 			</div>
 		</div>
 		<br><br><br><br><br>
@@ -98,11 +102,6 @@
 			<div class="poem-card">
 				<h4>London</h4>
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
-				<div class="remove">
-					<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
-						<path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"></path>
-					</svg>
-				</div>
 			</div>
 		</div>
 		<br>
