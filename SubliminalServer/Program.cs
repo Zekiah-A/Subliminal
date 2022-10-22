@@ -1,7 +1,11 @@
 using System;
+using System.Buffers.Text;
+using System.Globalization;
 using System.Text;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text.Unicode;
+using IronBarCode;
 using Microsoft.AspNetCore.Http.Json;
 using SubliminalServer;
 using WatsonWebsocket;
@@ -11,8 +15,11 @@ var configFile =  "config.txt";
 var purgatoryDir = new DirectoryInfo(@"Purgatory");
 var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
 var accountsDir = new DirectoryInfo("Accounts");
-var base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_=";
+var base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 var random = new Random();
+using var logoStream = File.OpenRead("SmallLogo.png");
+var logo = new QRCodeLogo(logoStream);
+
 var defaultJsonOptions = new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,
@@ -77,13 +84,20 @@ httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
 
+string HashSha256String(string text)
+{
+    var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
+    return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
+}
+
 httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
 
     await using var openStream = File.OpenRead(target);
     var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream, defaultJsonOptions);
-
+    if (entry is null) return;
+    
     entry.Approves = rating.Type switch
     {
         PurgatoryRatingType.Approve => entry.Approves + 1,
@@ -103,8 +117,11 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
 });
 
 
-httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) => {
-
+httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
+{
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"WIP: Report function - Poem {guid} has been reported, please investigate!");
+    Console.ResetColor();
 });
 
 httpServer.MapGet("/PurgatoryNew", () =>
@@ -128,7 +145,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.Approves = 0;
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
-    entry.DateCreated = DateTime.Now.ToString(); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+    entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.Name, guid.ToString()));
@@ -143,20 +160,52 @@ httpServer.MapPost("/Signup", async (string penName) =>
     
     var guid = Guid.NewGuid();
     var profile = new AccountProfile(guid.ToString(), penName, "", "", Array.Empty<string>(), "", Array.Empty<AccountBadge>(), Array.Empty<string>());
-    var account = new AccountData(profile, code, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
-
-});
-
-httpServer.MapPost("/Signin", async (string code) => 
-{
+    var account = new AccountData(profile, HashSha256String(code), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
     
+    await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
+    await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
+    
+    await using var mapStream = new FileStream(Path.Join(accountsDir.Name, "code-hash-guid.txt"), FileMode.Append);
+    await mapStream.WriteAsync(SHA256.HashData(Encoding.UTF8.GetBytes(code + " " + guid)));
+
+    await using var memory = new MemoryStream();
+    await memory.WriteAsync(Encoding.UTF8.GetBytes(code)); //up to 10 (code langth) * 1 (max utf8 char size for a character in the b64 set we use) = 10 bytes
+    memory.Position = 10;
+    await memory.WriteAsync(Encoding.UTF8.GetBytes(guid.ToString())); //up to 36 (guid length) * 1 (max utf char size for a character in guid set we use) = 36 bytes 
+    memory.Position = 46;
+    await memory.WriteAsync(QRCodeWriter.CreateQrCodeWithLogo(code, logo, 256).BinaryValue);
+    await memory.FlushAsync();
+    return Results.Bytes(memory.ToArray());
+});
+
+httpServer.MapPost("/Signin", async (string signinCode) =>
+{
+    var map = await File.ReadAllTextAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    var signinCodeHash = HashSha256String(signinCode);
+     
+    foreach (var line in map.Split("\n"))
+    {
+        var (codeHash, guid) = line.Split(" ");
+        if (!codeHash.Equals(signinCodeHash)) continue;
+
+        return Results.File(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid[0])));
+    }
+
+    return Results.Problem("Could not sign in to retrieve account data.");
 });
 
 
-
-httpServer.MapGet("/AccountData", async (string code) =>
+//Get public facing data for an account
+httpServer.MapPost("/AccountData", async (string guid) =>
 {
-    //if length is x, then it is a public account data, if y, then is own private data.
+    var target = Path.Join(accountsDir.Name, guid);
+    if (!File.Exists(target)) return Results.Problem("Account GUID does not exist.");
+
+    await using var openStream = File.OpenRead(target);
+    var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
+    
+    //Only return profile, not private data
+    return Results.Json(accountData?.Profile);
 });
 
 httpServer.Run();
