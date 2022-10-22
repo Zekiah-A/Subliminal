@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+SubliminalServer/Purgatory/
+SubliminalServer/PurgatoryBackups/
+SubliminalServer/Accounts/
+SubliminalServer/bin/
+SubliminalServer/obj/
+SubliminalServer/config.txt

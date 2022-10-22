@@ -162,6 +162,21 @@
       text-decoration: none;
     }
 
+    #login {
+      width: 400px;
+      height: unset;
+    }
+
+    #login[currentpage="signin"] > #loginSignin {
+      display: block !important;
+    }
+    #login[currentpage="signup"] > #loginSignup {
+      display: block !important;
+    }
+    #login[currentpage="code"] > #loginCode {
+      display: block !important;
+    }
+
     @media(prefers-color-scheme: dark) {
       .entry-new {
         background-color: #606060;
@@ -178,33 +193,32 @@
   <div style="display: flex;margin-top: 40px;column-gap: 8px;">
       <h1 style="margin-bottom: 0px;margin-top: 0px;">Contents</h1>
       <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-      <input type="button" value="Login  to Subliminal" onclick="loginPopup.style.display = 'block';">
+      <input type="button" value="Login  to Subliminal" onclick="login.style.display = 'block';">
   </div>
-  <!--TODO: Switch to cleaner syste,-->
-  <div id="loginPopup" style="display: none; position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:8px;padding:8px;box-shadow:0 0 16px #000;z-index:3;backdrop-filter:blur(16px);width:400px">
+  <div id="login" style="display: none;" class="popup" currentpage="signin">
     <h2>Login to Subliminal:</h2>
-    <div id="loginPopupSignin">
+    <div id="loginSignin" style="display: none;">
       <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
       <div style="display:flex;column-gap:8px;margin-top:8px">
-        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1" onclick="loginPopupSignin.style.display = 'none'; loginPopupSignup.style.display = 'block';">I don't have an account</div>
-        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1">Login</div>
+        <div class="popup-button" onclick="">I don't have an account</div>
+        <div class="popup-button" onclick="login.setAttribute('currentpage', 'signup'); login.style.display = 'none';">Login</div>
       </div>
     </div>
-    <div id="loginPopupSignup" style="display: none;">
-      <input type="text" placeholder="Pen name" style="width:calc(100% - 8px);display:block;line-height:200%">
+    <div id="loginSignup" style="display: none;">
+      <input id="loginPenName" type="text" placeholder="Pen name" style="width:calc(100% - 8px);display:block;line-height:200%">
       <input id="coolPromise" type="checkbox">
       <label for="coolPromise">I promise to be a cool member of subliminal</label>
       <div style="display:flex;column-gap:8px;margin-top:8px">
-        <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1" onclick="loginPopupSignup.style.display = 'none'; loginPopupCode.style.display = 'block';">Create account</div>
+        <div class="popup-button" onclick="login.setAttribute('currentpage', 'code'); signup(loginPenName.value);">Create account</div>
       </div>
     </div>
-    <div id="loginPopupCode" style="display: none">
+    <div id="loginCode" style="display: none;">
       <p>Your account code is the key for acessing your account, keep it private!</p>
       <span>Code:&nbsp;</span><span style="background:gray;border-radius:4px;color:gray;cursor: pointer;">00000000</span>
       <p>or</p>
       <div style="width:200px;height:200px;background-color:gray;border-radius:4px;cursor: pointer;"></div>
       <br>
-      <div style="font-family:Arial,Helvetica,sans-serif;border-radius:4px;padding:8px;text-align:center;cursor:pointer;background-color:var(--button-opaque);flex-grow:1;" onclick="loginPopup.style.display = 'none';">Close</div>
+      <div class="popup-button" onclick="login.setAttribute('currentpage', 'signin'); login.style.display = 'none';">Close</div>
     </div>
   </div>
   <div class="poem-preview">
@@ -501,6 +515,20 @@
       purgatoryFlex.children[0].classList.add("entry-new")
       window.scrollTo(0, 0)
       setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 800)
+    }
+
+    async function signup(penName) {
+        fetch("https://server.poemanthology.org:81/Signup", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: '"' + penName + '"'
+        })
+        .then((response) => response.json())
+		.then((data) => {
+          let dataObject = JSON.parse(data)
+          localStorage.accountCode = dataObject.code
+          localStorage.accountGuid = dataObject.guid
+        })
     }
 
     addPurgatoryEntries()

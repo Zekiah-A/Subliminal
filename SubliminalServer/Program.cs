@@ -6,9 +6,10 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Unicode;
 using IronBarCode;
-using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using SubliminalServer;
 using WatsonWebsocket;
+using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
 var configFile =  "config.txt";
@@ -51,7 +52,7 @@ if (!Directory.Exists(purgatoryBackupDir.Name))
     Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
     Directory.CreateDirectory(purgatoryBackupDir.Name);
 }
-if (!Directory.Exists(purgatoryBackupDir.Name))
+if (!Directory.Exists(accountsDir.Name))
 {
     Console.WriteLine("[WARN] Could not find accounts directory, creating.");
     Directory.CreateDirectory(accountsDir.Name);
@@ -153,7 +154,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
 });
 
-httpServer.MapPost("/Signup", async (string penName) =>
+httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 {
     var code = "";
     for (var i = 0; i < 10; i++) code += base64Alphabet[random.Next(0, 63)];
@@ -165,30 +166,28 @@ httpServer.MapPost("/Signup", async (string penName) =>
     await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
-    await using var mapStream = new FileStream(Path.Join(accountsDir.Name, "code-hash-guid.txt"), FileMode.Append);
-    await mapStream.WriteAsync(SHA256.HashData(Encoding.UTF8.GetBytes(code + " " + guid)));
-
-    await using var memory = new MemoryStream();
-    await memory.WriteAsync(Encoding.UTF8.GetBytes(code)); //up to 10 (code langth) * 1 (max utf8 char size for a character in the b64 set we use) = 10 bytes
-    memory.Position = 10;
-    await memory.WriteAsync(Encoding.UTF8.GetBytes(guid.ToString())); //up to 36 (guid length) * 1 (max utf char size for a character in guid set we use) = 36 bytes 
-    memory.Position = 46;
-    await memory.WriteAsync(QRCodeWriter.CreateQrCodeWithLogo(code, logo, 256).BinaryValue);
-    await memory.FlushAsync();
-    return Results.Bytes(memory.ToArray());
+    await using var codeHashGuid = File.AppendText(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    await codeHashGuid.WriteAsync(HashSha256String(code) + " " + guid + "\n");
+    
+    var response = new SignupResponse(code, guid.ToString());
+    return Results.Json(JsonSerializer.Serialize(response, defaultJsonOptions));
 });
 
-httpServer.MapPost("/Signin", async (string signinCode) =>
+httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
     var map = await File.ReadAllTextAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
     var signinCodeHash = HashSha256String(signinCode);
      
     foreach (var line in map.Split("\n"))
     {
-        var (codeHash, guid) = line.Split(" ");
+        var split = line.Split(" ");
+        if (split.Length < 2) continue;
+        
+        var codeHash = split[0];
+        var guid = line.Split(" ")[1];
         if (!codeHash.Equals(signinCodeHash)) continue;
 
-        return Results.File(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid[0])));
+        return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid)));
     }
 
     return Results.Problem("Could not sign in to retrieve account data.");

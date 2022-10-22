@@ -140,15 +140,26 @@
 	<a href="index" class="back"> &lt;- Back</a>
 </body>
 <script>
-	const accountID = localStorage.get("accountCode")
+	const code = localStorage.getItem("accountCode")
 
 	async function initialise() {
-		if (!accountID) {
+		if (!code) {
 			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
 			return
 		}
 
-		
+		let dataObject = JSON.parse(data)
+		console.log(data + " " + dataObject.code)
+
+		fetch('https://server.poemanthology.org:81/Signin', {
+			method: "POST",
+			headers: { 'Content-Type': 'application/json' },
+			body: '"' + code + '"'
+		})
+		.then((signinResponse) => signinResponse.json())
+		.then((signinData) => {
+			console.log(signinData)
+		})
 	}
 
 	initialise()

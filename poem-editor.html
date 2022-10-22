@@ -4,7 +4,7 @@
     <title>Subliminal</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="./styles.css">
     <style>
         .tool {
             margin: 1px;
@@ -69,18 +69,6 @@
             margin: 2px;
         }
 
-        #licenseAgreePopup {
-            position:absolute;
-            left:50%;
-            top:50%;
-            transform:translate(-50%,-50%);
-            border-radius:8px;
-            padding:8px;
-            box-shadow:0 0 16px #000;
-            z-index:3;
-            backdrop-filter:blur(16px);
-            width: 50%;
-        }
         #signCanvas {
             background: var(--button-opaque);
             width:50%;
@@ -101,14 +89,8 @@
             column-gap:8px;
             width:50%;
         }
-        .sign-buttons div {
-            font-family: Arial, Helvetica, sans-serif;
-            border-radius:4px;
-            padding:8px;
+        .sign-buttons > div {
             flex-grow: 1;
-            text-align:center;
-            cursor:pointer;
-            background-color: var(--button-opaque);
         }
 
         .management-button {
@@ -176,12 +158,6 @@
                 margin-top: 16px;
             }
 
-            #licenseAgreePopup {
-                width: calc(100% - 32px);
-                top: 0px;
-                transform: translateX(-50%);
-            }
-
             #signCanvas {
                 width: 100%;
             }
@@ -198,22 +174,22 @@
 </head>
  <!--TODO: Ability to import webpages and edit them.-->
 <body style="max-width: 100%; overflow-x: hidden; overflow-y: scroll;">
-    <div id="licenseAgreePopup" style="display: none;">
+    <div id="licenseAgreePopup" class="popup" style="display: none;">
         <h2>License agreement:</h2>
         <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
         <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
         <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here. We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
         <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
-        <p>If you think the terms we have laid out here are reasonable, and agree to all, please <strong>sign</strong> or draw a <strong>memorable scribble</strong> below.</p>
+        <p>If you want to, you can <strong>sign</strong> your poem off below.</p>
         <div class="sign-container">
            <canvas height="100" width="300" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
             <div class="sign-buttons">
-                <div style="pointer-events: none; opacity: 0.2;">Smooth</div>
-                <div onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-                <div onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
+                <div class="popup-button" style="pointer-events: none; opacity: 0.2;">Smooth</div>
+                <div class="popup-button" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
+                <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
             </div>
         </div>
-        <p style="opacity:0.6;"><em>(signatures will be stored securely on our servers in order to verify you are the owner of your work, and never released publicly)</em></p>
+        <p style="opacity:0.6;"><em>Please don't use a real signature you use on legal documents here. By pressing submit, you agree to all the terms stated above.</em></p>
     </div>
 
     <div class="title-blur" style="z-index: 2;">

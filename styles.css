@@ -145,11 +145,10 @@ p, a {
     font-family: Arial, Helvetica, sans-serif;
     border-radius:4px;
     padding:8px;
-    flex-grow: 1;
     text-align:center;
     cursor:pointer;
     background-color: var(--button-opaque);
-
+    flex-grow: 1;
 }
 
 /*Dark Mode Optimisations*/
@@ -235,6 +234,13 @@ p, a {
     
     .warning-centre a {
         font-size: 1em;
+    }
+
+    .popup {
+        width: calc(100% - 32px) !important;
+        height: calc(100% - 32px);
+        transform: translate(-50% -50%) !important;
+        overflow-y: scroll !important;
     }
 }
 
