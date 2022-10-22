@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "rTyU/vdqioAcY4UHGRrr51iegzr/jcfT/TJRtiPilzfTyg9t1zyF8qsl/u7RwAbASFwYOzZLanxPfALs2a52Yg==",
+  "success": true,
+  "projectFilePath": "/home/zekiah/Subliminal/SubliminalServer/SubliminalServer.csproj",
+  "expectedPackageFiles": [
+    "/home/zekiah/.nuget/packages/anglesharp/0.17.1/anglesharp.0.17.1.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/anglesharp.css/0.16.4/anglesharp.css.0.16.4.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/htmlsanitizer/7.1.542/htmlsanitizer.7.1.542.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/system.buffers/4.5.1/system.buffers.4.5.1.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/system.text.encoding.codepages/6.0.0/system.text.encoding.codepages.6.0.0.nupkg.sha512",
+    "/home/zekiah/.nuget/packages/watsonwebsocket/3.0.1/watsonwebsocket.3.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -10,6 +10,9 @@ using WatsonWebsocket;
 var configFile =  "config.txt";
 var purgatoryDir = new DirectoryInfo(@"Purgatory");
 var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
+var accountsDir = new DirectoryInfo("Accounts");
+var base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_=";
+var random = new Random();
 var defaultJsonOptions = new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,
@@ -41,6 +44,11 @@ if (!Directory.Exists(purgatoryBackupDir.Name))
     Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
     Directory.CreateDirectory(purgatoryBackupDir.Name);
 }
+if (!Directory.Exists(purgatoryBackupDir.Name))
+{
+    Console.WriteLine("[WARN] Could not find accounts directory, creating.");
+    Directory.CreateDirectory(accountsDir.Name);
+}
 
 Console.ResetColor();
 
@@ -63,7 +71,7 @@ builder.Services.Configure<JsonOptions>(options =>
 
 var httpServer = builder.Build();
 httpServer.Urls.Add(
-    $"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Por$
+    $"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}"
 );
 httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
@@ -128,16 +136,27 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
 });
 
-httpServer.MapPost("/Signup", async (AccountSignupInfo info) => {
+httpServer.MapPost("/Signup", async (string penName) =>
+{
+    var code = "";
+    for (var i = 0; i < 10; i++) code += base64Alphabet[random.Next(0, 63)];
+    
+    var guid = Guid.NewGuid();
+    var profile = new AccountProfile(guid.ToString(), penName, "", "", Array.Empty<string>(), "", Array.Empty<AccountBadge>(), Array.Empty<string>());
+    var account = new AccountData(profile, code, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
+
+});
+
+httpServer.MapPost("/Signin", async (string code) => 
+{
     
 });
 
-httpServer.MapPost("/Signin", async (AccountSigninInfo info) => {
 
-});
 
-httpServer.mapGet("/AccountData", async (string id) => {
+httpServer.MapGet("/AccountData", async (string code) =>
+{
     //if length is x, then it is a public account data, if y, then is own private data.
-}) 
+});
 
 httpServer.Run();
