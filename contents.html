@@ -200,8 +200,8 @@
     <div id="loginSignin" style="display: none;">
       <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
       <div style="display:flex;column-gap:8px;margin-top:8px">
-        <div class="popup-button" onclick="">I don't have an account</div>
-        <div class="popup-button" onclick="login.setAttribute('currentpage', 'signup'); login.style.display = 'none';">Login</div>
+        <div class="popup-button" onclick="login.setAttribute('currentpage', 'signup');">I don't have an account</div>
+        <div class="popup-button" onclick="login.style.display = 'none';">Login</div>
       </div>
     </div>
     <div id="loginSignup" style="display: none;">
@@ -214,9 +214,9 @@
     </div>
     <div id="loginCode" style="display: none;">
       <p>Your account code is the key for acessing your account, keep it private!</p>
-      <span>Code:&nbsp;</span><span style="background:gray;border-radius:4px;color:gray;cursor: pointer;">00000000</span>
+      <span>Code:&nbsp;</span><span id="loginCodeText" style="background:gray;border-radius:4px;color:gray;cursor: pointer;">00000000</span>
       <p>or</p>
-      <div style="width:200px;height:200px;background-color:gray;border-radius:4px;cursor: pointer;"></div>
+      <div id="loginCodeQR" style="width:200px;height:200px;background-color:gray;border-radius:4px;cursor: pointer;"></div>
       <br>
       <div class="popup-button" onclick="login.setAttribute('currentpage', 'signin'); login.style.display = 'none';">Close</div>
     </div>
@@ -518,17 +518,18 @@
     }
 
     async function signup(penName) {
-        fetch("https://server.poemanthology.org:81/Signup", {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: '"' + penName + '"'
-        })
-        .then((response) => response.json())
+      fetch("https://server.poemanthology.org:81/Signup", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: '"' + penName + '"'
+      })
+      .then((response) => response.json())
 		.then((data) => {
-          let dataObject = JSON.parse(data)
-          localStorage.accountCode = dataObject.code
-          localStorage.accountGuid = dataObject.guid
-        })
+        let dataObject = JSON.parse(data)
+        localStorage.accountCode = dataObject.code
+        localStorage.accountGuid = dataObject.guid
+        loginCodeText.textContent = dataObject.code
+      })
     }
 
     addPurgatoryEntries()
