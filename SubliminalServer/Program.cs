@@ -5,21 +5,19 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Unicode;
-using IronBarCode;
 using Microsoft.AspNetCore.Mvc;
 using SubliminalServer;
 using WatsonWebsocket;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
-var configFile =  "config.txt";
+const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 var purgatoryDir = new DirectoryInfo(@"Purgatory");
 var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
 var accountsDir = new DirectoryInfo("Accounts");
-var base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+var codeHashGuidFile = new FileInfo(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+var configFile = new FileInfo("config.txt");
 var random = new Random();
-using var logoStream = File.OpenRead("SmallLogo.png");
-var logo = new QRCodeLogo(logoStream);
 
 var defaultJsonOptions = new JsonSerializerOptions
 {
@@ -29,36 +27,34 @@ var defaultJsonOptions = new JsonSerializerOptions
     IncludeFields = true
 };
 
-if (!File.Exists(configFile))
+if (!File.Exists(configFile.Name))
 {
-	File.WriteAllText(configFile, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
+	File.WriteAllText(configFile.Name, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please check {0} and run this program again!", configFile);
 	Console.ResetColor();
 	Environment.Exit(0);
 }
 
-var config = File.ReadAllLines(configFile).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
+var config = File.ReadAllLines(configFile.Name).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
 
-//Purgatory
 Console.ForegroundColor = ConsoleColor.Yellow;
-
-if (!Directory.Exists(purgatoryDir.Name))
+//Regenerate required directories
+foreach (var path in new[] { purgatoryDir.Name, purgatoryBackupDir.Name, accountsDir.Name })
 {
-    Console.WriteLine("[WARN] Could not find purgatory directory, creating.");
-    Directory.CreateDirectory(purgatoryDir.Name);
-}
-if (!Directory.Exists(purgatoryBackupDir.Name))
-{
-    Console.WriteLine("[WARN] Could not find purgatory backup directory, creating.");
-    Directory.CreateDirectory(purgatoryBackupDir.Name);
-}
-if (!Directory.Exists(accountsDir.Name))
-{
-    Console.WriteLine("[WARN] Could not find accounts directory, creating.");
-    Directory.CreateDirectory(accountsDir.Name);
+    if (!Directory.Exists(path))
+    {
+        Console.WriteLine("[WARN] Could not find " + path + " directory, creating.");
+        Directory.CreateDirectory(path);
+    }
 }
 
+//Regenerate required files
+foreach (var path in new[] { codeHashGuidFile.Name })
+{
+    Console.WriteLine("[WARN] Could not find " + path + " file, creating.");
+    File.Create(path, 0);
+}
 Console.ResetColor();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -174,7 +170,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
-    await using var codeHashGuid = File.AppendText(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    await using var codeHashGuid = File.AppendText(codeHashGuidFile.Name);
     await codeHashGuid.WriteAsync(HashSha256String(code) + " " + guid + "\n");
     
     var response = new SignupResponse(code, guid.ToString());
@@ -183,7 +179,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 
 httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
-    var map = await File.ReadAllLinesAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
     var signinCodeHash = HashSha256String(signinCode);
      
     foreach (var line in map)
@@ -202,7 +198,7 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 });
 
 httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
-    var map = await File.ReadAllLinesAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
 
     foreach (var line in map)
     {
