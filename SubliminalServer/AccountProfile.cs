@@ -8,12 +8,15 @@ public record AccountProfile
     string Guid
 )
 {
-    public string PenName { get; set; }
-    public string Biography { get; set; }
-    public string Location { get; set; }
-    public string[] PinnedPoems { get; set; }
-    public string Role { get; set; }
-    public string JoinDate { get; set; }
-    public AccountBadge[] Badges { get; set; }
-    public List<string>? PoemGuids { get; set; }
+    //Customisable by the user
+    [JsonInclude] public string PenName { get; set; }
+    [JsonInclude] public string Biography { get; set; }
+    [JsonInclude] public string Location { get; set; }
+    [JsonInclude] public string[] PinnedPoems { get; set; }
+    [JsonInclude] public string Role { get; set; }
+    
+    //Immutable, does not have to be serialisable
+     public string JoinDate { get; set; }
+     public AccountBadge[] Badges { get; set; }
+     public List<string>? PoemGuids { get; set; }
 }
