@@ -162,6 +162,14 @@
       text-decoration: none;
     }
 
+    .signup-code-hidden {
+      background:gray;
+      border-radius:4px;
+      color:gray;
+      cursor: pointer;
+      transition: .2s all;
+    }
+
     #login {
       width: 400px;
       height: unset;
@@ -187,6 +195,7 @@
       }
     }
     </style>
+    <script type="text/javascript" src="./qrious-min.js"></script>
 </head>
  
 <body class="contents-div-centre" onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
@@ -215,9 +224,9 @@
     </div>
     <div id="loginCode" style="display: none;">
       <p>Your account code is the key for acessing your account, keep it private!</p>
-      <span>Code:&nbsp;</span><span id="loginCodeText" style="background:gray;border-radius:4px;color:gray;cursor: pointer;">00000000</span>
+      <span>Code:&nbsp;</span><span id="loginCodeText" class="signup-code-hidden" onmouseenter="this.style.background = 'transparent'; this.style.color = 'black';">00000000</span>
       <p>or</p>
-      <div id="loginCodeQR" style="width:200px;height:200px;background-color:gray;border-radius:4px;cursor: pointer;"></div>
+      <img id="loginCodeQR" width="200" height="200" style="width:200px;height:200px; filter: blur(16px);" onmouseenter="this.style.filter = 'blur(0px)';">
       <br>
       <div class="popup-button" onclick="login.setAttribute('currentpage', 'signin'); login.style.display = 'none';">Close</div>
     </div>
@@ -525,11 +534,21 @@
         body: '"' + penName + '"'
       })
       .then((response) => response.json())
-		.then((data) => {
+		  .then((data) => {
         let dataObject = JSON.parse(data)
         localStorage.accountCode = dataObject.code
         localStorage.accountGuid = dataObject.guid
+
         loginCodeText.textContent = dataObject.code
+
+        let qr = new QRious({
+          element: loginCodeQR,
+          background: "white",
+          foreground: "#007bd3",
+          size: 1000,
+          value: window.location + "?accountCode=" + dataObject.code + "&accountGuid=" + dataObject.guid
+        })
+        loginCodeQR.src = qr.toDataURL()
       })
     }
 
