@@ -235,7 +235,7 @@
 			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
 			profileLocation.textContent = signinObject.profile?.location || "Planet Earth, Milky Way"
 			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
-			profileRole = signinObject.profile?.role
+			setProfileRole(signinObject.profile?.role)
 			data = signinObject
 		})
 	}
