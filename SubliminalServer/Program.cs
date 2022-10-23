@@ -15,7 +15,7 @@ const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv
 var purgatoryDir = new DirectoryInfo(@"Purgatory");
 var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
 var accountsDir = new DirectoryInfo("Accounts");
-var codeHashGuidFile = new FileInfo(Path.Join(accountsDir.FullName, "code-hash-guid.txt"));
+var codeHashGuidFile = new FileInfo(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
 var configFile = new FileInfo("config.txt");
 var random = new Random();
 
@@ -27,16 +27,16 @@ var defaultJsonOptions = new JsonSerializerOptions
     IncludeFields = true
 };
 
-if (!File.Exists(configFile.FullName))
+if (!File.Exists(configFile.Name))
 {
-	File.WriteAllText(configFile.FullName, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
+	File.WriteAllText(configFile.Name, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please check {0} and run this program again!", configFile);
 	Console.ResetColor();
 	Environment.Exit(0);
 }
 
-var config = File.ReadAllLines(configFile.FullName).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
+var config = File.ReadAllLines(configFile.Name).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
 
 Console.ForegroundColor = ConsoleColor.Yellow;
 //Regenerate required directories
@@ -88,7 +88,7 @@ string HashSha256String(string text)
 }
 
 httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating) => {
-    var target = Path.Join(purgatoryDir.FullName, rating.Guid);
+    var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
 
     await using var openStream = File.OpenRead(target);
@@ -122,7 +122,7 @@ httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
 });
 
 httpServer.MapGet("/PurgatoryNew", () =>
-    Directory.GetFiles(purgatoryDir.FullName)
+    Directory.GetFiles(purgatoryDir.Name)
         .Take(30)
         .Select(file => new FileInfo(file))
         .OrderBy(file => file.CreationTime)
@@ -144,8 +144,8 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.AdminApproves = 0;
     entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
-    await using var createStream = File.Create(Path.Join(purgatoryDir.FullName, guid.ToString()));
-    await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.FullName, guid.ToString()));
+    await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
+    await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
     await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
 });
@@ -166,10 +166,10 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
         Profile = profile
     };
 
-    await using var createStream = File.Create(Path.Join(accountsDir.FullName, guid.ToString()));
+    await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
-    await using var codeHashGuid = File.AppendText(codeHashGuidFile.FullName);
+    await using var codeHashGuid = File.AppendText(codeHashGuidFile.Name);
     await codeHashGuid.WriteAsync(HashSha256String(code) + " " + guid + "\n");
     
     var response = new SignupResponse(code, guid.ToString());
@@ -178,7 +178,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 
 httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
     var signinCodeHash = HashSha256String(signinCode);
      
     foreach (var line in map)
@@ -190,14 +190,14 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
         var guid = split[1];
         if (!codeHash.Equals(signinCodeHash)) continue;
 
-        return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.FullName, guid)));
+        return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid)));
     }
 
     return Results.Problem("Could not sign in to retrieve account data.");
 });
 
 httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
 
     foreach (var line in map)
     {
@@ -207,7 +207,7 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
         //We can only locate the account to edit, and therefore edit the profile of the account if the code matches
         if (!codeHash.Equals(HashSha256String(profileUpdate.Code))) continue;
 
-        var target = Path.Join(accountsDir.FullName, guid);
+        var target = Path.Join(accountsDir.Name, guid);
         
         await using var openStream = File.OpenRead(target);
         var data = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
@@ -227,7 +227,7 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
 //Get public facing data for an account
 httpServer.MapPost("/AccountProfile", async (string guid) =>
 {
-    var target = Path.Join(accountsDir.FullName, guid);
+    var target = Path.Join(accountsDir.Name, guid);
     if (!File.Exists(target)) return Results.Problem("Account GUID does not exist.");
 
     await using var openStream = File.OpenRead(target);
