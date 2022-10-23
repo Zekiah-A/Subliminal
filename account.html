@@ -207,10 +207,10 @@
 		data.profile.role = profileRole
 		data.profile.pinnedPoems = profilePinned.textContent.split(", ")
 
-		fetch('https://server.poemanthology.org:81/Signin', {
+		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
-			body: data
+			body: JSON.stringify({ code: localStorage.accountCode, profile: data })
 		})
 		.then((res) => {
 			console.log(res)
