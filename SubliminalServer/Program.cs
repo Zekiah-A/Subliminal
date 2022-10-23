@@ -25,7 +25,8 @@ var defaultJsonOptions = new JsonSerializerOptions
 {
     PropertyNameCaseInsensitive = true,
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    WriteIndented = true
+    WriteIndented = true,
+    IncludeFields = true
 };
 
 if (!File.Exists(configFile))
@@ -91,7 +92,7 @@ string HashSha256String(string text)
     return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
 }
 
-httpServer.MapPost("/PurgatoryRate", async (PurgatoryRating rating) => {
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
 
@@ -157,12 +158,19 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
 httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 {
     var code = "";
+    var guid = Guid.NewGuid();
     for (var i = 0; i < 10; i++) code += base64Alphabet[random.Next(0, 63)];
     
-    var guid = Guid.NewGuid();
-    var profile = new AccountProfile(guid.ToString(), penName, "", "", Array.Empty<string>(), "", Array.Empty<AccountBadge>(), Array.Empty<string>());
-    var account = new AccountData(profile, HashSha256String(code), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
-    
+    var profile = new AccountProfile(guid.ToString())
+    {
+        PenName = penName,
+        JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
+    };
+    var account = new AccountData(HashSha256String(code))
+    {
+        Profile = profile
+    };
+
     await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
@@ -175,16 +183,16 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 
 httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
-    var map = await File.ReadAllTextAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    var map = await File.ReadAllLinesAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
     var signinCodeHash = HashSha256String(signinCode);
      
-    foreach (var line in map.Split("\n"))
+    foreach (var line in map)
     {
         var split = line.Split(" ");
         if (split.Length < 2) continue;
         
         var codeHash = split[0];
-        var guid = line.Split(" ")[1];
+        var guid = split[1];
         if (!codeHash.Equals(signinCodeHash)) continue;
 
         return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid)));
@@ -193,9 +201,36 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
     return Results.Problem("Could not sign in to retrieve account data.");
 });
 
+httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
+    var map = await File.ReadAllLinesAsync(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+
+    foreach (var line in map)
+    {
+        var split = line.Split(" ");
+        var codeHash = split[0];
+        var guid = split[1];
+        //We can only locate the account to edit, and therefore edit the profile of the account if the code matches
+        if (!codeHash.Equals(HashSha256String(profileUpdate.Code))) continue;
+
+        var target = Path.Join(accountsDir.Name, guid);
+        
+        await using var openStream = File.OpenRead(target);
+        var data = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
+        if (data is null) return Results.Problem("Deserialised account data was empty?");
+
+        data.Profile = profileUpdate.Profile;
+
+        await using var stream = new FileStream(target, FileMode.Truncate);
+        await JsonSerializer.SerializeAsync(stream, data, defaultJsonOptions);
+        return Results.Ok();
+    }
+    
+    return Results.Problem("You are not authenticated to modify this account profile.");
+});
+
 
 //Get public facing data for an account
-httpServer.MapPost("/AccountData", async (string guid) =>
+httpServer.MapPost("/AccountProfile", async (string guid) =>
 {
     var target = Path.Join(accountsDir.Name, guid);
     if (!File.Exists(target)) return Results.Problem("Account GUID does not exist.");

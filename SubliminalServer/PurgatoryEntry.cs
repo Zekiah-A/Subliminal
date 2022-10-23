@@ -21,6 +21,8 @@ public record PurgatoryEntry
     public int Vetoes { get; set; }
     public int AdminApproves { get; set; }
     public string DateCreated { get; set; }
+    
+    public List<PurgatoryAnnotation> Annotations { get; set; }
 }
 
 /* Never modified by client, only used internally

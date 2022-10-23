@@ -1,14 +1,15 @@
 using System;
+using System.Text.Json.Serialization;
 using SubliminalServer;
 
 //Private account info - encrypted sha256
 public record AccountData
 (
-    //Account profile
-    AccountProfile Profile,
-    
-    string Code,
-    string[] Drafts,
-    string[] LikedPoems,
-    string[] KnownIPs
-);
+    string Code
+)
+{
+    public List<string> LikedPoems { get; set; }
+    public List<string> Drafts { get; set; }
+    public List<string> KnownIPs { get; set; }
+    public AccountProfile Profile { get; set; }
+};

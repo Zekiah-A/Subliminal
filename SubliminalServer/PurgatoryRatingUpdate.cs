@@ -2,7 +2,7 @@ using System;
 
 namespace SubliminalServer;
 
-public record PurgatoryRating
+public record PurgatoryRatingUpdate
 (
    string Guid,
    PurgatoryRatingType Type
