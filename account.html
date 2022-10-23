@@ -194,6 +194,8 @@
 	let data = {}
 
 	function setProfileRole(newRole) {
+		if (newRole == null) return;
+
 		role = role.substring(0, 8)
 		role = newRole
 		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
@@ -201,11 +203,11 @@
 	}
 
 	async function updateProfile() {
-		data.profile.penName = profileName.textContent
-		data.profile.biography = profileBiography.textContent
-		data.profile.location = profileLocation.textContent
-		data.profile.role = profileRole
-		data.profile.pinnedPoems = profilePinned.textContent.split(", ")
+		data.profile.penName = profileName.textContent || data.profile.penName
+		data.profile.biography = profileBiography.textContent || data.profile.biography
+		data.profile.location = profileLocation.textContent || "Planet Earth, Milky Way"
+		data.profile.role = role || "writer"
+		data.profile.pinnedPoems = profilePinned.textContent.split(", ") || "Nothing pinned yet."
 
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
