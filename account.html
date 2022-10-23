@@ -115,7 +115,7 @@
 	<div id="profileAvatarUrl" style="height: fit-content; width: 40%; display: none;" class="popup"> <!--display: none;-->
 		<h2>Set profile image</h2>
 		<p>Enter image link:</p>
-		<input id="profileAvatarInput" type="text" placeholder="https://public.keskofiles.com/f/k-ruoka/product/7350126081371" maxlength="8" style="width:calc(100% - 8px);display:block;line-height:200%">
+		<input id="profileAvatarInput" type="text" placeholder="https://public.keskofiles.com/f/k-ruoka/product/7350126081371" style="width:calc(100% - 8px);display:block;line-height:200%">
 		<br>
 		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value)">Done</div>
 	</div>
@@ -230,7 +230,7 @@
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ code: localStorage.accountCode, profile: data })
+			body: JSON.stringify({ code: localStorage.accountCode, profile: data.profile })
 		})
 		.then((res) => {
 			console.log(res)
