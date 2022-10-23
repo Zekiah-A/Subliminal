@@ -42,16 +42,15 @@ Console.ForegroundColor = ConsoleColor.Yellow;
 //Regenerate required directories
 foreach (var path in new[] { purgatoryDir.Name, purgatoryBackupDir.Name, accountsDir.Name })
 {
-    if (!Directory.Exists(path))
-    {
-        Console.WriteLine("[WARN] Could not find " + path + " directory, creating.");
-        Directory.CreateDirectory(path);
-    }
+    if (Directory.Exists(path)) continue;
+    Console.WriteLine("[WARN] Could not find " + path + " directory, creating.");
+    Directory.CreateDirectory(path);
 }
 
 //Regenerate required files
 foreach (var path in new[] { codeHashGuidFile.Name })
 {
+    if (File.Exists(path)) continue;
     Console.WriteLine("[WARN] Could not find " + path + " file, creating.");
     File.Create(path);
 }
