@@ -553,6 +553,8 @@
           value: window.location + "?accountCode=" + dataObject.code + "&accountGuid=" + dataObject.guid
         })
         loginCodeQR.src = qr.toDataURL()
+        
+        signin()
       })
     }
 
