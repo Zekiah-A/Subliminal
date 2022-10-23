@@ -127,12 +127,12 @@ httpServer.MapGet("/PurgatoryNew", () =>
         .Select(file => new FileInfo(file))
         .OrderBy(file => file.CreationTime)
         .Reverse()
-        .Select(file => file.FullName)
+        .Select(file => file.Name)
         .ToArray()
 );
 
 httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
-    File.ReadAllTextAsync(Path.Join(purgatoryDir.FullName, guid))
+    File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
