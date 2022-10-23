@@ -193,7 +193,8 @@
   <div style="display: flex;margin-top: 40px;column-gap: 8px;">
       <h1 style="margin-bottom: 0px;margin-top: 0px;">Contents</h1>
       <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-      <input type="button" value="Login to Subliminal" onclick="login.style.display = 'block';">
+      <input id="loginButton" type="button" value="Login to Subliminal" onclick="login.style.display = 'block';">
+      <input id="accountButton" type="button" value="My account" style="display: none;" onclick="window.location.href = './account';">
   </div>
   <div id="login" style="display: none;" class="popup" currentpage="signin">
     <h2>Login to Subliminal:</h2>
@@ -532,14 +533,14 @@
       })
     }
 
-    async function login() {
+    async function signin() {
       if (!localStorage.accountCode || !localStorage.accountGuid) return
-      
-
+      loginButton.style.display = 'none'
+      accountButton.style.display = 'block'
     }
 
     addPurgatoryEntries()
-    login()
+    signin()
 
     filtersBar.addEventListener("mousemove", event => {
       for (let button of filtersBar.children) {
