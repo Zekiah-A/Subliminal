@@ -169,7 +169,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
-    await using var codeHashGuid = File.AppendText(codeHashGuidFile.Name);
+    await using var codeHashGuid = File.AppendText(codeHashGuidFile.FullName);
     await codeHashGuid.WriteAsync(HashSha256String(code) + " " + guid + "\n");
     
     var response = new SignupResponse(code, guid.ToString());
@@ -178,7 +178,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 
 httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
     var signinCodeHash = HashSha256String(signinCode);
      
     foreach (var line in map)
@@ -197,7 +197,7 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 });
 
 httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.Name);
+    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
 
     foreach (var line in map)
     {

@@ -226,7 +226,10 @@
       <p>Your account code is the key for acessing your account, keep it private!</p>
       <span>Code:&nbsp;</span><span id="loginCodeText" class="signup-code-hidden" onmouseenter="this.style.background = 'transparent'; this.style.color = 'black';">00000000</span>
       <p>or</p>
-      <img id="loginCodeQR" width="200" height="200" style="width:200px;height:200px; filter: blur(16px);" onmouseenter="this.style.filter = 'blur(0px)';">
+      <div style="position: relative; display: inline-block;">
+        <img id="loginCodeQR" width="200" height="200" style="width:200px;height:200px; filter: blur(16px);" onmouseenter="this.style.filter = 'blur(0px)';">
+        <img width="64" height="64" src="./Resources/SmallLogo.png" style="width:64px;height:64px;position:absolute;left:68px;top:68px;opacity:0.4;">
+      </div>
       <br>
       <div class="popup-button" onclick="login.setAttribute('currentpage', 'signin'); login.style.display = 'none';">Close</div>
     </div>
@@ -545,7 +548,8 @@
           element: loginCodeQR,
           background: "white",
           foreground: "#007bd3",
-          size: 1000,
+          level: "L",
+          size: 512,
           value: window.location + "?accountCode=" + dataObject.code + "&accountGuid=" + dataObject.guid
         })
         loginCodeQR.src = qr.toDataURL()
