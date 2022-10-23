@@ -3,10 +3,7 @@ using System.Text.Json.Serialization;
 namespace SubliminalServer;
 
 //Public data - can be seen by anyone
-public record AccountProfile
-(
-    string Guid
-)
+public record AccountProfile()
 {
     //Customisable by the user
     [JsonInclude] public string PenName { get; set; }

@@ -203,11 +203,11 @@
 	}
 
 	async function updateProfile() {
-		data.profile.penName = profileName.textContent || data.profile.penName
-		data.profile.biography = profileBiography.textContent || data.profile.biography
-		data.profile.location = profileLocation.textContent || data.profile.location
-		data.profile.role = role || data.profile.role
-		data.profile.pinnedPoems = profilePinned.textContent.split(", ") || []
+		data.profile?.penName = profileName.textContent || data.profile.penName
+		data.profile?.biography = profileBiography.textContent || data.profile.biography
+		data.profile?.location = profileLocation.textContent || data.profile.location
+		data.profile?.role = role || data.profile.role
+		data.profile?.pinnedPoems = profilePinned.textContent.split(", ") || []
 
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
@@ -236,7 +236,7 @@
 			profileName.textContent = signinObject.profile?.penName || "??????"
 			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
 			profileLocation.textContent = signinObject.profile?.location || "Planet Earth, Milky Way"
-			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
+			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
 			setProfileRole(signinObject.profile?.role || "writer")
 			data = signinObject
 		})

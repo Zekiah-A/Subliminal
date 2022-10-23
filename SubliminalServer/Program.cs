@@ -161,12 +161,12 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     var guid = Guid.NewGuid();
     for (var i = 0; i < 10; i++) code += base64Alphabet[random.Next(0, 63)];
     
-    var profile = new AccountProfile(guid.ToString())
+    var profile = new AccountProfile
     {
         PenName = penName,
         JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
     };
-    var account = new AccountData(HashSha256String(code))
+    var account = new AccountData(HashSha256String(code), guid.ToString())
     {
         Profile = profile
     };
