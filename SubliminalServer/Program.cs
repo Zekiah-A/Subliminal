@@ -53,7 +53,7 @@ foreach (var path in new[] { purgatoryDir.Name, purgatoryBackupDir.Name, account
 foreach (var path in new[] { codeHashGuidFile.Name })
 {
     Console.WriteLine("[WARN] Could not find " + path + " file, creating.");
-    File.Create(path, 0);
+    File.Create(path);
 }
 Console.ResetColor();
 
