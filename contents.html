@@ -532,7 +532,14 @@
       })
     }
 
+    async function login() {
+      if (!localStorage.accountCode || !localStorage.accountGuid) return
+      
+
+    }
+
     addPurgatoryEntries()
+    login()
 
     filtersBar.addEventListener("mousemove", event => {
       for (let button of filtersBar.children) {

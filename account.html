@@ -21,6 +21,15 @@
 			font-family:Arial,Helvetica,sans-serif;
 		}
 
+		.profile-title {
+			font-family:Arial,Helvetica,sans-serif;
+			font-size:42px;
+			margin-top:0;
+			margin-bottom:0;
+			white-space:pre;
+			display: inline;
+		}
+
 		.poem-card {
 			width:calc(100% - 32px);
 			height:64px;
@@ -77,13 +86,15 @@
 		<div style="display:flex;column-gap:16px">
 			<img id="profileImage" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
 			<div style="flex-direction:column">
-				<p style="font-family:Arial,Helvetica,sans-serif;font-size:42px;margin-top:0;white-space:pre;margin-bottom:0">I'm Zekiah, ohyesecond</p>
-				<p style="width: 442px; line-break: anywhere;" contenteditable="true">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
+				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true">Name</p><p class="profile-title">, writer</p>
+				<p style="width: 442px; line-break: anywhere;" contenteditable="true" id="profileBiography">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
-					<div>
-						🌍&nbsp;<span contenteditable="true">Planet of Earth, Milky Way</span>
-					</div>
-					<div>📌&nbsp;<span contenteditable="true">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation">Planet of Earth, Milky Way</span></div>
+					<div>📌&nbsp;<span contenteditable="true" id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+				</div>
+				<div style="/*! position: absolute; */width: 100%;height: 32px;bottom: -8px;margin: 8px;display: flex;column-gap: 8px;">
+					<div style="background: linear-gradient(white, #f9f3f3);width: 32px;height: 32px;display: block;border-radius: 100%;border: 1px solid grey;">Adn</div>
+					<div style="background: linear-gradient(white, #f9f3f3);width: 32px;height: 32px;display: block;border-radius: 100%;border: 1px solid grey;">OG</div>
 				</div>
 			</div>
 		</div>
@@ -140,25 +151,25 @@
 	<a href="index" class="back"> &lt;- Back</a>
 </body>
 <script>
-	const code = localStorage.getItem("accountCode")
-
 	async function initialise() {
-		if (!code) {
+		if (!localStorage.accountCode || !localStorage.accountGuid) {
 			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
 			return
 		}
 
-		let dataObject = JSON.parse(data)
-		console.log(data + " " + dataObject.code)
-
 		fetch('https://server.poemanthology.org:81/Signin', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
-			body: '"' + code + '"'
+			body: '"' + localStorage.accountCode + '"'
 		})
 		.then((signinResponse) => signinResponse.json())
 		.then((signinData) => {
 			console.log(signinData)
+			var signinObject = JSON.parse(signinData)
+			profileName.textContent = signinObject.profile.penName || "Anonymous"
+			profileBiography.textContent = signinObject.profile.biography || "Click here to start writing your bio!"
+			profileLocation.textContent = signinObject.profile.location || "Planet Earth, Milky Way"
+			profilePinned.textContent = signinObject.profile.pinnedPoems.length > 0 ? signinObject.profile.pinnedPoems : "Nothing pinned yet."
 		})
 	}
 
