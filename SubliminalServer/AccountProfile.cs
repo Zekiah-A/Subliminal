@@ -12,6 +12,7 @@ public record AccountProfile
     public string Biography { get; set; }
     public string Location { get; set; }
     public string[] PinnedPoems { get; set; }
+    public string Role { get; set; }
     public string JoinDate { get; set; }
     public AccountBadge[] Badges { get; set; }
     public List<string>? PoemGuids { get; set; }
