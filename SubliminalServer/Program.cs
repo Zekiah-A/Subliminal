@@ -52,7 +52,7 @@ foreach (var path in new[] { codeHashGuidFile.FullName })
 {
     if (File.Exists(path)) continue;
     Console.WriteLine("[WARN] Could not find " + path + " file, creating.");
-    File.Create(path);
+    File.WriteAllText(path, "");
 }
 Console.ResetColor();
 
