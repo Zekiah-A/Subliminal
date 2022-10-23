@@ -5,7 +5,7 @@
    <title>Subliminal</title>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="./styles.css">
    <style>
 		.profile-top {
 			text-align:center;
@@ -60,6 +60,23 @@
 			display: inline;			
 		}
 
+		.profile-badge {
+			background: linear-gradient(white, #f9f3f3);
+			width: 32px;
+			height: 32px;
+			display: block;
+			border-radius: 100%;
+			border: 1px solid grey;
+			text-align: center;
+			line-height: 32px;
+		}
+
+		.role-grid {
+			display: grid;
+			grid-template-columns: auto auto auto;
+			grid-gap: 8px;
+		}
+
 		#profileImage {
 			border-radius:4px;
 			cursor: pointer;
@@ -74,6 +91,27 @@
 </head>
 
 <body>
+	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
+		<h2>Your profile role:</h2>
+		<div class="role-grid">
+			<div class="popup-button" onclick="setProfileRole('writer');">Writer</div>
+			<div class="popup-button" onclick="setProfileRole('reader');">Reader</div>
+			<div class="popup-button" onclick="setProfileRole('listener');">Listener</div>
+			<div class="popup-button" onclick="setProfileRole('poet');">Poet</div>
+			<div class="popup-button" onclick="setProfileRole('critic');">Critic</div>
+			<div class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</div>
+			<div class="popup-button" onclick="setProfileRole('analyser');">Analyser</div>
+			<div class="popup-button" onclick="setProfileRole('teacher');">Teacher</div>
+			<div class="popup-button" onclick="setProfileRole('student');">Student</div>
+			<div class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</div>
+			<div class="popup-button" onclick="setProfileRole('casual');">Casual</div>
+		</div>
+		<br>
+		<input type="text" placeholder="Write your own!" maxlength="8" style="width:calc(100% - 8px);display:block;line-height:200%" oninput="setProfileRole(value)">
+		<br>
+		<div class="popup-button" onclick="profileRole.style.display = 'none';">Done</div>
+		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
+	</div>
 	<div class="div-centre">
 		<h1>Account</h1>
 		<!--
@@ -86,15 +124,16 @@
 		<div style="display:flex;column-gap:16px">
 			<img id="profileImage" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
 			<div style="flex-direction:column">
-				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true">Name</p><p class="profile-title">, writer</p>
+				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfile()">Name</p>
+				<p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
 				<p style="width: 442px; line-break: anywhere;" contenteditable="true" id="profileBiography">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
-					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation">Planet of Earth, Milky Way</span></div>
-					<div>📌&nbsp;<span contenteditable="true" id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" onblur="updateProfile()">Planet of Earth, Milky Way</span></div>
+					<div>📌&nbsp;<span contenteditable="true" id="profilePinned" onblur="updateProfile()">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
 				</div>
 				<div style="/*! position: absolute; */width: 100%;height: 32px;bottom: -8px;margin: 8px;display: flex;column-gap: 8px;">
-					<div style="background: linear-gradient(white, #f9f3f3);width: 32px;height: 32px;display: block;border-radius: 100%;border: 1px solid grey;">Adn</div>
-					<div style="background: linear-gradient(white, #f9f3f3);width: 32px;height: 32px;display: block;border-radius: 100%;border: 1px solid grey;">OG</div>
+					<div class="profile-badge">Adn</div>
+					<div class="profile-badge">OG</div>
 				</div>
 			</div>
 		</div>
@@ -151,6 +190,33 @@
 	<a href="index" class="back"> &lt;- Back</a>
 </body>
 <script>
+	let role = ""
+	let data = {}
+
+	function setProfileRole(newRole) {
+		role = role.substring(0, 8)
+		role = newRole
+		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
+		updateProfile()
+	}
+
+	async function updateProfile() {
+		data.profile.penName = profileName.textContent
+		data.profile.biography = profileBiography.textContent
+		data.profile.location = profileLocation.textContent
+		data.profile.role = profileRole
+		data.profile.pinnedPoems = profilePinned.textContent.split(", ")
+
+		fetch('https://server.poemanthology.org:81/Signin', {
+			method: "POST",
+			headers: { 'Content-Type': 'application/json' },
+			body: data
+		})
+		.then((res) => {
+			console.log(res)
+		})
+	}
+
 	async function initialise() {
 		if (!localStorage.accountCode || !localStorage.accountGuid) {
 			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
@@ -164,12 +230,13 @@
 		})
 		.then((signinResponse) => signinResponse.json())
 		.then((signinData) => {
-			console.log(signinData)
-			var signinObject = JSON.parse(signinData)
-			profileName.textContent = signinObject.profile.penName || "Anonymous"
-			profileBiography.textContent = signinObject.profile.biography || "Click here to start writing your bio!"
-			profileLocation.textContent = signinObject.profile.location || "Planet Earth, Milky Way"
-			profilePinned.textContent = signinObject.profile.pinnedPoems.length > 0 ? signinObject.profile.pinnedPoems : "Nothing pinned yet."
+			let signinObject = JSON.parse(signinData)
+			profileName.textContent = signinObject.profile?.penName || "Anonymous"
+			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
+			profileLocation.textContent = signinObject.profile?.location || "Planet Earth, Milky Way"
+			profilePinned.textContent = signinObject.profile?.pinnedPoems.length > 0 ? signinObject.profile.pinnedPoems : "Nothing pinned yet."
+			profileRole = signinObject.profile?.role
+			data = signinObject
 		})
 	}
 
