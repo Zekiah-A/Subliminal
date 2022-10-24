@@ -208,10 +208,10 @@
   <div id="login" style="display: none;" class="popup" currentpage="signin">
     <h2>Login to Subliminal:</h2>
     <div id="loginSignin" style="display: none;">
-      <input type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
+      <input id="loginSigninInput" type="text" placeholder="account code" style="width:calc(100% - 8px);display:block;line-height:200%">
       <div style="display:flex;column-gap:8px;margin-top:8px">
         <div class="popup-button" onclick="login.setAttribute('currentpage', 'signup');">I don't have an account</div>
-        <div class="popup-button" onclick="login.style.display = 'none';">Login</div>
+        <div class="popup-button" onclick="signin(loginSigninInput.value); login.style.display = 'none';">Login</div>
       </div>
     </div>
     <div id="loginSignup" style="display: none;">
@@ -550,22 +550,42 @@
           foreground: "#007bd3",
           level: "L",
           size: 512,
-          value: window.location + "?accountCode=" + dataObject.code + "&accountGuid=" + dataObject.guid
+          value: window.location + "?accountCode=" + dataObject.code
         })
         loginCodeQR.src = qr.toDataURL()
         
-        signin()
+        showMyAccount()
       })
     }
 
-    async function signin() {
-      if (!localStorage.accountCode || !localStorage.accountGuid) return
+    //Impossible to log in without code, GUID can be retrieved though
+    async function signin(code) {
+      fetch('https://server.poemanthology.org:81/Signin', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: '"' + code + '"'
+      })
+      .then((signinResponse) => signinResponse.json())
+      .then((signinData) => {
+        localstorage.accountCode = signinData.code
+        localstorage.accountGuid = signinData.guid
+        showMyAccount()
+      })
+    }
+
+    function showMyAccount() {
       loginButton.style.display = 'none'
       accountButton.style.display = 'block'
     }
 
+    if (params.get("accountCode")) {
+      signin(params.get("accountCode"))
+    }
+    if (localStorage.accountCode && localStorage.accountGuid) {
+      showMyAccount()
+    }
+
     addPurgatoryEntries()
-    signin()
 
     filtersBar.addEventListener("mousemove", event => {
       for (let button of filtersBar.children) {
