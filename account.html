@@ -312,6 +312,7 @@
 			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
 			setProfileRole(signinObject.profile?.role || "writer")
 			setProfileAvatar(signinObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
+			setProfileBadges(signinObject.profile?.badges)
 			data = signinObject
 		})
 	}
