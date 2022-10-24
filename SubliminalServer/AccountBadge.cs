@@ -7,4 +7,5 @@ public enum AccountBadge
     WellKnown,
     Verified,
     Original,
+    New
 }

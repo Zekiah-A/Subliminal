@@ -13,8 +13,11 @@ public record AccountProfile
     [JsonInclude] public string Role { get; set; }
     [JsonInclude] public string AvatarUrl { get; set; }
     
-    //Immutable, you can't change these, does not have to be serialisable
-     public string JoinDate { get; set; }
-     public AccountBadge[] Badges { get; set; }
-     public List<string>? PoemGuids { get; set; }
+    
+    //Immutable, you don't want user to change these
+    [JsonInclude] public string? JoinDate { get; set; }
+    [JsonInclude] public List<AccountBadge>? Badges { get; set; }
+    [JsonInclude] public List<string>? PoemGuids { get; set; }
+    
+    public bool CheckUserUnchanged(AccountProfile comparison) => JoinDate == comparison.JoinDate && Badges == comparison.Badges && PoemGuids == comparison.PoemGuids;
 }

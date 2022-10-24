@@ -4,7 +4,7 @@
 <svg
    width="64"
    height="64"
-   viewBox="0 0 16.933333 16.933333"
+   viewBox="0 0 64 64"
    version="1.1"
    id="svg2233"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
@@ -22,27 +22,30 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
+     inkscape:document-units="px"
      showgrid="true"
-     inkscape:zoom="10.59046"
-     inkscape:cx="33.379097"
-     inkscape:cy="40.744216"
+     inkscape:zoom="7.4885861"
+     inkscape:cx="35.520724"
+     inkscape:cy="45.068588"
      inkscape:window-width="1920"
      inkscape:window-height="1006"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="text2883">
+     inkscape:current-layer="layer1">
     <inkscape:grid
        type="xygrid"
-       id="grid2406" />
+       id="grid2406"
+       originx="-0.41460523"
+       originy="-0.48223833" />
   </sodipodi:namedview>
   <defs
      id="defs2230" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     transform="translate(-0.41460523,-0.48223834)">
     <path
        sodipodi:type="star"
        style="fill:#bb00ff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-dashoffset:31.92;stroke-opacity:1"
@@ -57,10 +60,10 @@
        sodipodi:arg2="1.5894211"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="M 13.094898,15.058682 7.8556245,12.333042 2.7585774,15.043043 3.7317901,9.217929 -0.42064781,5.2077854 5.4201038,4.3333065 7.9508032,-0.85509915 10.587373,4.4295569 16.30387,5.2330895 12.092608,9.3736654 Z"
-       inkscape:transform-center-x="0.070487729"
-       inkscape:transform-center-y="-0.75902485"
-       transform="matrix(0.96012584,0,0,1.000512,0.92100059,1.3377753)" />
+       d="M 13.094898,15.058682 7.8556246,12.333042 2.7585774,15.043043 3.7317901,9.217929 -0.42064782,5.2077854 5.4201038,4.3333065 7.9508032,-0.85509915 10.587373,4.4295569 16.30387,5.2330895 12.092608,9.3736654 Z"
+       inkscape:transform-center-x="0.27688238"
+       inkscape:transform-center-y="-2.9939798"
+       transform="matrix(3.7714624,0,0,3.9465284,2.4037725,3.8569114)" />
     <path
        sodipodi:type="star"
        style="opacity:0.632653;fill:#eaabff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-dashoffset:31.92;stroke-opacity:1"
@@ -76,12 +79,12 @@
        inkscape:rounded="0"
        inkscape:randomized="0"
        d="M 13.094898,15.058682 7.8556246,12.333042 2.7585774,15.043043 3.7317901,9.217929 -0.42064782,5.2077854 5.4201038,4.3333065 7.9508032,-0.85509915 10.587373,4.4295569 16.30387,5.2330895 12.092608,9.3736654 Z"
-       inkscape:transform-center-x="0.22736515"
-       inkscape:transform-center-y="0.82825534"
-       transform="matrix(0.76279519,0.58308243,-0.60760886,0.79488095,7.4506617,-2.8979383)" />
+       inkscape:transform-center-x="0.89311026"
+       inkscape:transform-center-y="3.267061"
+       transform="matrix(2.9963296,2.2999738,-2.3867433,3.1354149,28.05288,-12.850898)" />
     <g
        aria-label="WK"
-       transform="scale(1.0080538,0.99201054)"
+       transform="matrix(3.9597278,0,0,3.9129942,-1.2140023,-1.419955)"
        id="text2883"
        style="font-size:5.6899px;line-height:1.25;fill:#ffffff;stroke-width:0.266714">
       <path

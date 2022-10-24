@@ -109,7 +109,7 @@
 		<br>
 		<input type="text" placeholder="Write your own!" maxlength="8" style="width:calc(100% - 8px);display:block;line-height:200%" oninput="setProfileRole(value)">
 		<br>
-		<div class="popup-button" onclick="profileRole.style.display = 'none';">Done</div>
+		<div class="popup-button" onclick="profileRole.style.display = 'none'; updateProfile()">Done</div>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
 	</div>
 	<div id="profileAvatarUrl" style="height: fit-content; width: 40%; display: none;" class="popup"> <!--display: none;-->
@@ -117,7 +117,7 @@
 		<p>Enter image link:</p>
 		<input id="profileAvatarInput" type="text" placeholder="https://public.keskofiles.com/f/k-ruoka/product/7350126081371" style="width:calc(100% - 8px);display:block;line-height:200%">
 		<br>
-		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value)">Done</div>
+		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
 	</div>
 	<div class="div-centre">
 		<h1>Account</h1>
@@ -206,7 +206,6 @@
 
 		avatarUrl = newUrl
 		profileAvatar.src = avatarUrl
-		updateProfile()
 	}
 
 	function setProfileRole(newRole) {
@@ -215,7 +214,6 @@
 		role = role.substring(0, 8)
 		role = newRole
 		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
-		updateProfile()
 	}
 
 	function setProfileBadges(newBadges) {

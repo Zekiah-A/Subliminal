@@ -159,7 +159,8 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     var profile = new AccountProfile
     {
         PenName = penName,
-        JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
+        JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture),
+        Badges = new List<AccountBadge> { AccountBadge.New }
     };
     var account = new AccountData(HashSha256String(code), guid.ToString())
     {
@@ -215,11 +216,13 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
 
         //Add case for pinned poems + avatar url
         if (profileUpdate.Profile.PenName.Length >= 16) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
-        if (profileUpdate.Profile.Biography.Length >= 16) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
-        if (profileUpdate.Profile.Role.Length >= 16) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
-        
-        data.Profile = profileUpdate.Profile;
+        if (profileUpdate.Profile.Biography.Length >= 360) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
+        if (profileUpdate.Profile.Role.Length >= 8) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
 
+        //Equals ignores any user changable/mutable peroperties, therefore we can ensure client does not change anything they shouldn't 
+        if (!data.Profile.CheckUserUnchanged(profileUpdate.Profile)) return Results.Problem("You attempted to change a profile property that is not user modifiable.");
+        data.Profile = profileUpdate.Profile;
+        
         await using var stream = new FileStream(target, FileMode.Truncate);
         await JsonSerializer.SerializeAsync(stream, data, defaultJsonOptions);
         return Results.Ok();
