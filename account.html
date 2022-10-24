@@ -244,6 +244,11 @@
 			let badgeElement = document.createElement("div")
 			badgeElement.className = "profile-badge"
 
+			let tooltip = document.createElement("div")
+			tooltip.className = "button-tooltip"
+			tooltip.textContent = getBadgeInfo(badge)
+			badgeElement.appendChild(tooltip)
+
 			let icon = stringToHtml(await (await fetch("./Resources/" + badgeName + "Badge.svg")).text())
 			icon.setAttribute("viewBox", "0 0 64 64")
 			icon.setAttribute("width", "32")
@@ -251,6 +256,21 @@
 			badgeElement.appendChild(icon)
 
 			profileBadges.appendChild(badgeElement)
+		}
+	}
+
+	function getBadgeInfo(badge) {
+		switch (badge) {
+			case badgeType.Admin:
+				return "This person has the special role of ensuring things don't get too out of hand! Admins keep subliminal as the #1 spot for poems."
+			case badgeType.Based:
+				return "This person skirts the edge, either by pushing the limits of content here, or exploring places in creativity that others may fear to follow."
+			case badgeType.New:
+				return "This person recently made an account on subliminal, say hello!"
+			case badgeType.Verified:
+				return "This person has been verified to be who they claim they are (no imposters here)!"
+			case badgeType.WellKnown:
+				return "This person is certainly known for something, and is well established here because of it!"
 		}
 	}
 
