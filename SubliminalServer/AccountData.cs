@@ -13,5 +13,7 @@ public record AccountData
     public List<string> LikedPoems { get; set; }
     public List<string> Drafts { get; set; }
     public List<string> KnownIPs { get; set; }
+    public string Email { get; set;  }
+    public string PhoneNumber { get; set; }
     public AccountProfile Profile { get; set; }
 };
