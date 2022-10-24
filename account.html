@@ -69,6 +69,17 @@
 			border: 1px solid grey;
 			text-align: center;
 			line-height: 32px;
+			position: relative;
+		}
+
+		.profile-badge:hover .button-tooltip {
+			pointer-events: all;
+            opacity: 1;
+		}
+
+		.button-tooltip {
+			left: calc(-100% - 184px) !important;
+			width: 200px !important;
 		}
 
 		.role-grid {
@@ -239,7 +250,7 @@
 		if (newBadges == null) return
 		
 		for (let badge of newBadges) {
-			let badgeName = Object.keys(badgeType).find(key => badgeType[badge] === badge)
+			let badgeName = Object.keys(badgeType)[badge]
 
 			let badgeElement = document.createElement("div")
 			badgeElement.className = "profile-badge"

@@ -162,7 +162,7 @@ p, a {
     z-index: 1;
     top: 0px;
     transition: opacity 0.5s;
-    user-select: none;
+    pointer-events: none;
 }
 
 .button-tooltip:hover {
