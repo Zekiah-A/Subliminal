@@ -213,6 +213,11 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
         var data = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
         if (data is null) return Results.Problem("Deserialised account data was empty?");
 
+        //Add case for pinned poems + avatar url
+        profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
+        profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
+        profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
+            
         data.Profile = profileUpdate.Profile;
 
         await using var stream = new FileStream(target, FileMode.Truncate);

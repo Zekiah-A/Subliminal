@@ -132,9 +132,9 @@
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
 			<div style="flex-direction:column">
 				<p class="profile-title">I'm </p>
-				<p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfile()">Name</p>
+				<p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfile()" onkeydown="if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p>
 				<p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
-				<p style="width: 442px; line-break: anywhere;" contenteditable="true" id="profileBiography">I live in a society, this is one of the sites ever, and I write <br>some of the poems ever.</p>
+				<p style="width: 442px; line-break: anywhere;" contenteditable="true" id="profileBiography" onkeydown="if (this.textContent.length >= 360) this.textContent = this.textContent.substring(0, 360);">Click here to start writing your bio!</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
 					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" onblur="updateProfile()">Planet of Earth, Milky Way</span></div>
 					<div>📌&nbsp;<span contenteditable="true" id="profilePinned" onblur="updateProfile()">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
@@ -195,11 +195,12 @@
 			poems, no matter what you do here, if it is making subliminal a better place, we are all for it!
 		</p>
 	</div>
-	<a href="index" class="back"> &lt;- Back</a>
+	<a href="./contents" class="back"> &lt;- Back</a>
 </body>
 <script>
 	let role = ""
 	let avatarUrl = ""
+	let badges = []
 	let data = {}
 
 	function setProfileAvatar(newUrl) {
@@ -217,6 +218,10 @@
 		role = newRole
 		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
 		updateProfile()
+	}
+
+	function setProfileBadges(newBadges) {
+
 	}
 
 	async function updateProfile() {
