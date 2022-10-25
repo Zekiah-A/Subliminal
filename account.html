@@ -126,10 +126,25 @@
 			<div class="popup-button" onclick="setProfileRole('casual');">Casual</div>
 		</div>
 		<br>
-		<input type="text" placeholder="Write your own!" maxlength="8" style="width:calc(100% - 8px);display:block;line-height:200%" oninput="setProfileRole(value)">
+		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="8" oninput="setProfileRole(value)">
 		<br>
 		<div class="popup-button" onclick="profileRole.style.display = 'none'; updateProfile()">Done</div>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
+	</div>
+	<div id="accountEmail" style="height: fit-content; width: 30%; display: none;" class="popup">
+		<h2>Enter your email:</h2>
+		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="8" oninput="setProfileEmail(value)">
+		<br>
+		<div class="popup-button" onclick="accountEmail.style.display = 'none'; updateProfile()">Done</div>
+	</div>
+	<div id="accountNumber" style="height: fit-content; width: 30%; display: none;" class="popup">
+		<h2>Enter your phone number:</h2>
+		<div style="display: flex; column-gap: 4px">
+			<input id="accountCCodeInput" type="text" class="popup-input" style="width: 64px; display: inline;" placeholder="+44" value="+" maxlength="4" oninput="if (value.length < 1) value = '+';">
+			<input id="accountNumberInput" type="text" class="popup-input" style="flex-grow: 1; display: inline;" placeholder="0123456789">
+		</div>
+		<br>
+		<div class="popup-button" onclick="accountNumber.style.display = 'none'; setProfileNumber(accountCCodeInput.value + accountNumberInput.value); updateProfile()">Done</div>
 	</div>
 	<div id="profileAvatarUrl" style="height: fit-content; width: 40%; display: none;" class="popup"> <!--display: none;-->
 		<h2>Set profile image</h2>
@@ -139,14 +154,7 @@
 		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
 	</div>
 	<div class="div-centre">
-		<h1>Account</h1>
-		<!--
-		<div style="text-align:center;border-radius:8px;display:flex;column-gap:8px;margin-top:16px;margin-bottom:16px;width:150%;transform:translateX(-13.5%);">
-			<div id="profileBadges" style="font-size:24px">📛</div>
-			<div id="profileJoinDate" style="font-size:24px">21/10/2022</div>
-			<h1 style="flex-grow:1;margin:0;font-family:Arial,Helvetica,sans-serif" contenteditable="true">Lord Zekiah<br></h1>
-		</div>
-		-->
+		<h1>Account</h1>		
 		<div style="display:flex;column-gap:16px">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
 			<div style="flex-direction:column">
@@ -171,6 +179,14 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
+		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountEmail.style.display = 'block';">
+			Edit Email
+			<div class="button-tooltip">Allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or just spam your inbox with random stuff</div>
+		</button>
+		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountNumber.style.display = 'block';">
+			Edit Phone Number
+			<div class="button-tooltip">Use 2FA with your account, and allow us to send you messages about account activity, or just send random sms funnnies</div>
+		</button>
 		<h2>Draft poems:</h2>
 		<div id="draftPoems">
 			<div class="poem-card">
@@ -214,6 +230,8 @@
 <script>
 	let role = ""
 	let avatarUrl = ""
+	let number = ""
+	let email = ""
 	let data = {}
 
 	const badgeType = {
@@ -244,6 +262,27 @@
 		role = role.substring(0, 8)
 		role = newRole
 		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
+	}
+
+	function setProfileEmail(newEmail) {
+		if (newEmail == null) return
+
+		if (!email) {
+			accountEmailInput.value = newEmail
+		}
+
+		email = newEmail
+	}
+
+	function setProfileNumber(newNumber) {
+		if (newNumber == null) return
+
+		if (!number) {
+			accountCCodeInput.value = newNumber.substring(0, 2)
+			accountNumberInput.value = newNumber.slice(3) 
+		}
+
+		number = newNumber
 	}
 
 	async function setProfileBadges(newBadges) {
@@ -294,14 +333,13 @@
 		data.profile.role = role || data.profile.role
 		data.profile.pinnedPoems = profilePinned.textContent.split(", ") || []
 		data.profile.avatarUrl = avatarUrl || data.profile.avatarUrl
+		data.email = email
+		data.phoneNumber = number
 
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ code: localStorage.accountCode, profile: data.profile })
-		})
-		.then((res) => {
-			console.log(res)
 		})
 	}
 
