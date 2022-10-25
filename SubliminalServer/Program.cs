@@ -1,13 +1,9 @@
-using System;
-using System.Buffers.Text;
 using System.Globalization;
 using System.Text;
 using System.Security.Cryptography;
 using System.Text.Json;
-using System.Text.Unicode;
 using Microsoft.AspNetCore.Mvc;
 using SubliminalServer;
-using WatsonWebsocket;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
@@ -177,7 +173,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     return Results.Json(JsonSerializer.Serialize(response, defaultJsonOptions));
 });
 
-httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
+httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
 {
     var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
     var signinCodeHash = HashSha256String(signinCode);
@@ -191,7 +187,18 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
         var guid = split[1];
         if (!codeHash.Equals(signinCodeHash)) continue;
 
-        return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid)));
+        await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
+        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
+        if (accountData is null) return Results.Problem("Deserialised account data was empty?");
+        
+        var ip = context.Connection.RemoteIpAddress?.ToString();
+        if (ip is null) return Results.Problem("Remote IP address was null");
+        var aes = Aes.Create();
+
+        var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
+        if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
+
+        return Results.Json(accountData);
     }
 
     return Results.Problem("Could not sign in to retrieve account data.");
