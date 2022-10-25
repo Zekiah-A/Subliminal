@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Text;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,10 @@ var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
 var accountsDir = new DirectoryInfo("Accounts");
 var codeHashGuidFile = new FileInfo(Path.Join(accountsDir.Name, "code-hash-guid.txt"));
 var configFile = new FileInfo("config.txt");
+
+var aes = Aes.Create();
 var random = new Random();
+var ipAlreadyRated = new Dictionary<string, PurgatoryRatingUpdate>();
 
 var defaultJsonOptions = new JsonSerializerOptions
 {
@@ -77,16 +79,40 @@ httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
 
-string HashSha256String(string text)
-{
-    var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
-    return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
-}
 
-httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating) => {
+//TODO: Add ability for account ratings, fix undoapprove/vetologic and make it so that it is 1 per account too, with credential argument for rating.
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, [FromBody] string ratingCode, HttpContext context) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
+    
+    //Check if this IP has already done the same rating, ofc this ain't perfect though
+    var ip = context.Connection.RemoteIpAddress?.ToString();
+    if (ip is null) return;
+    var pair = new KeyValuePair<string, PurgatoryRatingUpdate>(ip, rating);
+    if (ipAlreadyRated.Contains(pair)) return;
+    ipAlreadyRated.Add(pair.Key, pair.Value);
+    
+    //Add rating to account data if it's a like
+    if (await Account.CodeIsValid(ratingCode) && rating.Type == PurgatoryRatingType.Approve)
+    {
+        var accountTarget = Path.Join(accountsDir.Name, await Account.GetGuid(ratingCode));
+        if (!File.Exists(accountTarget)) return;
 
+        await using var accountOpenStream = File.OpenRead(accountTarget);
+        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(accountOpenStream);
+        if (accountData is null) return;
+        
+        var likedPoems = new List<string>();
+        
+        if (accountData is {LikedPoems: not null })
+            likedPoems.AddRange(accountData.LikedPoems.Select(encryptedPoem => AesEncryptor.DecryptStringFromBytes(encryptedPoem, aes.Key, aes.IV)));
+        if (likedPoems.Contains(rating.Guid))
+            accountData.LikedPoems?.Add(AesEncryptor.EncryptStringToBytes(rating.Guid, aes.IV, aes.Key));
+
+        await using var accountStream = new FileStream(target, FileMode.Truncate);
+        await JsonSerializer.SerializeAsync(accountStream, accountData, defaultJsonOptions);
+    }
+    
     await using var openStream = File.OpenRead(target);
     var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream, defaultJsonOptions);
     if (entry is null) return;
@@ -109,7 +135,6 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating) => {
     await JsonSerializer.SerializeAsync(stream, entry, defaultJsonOptions);
 });
 
-
 httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
 {
     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -131,7 +156,7 @@ httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
     File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
+httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, [FromBody] string? uploadCode) =>
 {
     var guid = Guid.NewGuid();
     entry.Guid = guid.ToString();
@@ -139,6 +164,11 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
     entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+    
+    if (uploadCode is not null && await Account.CodeIsValid(uploadCode))
+    {
+        entry = entry with { PoemAuthor = await Account.GetGuid(uploadCode) ?? entry.PoemAuthor };
+    }
 
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.Name, guid.ToString()));
@@ -146,6 +176,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
     await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
 });
 
+//Creates a new account with a provided pen name, and then gives the client the credentials for their created account
 httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 {
     var code = "";
@@ -158,7 +189,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
         JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture),
         Badges = new List<AccountBadge> { AccountBadge.New }
     };
-    var account = new AccountData(HashSha256String(code), guid.ToString())
+    var account = new AccountData(Account.HashSha256String(code), guid.ToString())
     {
         Profile = profile
     };
@@ -167,83 +198,75 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     await JsonSerializer.SerializeAsync(createStream, account, defaultJsonOptions);
     
     await using var codeHashGuid = File.AppendText(codeHashGuidFile.FullName);
-    await codeHashGuid.WriteAsync(HashSha256String(code) + " " + guid + "\n");
+    await codeHashGuid.WriteAsync(Account.HashSha256String(code) + " " + guid + "\n");
     
-    var response = new SignupResponse(code, guid.ToString());
+    var response = new AccountCredentials(code, guid.ToString());
     return Results.Json(JsonSerializer.Serialize(response, defaultJsonOptions));
 });
 
+//Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
 httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
 {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
-    var signinCodeHash = HashSha256String(signinCode);
-     
-    foreach (var line in map)
+    if (!await Account.CodeIsValid(signinCode))
     {
-        var split = line.Split(" ");
-        if (split.Length < 2) continue;
-        
-        var codeHash = split[0];
-        var guid = split[1];
-        if (!codeHash.Equals(signinCodeHash)) continue;
-
-        await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
-        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
-        if (accountData is null) return Results.Problem("Deserialised account data was empty?");
-        
-        var ip = context.Connection.RemoteIpAddress?.ToString();
-        if (ip is null) return Results.Problem("Remote IP address was null");
-        var aes = Aes.Create();
-
-        var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
-        if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
-
-        return Results.Json(accountData);
+        return Results.Problem("Could not sign in to retrieve account data.");
     }
 
-    return Results.Problem("Could not sign in to retrieve account data.");
+    var guid = await Account.GetGuid(signinCode);
+        
+    await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
+    var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
+    if (accountData is null) return Results.Problem("Deserialised account data was empty?");
+        
+    var ip = context.Connection.RemoteIpAddress?.ToString();
+    if (ip is null) return Results.Problem("Remote IP address was null");
+
+    var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
+    if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
+
+    return Results.Json(accountData);
+
 });
 
+//Updates an accounts profile with new data, such as a snazzy new profile image (only if they are authenticated).
 httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
-    var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
 
-    foreach (var line in map)
+    if (!await Account.CodeIsValid(profileUpdate.Code))
     {
-        var split = line.Split(" ");
-        var codeHash = split[0];
-        var guid = split[1];
-        //We can only locate the account to edit, and therefore edit the profile of the account if the code matches
-        if (!codeHash.Equals(HashSha256String(profileUpdate.Code))) continue;
+        return Results.Problem("You are not authenticated to modify this account profile.");
+    }
 
-        var target = Path.Join(accountsDir.Name, guid);
-        
-        await using var openStream = File.OpenRead(target);
-        var data = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
-        if (data is null) return Results.Problem("Deserialised account data was empty?");
+    var guid = await Account.GetGuid(profileUpdate.Code);
+    var target = Path.Join(accountsDir.Name, guid);
+    
+    await using var openStream = File.OpenRead(target);
+    var data = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
+    if (data is null) return Results.Problem("Deserialised account data was empty?");
 
-        //Add case for pinned poems + avatar url
-        if (profileUpdate.Profile.PenName.Length >= 16) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
-        if (profileUpdate.Profile.Biography.Length >= 360) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
-        if (profileUpdate.Profile.Role.Length >= 8) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
+    //TODO: Cleanup
+    if (profileUpdate.Profile.PenName.Length >= 16) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
+    if (profileUpdate.Profile.Biography.Length >= 360) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
+    if (profileUpdate.Profile.Role.Length >= 8) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
 
-        //Equals ignores any user changable/mutable peroperties, therefore we can ensure client does not change anything they shouldn't 
-        if (!data.Profile.CheckUserUnchanged(profileUpdate.Profile)) return Results.Problem("You attempted to change a profile property that is not user modifiable.");
-        data.Profile = profileUpdate.Profile;
-        
-        await using var stream = new FileStream(target, FileMode.Truncate);
-        await JsonSerializer.SerializeAsync(stream, data, defaultJsonOptions);
-        return Results.Ok();
+    //Equals ignores any user changeable/mutable properties, therefore we can ensure client does not change anything they shouldn't 
+    if (!data.Profile.CheckUserUnchanged(profileUpdate.Profile))
+    {
+        return Results.Problem("You attempted to change a profile property that is not user modifiable.");
     }
     
-    return Results.Problem("You are not authenticated to modify this account profile.");
+    data.Profile = profileUpdate.Profile;
+    
+    await using var stream = new FileStream(target, FileMode.Truncate);
+    await JsonSerializer.SerializeAsync(stream, data, defaultJsonOptions);
+    return Results.Ok();
 });
 
 
 //Get public facing data for an account
-httpServer.MapPost("/AccountProfile", async (string guid) =>
+httpServer.MapPost("/AccountProfile/{guid}", async (string guid) =>
 {
     var target = Path.Join(accountsDir.Name, guid);
-    if (!File.Exists(target)) return Results.Problem("Account GUID does not exist.");
+    if (!File.Exists(target)) return Results.Problem($"Profile with account GUID {guid} does not exist.");
 
     await using var openStream = File.OpenRead(target);
     var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);

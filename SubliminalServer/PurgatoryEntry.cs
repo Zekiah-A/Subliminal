@@ -16,6 +16,11 @@ public record PurgatoryEntry
     bool Amends
 )
 {
+    
+    //Optional, if uploaded by a user with account, the code provided here will be hidden, and author switched out for their account GUID, to allow for 
+    [JsonInclude] public AccountCredentials Credentials { get; set; }
+
+    //Server only changeable - does not need to be serialisable
     public string Guid { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }

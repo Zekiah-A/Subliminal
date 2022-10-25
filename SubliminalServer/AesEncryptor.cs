@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace SubliminalServer;
 
-//No, I did not copy this from the C# docs, I contributed this snippet to it 😎
 public class AesEncryptor
 {
     public static byte[] EncryptStringToBytes(string plainText, byte[] key, byte[] iv)
@@ -24,10 +24,10 @@ public class AesEncryptor
         using var swEncrypt = new StreamWriter(csEncrypt);
         //Write all data to the stream.
         swEncrypt.Write(plainText);
-        
+        swEncrypt.Flush();
+        csEncrypt.FlushFinalBlock();
         
         var encrypted = msEncrypt.ToArray();
-
         // Return the encrypted bytes from the memory stream.
         return encrypted;
     }

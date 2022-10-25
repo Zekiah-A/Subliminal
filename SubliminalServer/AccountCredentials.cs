@@ -1,6 +1,6 @@
 namespace SubliminalServer;
 
-public record SignupResponse
+public record AccountCredentials
 (
     string Code,
     string Guid
