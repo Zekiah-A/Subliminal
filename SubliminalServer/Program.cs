@@ -290,9 +290,10 @@ httpServer.MapPost("/AccountProfile/{guid}", async (string guid) =>
 
     await using var openStream = File.OpenRead(target);
     var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
+    if (accountData is null) return Results.Problem("Account data was null.");
     
     //Only return profile, not private data
-    return Results.Json(accountData?.Profile);
+    return Results.Json(accountData.Profile);
 });
 
 httpServer.Run();
