@@ -7,104 +7,16 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="./styles.css">
    <style>
-		.profile-top {
-			text-align:center;
-			border-radius:8px;
-			display:flex;
-			column-gap:8px;
-			margin-top:16px;
-			margin-bottom:16px;
-		}
-		.profile-top > h1 {
-			flex-grow:1;
-			margin:0;
-			font-family:Arial,Helvetica,sans-serif;
-		}
-
-		.profile-title {
-			font-family:Arial,Helvetica,sans-serif;
-			font-size:42px;
-			margin-top:0;
-			margin-bottom:0;
-			white-space:pre;
-			display: inline;
-		}
-
-		.poem-card {
-			width:calc(100% - 32px);
-			height:64px;
-			background:var(--button-opaque);
-			border-radius:8px;
-			display: flex;
-			flex-direction: row;
-			column-gap: 16px;
-			padding: 4px;
-			padding-left: 16px;
-			padding-right: 16px;
-		}
-		.poem-card .poem-preview {
-			position: relative;
-			margin: 0px;
-			padding: 8px;
-			overflow: hidden;
-		}
-		.poem-card .poem-preview::after {
-			opacity: 1;
-			width: 100%;
-			height: 100%;
-			top: 0;
-			left: 0;
-			position: absolute;
-			background: linear-gradient(var(--button-opaque), transparent, var(--button-opaque));
-			content: '';
-			display: inline;			
-		}
-
-		.profile-badge {
-			background: linear-gradient(white, #f9f3f3);
-			width: 32px;
-			height: 32px;
-			display: block;
-			border-radius: 100%;
-			border: 1px solid grey;
-			text-align: center;
-			line-height: 32px;
-			position: relative;
-		}
-
-		.profile-badge:hover .button-tooltip {
-			pointer-events: all;
-            opacity: 1;
-		}
-
-		.button-tooltip {
-			left: calc(-100% - 184px) !important;
-			width: 200px !important;
-		}
-
 		.role-grid {
 			display: grid;
 			grid-template-columns: auto auto auto;
 			grid-gap: 8px;
 		}
 
-		#profileImage {
-			border-radius:4px;
-			cursor: pointer;
-		}
-
 		#recentWorks {
 			display: flex;
 			flex-direction: column;
 			row-gap: 16px;
-		}
-
-		#profileBadges {
-			width: 100%;
-			height: 32px;
-			margin: 8px;
-			display: flex;
-			column-gap: 8px;
 		}
    </style>
 </head>
@@ -153,6 +65,21 @@
 		<br>
 		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
 	</div>
+	<!--
+	<div id="adminPanel" style="height: fit-content; width: 40%;" class="popup">
+		<h2>Admin controls:</h2>
+		<p>No functions here will work if you are not an admin on subliminal. However, feel free to snoop around and see how we keep the site based!</p>
+		<div style="display: grid; grid-template-rows: auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
+			<div class="popup-button">View purgatory reports</div>
+			<div class="popup-button">Remove purgatory poem</div>
+			<div class="popup-button">Terminate account</div>
+			<div class="popup-button">Send user login message</div>
+		</div>
+		<br>
+		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
+		<p style="opacity:0.6;">Be responsible, never use admin privilages to suppress, grief, or cause other discord on the site. Always be impartial.</p>
+	</div>
+	-->
 	<div class="div-centre">
 		<h1>Account</h1>		
 		<div style="display:flex;column-gap:16px">
@@ -217,7 +144,7 @@
 			your account may be removed, or IP blocked from submitting content to the site. It is both impossible, and
 			against our values to use any of your personal information against you, but, if you publicly post something
 			such as your location in a work you upload, others can, and may forward this on to relevant authorities. If you
-			post something publicly, people can see use it.
+			post something publicly, people can see and use it.
 		</p>
 		<h2>Being subliminal:</h2>
 		<p>The final thing we'd like to note, is that this is a cool place. This site is supposed to be fun, experimental,

@@ -39,7 +39,10 @@
  
 <body>
     <div class="title-blur">
-        <h2 id="poemTitle" class="centre content">TITLE</h2>
+        <div style="display: flex;">
+            <h2 id="poemTitle" style="display: inline; flex-grow: 1; text-align: end; margin-bottom: 12px;">TITLE</h2>
+            <h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px; cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileFrame.style.display = 'block';">TITLE</h2>
+        </div>
         <hr>
     </div>
     <div id="poemMain">
@@ -55,7 +58,12 @@
         </div>
     </div>
 
-    <div id="contentWarning">
+    <div id="profileFrame" style="height: 512px; width: 80%; display: none;" class="popup">
+        <iframe src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
+        <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
+	</div>
+
+    <div id="contentWarning" style="display: none;">
         <pre class="warning-centre">
 ___________________________________________________________
 | Disclaimer: This is a poem in the subliminal poem       |
@@ -103,7 +111,7 @@ ___________________________________________________________
         fetch("https://server.poemanthology.org:81/PurgatoryRate", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(ratingObject)
+            body: JSON.stringify(ratingObject) + localStorage.accountCode ? "\"" + localStorage.accountCode + "\"": ""
         }).then(res => {
             alert('Rating success!')
             let ratingName = Object.keys(ratingType)
@@ -132,7 +140,21 @@ ___________________________________________________________
         document.title = "Subliminal - " + poemData.poemName
 
         //Place poem data into the DOM
-        poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
+        
+        //This suggests that the author is an author GUID, therefore we check with the server for if we can attach an author/account here
+        if (poemData.poemAuthor.length == 36) {
+            poemTitle.textContent = poemData.poemName + " - By "
+            poemAuthor.textContent = poemData.poemAuthor
+            profileFrame.src = "./Other/profile-template-frame.html?guid=" + poemData.poemAuthor
+        }
+        else {
+            poemTitle.textContent = poemData.poemName + " - By "
+            poemAuthor.textContent = poemData.poemAuthor
+            poemAuthor.removeAttribute("onclick")
+            poemAuthor.removeAttribute("onmouseover")
+            poemAuthor.removeAttribute("onmouseleave")
+        }
+
         poemContent.innerHTML = poemData.poemContent
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground

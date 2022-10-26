@@ -103,11 +103,16 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, [FromB
         if (accountData is null) return;
         
         var likedPoems = new List<string>();
-        
-        if (accountData is {LikedPoems: not null })
+
+        if (accountData is {LikedPoems: not null})
+        {
             likedPoems.AddRange(accountData.LikedPoems.Select(encryptedPoem => AesEncryptor.DecryptStringFromBytes(encryptedPoem, aes.Key, aes.IV)));
+        }
         if (likedPoems.Contains(rating.Guid))
-            accountData.LikedPoems?.Add(AesEncryptor.EncryptStringToBytes(rating.Guid, aes.IV, aes.Key));
+        {
+            accountData.LikedPoems ??= new List<byte[]>();
+            accountData.LikedPoems.Add(AesEncryptor.EncryptStringToBytes(rating.Guid, aes.IV, aes.Key));
+        }
 
         await using var accountStream = new FileStream(target, FileMode.Truncate);
         await JsonSerializer.SerializeAsync(accountStream, accountData, defaultJsonOptions);
@@ -165,9 +170,22 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, [FromBody] s
     entry.AdminApproves = 0;
     entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
     
+    //Account-poem link if uploadeed by a user who is signed in
     if (uploadCode is not null && await Account.CodeIsValid(uploadCode))
     {
-        entry = entry with { PoemAuthor = await Account.GetGuid(uploadCode) ?? entry.PoemAuthor };
+        var accountGuid = await Account.GetGuid(uploadCode);
+        entry = entry with { PoemAuthor = accountGuid };
+        
+        //Link newly uploaded poem to account profile
+        var accountTarget = Path.Join(accountsDir.Name, accountGuid);
+        await using var openStream = File.OpenRead(accountTarget);
+        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
+        if (accountData is null) return;
+        accountData.Profile.PoemGuids ??= new List<string>();
+        accountData.Profile.PoemGuids.Add(guid.ToString());
+        
+        await using var stream = new FileStream(accountTarget, FileMode.Truncate);
+        await JsonSerializer.SerializeAsync(stream, accountData, defaultJsonOptions);
     }
 
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
