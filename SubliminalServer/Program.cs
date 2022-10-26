@@ -240,7 +240,8 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
         
     var ip = context.Connection.RemoteIpAddress?.ToString();
     if (ip is null) return Results.Problem("Remote IP address was null");
-
+    accountData.KnownIPs ??= new List<byte[]>();
+    
     var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
     if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
 
@@ -264,9 +265,9 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
     if (data is null) return Results.Problem("Deserialised account data was empty?");
 
     //TODO: Cleanup
-    if (profileUpdate.Profile.PenName.Length >= 16) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
-    if (profileUpdate.Profile.Biography.Length >= 360) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
-    if (profileUpdate.Profile.Role.Length >= 8) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
+    if (profileUpdate.Profile.PenName is {Length: >= 16}) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
+    if (profileUpdate.Profile.Biography is {Length: >= 360}) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
+    if (profileUpdate.Profile.Role is {Length: >= 8}) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
 
     //Equals ignores any user changeable/mutable properties, therefore we can ensure client does not change anything they shouldn't 
     if (!data.Profile.CheckUserUnchanged(profileUpdate.Profile))

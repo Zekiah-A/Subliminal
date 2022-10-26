@@ -6,12 +6,12 @@ namespace SubliminalServer;
 public record AccountProfile
 {
     //Customisable by the user
-    [JsonInclude] public string PenName { get; set; }
-    [JsonInclude] public string Biography { get; set; }
-    [JsonInclude] public string Location { get; set; }
-    [JsonInclude] public string[] PinnedPoems { get; set; }
-    [JsonInclude] public string Role { get; set; }
-    [JsonInclude] public string AvatarUrl { get; set; }
+    [JsonInclude] public string? PenName { get; set; }
+    [JsonInclude] public string? Biography { get; set; }
+    [JsonInclude] public string? Location { get; set; }
+    [JsonInclude] public string[]? PinnedPoems { get; set; }
+    [JsonInclude] public string? Role { get; set; }
+    [JsonInclude] public string? AvatarUrl { get; set; }
     
     
     //Immutable, you don't want user to change these
