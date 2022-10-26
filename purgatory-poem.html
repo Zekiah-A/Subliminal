@@ -42,7 +42,7 @@
         <div style="display: flex;">
             <h2 id="poemTitle" style="display: inline; flex-grow: 1; text-align: end; margin-bottom: 12px;">TITLE</h2>
             <h2 style="display: inline; margin-bottom: 12px; white-space: pre;"> - By </h2>
-            <h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px; cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileFrame.style.display = 'block';">AUTHOR</h2>
+            <h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px;">AUTHOR</h2>
         </div>
         <hr>
     </div>
@@ -146,14 +146,15 @@ ___________________________________________________________
         if (poemData.poemAuthor.length == 36) {
             poemTitle.textContent = poemData.poemName + " - By "
             poemAuthor.textContent = poemData.poemAuthor
+            poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
+            poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
+            poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
+            poemAuthor.style.cursor = "pointer"
             profileFrame.src = "./Other/profile-template-frame.html?guid=" + poemData.poemAuthor
         }
         else {
             poemTitle.textContent = poemData.poemName
             poemAuthor.textContent = poemData.poemAuthor
-            poemAuthor.removeAttribute("onclick")
-            poemAuthor.removeAttribute("onmouseover")
-            poemAuthor.removeAttribute("onmouseleave")
         }
 
         poemContent.innerHTML = poemData.poemContent
