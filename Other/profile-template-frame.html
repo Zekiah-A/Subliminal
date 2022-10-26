@@ -70,7 +70,7 @@
 
     async function initialise() {
         if (!params.get("guid")) {
-            alert("Could not display profile information: No profile found.")
+            console.error("Could not display profile information: No GUID provided")
 			return
         }
 
@@ -81,13 +81,13 @@
 		.then((res) => res.json())
 		.then((profileData) => {
 			let profileObject = JSON.parse(profileData)
-			profileName.textContent = profileObject.profile?.penName || "Nameless"
-			profileBiography.textContent = profileObject.profile?.biography || "I have no biography, I am the unknown."
-			profileLocation.textContent = profileObject.profile?.location || "Planet Earth, Milky Way"
-			profilePinned.textContent = (profileObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
-			setProfileRole(profileObject.profile?.role || "writer")
-			setProfileAvatar(profileObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
-			setProfileBadges(profileObject.profile?.badges)
+			profileName.textContent = profileObject.penName || "Nameless"
+			profileBiography.textContent = profileObject.biography || "I have no biography, I am the unknown."
+			profileLocation.textContent = profileObject.location || "Planet Earth, Milky Way"
+			profilePinned.textContent = (profileObject.pinnedPoems?.length > 0 ? profileObject.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
+			setProfileRole(profileObject.role || "writer")
+			setProfileAvatar(profileObject.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
+			setProfileBadges(profileObject.badges)
 		})
     }
 
