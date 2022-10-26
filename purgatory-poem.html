@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div id="profileFrame" style="height: 512px; width: 80%; display: none;" class="popup">
+    <div id="profileFrame" style="height: 512px; width: 60%; display: none;" class="popup">
         <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
         <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
 	</div>
@@ -150,9 +150,9 @@ ___________________________________________________________
                 headers: { 'Content-Type': 'application/json' },
             })
             .then((res) => res.json())
-            .then((profileData) => poemTitle.textContent = profileData.profile.penName)
+            .then((profileData) => poemAuthor.textContent = profileData.profile.penName)
 
-            poemAuthor.textContent = poemData.poemAuthor
+            poemTitle.textContent = poemData.poemName
 
             poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
             poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
