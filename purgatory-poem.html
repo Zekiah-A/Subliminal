@@ -150,7 +150,7 @@ ___________________________________________________________
                 headers: { 'Content-Type': 'application/json' },
             })
             .then((res) => res.json())
-            .then((profileData) => poemAuthor.textContent = profileData.profile.penName)
+            .then((profileData) => poemAuthor.textContent = profileData.penName || poemData.poemAuthor)
 
             poemTitle.textContent = poemData.poemName
 
