@@ -4,6 +4,7 @@
     --panel-transparent: #f2f2f240;
     --background-opaque: #ffffff;
     --background-transparent: #ffffff33;
+    --text-colour: black;
 }
 
 @media(prefers-color-scheme: dark) {
@@ -13,6 +14,7 @@
         --panel-transparent: #37373740;
         --background-opaque: #1e1e1e;
         --background-transparent: #1e1e1e33;
+        --text-colour: #DADADA;
     }    
 }
 
@@ -182,7 +184,7 @@ p, a {
 @media(prefers-color-scheme: dark) {
     body {
         background: #1e1e1e;
-        color: #DADADA;
+        color: var(--text-colour);
     }
 
     #contentWarning {
@@ -198,7 +200,7 @@ p, a {
     }
 
     .searchbar {
-        color: #DADADA;
+        color: var(--text-colour);
         background-color: #ffffff33;
         backdrop-filter: blur(10px);
         z-index: 1;
