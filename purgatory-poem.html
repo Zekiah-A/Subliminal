@@ -60,7 +60,7 @@
     </div>
 
     <div id="profileFrame" style="height: 512px; width: 80%; display: none;" class="popup">
-        <iframe src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
+        <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
         <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
 	</div>
 
@@ -144,13 +144,21 @@ ___________________________________________________________
         
         //This suggests that the author is an author GUID, therefore we check with the server for if we can attach an author/account here
         if (poemData.poemAuthor.length == 36) {
-            poemTitle.textContent = poemData.poemName + " - By "
+            //Need a better way to just get the name
+            fetch('https://server.poemanthology.org:81/AccountProfile/' + poemData.poemAuthor, {
+                method: "GET",
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then((res) => res.json())
+            .then((profileData) => poemTitle.textContent = profileData.profile.penName)
+
             poemAuthor.textContent = poemData.poemAuthor
+
             poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
             poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
             poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
             poemAuthor.style.cursor = "pointer"
-            profileFrame.src = "./Other/profile-template-frame.html?guid=" + poemData.poemAuthor
+            profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.poemAuthor
         }
         else {
             poemTitle.textContent = poemData.poemName
