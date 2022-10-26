@@ -31,7 +31,7 @@ public static class Account
             if (split.Length < 2) continue;
         
             var accountCode = split[0];
-            var accountGuid = split[2];
+            var accountGuid = split[1];
             
             if (accountCode.Equals(codeHash)) return accountGuid;
         }
