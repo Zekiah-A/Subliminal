@@ -81,7 +81,8 @@ httpServer.UseCors(policy =>
 
 
 //TODO: Add ability for account ratings, fix undoapprove/vetologic and make it so that it is 1 per account too, with credential argument for rating.
-httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, [FromBody] string ratingCode, HttpContext context) => {
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, HttpContext context) => { // [FromBody] string? ratingCode,
+    string? ratingCode = null;
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
     
@@ -93,7 +94,7 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, [FromB
     ipAlreadyRated.Add(pair.Key, pair.Value);
     
     //Add rating to account data if it's a like
-    if (await Account.CodeIsValid(ratingCode) && rating.Type == PurgatoryRatingType.Approve)
+    if (ratingCode is not null && await Account.CodeIsValid(ratingCode) && rating.Type == PurgatoryRatingType.Approve)
     {
         var accountTarget = Path.Join(accountsDir.Name, await Account.GetGuid(ratingCode));
         if (!File.Exists(accountTarget)) return;
@@ -161,8 +162,9 @@ httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
     File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, [FromBody] string? uploadCode) =>
+httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) => //, [FromBody] string? uploadCode
 {
+    string? uploadCode = null;
     var guid = Guid.NewGuid();
     entry.Guid = guid.ToString();
     entry.Approves = 0;
