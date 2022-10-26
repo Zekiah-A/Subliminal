@@ -281,19 +281,17 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
     return Results.Ok();
 });
 
-
 //Get public facing data for an account
-httpServer.MapPost("/AccountProfile/{guid}", async (string guid) =>
+httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
 {
     var target = Path.Join(accountsDir.Name, guid);
     if (!File.Exists(target)) return Results.Problem($"Profile with account GUID {guid} does not exist.");
-
+    
     await using var openStream = File.OpenRead(target);
     var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
-    if (accountData is null) return Results.Problem("Account data was null.");
     
     //Only return profile, not private data
-    return Results.Json(accountData.Profile);
+    return accountData is null ? Results.Problem("Account data was null.") : Results.Json(accountData.Profile);
 });
 
 httpServer.Run();
