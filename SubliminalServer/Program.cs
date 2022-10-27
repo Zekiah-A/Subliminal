@@ -236,8 +236,8 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
         
     await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
     var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
-    if (accountData is null) return Results.Problem("Deserialised account data was empty?");
-  
+    return accountData is null ? Results.Problem("Deserialised account data was empty?") : Results.Json(accountData);
+    
     /* TODO: Like this until I figure it out
     var ip = context.Connection.RemoteIpAddress?.ToString();
     if (ip is null) return Results.Problem("Remote IP address was null");
@@ -246,9 +246,6 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
     var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
     if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
     */
-    
-    return Results.Json(accountData);
-
 });
 
 //Updates an accounts profile with new data, such as a snazzy new profile image (only if they are authenticated).
