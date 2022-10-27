@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Subliminal</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="../styles.css"> <!--URL paths should be correct when this is loaded into a page-->
@@ -31,7 +30,7 @@
     <br>
 </body>
 <script>
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(location.search)
 
     function setProfileAvatar(newUrl) {
 		if (newUrl == null) return
