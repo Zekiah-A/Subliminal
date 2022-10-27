@@ -153,7 +153,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
         //Link newly uploaded poem to account profile
         var accountTarget = Path.Join(accountsDir.Name, accountGuid);
         await using var openStream = File.OpenRead(accountTarget);
-        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
+        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
         if (accountData is null) return;
         accountData.Profile.PoemGuids ??= new List<string>();
         accountData.Profile.PoemGuids.Add(guid.ToString());
@@ -223,8 +223,8 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
 });
 
 //Updates an accounts profile with new data, such as a snazzy new profile image (only if they are authenticated).
-httpServer.MapPost("/UpdateAccountProfile", async (AccountAuthenticatedProfile profileUpdate) => {
-
+httpServer.MapPost("/UpdateAccountProfile", async (AccountAuthenticatedProfile profileUpdate) =>
+{
     if (!await Account.CodeIsValid(profileUpdate.Code))
     {
         return Results.Problem("You are not authenticated to modify this account profile.");
