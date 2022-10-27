@@ -161,6 +161,8 @@
 	let email = ""
 	let data = {}
 
+
+	//TODO: Move all this to my custom profile template frame component
 	const badgeType = {
 		Admin: 0,
     	Based: 1,
@@ -282,8 +284,7 @@
 			body: '"' + localStorage.accountCode + '"'
 		})
 		.then((signinResponse) => signinResponse.json())
-		.then((signinData) => {
-			let signinObject = JSON.parse(signinData)
+		.then((signinObject) => {
 			profileName.textContent = signinObject.profile?.penName || "Nameless"
 			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
 			profileLocation.textContent = signinObject.profile?.location || "Planet Earth, Milky Way"
