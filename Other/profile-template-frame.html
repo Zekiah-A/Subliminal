@@ -31,7 +31,7 @@
     <br>
 </body>
 <script>
-    const params = new URLSearchParams()
+    const params = new URLSearchParams(window.location.search)
 
     function setProfileAvatar(newUrl) {
 		if (newUrl == null) return
