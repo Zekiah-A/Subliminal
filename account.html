@@ -264,11 +264,12 @@
 		data.profile.avatarUrl = avatarUrl || data.profile.avatarUrl
 		data.email = email
 		data.phoneNumber = number
+		data.code = localStorage.accountCode
 
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ code: localStorage.accountCode, profile: data.profile })
+			body: JSON.stringify(data.profile)
 		})
 	}
 

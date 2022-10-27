@@ -1,26 +1,21 @@
-using System.Text.Json.Serialization;
-
 namespace SubliminalServer;
 
 public record PurgatoryEntry
 (
-    string Summary,
-    string Tags,
-    bool CWarning,
-    string CWarningAdditions,
-    string PoemName,
-    string PoemAuthor,
-    string PoemContent,
-    string PageStyle,
-    string PageBackground,
-    bool Amends
+    string? Summary = null,
+    string? Tags  = null,
+    bool? CWarning  = null,
+    string? CWarningAdditions  = null,
+    string? PoemName  = null,
+    string? PoemAuthor  = null,
+    string? PoemContent  = null,
+    string? PageStyle  = null,
+    string? PageBackground  = null,
+    bool? Amends = null
 )
 {
-    
-    //Optional, if uploaded by a user with account, the code provided here will be hidden, and author switched out for their account GUID, to allow for 
-    [JsonInclude] public AccountCredentials Credentials { get; set; }
-
     //Server only changeable - does not need to be serialisable
+    public string AuthorGuid { get; set; }
     public string Guid { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }

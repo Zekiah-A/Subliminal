@@ -367,10 +367,12 @@
     }
 
     function upload(poemJson) {
+        poemJson.code = localStorage.accountCode || null
+
         fetch("https://server.poemanthology.org:81/PurgatoryUpload", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(poemJson) + localStorage.accountCode ? ", \"" + localStorage.accountCode + "\"" : ""
+            body: JSON.stringify(poemJson)
         }).then(res => {
             console.log("Upload sucessful, redirecting.")
             window.onbeforeunload = () => {} 

@@ -50,6 +50,7 @@
         <p id="poemContent">
             CONTENT
         </p>
+        <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an adaptation of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <div class="rating-container">
             <div>
                 <a href="#contentWarning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" class="rate-button">Approve</a>
@@ -103,11 +104,11 @@ ___________________________________________________________
         UndoVeto: 3
     }
 
-
     function ratePoem(rating) {
         let ratingObject = {
             guid: guid.toString(),
-            purgatoryRating: rating
+            purgatoryRating: rating,
+            code: localStorage.accountCode || null
         }
      
         fetch("https://server.poemanthology.org:81/PurgatoryRate", {
@@ -143,32 +144,30 @@ ___________________________________________________________
 
         //Place poem data into the DOM
         
-        //This suggests that the author is an author GUID, therefore we check with the server for if we can attach an author/account here
-        if (poemData.poemAuthor.length == 36) {
-            //Need a better way to just get the name
-            fetch('https://server.poemanthology.org:81/AccountProfile/' + poemData.poemAuthor, {
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' },
-            })
-            .then((res) => res.json())
-            .then((profileObject) => poemAuthor.textContent = profileObject.penName || poemData.poemAuthor)
-
-            poemTitle.textContent = poemData.poemName
-
+        //If author has a GUID (account),link it to the poem
+        if (poemData.authorGuid) {
             poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
             poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
             poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
             poemAuthor.style.cursor = "pointer"
-            profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.poemAuthor
+            profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.authorGuid
         }
-        else {
-            poemTitle.textContent = poemData.poemName
-            poemAuthor.textContent = poemData.poemAuthor
-        }
-
+        
+        //Set up title
+        poemTitle.textContent = poemData.poemName
+        poemAuthor.textContent = poemData.poemAuthor
+        
+        //Set up main poem content
         poemContent.innerHTML = poemData.poemContent
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
+
+        //If the poem is an adaptation/amendment of another, then keep track of that as well
+        if (poemData.amends) {
+            amendmentNote.style.display = "block"
+            amendmentLink.href = window.location.protocol + '\/\/' + window.location.hostname + 
+                (poemData.amends.includes("/") ? "/poem?path=" + poemData.amends : "purgatory-poem?guid=" + poemData.amends)
+        }
 
         //Probably useless since pages are procedurally generated...
         document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)

@@ -15,7 +15,7 @@ var configFile = new FileInfo("config.txt");
 
 var aes = Aes.Create();
 var random = new Random();
-var ipAlreadyRated = new Dictionary<string, PurgatoryRatingUpdate>();
+var ipAlreadyRated = new Dictionary<string, PurgatoryRating>();
 
 var defaultJsonOptions = new JsonSerializerOptions
 {
@@ -81,43 +81,16 @@ httpServer.UseCors(policy =>
 
 
 //TODO: Add ability for account ratings, fix undoapprove/vetologic and make it so that it is 1 per account too, with credential argument for rating.
-httpServer.MapPost("/PurgatoryRate", async (PurgatoryRatingUpdate rating, HttpContext context) => { // [FromBody] string? ratingCode,
-    string? ratingCode = null;
+httpServer.MapPost("/PurgatoryRate", async (PurgatoryAuthenticatedRating rating, HttpContext context) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
     if (!File.Exists(target)) return;
     
     //Check if this IP has already done the same rating, ofc this ain't perfect though
     var ip = context.Connection.RemoteIpAddress?.ToString();
     if (ip is null) return;
-    var pair = new KeyValuePair<string, PurgatoryRatingUpdate>(ip, rating);
+    var pair = new KeyValuePair<string, PurgatoryRating>(ip, rating);
     if (ipAlreadyRated.Contains(pair)) return;
     ipAlreadyRated.Add(pair.Key, pair.Value);
-    
-    //Add rating to account data if it's a like
-    if (ratingCode is not null && await Account.CodeIsValid(ratingCode) && rating.Type == PurgatoryRatingType.Approve)
-    {
-        var accountTarget = Path.Join(accountsDir.Name, await Account.GetGuid(ratingCode));
-        if (!File.Exists(accountTarget)) return;
-
-        await using var accountOpenStream = File.OpenRead(accountTarget);
-        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(accountOpenStream);
-        if (accountData is null) return;
-        
-        var likedPoems = new List<string>();
-
-        if (accountData is {LikedPoems: not null})
-        {
-            likedPoems.AddRange(accountData.LikedPoems.Select(encryptedPoem => AesEncryptor.DecryptStringFromBytes(encryptedPoem, aes.Key, aes.IV)));
-        }
-        if (likedPoems.Contains(rating.Guid))
-        {
-            accountData.LikedPoems ??= new List<byte[]>();
-            accountData.LikedPoems.Add(AesEncryptor.EncryptStringToBytes(rating.Guid, aes.IV, aes.Key));
-        }
-
-        await using var accountStream = new FileStream(target, FileMode.Truncate);
-        await JsonSerializer.SerializeAsync(accountStream, accountData, defaultJsonOptions);
-    }
     
     await using var openStream = File.OpenRead(target);
     var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream, defaultJsonOptions);
@@ -162,21 +135,20 @@ httpServer.MapGet("/Purgatory/{guid}", (string guid) =>
     File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) => //, [FromBody] string? uploadCode
+httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
 {
-    string? uploadCode = null;
     var guid = Guid.NewGuid();
     entry.Guid = guid.ToString();
     entry.Approves = 0;
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
-    entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture); //new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+    entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture);
     
-    //Account-poem link if uploadeed by a user who is signed in
-    if (uploadCode is not null && await Account.CodeIsValid(uploadCode))
+    //Account-poem link if uploaded by a user who is signed in
+    if (entry.Code is not null && await Account.CodeIsValid(entry.Code))
     {
-        var accountGuid = await Account.GetGuid(uploadCode);
-        entry = entry with { PoemAuthor = accountGuid };
+        var accountGuid = await Account.GetGuid(entry.Code);
+        entry.AuthorGuid = accountGuid; 
         
         //Link newly uploaded poem to account profile
         var accountTarget = Path.Join(accountsDir.Name, accountGuid);
@@ -192,8 +164,10 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) => //, [From
 
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await using var backupStream = File.Create(Path.Join(purgatoryBackupDir.Name, guid.ToString()));
-    await JsonSerializer.SerializeAsync(createStream, entry, defaultJsonOptions);
-    await JsonSerializer.SerializeAsync(backupStream, entry, defaultJsonOptions);
+    
+    //We convert them back to PurgatoryEntry when saving to not leak code (safety)
+    await JsonSerializer.SerializeAsync(createStream, entry as PurgatoryEntry, defaultJsonOptions);
+    await JsonSerializer.SerializeAsync(backupStream, entry as PurgatoryEntry, defaultJsonOptions);
 });
 
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
@@ -249,7 +223,7 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
 });
 
 //Updates an accounts profile with new data, such as a snazzy new profile image (only if they are authenticated).
-httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileUpdate) => {
+httpServer.MapPost("/UpdateAccountProfile", async (AccountAuthenticatedProfile profileUpdate) => {
 
     if (!await Account.CodeIsValid(profileUpdate.Code))
     {
@@ -264,17 +238,17 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountProfileUpdate profileU
     if (data is null) return Results.Problem("Deserialised account data was empty?");
 
     //TODO: Cleanup
-    if (profileUpdate.Profile.PenName is {Length: >= 16}) profileUpdate.Profile.PenName = profileUpdate.Profile.PenName[..16];
-    if (profileUpdate.Profile.Biography is {Length: >= 360}) profileUpdate.Profile.Biography = profileUpdate.Profile.Biography[..360];
-    if (profileUpdate.Profile.Role is {Length: >= 8}) profileUpdate.Profile.Role = profileUpdate.Profile.Role[..8];
+    if (profileUpdate.PenName is {Length: >= 16}) profileUpdate.PenName = profileUpdate.PenName[..16];
+    if (profileUpdate.Biography is {Length: >= 360}) profileUpdate.Biography = profileUpdate.Biography[..360];
+    if (profileUpdate.Role is {Length: >= 8}) profileUpdate.Role = profileUpdate.Role[..8];
 
     //Equals ignores any user changeable/mutable properties, therefore we can ensure client does not change anything they shouldn't 
-    if (!data.Profile.CheckUserUnchanged(profileUpdate.Profile))
+    if (!data.Profile.CheckUserUnchanged(profileUpdate))
     {
         return Results.Problem("You attempted to change a profile property that is not user modifiable.");
     }
     
-    data.Profile = profileUpdate.Profile;
+    data.Profile = profileUpdate;
     
     await using var stream = new FileStream(target, FileMode.Truncate);
     await JsonSerializer.SerializeAsync(stream, data, defaultJsonOptions);

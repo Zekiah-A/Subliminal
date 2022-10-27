@@ -12,8 +12,7 @@ public record AccountProfile
     [JsonInclude] public string[]? PinnedPoems { get; set; }
     [JsonInclude] public string? Role { get; set; }
     [JsonInclude] public string? AvatarUrl { get; set; }
-    
-    
+
     //Immutable, you don't want user to change these
     [JsonInclude] public string? JoinDate { get; set; }
     [JsonInclude] public List<AccountBadge>? Badges { get; set; }
