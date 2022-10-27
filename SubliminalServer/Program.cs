@@ -235,7 +235,7 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
     var guid = await Account.GetGuid(signinCode);
         
     await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
-    var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream);
+    var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, defaultJsonOptions);
     return accountData is null ? Results.Problem("Deserialised account data was empty?") : Results.Json(accountData);
     
     /* TODO: Like this until I figure it out
