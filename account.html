@@ -255,6 +255,7 @@
 		}
 	}
 
+	//We only send profile from the acocunt data to the server, fields outside profile requre a separate kind of request to modify
 	async function updateProfile() {
 		data.profile.penName = profileName.textContent || data.profile.penName
 		data.profile.biography = profileBiography.textContent || data.profile.biography
@@ -262,9 +263,7 @@
 		data.profile.role = role || data.profile.role
 		data.profile.pinnedPoems = profilePinned.textContent.split(", ") || []
 		data.profile.avatarUrl = avatarUrl || data.profile.avatarUrl
-		data.email = email
-		data.phoneNumber = number
-		data.code = localStorage.accountCode
+		data.profile.code = localStorage.accountCode
 
 		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
 			method: "POST",
