@@ -78,8 +78,7 @@
 			headers: { 'Content-Type': 'application/json' },
 		})
 		.then((res) => res.json())
-		.then((profileData) => {
-			let profileObject = JSON.parse(profileData)
+		.then((profileObject) => {
 			profileName.textContent = profileObject.penName || "Nameless"
 			profileBiography.textContent = profileObject.biography || "I have no biography, I am the unknown."
 			profileLocation.textContent = profileObject.location || "Planet Earth, Milky Way"
