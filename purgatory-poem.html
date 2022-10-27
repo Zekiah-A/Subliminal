@@ -103,6 +103,8 @@ ___________________________________________________________
         UndoVeto: 3
     }
 
+    
+
     function ratePoem(rating) {
         let ratingObject = {
             guid: guid.toString(),
@@ -150,7 +152,7 @@ ___________________________________________________________
                 headers: { 'Content-Type': 'application/json' },
             })
             .then((res) => res.json())
-            .then((profileData) => poemAuthor.textContent = profileData.penName || poemData.poemAuthor)
+            .then((profileObject) => poemAuthor.textContent = profileObject.penName || poemData.poemAuthor)
 
             poemTitle.textContent = poemData.poemName
 
