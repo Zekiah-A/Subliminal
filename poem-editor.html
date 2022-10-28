@@ -287,7 +287,14 @@
             
             let cardPreview = document.createElement("p")
             cardPreview.className = "poem-preview"
-            cardPreview.textContent = JSON.parse(localStorage.getItem(localStorage.key(i))).poemContent
+            let pContent
+            try {
+                pContent = JSON.parse(localStorage.getItem(localStorage.key(i))).poemContent
+            }
+            catch (e) {
+                continue
+            }
+            cardPreview.textContent = pContent
 
             cardEl.appendChild(cardPreview)
             loadDiv.appendChild(cardEl)
