@@ -15,26 +15,22 @@
             position: fixed;
             top: 146px;
             left: 16px;
-            border: 1px solid black;
             width: 160px;
-            padding: 5px;
-            border-radius: 2px;
-            background-color: rgba(255, 255, 255, .2);
+            padding: 8px;
+            border-radius: 8px;
+            background-color: var(--button-transparent); /*var(--background-transparent);*/
             backdrop-filter: blur(5px);
-            box-shadow: 0px 2px 4px gray;
             z-index: 1;
         }
         .document-tools {
             position: fixed;
             top: 146px;
             right: 16px;
-            border: 1px solid black;
             width: 180px;
-            padding: 5px;
-            border-radius: 2px;
-            background-color: rgba(255, 255, 255, .2);
+            padding: 8px;
+            border-radius: 8px;
+            background-color: var(--button-transparent); /*var(--background-transparent);*/
             backdrop-filter: blur(5px);
-            box-shadow: 0px 2px 4px gray;
             z-index: 1;
         }
 
@@ -103,6 +99,10 @@
         .management-button:hover .button-tooltip {
             pointer-events: all;
             opacity: 1;
+        }
+
+        .button-tooltip {
+            left: calc(-100% - 32px) !important;
         }
 
         #originalContent {
@@ -174,6 +174,13 @@
         <p style="opacity:0.6;"><em>Please don't use a real signature you use on legal documents here. By pressing submit, you agree to all the terms stated above.</em></p>
     </div>
 
+    <div id="loadPoemPopup" class="popup" style="display: block;">
+        <h2>Load poem:</h2>
+
+        <div id="loadDiv" style="display: flex;flex-direction: column;row-gap: 5px;max-height: 512px;overflow: scroll;height: 512px;"></div>
+        <div class="popup-button" onclick="loadPoemPopup.style.display =  'none';">Done</div>
+    </div>
+
     <div class="title-blur" style="z-index: 2;">
         <div style="display: flex;">
             <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
@@ -220,21 +227,23 @@
     </div>
     <div id="toolbox" class="document-tools">
         <span class="tool-header">Document Management:</span>
-        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;">
-        <div style="margin: 2px;border: 1px solid black;padding: 5px;margin-top: 8px;" id="loadDiv">Load: <br></div>
+        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;">        
+        <button class="management-button" id="loadButton" onclick="loadPoemPopup.style.display = 'block';">
+            <p name="tooltip" class="button-tooltip">Will open the load poem menu. Allowing you to acess your poem editor saved poems, or open a poem autosaved to the subliminal cloud* (only applies if you have a subliminal account).</p>Load Poem
+        </button>
         <button id="downloadButton" onclick="download()" class="management-button">
-            <div name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</div>
+            <p name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</p>
             Download edited page
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);">
               <path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path>
            </svg>
         </button>
         <button id="uploadButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button">
-            <div name="tooltip" class="button-tooltip">This will send your poem to the <strong>poem purgatory</strong> section of the site, where anyone can view it immediately.<br><br><em>Note: Anyone will be able to rate your poem, if it gets enough approvals, it will officially be added to the site.</em></div>
+            <p name="tooltip" class="button-tooltip">This will send your poem to the <strong>poem purgatory</strong> section of the site, where anyone can view it immediately.<br><br><em>Note: Anyone will be able to rate your poem, if it gets enough approvals, it will officially be added to the site.</em></p>
             Upload to site 📨
         </button>
         <button id="amendButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button" style="display: none;">
-            <div name="tooltip" class="button-tooltip">This will send the changes to your current poem to the <strong>poem purgatory</strong> section of the site, if approved, that poem will be amended with your changes.</div>Propose poem changes ✋
+            <p name="tooltip" class="button-tooltip">This will send the changes to your current poem to the <strong>poem purgatory</strong> section of the site, if approved, that poem will be amended with your changes.</p>Propose poem changes ✋
         </button>
      </div>
     <div id="main" class="poem-centre">
@@ -266,10 +275,22 @@
     }
 
     function fetchStorage() {
-        document.getElementById("loadDiv").innerHTML = "Load: <br>";
         for (let i = 0; i < localStorage.length; i++) {
-            let current = localStorage.getItem(localStorage.key(i));
-            document.getElementById("loadDiv").innerHTML += `<input class="tool" onclick="loadKey('${localStorage.key(i)}')" type="button" value="${localStorage.key(i)}"> <br>`;
+            let current = localStorage.getItem(localStorage.key(i))
+            let cardEl = document.createElement("div")
+            cardEl.className = "poem-card"
+            cardEl.onclick = () => { loadKey(localStorage.key(i)); loadPoemPopup.style.display= "none"; }
+
+            let cardTitle = document.createElement("h4")
+            cardTitle.textContent = localStorage.key(i)
+            cardEl.appendChild(cardTitle)
+            
+            let cardPreview = document.createElement("p")
+            cardPreview.className = "poem-preview"
+            cardPreview.textContent = JSON.parse(localStorage.getItem(localStorage.key(i))).poemContent
+
+            cardEl.appendChild(cardPreview)
+            loadDiv.appendChild(cardEl)
         }
     }
 

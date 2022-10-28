@@ -196,6 +196,7 @@ p, a {
     padding: 4px;
     padding-left: 16px;
     padding-right: 16px;
+    cursor: pointer;
 }
 .poem-card .poem-preview {
     position: relative;
