@@ -29,6 +29,17 @@ hr {
     margin: 8px;
 }
 
+button, input[type="button"] {
+    background-color: var(--button-opaque);
+    color: var(--text-colour);
+    border: 1px solid #8f8f9d;
+    border-radius: 4px;
+}
+
+button:hover, input[type="button"]:hover {
+    background-color: #85859269;
+}
+
 /*Header bar*/
 .title-blur {
     position: relative;
@@ -72,6 +83,7 @@ hr {
     bottom: 10px;
     right: 10px;
     opacity: 0.4;
+    cursor: pointer;
 }
 
 .previous {

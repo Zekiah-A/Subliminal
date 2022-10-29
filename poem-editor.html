@@ -258,6 +258,7 @@
     const ctx = signCanvas.getContext('2d')
     const params = new URLSearchParams(document.location.search)
     const edit = params.get("edit")
+    const amend = params.get("amend")
     let poemTags = []
 
     //Make user confirm that they want to leave the page.
@@ -496,48 +497,44 @@
         this.Y = relativeY
     }
 
-    async function amendMode() {
-        downloadButton.setAttribute("disabled", true)
-        uploadButton.setAttribute("disabled", true)
-        saveButton.setAttribute("disabled", true)
-        amendButton.style.display = "block"
-        loadDiv.innerText = "Load:\n\nLoading poems is disabled, as you are in poem amendment mode."
-        originalContent.style.display = "block"
-        originalContent.style.top = content.offsetTop + "px"
-
-        //Load up amendment poem
+    async function loadPath(path) {
         let json = {}
-        if (edit.includes("/")) { //then it is a poem already on the site, we have to create a new json object to load
-            const version = params.get("version")
 
-            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + edit)
-            if (version == "2") {
-                //pathname + '.json'
-                json = await data.json()
-                json.amends = edit
-            }
-            /*else { //DEPRECATED: Maybe this can be refitted for loading up downloaded poem HTML files
-                let poemHtml = pageToHtml(await data.text())
-                json = {
-                    //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
-                    poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
-                    poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
-                    poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
-                    pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
-                    pageBackground: poemHtml.style.background, //poem background image
-                    amends: edit
-                }
-            }*/
+        if (path.includes("/")) {
+            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + amend)
+            json = await data.json()
+            json.amends = path
         }
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
-            json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + edit)).json()
-            json.amends = edit
+            json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + path)).json()
+            json.amends = path
         }
 
         load(json)
     }
 
-    if (edit) amendMode() //enter poem amendment mode
+    async function amendMode() {
+        downloadButton.setAttribute("disabled", true)
+        uploadButton.setAttribute("disabled", true)
+        saveButton.setAttribute("disabled", true)
+        amendButton.style.display = "block"
+        loadDiv.innerText = "Loading poems is disabled, as you are in poem amendment mode."
+        originalContent.style.display = "block"
+        originalContent.style.top = content.offsetTop + "px"
+
+        originalContent.innerHTML = json.poemContent || ""
+
+        //Load up amendment poem
+        await loadPath(amend)
+    }
+
+    async function editMode() {
+        loadDiv.style.display = 'none'
+        await loadPath(edit)
+    }
+
+    if (amend) amendMode() //enter poem amendment mode
+    else if (edit) editMode()
     else fetchStorage() //Load saved poems from local storage
 
     formattingToolbar.addEventListener("mousemove", event => {
@@ -547,3 +544,18 @@
     })
 </script>
 </html>
+
+<!--
+else { //DEPRECATED: Maybe this can be refitted for loading up downloaded poem HTML files
+    let poemHtml = pageToHtml(await data.text())
+    json = {
+        //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
+        poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
+        poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
+        poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
+        pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
+        pageBackground: poemHtml.style.background, //poem background image
+        amends: edit
+    }
+}
+-->

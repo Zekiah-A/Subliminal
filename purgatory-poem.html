@@ -50,7 +50,7 @@
         <p id="poemContent">
             CONTENT
         </p>
-        <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an adaptation of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
+        <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <div class="rating-container">
             <div>
                 <a href="#contentWarning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" class="rate-button">Approve</a>
@@ -59,7 +59,19 @@
             <a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
         </div>
     </div>
-
+    <div id="editFrame" style="height: auto; width: 30%; display: none;" class="popup">
+        <h2>Poem editor:</h2>
+        <div style="display: flex; column-gap: 8px;">
+            <div class="popup-button" style="height: 128px;" onclick="window.location.href = './poem-editor?amend=' + guid;">
+                <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
+            </div>
+            <div class="popup-button" style="height: 128px;" onclick="window.location.href = './poem-editor?edit=' + guid;">
+                <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
+            </div>
+        </div>
+        <br>
+        <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
+    </div>
     <div id="profileFrame" style="height: 512px; width: 60%; display: none;" class="popup">
         <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
         <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
@@ -92,7 +104,7 @@ ___________________________________________________________
         </pre>
     </div>  
     <a href="../../contents" class="back"> <- Back</a>
-    <a href="javascript: window.location.href = '../../poem-editor?edit=' + guid;" class="edit"><svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg></a>
+    <div onclick="editFrame.style.display = 'block';" class="edit"><svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg></div>
 </body>
 <script>
     const params = new URLSearchParams(document.location.search)
