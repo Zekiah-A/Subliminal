@@ -517,6 +517,8 @@
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
         saveButton.setAttribute("disabled", true)
+        loadButton.setAttribute("disabled", true)
+        loadPoemPopup.style.display = 'none'
         amendButton.style.display = "block"
         loadDiv.innerText = "Loading poems is disabled, as you are in poem amendment mode."
         originalContent.style.display = "block"
@@ -529,7 +531,7 @@
     }
 
     async function editMode() {
-        loadDiv.style.display = 'none'
+        loadPoemPopup.style.display = 'none'
         await loadPath(edit)
     }
 
