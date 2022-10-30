@@ -21,7 +21,26 @@
             background-color: var(--button-transparent); /*var(--background-transparent);*/
             backdrop-filter: blur(5px);
             z-index: 1;
+            transition: height .5s;
         }
+        .tools-collapsed {
+            text-align: right;
+            position: absolute;
+            right: 16px;
+            rotate: 180deg;
+            transform: translateY(4px);
+        }
+        .tools-collapsed > svg {
+            fill: var(--text-colour);
+        }
+        .text-tools[collapsed="true"] {
+            height: 36px;
+            overflow: hidden;
+        }
+        .text-tools[collapsed="true"] .tools-collapsed {
+            rotate: 0deg;
+        }
+
         .document-tools {
             position: fixed;
             top: 146px;
@@ -206,24 +225,28 @@
     </div>
     <div style="position: fixed; top: 90px;">
     </div>
-    <div class="text-tools">
-        <span class="tool-header">Tools:</span>
+    <div class="text-tools" collapsed="false" onclick="this.setAttribute('collapsed', this.getAttribute('collapsed') == 'true' ? 'false' : 'true')">
+        <span class="tool-header">
+           Tools:
+           <span class="tools-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+        </span>
         <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px;">
-            <option value="poem-centre" selected>Poem Centre</option>
-            <option value="poem-centre-wide">Poem Centre Wide</option>
-            <option value="centre">Centre</option>
-        </select> <br>
+           <option value="poem-centre" selected="">Poem Centre</option>
+           <option value="poem-centre-wide">Poem Centre Wide</option>
+           <option value="centre">Centre</option>
+        </select>
+        <br>
         Background image: <br>
-        <input type="file" multiple accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
+        <input type="file" multiple="" accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         Poem summary: <br>
         <textarea id="summaryArea" type="text" maxlength="160" style="min-height: 50px; width: calc(100% - 5px); height: 50px; max-width: calc(100% - 5px); max-height: 150px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
         <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (this.value.trim() == '') return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { this.spaces++; if (this.spaces < 2) return; add(); this.spaces = 0 }">
         Content Warning: <br>
-        <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true"/>
+        <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
         <label for="cWarningCheckbox"> Enabled</label><br>
-        <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled>
+        <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
     </div>
     <div id="toolbox" class="document-tools">
         <span class="tool-header">Document Management:</span>
@@ -497,20 +520,19 @@
         this.Y = relativeY
     }
 
-    async function loadPath(path) {
+    async function fetchPathJson(path) {
         let json = {}
 
         if (path.includes("/")) {
             let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + amend)
             json = await data.json()
-            json.amends = path
         }
         else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
             json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + path)).json()
             json.amends = path
         }
 
-        load(json)
+        return json
     }
 
     async function amendMode() {
@@ -527,12 +549,16 @@
         originalContent.innerHTML = json.poemContent || ""
 
         //Load up amendment poem
-        await loadPath(amend)
+        let currentJson = await fetchPathJson(amend)
+        currentJson.amends = path
+        load(json)
     }
 
     async function editMode() {
         loadPoemPopup.style.display = 'none'
-        await loadPath(edit)
+        let currentJson = await fetchPathJson(edit)
+        currentJson.edits = path
+        load(json)
     }
 
     if (amend) amendMode() //enter poem amendment mode
