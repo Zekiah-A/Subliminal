@@ -485,7 +485,7 @@
       document.querySelectorAll(".section-body a").forEach((elem) => {
         elem.style.display = 'inline-block'
         if (!value.toLowerCase().trim()) return
-        if (!elem.textContent.toLowerCase().includes(value)) elem.style.display = 'none'
+        if (!elem.textContent.toLowerCase().includes(value.toLowerCase().trim())) elem.style.display = 'none'
       })
       document.querySelectorAll(".section-body br").forEach((lnb) => {
         lnb.style.display = 'inline-block'          
