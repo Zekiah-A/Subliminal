@@ -284,7 +284,7 @@
 	}
 
 	async function initialise() {
-		if (!localStorage.accountCode || !localStorage.accountGuid) {
+		if (!localStorage.accountCode) {
 			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
 			return
 		}

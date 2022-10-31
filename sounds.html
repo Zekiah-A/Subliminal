@@ -553,6 +553,7 @@
         SearchRandom: 10,
         SongInfo: 11
     }
+
     const serverPackets = {
         StartPlay: 0,
         EndPlay: 1,
@@ -562,6 +563,9 @@
         RetRandom: 5,
         RetLyrics: 6
     }
+
+    const ctx = lyricsCanvas.getContext("2d")
+
     //Card grids, such as those inheriting home-cards-grid css class
     const cardGrids = [homeRecentCards]
     const socket = new WebSocket("wss://server.poemanthology.org:80")
@@ -620,17 +624,71 @@
         return elements
     }
 
-    /*class LyricsEffect {
-        duration = 0
+
+    function resizeLyricsCanvas() {
+        lyricsCanvas.width = lyricsCanvas.offsetWidth
+        lyricsCanvas.height = lyricsCanvas.offsetHeight
     }
 
-    function playLyricsEffect(name, effect) {
+    let sphere = {
+        centreX: 400,
+        centreY: 400,
+        offsetX: 100,
+        offsetY: 100,
+        radius: 400 //radiusX
+    }
 
-    }*/
+    function renderCanvasEffect() {
+        //Disco ball effect
+        let time = 0
+        let particles = []
+
+        let renderTick = () => {
+            ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height)
+            let tick = time / 100
+
+            for (let i = 0; i < particles.length; i++) {
+                let circle = new Path2D()
+                let radiusX = (Math.sin(tick + particles[i].tickOffsetX) + 1) * particles[i].initialRadius //X
+                let radiusY = 0//-(Math.abs(particles[i].initialY - sphere.centreY) / hackyConstant)
+                let radius = Math.max(0, radiusX + radiusY)
+
+                circle.arc(
+                    sphere.offsetX + sphere.radius * (Math.cos(tick + particles[i].tickOffsetX) + 1), //X
+                    y, //Y //sphere.offsetY + sphere.radius * (Math.cos(particles[i].initialY) + 1)
+                    radius,
+                    0, //Drawing stuff
+                    2 * Math.PI, //Drawing stuff
+                    false //Drawing stuff
+                )
+                ctx.fillStyle = particles[i].colour
+                ctx.fill(circle)
+            }
+
+            time++
+        }
+
+        for (let y = 0; y < 1000; y += 100) { //used for positioning
+            for (let x = 0; x < 15; x++) { //used for populating
+                particles.push({
+                    colour: ['red', 'blue', 'green'][Math.floor(Math.random() * 3)],
+                    initialY: y - 500,
+                    tickOffsetX: x * 1000,
+                    initialRadius: 40
+                })
+            }
+        }
+
+        setInterval(renderTick, 16)
+        //Snow effect
+
+        //Big word effect
+
+    }
 
     function resizeCardGrids() {
         for (let elementRef of cardGrids) {
-            //A card should have a 3H : 2W ratio, with max width preferably being around 200px, on portrait, 100px, the maximum column count should be around 5
+            //A card should have a 3H : 2W ratio, with max width preferably being around 200px, on portrait, 100px, the maximum column count should be around 5mon
             let columnCount = Math.min(Math.floor(elementRef.offsetWidth / (window.innerHeight > window.innerWidth ? 100 : 200)), elementRef.childElementCount)
             let rowCount = Math.ceil(elementRef.childElementCount / columnCount)
             let height = 1.5 * elementRef.children[0].offsetWidth //non mathematical slightly dirty hack // 3 / 2, keeps 3:2 ratio
@@ -649,12 +707,16 @@
         }
     }
 
-    addEventListener("resize", resizeCardGrids, false)
-    addEventListener("orientationchange", resizeCardGrids, false)
-    
-    setTimeout(() => {
+    resizeLyricsCanvas()
+    renderCanvasEffect()
+
+    addEventListener("resize", resizeLyricsCanvas, false)
+    //addEventListener("resize", resizeCardGrids, false)
+    //addEventListener("orientationchange", resizeCardGrids, false)
+
+    /*setTimeout(() => {
         testLyricLoad()
         resizeCardGrids()
-    }, 1000);
+    }, 1000)*/
 </script>
 </html>

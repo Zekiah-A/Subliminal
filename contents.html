@@ -586,7 +586,7 @@
     if (params.get("accountCode")) {
       signin(params.get("accountCode"))
     }
-    if (localStorage.accountCode && localStorage.accountGuid) {
+    else if (localStorage.accountCode) {
       showMyAccount()
     }
 
