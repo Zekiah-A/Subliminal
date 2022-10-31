@@ -420,10 +420,10 @@
 
         for (let h = 0; h < signCanvas.height; h++) {
             for (let w = 0; w < signCanvas.width; w++) {
-                let byteI = (math.floor(w) / 8) * bufHeight
+                let byteI = (Math.floor(w) / 8) * bufHeight
                 let shiftI = w % 8
 
-                if (data[(w + h) * 3]) buffer[byteI] &= 1 << shiftI
+                if (data[w + h][0] == 0) buffer[byteI] &= 1 << shiftI
             }
         }
 
@@ -435,7 +435,7 @@
         let signData = getSignCanvasBits()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
         loadObject.signature = signData
-        
+
         upload(loadObject)
     }
 
