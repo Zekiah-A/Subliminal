@@ -183,7 +183,7 @@
         <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
         <p>If you want to, you can <strong>sign</strong> your poem off below.</p>
         <div class="sign-container">
-           <canvas height="100" width="300" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
+           <canvas height="96" width="256" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
             <div class="sign-buttons">
                 <div class="popup-button" style="pointer-events: none; opacity: 0.2;">Smooth</div>
                 <div class="popup-button" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
@@ -278,7 +278,7 @@
     <a href="../contents" class="back"> <- Back</a>
 </body>
 <script>
-    const ctx = signCanvas.getContext('2d')
+    const ctx = signCanvas.getContext('2d', { willReadFrequently: true })
     const params = new URLSearchParams(document.location.search)
     const edit = params.get("edit")
     const amend = params.get("amend")
@@ -412,8 +412,27 @@
         confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
     }
 
+    function getSignCanvasBits() {
+        //Canvas has to be a multiple of 8 in width and height, else special byte operations would be necessary
+        let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height / 8
+        let buffer = new Uint8Array(bufWidth * bufHeight)
+        let data = ctx.getImageData(0, 0, signCanvas.width, signCanvas.height).data
+
+        for (let h = 0; h < signCanvas.height; h++) {
+            for (let w = 0; w < signCanvas.width; w++) {
+                let shiftI = (w) % 8
+                let byteI = (math.floor(w) / 8) * bufHeight
+
+                if (data[(w + h) * 3]) buffer[byteI] &= 1 << shiftI
+            }
+        }
+
+        return buffer
+    }
+
     function uploadCurrent() {
         saveCurrent()
+        let signBytes = getSignCanvasBits()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
         upload(loadObject)
     }
