@@ -630,16 +630,15 @@
         lyricsCanvas.height = lyricsCanvas.offsetHeight
     }
 
-    let sphere = {
-        centreX: 600,
-        centreY: 600,
-        radius: 200 //radiusX
-    }
-
     function renderCanvasEffect() {
         //Disco ball effect
         let time = 0
         let particles = []
+        let sphere = {
+            centreX: 600,
+            centreY: 600,
+            radius: 200
+        }
 
         let renderTick = () => {
             ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height)
@@ -673,7 +672,7 @@
         for (let y = -400; y < 400; y += 10) { //used for positioning
             for (let x = 0; x < 10; x++) { //used for populating
                 particles.push({
-                    colour: ['red', 'blue', 'green'][Math.floor(Math.random() * 3)],
+                    colour: ['white', 'gray', 'lightgray'][Math.floor(Math.random() * 3)],
                     offsetY: y,
                     tickOffsetX: Math.random() * 1000,
                     initialRadius: .05
