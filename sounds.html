@@ -631,11 +631,9 @@
     }
 
     let sphere = {
-        centreX: 400,
-        centreY: 400,
-        offsetX: 100,
-        offsetY: 100,
-        radius: 400 //radiusX
+        centreX: 600,
+        centreY: 600,
+        radius: 200 //radiusX
     }
 
     function renderCanvasEffect() {
@@ -649,14 +647,18 @@
 
             for (let i = 0; i < particles.length; i++) {
                 let circle = new Path2D()
-                let radiusX = (Math.sin(tick + particles[i].tickOffsetX) + 1) * particles[i].initialRadius //X
-                let radiusY = 0//-(Math.abs(particles[i].initialY - sphere.centreY) / hackyConstant)
-                let radius = Math.max(0, radiusX + radiusY)
 
+                //Find the x offset (radius) of the current ring of tye sphere that this point is on
+                let r = Math.acos(particles[i].offsetY / (sphere.radius * 2)) / Math.PI
+                let ringRadius = Math.abs((sphere.radius * 2) * Math.sin(Math.PI * r))
+                
+                //Combine the initial radius, radius of ring particle is on (inverse distance from camera), and it's current X (pos in 3D) to get final radius
+                let radius = (Math.sin(tick + particles[i].tickOffsetX) + 1) * particles[i].initialRadius * ringRadius
+                
                 circle.arc(
-                    sphere.offsetX + sphere.radius * (Math.cos(tick + particles[i].tickOffsetX) + 1), //X
-                    y, //Y //sphere.offsetY + sphere.radius * (Math.cos(particles[i].initialY) + 1)
-                    radius,
+                    sphere.centreX + ringRadius * Math.cos(tick + particles[i].tickOffsetX), //X
+                    particles[i].offsetY + sphere.centreY, //Y //sphere.offsetY + sphere.radius * (Math.cos(particles[i].initialY) + 1)
+                    radius,//radius,
                     0, //Drawing stuff
                     2 * Math.PI, //Drawing stuff
                     false //Drawing stuff
@@ -668,13 +670,13 @@
             time++
         }
 
-        for (let y = 0; y < 1000; y += 100) { //used for positioning
-            for (let x = 0; x < 15; x++) { //used for populating
+        for (let y = -400; y < 400; y += 10) { //used for positioning
+            for (let x = 0; x < 10; x++) { //used for populating
                 particles.push({
                     colour: ['red', 'blue', 'green'][Math.floor(Math.random() * 3)],
-                    initialY: y - 500,
-                    tickOffsetX: x * 1000,
-                    initialRadius: 40
+                    offsetY: y,
+                    tickOffsetX: Math.random() * 1000,
+                    initialRadius: .05
                 })
             }
         }
