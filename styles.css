@@ -202,6 +202,10 @@ p, a {
     white-space:pre;
     display: inline;
 }
+.profile-container {
+    display:flex;
+    column-gap:16px;
+}
 .poem-card {
     width:calc(100% - 32px);
     height:64px;
@@ -356,6 +360,10 @@ p, a {
         transform: translate(-50% -50%) !important;
         overflow-y: scroll !important;
     }
+
+    .profile-container {
+        flex-direction: column-reverse;
+    }    
 }
 
 @media screen and (orientation:landscape) {
