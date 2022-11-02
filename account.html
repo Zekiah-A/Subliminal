@@ -284,7 +284,7 @@
 	}
 
 	function confirmFail() {
-		if (confirm("Failed to load account profile data\nLogging out may fix such errors, proceed to logout?\If yes, press OK, else Cancel.")) {
+		if (confirm("Failed to load account profile data\nLogging out may fix such errors, proceed to logout?\nIf yes, press OK, else Cancel.")) {
 			localStorage.removeItem("accountCode")
 			localStorage.removeItem("accountGuid")
 		}
@@ -302,7 +302,7 @@
 			body: '"' + localStorage.accountCode + '"'
 		})
 		.then((signinResponse) => {
-			if (!signinResponse.ok) confirmFail()
+			if (!signinResponse.ok) { confirmFail(); return }
 			return signinResponse.json() 
 		})
 		.then((signinObject) => {
