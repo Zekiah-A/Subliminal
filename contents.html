@@ -535,13 +535,22 @@
       setTimeout(() => { purgatoryFlex.children[0].classList.remove("entry-new") }, 800)
     }
 
+    function confirmFail(e) {
+      alert("Failed to load account data " + e)
+      localStorage.removeItem("accountCode")
+      localStorage.removeItem("accountGuid")
+	  }
+
     async function signup(penName) {
       fetch("https://server.poemanthology.org:81/Signup", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: '"' + penName + '"'
       })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) { confirmFail("signup response was denied."); return }
+        return response.json()
+      })
 		  .then((data) => {
         let dataObject = JSON.parse(data)
         localStorage.accountCode = dataObject.code
@@ -561,6 +570,7 @@
         
         showMyAccount()
       })
+      .catch((e) => confirmFail(e))
     }
 
     //Impossible to log in without code, GUID can be retrieved though
@@ -570,12 +580,16 @@
         headers: { 'Content-Type': 'application/json' },
         body: '"' + code + '"'
       })
-      .then((signinResponse) => signinResponse.json())
+      .then((signinResponse) => {
+        if (!response.ok) { confirmFail("signin response was denied."); return }
+        return signinResponse.json()
+      })
       .then((signinData) => {
         localStorage.accountCode = signinData.code
         localStorage.accountGuid = signinData.guid
         showMyAccount()
       })
+      .catch((e) => confirmFail(e))
     }
 
     function showMyAccount() {

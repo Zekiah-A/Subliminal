@@ -283,6 +283,13 @@
 		})
 	}
 
+	function confirmFail() {
+		if (confirm("Failed to load account profile data\nLogging out may fix such errors, proceed to logout?\If yes, press OK, else Cancel.")) {
+			localStorage.removeItem("accountCode")
+			localStorage.removeItem("accountGuid")
+		}
+	}
+
 	async function initialise() {
 		if (!localStorage.accountCode) {
 			alert("You don't seem to have an account here, so this page won't be of much use ;(\n Head over to the contents page to create one.")
@@ -294,7 +301,10 @@
 			headers: { 'Content-Type': 'application/json' },
 			body: '"' + localStorage.accountCode + '"'
 		})
-		.then((signinResponse) => signinResponse.json())
+		.then((signinResponse) => {
+			if (!signinResponse.ok) confirmFail()
+			return signinResponse.json() 
+		})
 		.then((signinObject) => {
 			profileName.textContent = signinObject.profile?.penName || "Nameless"
 			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
@@ -305,6 +315,7 @@
 			setProfileBadges(signinObject.profile?.badges)
 			data = signinObject
 		})
+		.catch((e) => confirmFail())
 	}
 
 	initialise()
