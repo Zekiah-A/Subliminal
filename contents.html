@@ -581,7 +581,7 @@
         body: '"' + code + '"'
       })
       .then((signinResponse) => {
-        if (!response.ok) { confirmFail("signin response was denied."); return }
+        if (!signinResponse.ok) { confirmFail("signin response was denied."); return }
         return signinResponse.json()
       })
       .then((signinData) => {
