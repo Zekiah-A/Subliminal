@@ -585,7 +585,7 @@
         return signinResponse.json()
       })
       .then((signinData) => {
-        localStorage.accountCode = signinData.code
+        localStorage.accountCode = code
         localStorage.accountGuid = signinData.guid
         showMyAccount()
       })
