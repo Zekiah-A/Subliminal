@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace SubliminalServer;
 
 public record PurgatoryEntry
@@ -6,15 +8,17 @@ public record PurgatoryEntry
     string? Tags  = null,
     bool? CWarning  = null,
     string? CWarningAdditions  = null,
-    string? PoemName  = null,
-    string? PoemAuthor  = null,
-    string? PoemContent  = null,
     string? PageStyle  = null,
     string? PageBackground  = null,
     bool? Amends = null
 )
 {
-    //Server only changeable - does not need to be serialisable
+    // Parts of an entry that is modifiable & necessary, serialiseable
+    [JsonInclude] public string PoemName { get; set; }
+    [JsonInclude] public string PoemContent { get; set; }
+    [JsonInclude] public string PoemAuthor { get; set; }
+
+    // Server only changeable - does not need to be serialisable
     public string AuthorGuid { get; set; }
     public string Guid { get; set; }
     public int Approves { get; set; }

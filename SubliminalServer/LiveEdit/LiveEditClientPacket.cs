@@ -1,16 +1,14 @@
 namespace SubliminalServer.LiveEdit;
 
-public enum LiveEditPacket
+/// <summary>
+/// Packets sent by client that server may loop onto other clients
+/// </summary>
+public enum LiveEditClientPacket
 {
-    PoemData,
     JoinSession,
     CursorPosition,
     Insertion,
     Deletion,
     Comment,
-    SetText,
     FormatText,
-    ClientJoinSession,
-    ClientLeaveSession,
-    ErrorMessage
 }
