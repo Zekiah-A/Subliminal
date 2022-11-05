@@ -1,0 +1,4 @@
+[submodule "SubliminalServer/WatsonWebsocketPlus"]
+	path = SubliminalServer/WatsonWebsocketPlus
+	url = git@github.com:Zekiah-A/WatsonWebsocketPlus.git
+	branch = plus

@@ -1,6 +1,6 @@
 namespace SubliminalServer;
 
-public class WebsocketServer
+public class SoundsSocketServer
 {
     //var websocketServer = new WatsonWsServer("localhost", 1234, false);
     //var clients = new Dictionary<string, Client>();

@@ -1,6 +1,6 @@
 namespace SubliminalServer;
 
-public enum ServerPackets
+public enum SoundsServerPackets
 {
     StartPlay = 0,
     EndPlay,

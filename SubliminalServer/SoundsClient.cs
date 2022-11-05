@@ -1,8 +1,8 @@
 namespace SubliminalServer;
 
-public record Client
+public record SoundsClient
 {
     public string HostUniqueId;
-    public List<Client>? Zombies;
+    public List<SoundsClient>? Zombies;
     public bool IsZombie;
 }
