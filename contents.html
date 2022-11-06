@@ -569,13 +569,15 @@
     }
 
     async function addPurgatoryEntries(filter) {
+        let entryTemplate = await (await fetch("./Other/purgatory-entry-template")).text()
+
         if (filter != "all") {
             purgatoryGrid.style.display = "none"
             purgatoryFlex.style.display = "flex"
 
             while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
             let entries = await (await fetch("https://server.poemanthology.org:81/" + (filter == "new" ? "PurgatoryNew" : "PurgatoryPicks"))).json()
-            for (let entry of entries) { await appendEntry(entry, purgatoryFlex) }
+            for (let entry of entries) { await appendEntry(entry, purgatoryFlex, entryTemplate) }
         }
         else {
             purgatoryFlex.style.display = "none"
@@ -583,7 +585,7 @@
 
             while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
             let entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
-            for (let entry of entries) { await appendEntry(entry, purgatoryGrid) }
+            for (let entry of entries) { await appendEntry(entry, purgatoryGrid, entryTemplate) }
         }
 
         if (!params.get("purgatorynew") || !purgatoryFlex.children[0]) return
@@ -595,10 +597,9 @@
         }, 800)
     }
 
-    async function appendEntry(entry, element) {
-        let entryTemplate = await (await fetch("./Other/purgatory-entry-template")).text()
+    async function appendEntry(entry, element, template) {
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
-        let newE = stringToHtml(entryTemplate.valueOf())
+        let newE = stringToHtml(template.valueOf())
         newE.setAttribute("guid", entryData?.guid)
         newE.querySelector("#_poemPreview").textContent = (
             entryData.poemContent?.substring(0, 56)

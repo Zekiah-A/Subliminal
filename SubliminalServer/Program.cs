@@ -112,7 +112,7 @@ httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
 });
 
 httpServer.MapGet("/PurgatoryPicks", async () =>
-    Results.Json(await File.ReadAllLinesAsync(purgatoryPicksFile.FullName))
+    await File.ReadAllLinesAsync(purgatoryPicksFile.FullName)
 );
 
 httpServer.MapGet("/PurgatoryNew", () =>
@@ -135,7 +135,7 @@ httpServer.MapGet("/PurgatoryAll", () =>
 
 
 httpServer.MapGet("/Purgatory/{guid}", async (string guid) =>
-    Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)))
+    await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
 );
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
