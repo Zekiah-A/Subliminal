@@ -567,7 +567,7 @@
 
             while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
             let entries = await (await fetch("https://server.poemanthology.org:81/" + (filter == "new" ? "PurgatoryNew" : "PurgatoryPicks"))).json()
-            for (let entry of entries) { appendEntry(entry, purgatoryFlex) }
+            for (let entry of entries) { await appendEntry(entry, purgatoryFlex) }
         }
         else {
             purgatoryFlex.style.display = "none"
@@ -575,7 +575,7 @@
 
             while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
             let entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
-            for (let entry of entries) { appendEntry(entry, purgatoryGrid) }
+            for (let entry of entries) { await appendEntry(entry, purgatoryGrid) }
         }
 
         if (!params.get("purgatorynew") || !purgatoryFlex.children[0]) return
@@ -587,12 +587,13 @@
         }, 800)
     }
 
-    function appendEntry(entry, element) {
+    async function appendEntry(entry, element) {
         let entryTemplate = await (await fetch("./Other/purgatory-entry-template")).text()
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
         let newE = stringToHtml(entryTemplate.valueOf())
         newE.setAttribute("guid", entryData?.guid)
-        newE.querySelector("#_poemPreview").textContent = (entryData.poemContent?.substring(0, 56)
+        newE.querySelector("#_poemPreview").textContent = (
+            entryData.poemContent?.substring(0, 56)
             .replace(/<[^>]*>?/gm, " ")
             .replace(/\s+/g, " ")
             .trim()
