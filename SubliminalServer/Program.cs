@@ -128,6 +128,7 @@ httpServer.MapGet("/PurgatoryNew", () =>
 httpServer.MapGet("/PurgatoryAll", () =>
     Directory.GetFiles(purgatoryDir.Name)
         .Select(file => new FileInfo(file))
+        .Where(file => file.Name != purgatoryPicksFile.Name)
         .Reverse()
         .Select(file => file.Name)
         .ToArray()
