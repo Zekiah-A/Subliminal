@@ -165,12 +165,13 @@
             margin: 8px;
         }
 
-        #filtersBar>div {
+        #filtersBar > div {
             border-radius: 32px;
             padding: 1px;
+            position: relative;
         }
 
-        #filtersBar>div>div {
+        #filtersBar > div > div {
             padding-left: 12px;
             padding-right: 12px;
             padding-top: 4px;
@@ -179,6 +180,11 @@
             border-radius: 32px;
             user-select: none;
             pointer-events: none;
+        }
+
+        #filtersBar > div:hover .button-tooltip {
+            pointer-events: all;
+            opacity: 1;
         }
 
         .sounds-button {
@@ -202,15 +208,15 @@
             height: unset;
         }
 
-        #login[currentpage="signin"]>#loginSignin {
+        #login[currentpage="signin"] > #loginSignin {
             display: block !important;
         }
 
-        #login[currentpage="signup"]>#loginSignup {
+        #login[currentpage="signup"] > #loginSignup {
             display: block !important;
         }
 
-        #login[currentpage="code"]>#loginCode {
+        #login[currentpage="code"] > #loginCode {
             display: block !important;
         }
 
@@ -299,12 +305,15 @@
     <div id="filtersBar">
         <div onclick="addPurgatoryEntries('new')">
             <div>New</div>
+            <tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
         </div>
         <div onclick="addPurgatoryEntries('picks')">
             <div>Picks</div>
+            <tooltip class="button-tooltip">The best of the best - These are the poems we reccomend you should check out!</tooltip>
         </div>
         <div onclick="addPurgatoryEntries('all')">
             <div>All</div>
+            <tooltip class="button-tooltip">Every poem in the purgatory! Be warned: The list may be quite long...</tooltip>
         </div>
     </div>
     <div id="purgatoryFlex">
