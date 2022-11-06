@@ -570,14 +570,14 @@
         //Load up amendment poem
         let currentJson = await fetchPathJson(amend)
         originalContent.innerHTML = currentJson.poemContent || ""
-        currentJson.amends = path
+        currentJson.amends = amend
         load(currentJson)
     }
 
     async function editMode() {
         loadPoemPopup.style.display = 'none'
         let currentJson = await fetchPathJson(edit)
-        currentJson.edits = path
+        currentJson.edits = edit
         load(currentJson)
     }
 
