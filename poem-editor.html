@@ -512,6 +512,7 @@
         }
     }
 
+
     function signCanvasDown(e) {
         let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
@@ -566,6 +567,7 @@
         loadDiv.innerText = "Loading poems is disabled, as you are in poem amendment mode."
         originalContent.style.display = "block"
         originalContent.style.top = content.offsetTop + "px"
+        originalContent.style.maxWidth = content.offsetWidth + "px"
 
         //Load up amendment poem
         let currentJson = await fetchPathJson(amend)
@@ -589,6 +591,11 @@
         for (let button of formattingToolbar.children) {
             button.style.background = 'radial-gradient(at left ' + (event.screenX - button.offsetLeft) + 'px top ' + (event.screenY - button.offsetTop) + 'px, darkgray, white)'
         }
+    })
+
+    this.addEventListener('resize', event => {
+        originalContent.style.top = content.offsetTop + "px"
+        originalContent.style.maxWidth = content.offsetWidth + "px"
     })
 </script>
 </html>
