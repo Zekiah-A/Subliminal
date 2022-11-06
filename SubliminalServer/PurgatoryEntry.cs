@@ -27,6 +27,8 @@ public record PurgatoryEntry
     public string DateCreated { get; set; }
     
     public List<PurgatoryAnnotation> Annotations { get; set; }
+    
+    public List<string> AuthorisedEditors { get; set; }
 }
 
 /* Never modified by client, only used internally

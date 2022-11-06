@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using WatsonWebsocket;
@@ -10,13 +11,18 @@ namespace SubliminalServer.LiveEdit;
 /// </summary>
 public class LiveEditSocketServer
 {
-    private WatsonWsServer app = new("localhost", 1234, false);
+    private WatsonWsServer app;
     // List of draft guids + draft poem data that currently have clients connected
-    private Dictionary<string, PurgatoryDraftEntry> sessions = new();
+    private Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();
     private Dictionary<ClientMetadata, LiveEditClient> clients = new();
 
-    private readonly DirectoryInfo draftsDir = new("./Drafts");
+    private readonly DirectoryInfo draftsDir = new(@"Drafts");
 
+    public LiveEditSocketServer(int port, bool ssl) //X509Certificate cert, X509Certificate key
+    {
+        app = new WatsonWsServer("localhost", port, ssl);
+    }
+    
     public async Task Start()
     {
         //In the server's eyes, client does not exist until it has sent a join session packet, therefore no onconnect handler.
@@ -44,7 +50,7 @@ public class LiveEditSocketServer
                     if (!sessions.Keys.Contains(draftGuid))
                     {
                         await using var openStream = File.OpenRead(Path.Join(draftsDir.Name, draftGuid));
-                        var draftData = await JsonSerializer.DeserializeAsync<PurgatoryDraftEntry>(openStream, Utils.DefaultJsonOptions);
+                        var draftData = await JsonSerializer.DeserializeAsync<PurgatoryAuthenticatedEntry>(openStream, Utils.DefaultJsonOptions);
                         if (draftData is null)
                         {
                             await DisconnectClient(args.Client, "Draft poem to edit does not exist.");
@@ -56,8 +62,8 @@ public class LiveEditSocketServer
                     
                     var clientGuid = await Account.GetGuid(code);
 
-                    //If client is authed in this draft's data, then we add them to the session
-                    if (!sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
+                    //If client is authed in this draft's data, or is literally the poem owner, then we allow them into the session
+                    if (!sessions[draftGuid].AuthorGuid.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
                     {
                         await DisconnectClient(args.Client, "You are not an authorised editor of this poem.");
                         return;

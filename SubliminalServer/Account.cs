@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace SubliminalServer;
 
@@ -58,5 +59,20 @@ public static class Account
         }
 
         return false;
+    }
+
+    public static async Task<AccountData> GetAccountData(string guid)
+    {
+        await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
+        var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, Utils.DefaultJsonOptions);
+        if (accountData is null) throw new NullReferenceException(nameof(accountData));
+        
+        return accountData;
+    }
+
+    public static async Task SaveAccountData(AccountData data)
+    {
+        await using var stream = new FileStream(Path.Join(accountsDir.Name, data.Guid), FileMode.Truncate);
+        await JsonSerializer.SerializeAsync(stream, data, Utils.DefaultJsonOptions);
     }
 }
