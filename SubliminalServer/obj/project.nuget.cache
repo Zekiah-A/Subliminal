@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GK5mEdxMAAhdu02Hi5nBFgBE93w2fit4OE+l7zmZlWrXDkl0QmIOl8H5faEZ0F2d8BCT092Q4rc0yMsh/t/Xjg==",
+  "dgSpecHash": "u/+7SagEugEunNZMXBF7OLD93s3uhwV0p33/gTv29Y8mCw6GdR9AoD1DYWU4V1Z6WLhwdfz4oNkfhwHagE60yw==",
   "success": true,
   "projectFilePath": "/home/zekiah/Subliminal/SubliminalServer/SubliminalServer.csproj",
   "expectedPackageFiles": [
@@ -17,7 +17,6 @@
     "/home/zekiah/.nuget/packages/system.buffers/4.5.1/system.buffers.4.5.1.nupkg.sha512",
     "/home/zekiah/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "/home/zekiah/.nuget/packages/system.text.encoding.codepages/6.0.0/system.text.encoding.codepages.6.0.0.nupkg.sha512",
-    "/home/zekiah/.nuget/packages/watsonwebsocket/3.0.1/watsonwebsocket.3.0.1.nupkg.sha512",
     "/home/zekiah/.nuget/packages/zxing.net/0.16.8/zxing.net.0.16.8.nupkg.sha512",
     "/home/zekiah/.nuget/packages/zxing.net.bindings.imagesharp.v2/0.16.14/zxing.net.bindings.imagesharp.v2.0.16.14.nupkg.sha512"
   ],

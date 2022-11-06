@@ -109,8 +109,8 @@ public class LiveEditSocketServer
                     {
                         var count = BinaryPrimitives.ReadUInt32BigEndian(args.Data[6..10]);
 
-                        sessions[clients[args.Client].Session].PoemContent =
-                            sessions[clients[args.Client].Session].PoemContent.Remove((int) index, (int) count);
+                        sessions[sessionClient.Session].PoemContent =
+                            sessions[sessionClient.Session].PoemContent.Remove((int) index, (int) count);
                     }
                     
                     foreach (var other in ClientSessionMembers(sessionClient))

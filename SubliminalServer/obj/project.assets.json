@@ -162,15 +162,6 @@
           }
         }
       },
-      "WatsonWebsocket/3.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/WatsonWebsocket.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0/WatsonWebsocket.dll": {}
-        }
-      },
       "ZXing.Net/0.16.8": {
         "type": "package",
         "compile": {
@@ -487,28 +478,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "WatsonWebsocket/3.0.1": {
-      "sha512": "f5awyDWsRv+PwwLufwmQJ9+VGAR8Qv3F5ohbSd/emgmiV3f0+mJs0UTxxjhB1rire3h0y/jMFChhRd0eAoobfQ==",
-      "type": "package",
-      "path": "watsonwebsocket/3.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.md",
-        "lib/net461/WatsonWebsocket.dll",
-        "lib/net5.0/WatsonWebsocket.dll",
-        "lib/net5.0/WatsonWebsocket.xml",
-        "lib/net6.0/WatsonWebsocket.dll",
-        "lib/net6.0/WatsonWebsocket.xml",
-        "lib/netcoreapp3.1/WatsonWebsocket.dll",
-        "lib/netcoreapp3.1/WatsonWebsocket.xml",
-        "lib/netstandard2.1/WatsonWebsocket.dll",
-        "lib/netstandard2.1/WatsonWebsocket.xml",
-        "watson.png",
-        "watsonwebsocket.3.0.1.nupkg.sha512",
-        "watsonwebsocket.nuspec"
-      ]
-    },
     "ZXing.Net/0.16.8": {
       "sha512": "Cbbe+x7I7E+VJ0VxU1fPc7AktIw/9xea/ZY/fh38sXqTQ75LJp9ooGUjpzFqfpPfIKozAoXgJ4yvY4GzKpPBzQ==",
       "type": "package",
@@ -622,8 +591,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "BarCode >= 2022.10.9871",
-      "HtmlSanitizer >= 7.1.542",
-      "WatsonWebsocket >= 3.0.1"
+      "HtmlSanitizer >= 7.1.542"
     ]
   },
   "packageFolders": {
@@ -678,10 +646,6 @@
           "HtmlSanitizer": {
             "target": "Package",
             "version": "[7.1.542, )"
-          },
-          "WatsonWebsocket": {
-            "target": "Package",
-            "version": "[3.0.1, )"
           }
         },
         "imports": [
