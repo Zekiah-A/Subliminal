@@ -237,8 +237,7 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext c
         return Results.Problem("Could not sign in to retrieve account data.");
     }
     var guid = await Account.GetGuid(signinCode);
-    
-    return Results.Json(await File.ReadAllTextAsync(Path.Join(accountsDir.Name, guid)));
+    return Results.Json(await Account.GetAccountData(guid));
 });
 /*
 var ip = context.Connection.RemoteIpAddress?.ToString();
@@ -281,14 +280,9 @@ httpServer.MapPost("/UpdateAccountProfile", async (AccountAuthenticatedProfile p
 //Get public facing data for an account
 httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
 {
-    var target = Path.Join(accountsDir.Name, guid);
-    if (!File.Exists(target)) return Results.Problem($"Profile with account GUID {guid} does not exist.");
-    
-    await using var openStream = File.OpenRead(target);
-    var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, Utils.DefaultJsonOptions);
-    
-    //Only return profile, not private data
-    return accountData is null ? Results.Problem("Account data was null.") : Results.Json(accountData.Profile);
+    if (!Account.GuidIsValid(guid)) return Results.Problem($"Profile with account GUID {guid} does not exist.");
+    var accountData = await Account.GetAccountData(guid);
+    return Results.Json(accountData.Profile);
 });
 
 httpServer.Run();

@@ -61,6 +61,11 @@ public static class Account
         return false;
     }
 
+    public static bool GuidIsValid(string guid)
+    {
+        return File.Exists(Path.Join(accountsDir.Name, guid));
+    }
+
     public static async Task<AccountData> GetAccountData(string guid)
     {
         await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
