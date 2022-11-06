@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
+      <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
     </ItemGroup>
 
 </Project>
