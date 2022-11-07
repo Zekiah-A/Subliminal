@@ -420,7 +420,7 @@
 
         for (let h = 0; h < signCanvas.height; h++) {
             for (let w = 0; w < signCanvas.width; w++) {
-                let byteI = (Math.floor(w) / 8) * bufHeight
+                let byteI = (Math.floor(w / 8)) * bufHeight
                 let shiftI = w % 8
 
                 if (data[(w * 3) + h] == 0) buffer[byteI] &= 1 << shiftI
