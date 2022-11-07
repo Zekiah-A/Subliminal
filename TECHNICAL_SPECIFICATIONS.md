@@ -21,7 +21,7 @@ _________________________________
 This means that we must split the image into bytes, each 8 pixels across is one byte horizontally = signCanvas.width / 8, vertically = signCanvas.height, as the bytes are 1D. We then assign the pixel to it's respective byte and bity in that byte. This can then all be combined into a buffer which can be compactly saved on the server.
 
 **Limitations**
-Canvas has to be a multiple of 8 in width and height, else special byte operations would be necessary. We must convert back to unicode, as the server uses JSON, saving a bytearray as json has no advantage, as [ 128, 14, 26 ] as UTF-8 text is much more consuming than a garbled á or corrupted unicode char.
+Canvas has to be a multiple of 8 in width, else special byte operations would be necessary to wrap around the end of a row. We must convert back to unicode, as the server uses JSON, saving a bytearray as json has no advantage, as [ 128, 14, 26 ] as UTF-8 text is much more consuming than a garbled á or corrupted unicode char.
 
 ## The poem styling protocol
 This engine is responsible for providing a cross platform solution for rendering poems on subliminal with rich text features. It's function is to be as easy to integrate both into a poem rich text editor, with little intense string manipulation or calculation in order to display the correct styles, to be small, or easily compressable, to make poem loading and server storage quick, and to be easily decodable, into HTML or another alike markup language, by a poem styling engine implementation.
