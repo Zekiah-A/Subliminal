@@ -282,6 +282,7 @@
     const params = new URLSearchParams(document.location.search)
     const edit = params.get("edit")
     const amend = params.get("amend")
+    const decoder = new TextDecoder()
     let poemTags = []
 
     //Make user confirm that they want to leave the page.
@@ -413,8 +414,7 @@
     }
 
     function getSignCanvasBits() {
-        //Canvas has to be a multiple of 8 in width and height, else special byte operations would be necessary
-        let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height / 8
+        let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height
         let buffer = new Uint8Array(bufWidth * bufHeight)
         let data = ctx.getImageData(0, 0, signCanvas.width, signCanvas.height).data
 
@@ -432,9 +432,9 @@
 
     function uploadCurrent() {
         saveCurrent()
-        let signData = getSignCanvasBits()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
-        loadObject.signature = signData
+        //Converting back to utf8, because converitng a bytearray into JSON does not have any poisitive effects on storage
+        loadObject.signature = decoder.decode(getSignCanvasBits())
 
         upload(loadObject)
     }
