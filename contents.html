@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         .section-span {
-            font-size: small;
             cursor: pointer;
-            transition: height .5s;
         }
 
         .section-body {
@@ -31,9 +29,8 @@
         }
 
         .grid-sub-container {
-            display: grid;
-            grid-template-columns: 20% auto;
-            grid-gap: 2px;
+            display: flex;
+            flex-direction: row;
             border-radius: 8px;
             margin: 8px;
             padding: 8px;
@@ -225,6 +222,10 @@
                 grid-template-columns: auto;
             }
 
+            .grid-sub-container {
+                flex-direction: column;
+            }
+
             #purgatoryGrid {
                 grid-template-columns: auto auto;  
             }
@@ -327,7 +328,7 @@
         <div>
             <h3>Volume 1: (Phrenes and Memes)</h3>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-1')">War and Phrenics:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-1')">War and Phrenics:</p>
                 <div id="section-1" class="section-body">
                     <a href="./poem?path=/Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
                     <br>
@@ -358,7 +359,7 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-2')">Really Stupid Stuff:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-2')">Really Stupid Stuff:</p>
                 <div id="section-2" class="section-body">
                     <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
                     <br>
@@ -407,7 +408,7 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</p>
                 <div id="section-3" class="section-body">
                     <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
                     <br>
@@ -435,7 +436,7 @@
         <div>
             <h3>Volume 2: (Idiots and Revelations)</h3>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-4')">Idiots:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-4')">Idiots:</p>
                 <div id="section-4" class="section-body">
                     <a href="./poem?path=/Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
                     <br>
@@ -486,7 +487,7 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-5')">Sublime and Revelation:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-5')">Sublime and Revelation:</p>
                 <div id="section-5" class="section-body">
                     <a href="./poem?path=/Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
                     <br>
@@ -501,7 +502,7 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-6')">Tales and Tomes:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-6')">Tales and Tomes:</p>
                 <div id="section-6" class="section-body">
                     <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
                     <br>
@@ -513,7 +514,7 @@
             </div>
             <h3>Other stuff:</h3>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-6')">Copypastas:</span>
+                <p class="section-span" onclick="toggleCollapsed('section-6')">Copypastas:</p>
                 <div id="section-6" class="section-body">
                     <a href="Other/a-joke">1. A joke - By Zekiah</a>
                     <br>
@@ -522,7 +523,7 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <span class="section-span" onclick="toggleCollapsed('section-6')">Sussy songs</span>
+                <p class="section-span" onclick="toggleCollapsed('section-6')">Sussy songs</p>
                 <div id="section-6" class="section-body">
                     <a href="#">1. AQGay (Lyrics) - By Zekiah (as SussZ)</a>
                     <br>
