@@ -146,6 +146,15 @@
             margin-bottom: 4px;
         }
 
+        #loadDiv {
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+            max-height: 512px;
+            overflow: scroll;
+            height: 512px;
+        }
+
 
         @media screen and (orientation:portrait) {
             .text-tools {
@@ -169,6 +178,11 @@
 
             #formattingToolbar {
                 overflow-x: scroll;
+            }
+
+            #loadDiv {
+                height: auto;
+                max-height: calc(100% - 96px);
             }
         }
     </style>
@@ -195,9 +209,8 @@
 
     <div id="loadPoemPopup" class="popup" style="display: block;">
         <h2>Load poem:</h2>
-
-        <div id="loadDiv" style="display: flex;flex-direction: column;row-gap: 5px;max-height: 512px;overflow: scroll;height: 512px;"></div>
-        <div class="popup-button" onclick="loadPoemPopup.style.display =  'none';">Done</div>
+        <div id="loadDiv"></div>
+        <div class="popup-button" style="margin-top: 8px;" onclick="loadPoemPopup.style.display =  'none';">Done</div>
     </div>
 
     <div class="title-blur" style="z-index: 2;">
