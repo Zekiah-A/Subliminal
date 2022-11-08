@@ -135,9 +135,26 @@ httpServer.MapGet("/PurgatoryAll", () =>
 );
 
 
-httpServer.MapGet("/Purgatory/{guid}", async (string guid) =>
-    await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid))
-);
+httpServer.MapGet("/Purgatory/{guid}", async (string guid, string? code) =>
+{
+    if (code is null)
+    {
+        return Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)));
+    }
+
+    if (!await Account.CodeIsValid(code))
+    {
+        return Results.Problem("Account code was invalid");
+    }
+    
+    var profileBadges = (await Account.GetAccountData(await Account.GetGuid(code))).Profile.Badges;
+    if (profileBadges is null || !profileBadges.Contains(AccountBadge.Based))
+    {
+        return Results.Problem("Not authenticated to access this poem");
+    }
+    
+    return Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)));
+});
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
 {
