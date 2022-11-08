@@ -423,7 +423,10 @@
                 let byteI = Math.floor(w / 8) * bufHeight
                 let shiftI = w % 8
 
-                if (data[(w * 3) + (signCanvas.width * h)] == 255) buffer[byteI] &= 1 << shiftI
+                if (data[(w * 4) - 1 + (signCanvas.width * h)] == 255) {
+                    let mask = 1 << shiftI
+                    buffer[byteI] = buffer[byteI] & ~mask | (1 << shiftI) & mask
+                }
             }
         }
 
