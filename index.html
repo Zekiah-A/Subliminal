@@ -1,104 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Subliminal</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="3HzNFq1xj99Jk3fvQnbEuEwF25UjxEv9IEWx-eN4X54" />
-  <meta name="description" content="Probably the weirdest poetry anthology to ever exist. This site is a spin-off of traditional poetic anthologies, intended to bring maximum humour.">
-  <meta name="keywords" content="Poetry, Anthology, Subliminal, Methallyne blue, Poem">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .fixed {
-      vertical-align: middle;
-      text-align: center;
-      height: calc(100% - 40px);
-      width: 100%;
-      overflow:scroll;
-      margin-bottom: 5px;
-      scroll-behavior: smooth;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      border-radius: 2px;
-      transition: width 0.5s;
-    }
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="3HzNFq1xj99Jk3fvQnbEuEwF25UjxEv9IEWx-eN4X54" />
+    <meta name="description" content="Probably the weirdest poetry anthology to ever exist. This site is a spin-off of traditional poetic anthologies, intended to bring maximum humour.">
+    <meta name="keywords" content="Poetry, Anthology, Subliminal, Methallyne blue, Poem">
+    <link rel="stylesheet" href="styles.css">
+    <script src="header.js"></script>
+    <style>
+        .fixed {
+            vertical-align: middle;
+            text-align: center;
+            height: calc(100% - 40px);
+            width: 100%;
+            overflow: scroll;
+            margin-bottom: 5px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
 
-    .fixed:has(a > #advert3:target) {
-      width: 128%;
-    }
+        .fixed:has(a > #advert3:target) {
+            width: 128%;
+        }
 
-    .fixed::-webkit-scrollbar {
-      display: none;
-    }
+        .fixed::-webkit-scrollbar {
+            display: none;
+        }
 
-    .fixed-container {
-      position: fixed;
-      top: 30%;
-      left: 65%;
-      height: 46vh;
-      width: 18vh;
-    }
+        .fixed-container {
+            position: fixed;
+            top: 30%;
+            left: 65%;
+            height: 46vh;
+            width: 18vh;
+        }
 
-    .slide-link {
-      text-decoration: none;
-      padding: 2px 6px 2px 6px;
-      color: rgb(50, 50, 50);
-      background-color: #eeeeee;
-      border: 1px solid rgb(50, 50, 50);
-      border-radius: 2px;
-    }
+        .slide-link {
+            text-decoration: none;
+            padding: 2px 6px 2px 6px;
+            color: rgb(50, 50, 50);
+            background-color: #eeeeee;
+            border: 1px solid rgb(50, 50, 50);
+            border-radius: 2px;
+        }
 
-    @media(prefers-color-scheme: dark) {
-      .index-image {
-        filter: invert(1)
-      }
-    }
+        @media(prefers-color-scheme: dark) {
+            .index-image {
+                filter: invert(1)
+            }
+        }
 
-    @media screen and (orientation:portrait) {
-      .fixed-container {
-        left: auto;
-        right: 32px;
-      }
-    }
-  </style>
+        @media screen and (orientation:portrait) {
+            .fixed-container {
+                left: auto;
+                right: 32px;
+            }
+        }
+    </style>
 </head>
- 
+
 <body>
-  <div class="div-centre">
-    <h1>Subliminal</h1>
-    <p>The methallyne blue analogy of stuff.</p>
-    
-    <p>Probably the weirdest poetry anthology to ever exist.</p>
+    <div class="div-centre">
+        <h1>Subliminal</h1>
+        <p>The methallyne blue analogy of stuff.</p>
 
-    <img class="index-image" src="Resources/AbbstrakDog.png" width="70%" height="70%" alt="Dog">
+        <p>Probably the weirdest poetry anthology to ever exist.</p>
 
-    <p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup> <sub>f</sub> <sup>f</sup>  <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
+        <img class="index-image" src="Resources/AbbstrakDog.png" width="70%" height="70%" alt="Dog">
 
-    <a href="contents">-> Contents</a> <br>
-    <a href="dictionary">-> Dictionary</a> <br>
-    <a href="disclaimer">-> *Disclaimer*</a>
-  </div>
+        <p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup>
+            <sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
 
-  <div class="fixed-container">
-    <div class="fixed">
-      <a href="https://rplace.tk">
-        <img id="advert1" alt="A fun game to play in your free time" src="Resources/Advert2.png" style="height: 100%; width: 100%;">
-      </a>
-      <a href="https://discord.gg/juhqU5ETtT">
-        <img id="advert2" alt="An interesting discord server" src="Resources/Advert1.png" style="height: 100%; width: 100%;">
-      </a>
-      <a href="https://poemanthology.org">
-        <video id="advert3" autoplay="true" loop="true" muted="true" height="100%">
-          <source src="Resources/Advert3.webm" type="video/webm">
-          ERROR: Your browser sucks and can't play the advert that is supposed to be here...
-        </video>
-      </a>
+        <a href="contents">-> Contents</a> <br>
+        <a href="dictionary">-> Dictionary</a> <br>
+        <a href="disclaimer">-> *Disclaimer*</a>
     </div>
-    <a class="slide-link" href="#advert1">1</a>
-    <a class="slide-link" href="#advert2">2</a>
-    <a class="slide-link" href="#advert3">3</a>
-  </div>
 
+    <div class="fixed-container">
+        <div class="fixed">
+            <a href="https://rplace.tk">
+                <img id="advert1" alt="A fun game to play in your free time" src="Resources/Advert2.png"
+                    style="height: 100%; width: 100%;">
+            </a>
+            <a href="https://discord.gg/juhqU5ETtT">
+                <img id="advert2" alt="An interesting discord server" src="Resources/Advert1.png"
+                    style="height: 100%; width: 100%;">
+            </a>
+            <a href="https://poemanthology.org">
+                <video id="advert3" autoplay="true" loop="true" muted="true" height="100%">
+                    <source src="Resources/Advert3.webm" type="video/webm">
+                </video>
+            </a>
+        </div>
+    </div>
 </body>
- 
-</html> 
+<script>initialiseHeader()</script>
+</html>
