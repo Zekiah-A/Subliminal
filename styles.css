@@ -45,6 +45,73 @@ button[disabled], input[disabled] {
     pointer-events: none;
 }
 
+/*Main page navigation header*/
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100%);
+    backdrop-filter: blur(5px);
+    background: transparent;
+    z-index: 3;
+}
+
+header > div {
+    display: flex;
+    column-gap: 16px;
+    margin: 2px;
+    margin-left: 16px;
+    margin-right: 16px;
+    height: 48px;
+}
+
+header p {
+    flex-grow: 1;
+    text-align: end;
+    margin: 0px;
+    align-self: center;
+    font-style: italic;
+    opacity: 0.6;
+}
+
+header a {
+    align-self: center;
+    white-space: nowrap;
+}
+
+header img {
+    align-self: center;
+}
+
+/*TODO: Move to main portrait area*/
+@media (orientation: portrait) {
+    header p {
+        display: none;
+    }
+
+    header h1 {
+        display: none;
+    }
+
+    header img {
+        width: 64px;
+        height: 64px;
+    }
+
+    header {
+        height: 72px;
+    }
+
+    header a {
+        font-size: 3vw;
+    }
+
+    header > div {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}
+
 /*Header bar*/
 .title-blur {
     position: relative;
