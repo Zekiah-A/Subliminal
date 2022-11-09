@@ -71,8 +71,30 @@
             margin-left: 5%;
             margin-right: 5%;
             align-self: center;
+            column-gap: 16px;
         }
 
+        /*Special bottom section code*/
+        .section-double {
+            flex-direction: row;
+            background: transparent;
+        }
+
+        .section-double > div {
+            /*max-height: 256px;
+            height: 256px;*/
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .section-double > div > img, video {
+            width: 180px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Relatable-s messages */
         .section-info {
             margin-left: 5%;
             margin-right: 5%;
@@ -80,6 +102,7 @@
             margin-bottom: 128px;
         }
 
+        /*TODO: Mobile*/
         .presenter-container {
             display: flex;
             flex-direction: column;
@@ -122,10 +145,32 @@
         }
 
         #poemProcessSubInfo > div {
-            background-color: var(--button-opaque);
+            background-color: var(--panel-transparent);
             padding: 8px;
             border-radius: 8px;
             height: 120px;
+            min-width: 112px;
+        }
+
+        #topBackground {
+            position: absolute;
+            z-index: -1;
+            left: 0px;
+            top: 0px;
+        }
+
+        #topBackground > img {
+            width: 100%;
+        }
+
+        #topBackground::after {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--background-opaque) 90%);
+            content: "";
         }
 
         @media(prefers-color-scheme: dark) {
@@ -142,7 +187,10 @@
 
             .section {
                 flex-direction: column-reverse;
+            }
 
+            .section-double {
+                row-gap: 16px;
             }
 
             .presenter-container {
@@ -155,6 +203,8 @@
 </head>
 
 <body>
+    <div id="topBackground"><img src="Resources/TopBackground.webp"></div>
+
     <div class="div-centre">
         <br><br><br>
         <p class="profile-title">Subliminal</p>
@@ -200,7 +250,7 @@
                         ...
                     </p>
                 </div>
-                <span clas="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</span>
+                <span class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</span>
             </div>
         </div>
 
@@ -221,7 +271,7 @@
                 <div class="presenter">
                     <img src="Resources/AccountProfile.png" style="filter: saturate(0.5);">
                 </div>
-                <span class="presenter-caption">You can acess 99% of site features without an account. But if you really want to become a renowned writer, then making an account is well.... Sublime.</span>
+                <span class="presenter-caption">Creating a profile for yourself is as cool as it can get!</span>
             </div>
 
             <div style="flex-grow: 1;">
@@ -241,23 +291,27 @@
                 <div style="margin-top: 8px;"><p>A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
                 <div style="margin-top: -12px;"><p>Finally completed poem! Sign a breath of relief.</p></div>
                 <div style="margin-top: 16px;"><p>Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
-                <div style="height: 120px;"><p>Back to step 1.</p></div>
             </div>            
             <div style="padding-left: 32px;">
                 <p style="margin-left: 12px;">-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</p>
                 <p style="margin-left: 12px;">-> That's why subliminal provides a  community where people can share and grow, so we can all can write the poems that future generations will be tortured with in class one day.</p>
             </div>
+            <br>
+            <p style="margin-left: 12px;">Poetry may not solve your crippling internet addiction, but it's a step in the right direction!</p>
         </div>
 
         <p style="padding-left: 5%;" class="profile-title">Other stuff</p>
-        <div id="otherSection" style="display: flex; flex-direction: row; column-gap: 16px; margin-left: 5%; margin-right: 5%; align-self: center;">
-            <div style="position: relative; display: flex;flex-direction: row;border-radius: 8px;background-color: var(--button-transparent);padding: 8px;align-self: center; max-height: 256px; column-gap: 16px;">
+        <div id="otherSection" class="section section-double">
+            <div class="section">
                 <img alt="A fun game to play in your free time" src="Resources/Advert2.png">
-                <div style="flex-grow: 1"><p>Rplace.tk a game by Zekiah-A and BlobKat, based on a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p></div>
+                <div style="flex-grow: 1">
+                    <p>Rplace.tk, a spinoff of the reddit place event!</p>
+                    <p>a game by Zekiah-A and BlobKat, based on a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
+                </div>
             </div>
 
-            <div style="position: relative; display: flex;flex-direction: row;border-radius: 8px;background-color: var(--button-transparent);padding: 8px;align-self: center; max-height: 256px; column-gap: 16px;">
-                <video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true" style="width: 200px; object-fit: fill;">
+            <div class="section">
+                <video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
                     <source src="Resources/Advert3.webm" type="video/webm">
                 </video>       
                 <div style="flex-grow: 1">
