@@ -374,6 +374,7 @@ p, a {
 
     header a {
         /*font-size: 3.4vw;*/
+        font-size: 4vw;
         flex: 1 1 auto;
         white-space: nowrap;
         overflow: hidden;
