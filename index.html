@@ -210,8 +210,9 @@
     function handleElementsIntersect(entries, observer) {
         entries.forEach(entry => {
             //entry.target.style.opacity = entry.intersectionRatio
-            entry.stye.classList.add("scroll-unseen")
+            entry.style.classList.add("scroll-unseen")
             entry.style.classList.add("scroll-in")
+            observer.unobserve(entry.target)
         })
     }
 
@@ -219,8 +220,8 @@
     initialiseHeader()
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleElementsIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-    for (let node of [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection]) {
-        observer.observe(node)
-    }
+    [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection].forEach((element) => {
+        observer.observe(element)
+    })
 </script>
 </html>
