@@ -6,8 +6,13 @@ async function initialiseHeader(customHtml = null) {
     }
     
     let header = stringToHtml(await (await fetch("./Other/header-template")).text())
+    
     if (customHtml) {
         header.getElementsByTagName("custom")[0].innerHTML = customHtml
     }
+    if (localStorage.accountCode) {
+        header.getElementsByTagName("account")[0].style.display = "flex"
+    }
+    
     document.body.appendChild(header)
 }
