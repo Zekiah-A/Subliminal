@@ -5,6 +5,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="./styles.css">
+   <script src="header.js"></script>
    <style>
 		.role-grid {
 			display: grid;
@@ -92,6 +93,7 @@
 	</div>
 	-->
 	<div class="div-centre">
+		<br><br><br>
 		<h1>Account</h1>		
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
@@ -318,6 +320,7 @@
 		.catch((e) => confirmFail())
 	}
 
+	initialiseHeader()
 	initialise()
 	console.log("%cYour account's data is held in browser local storage, a thing that can be acessed by putting code in this browser console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
 	console.log("%cTL;DR: Never put anything you do not understand here. Uncool things may happen.", "color: blue; font-size: x-large")
