@@ -60,6 +60,73 @@
             transition: 0.5s opacity, 0.5s transform; 
         }
 
+        /* Sections, below main style */
+
+        .section {
+            display: flex;
+            flex-direction: row;
+            border-radius: 8px;
+            background-color: var(--button-transparent);
+            padding: 8px;
+            margin-left: 5%;
+            margin-right: 5%;
+            align-self: center;
+        }
+
+        .section-info {
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 32px;
+            margin-bottom: 128px;
+        }
+
+        .presenter-container {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+        }
+
+        .presenter {
+            position: relative;
+            width: 100%; 
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .presenter img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .presenter  p {
+            position: absolute;
+            top: 0px;
+            left: 30%;
+            transform: rotateX(42deg) rotateY(-12deg) rotateZ(24deg) translate(-50%);
+            white-space: pre;font-size: 1.1vw;color: white;
+            opacity: 0.6;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            line-height: 1; font-weight: bolder;
+        }
+
+        .presenter-caption {
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        #poemProcessSubInfo {
+            display: flex;
+            column-gap: 4px;
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        #poemProcessSubInfo > div {
+            background-color: var(--button-opaque);
+            padding: 8px;
+            border-radius: 8px;
+            height: 120px;
+        }
 
         @media(prefers-color-scheme: dark) {
             .index-image {
@@ -71,6 +138,16 @@
             .fixed-container {
                 left: auto;
                 right: 32px;
+            }
+
+            .section {
+                flex-direction: column;
+            }
+
+            .presenter-container {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
             }
         }
     </style>
@@ -97,17 +174,17 @@
 
     <div style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
         <p style="padding-left: 5%;" class="profile-title">About Subliminal</p>
-        <div id="aboutSection" style="display: flex;flex-direction: row;border-radius: 8px;background-color: var(--button-transparent);padding: 8px;margin-left: 5%; margin-right: 5%; align-self: center;">
+        <div id="aboutSection" class="section">
            <div style="flex-grow: 1;">
                 <p>Not sure why you didn't read the description of the site above, but if you're really curious</p>
                 <p>Subliminal is an open source project to create the largest repository of poems in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
                 <p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
                 <p>As long as it's a poem, it's good enough for subliminal.</p>
             </div>
-            <div style="display: flex; flex-direction: column;width: 60%;">
-                <presenter style="position: relative; width: 100%; border-radius: 4px; overflow: hidden;">
-                    <img src="Resources/AlMogus.webp" style="width: 100%; height: 100%;">
-                    <p style="position: absolute; top: 0px; left: 30%; transform: rotateX(42deg) rotateY(-12deg) rotateZ(24deg) translate(-50%); white-space: pre;font-size: 1.1vw;color: white;opacity: 0.6; font-family: 'Comic Sans MS', 'Comic Sans', cursive; line-height: 1; font-weight: bolder;">
+            <div class="presenter-container">
+                <div class="presenter">
+                    <img src="Resources/AlMogus.webp">
+                    <p>
                         A long road to Al'mogus:<br>
                         Earth and Bones, old sticks and stones, <br>
                         Just one long road to Al'mogus. <br>
@@ -121,12 +198,12 @@
                         my back like a brick of lead. Yet I<br>
                         ...
                     </p>
-                </presenter> <!---->
-                <span style="opacity: 0.6;font-style: italic;">A long road to Al'mogus, a poem about human desire, by Zekiah.</span>
+                </div>
+                <span clas="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</span>
             </div>
         </div>
 
-        <div id="aboutInfo" style="margin-left: 5%; margin-right: 5%; margin-top: 32px; margin-bottom: 128px;">
+        <div id="aboutInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Did you know?</div>
             <div style="padding-left: 32px;">
                 <p>-> There are 100 poems already on the anthology, with more being added each day!</p>
@@ -138,12 +215,12 @@
         </div>
 
         <p style="padding-left: 5%;" class="profile-title">Get started</p>
-        <div id="getStartedSection" style="display: flex;flex-direction: row;border-radius: 8px;background-color: var(--button-transparent);padding: 8px;margin-left: 5%; margin-right: 5%; align-self: center; column-gap: 8px;">
+        <div id="getStartedSection" class="section">
             <div style="display: flex; flex-direction: column;width: 60%;">
                 <presenter style="position: relative; width: 100%; border-radius: 4px; overflow: hidden;">
-                <img src="Resources/AccountProfile.png" style="width: 100%; height: 100%; filter: saturate(0.5);">
-                </presenter> <!---->
-                <span style="opacity: 0.6;font-style: italic;">You can acess 99% of site features without an occunt. But if you really want to become a renowned writer, then making an account is well.... Sublime.</span>
+                    <img src="Resources/AccountProfile.png" style="filter: saturate(0.5);">
+                </presenter>
+                <span class="presenter-caption">You can acess 99% of site features without an account. But if you really want to become a renowned writer, then making an account is well.... Sublime.</span>
             </div>
 
             <div style="flex-grow: 1;">
@@ -153,31 +230,17 @@
             </div>
         </div>
 
-        <div id="getStartedInfo" style="margin-left: 5%; margin-right: 5%; margin-top: 32px; margin-bottom: 128px;">
+        <div id="getStartedInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
             <p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-            <div style="display: flex; column-gap: 4px; overflow-x: scroll; overflow-y: hidden;">
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px;">
-                    <p>Burst of inspiration at the most unexpected moment.</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px; margin-top: 12px;">
-                    <p>Spontaneous writing, tiring yourself out as you refine your work.</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px; margin-top: -4px;">
-                    <p>Writer's block.</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px; margin-top: 8px;">
-                    <p>A second hope, reading back on some previous works, you are motivated to finish what you started.</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px; margin-top: -12px;">
-                    <p>Finally completed poem! Sign a breath of relief.</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px; margin-top: 16px;">
-                    <p>Tell everyone! Have your teacher, friends, family, read and review your poem!</p>
-                </div>
-                <div style="background-color: var(--button-opaque); padding: 8px; border-radius: 8px; height: 120px;">
-                    <p>Back to step 1.</p>
-                </div>
+            <div id="poemProcessSubInfo">
+                <div><p>Burst of inspiration at the most unexpected moment.</p></div>
+                <div style="margin-top: 12px;"><p>Spontaneous writing, tiring yourself out as you refine your work.</p></div>
+                <div style="margin-top: -4px;"><p>Writer's block.</p></div>
+                <div style="margin-top: 8px;"><p>A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
+                <div style="margin-top: -12px;"><p>Finally completed poem! Sign a breath of relief.</p></div>
+                <div style="margin-top: 16px;"><p>Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
+                <div style="height: 120px;"><p>Back to step 1.</p></div>
             </div>            
             <div style="padding-left: 32px;">
                 <p style="margin-left: 12px;">-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</p>
@@ -212,7 +275,6 @@
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add("scroll-in")
-                //entry.target.style.opacity = entry.intersectionRatio observer.unobserve(entry.target)
             }
         })
     }
