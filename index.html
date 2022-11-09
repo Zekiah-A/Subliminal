@@ -207,10 +207,11 @@
      <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2022</p>
 </body>
 <script>
-    function handleElementsIntersect(elements, observer) {
-        entries.forEach(() => {
-            element.classList.add("scroll-unseen")
-            entry.classList.add("scroll-in")
+    function handleElementsIntersect(entries, observer) {
+        entries.forEach(entry => {
+            //entry.target.style.opacity = entry.intersectionRatio
+            entry.stye.classList.add("scroll-unseen")
+            entry.style.classList.add("scroll-in")
         })
     }
 
