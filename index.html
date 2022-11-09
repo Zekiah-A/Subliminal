@@ -49,6 +49,17 @@
             border-radius: 2px;
         }
 
+        .scroll-in {
+            opacity: 1;
+        }
+
+        .scroll-unseen {
+            opacity: 0;
+            transform: translateY(16px) scale(1.1);
+            transition: .2s opacity, .2s transform; 
+        }
+
+
         @media(prefers-color-scheme: dark) {
             .index-image {
                 filter: invert(1)
@@ -184,13 +195,31 @@
                 <video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true" style="width: 200px; object-fit: fill;">
                     <source src="Resources/Advert3.webm" type="video/webm">
                 </video>       
-                <div style="flex-grow: 1"><p>The best waste of money since buying an NFT - Help fund development of subliminal, and support me with my other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p></div>
+                <div style="flex-grow: 1">
+                    <p>The best waste of money since buying an NFT!</p>
+                    <p>Help fund development of subliminal, and support me with my other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
+                </div>
             </div>
         </div>
      </div>
-     
+
      <hr>
      <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2022</p>
 </body>
-<script>initialiseHeader()</script>
+<script>
+    function handleElementsIntersect(elements, observer) {
+        entries.forEach(() => {
+            element.classList.add("scroll-unseen")
+            entry.classList.add("scroll-in")
+        })
+    }
+
+    //Global code
+    initialiseHeader()
+    //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
+    let observer = new IntersectionObserver(handleElementsIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
+    for (let node of [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection]) {
+        observer.observe(node)
+    }
+</script>
 </html>
