@@ -62,7 +62,7 @@ header > div {
     margin: 2px;
     margin-left: 16px;
     margin-right: 16px;
-    height: 48px;
+    height: 64px;
 }
 
 header p {
@@ -70,7 +70,7 @@ header p {
     margin: 0px;
     font-style: italic;
     opacity: 0.6;
-    line-height: 48px;
+    line-height: 64px;
 }
 
 header a {
@@ -372,6 +372,7 @@ p, a {
     header > div {
         margin-left: 8px;
         margin-right: 8px;
+        height: 48px;
     }
 
     .searchbar {
