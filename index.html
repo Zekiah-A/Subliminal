@@ -114,6 +114,7 @@
             width: 100%; 
             border-radius: 4px;
             overflow: hidden;
+            user-select: none;
         }
 
         .presenter img {
@@ -193,6 +194,10 @@
                 row-gap: 16px;
             }
 
+            .presenter p {
+                font-size: 4vw;
+            }
+
             .presenter-container {
                 display: flex;
                 flex-direction: column;
@@ -216,11 +221,7 @@
         <img class="index-image" src="Resources/AbbstrakDog.png" width="70%" height="70%" alt="Dog">
 
         <p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup>
-            <sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
-
-        <a href="contents">-> Contents</a> <br>
-        <a href="dictionary">-> Dictionary</a> <br>
-        <a href="disclaimer">-> *Disclaimer*</a>
+        <sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
     </div>
 
     <div style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
@@ -236,7 +237,6 @@
                 <div class="presenter">
                     <img src="Resources/AlMogus.webp">
                     <p>
-                        A long road to Al'mogus:<br>
                         Earth and Bones, old sticks and stones, <br>
                         Just one long road to Al'mogus. <br>
                         Sandles, seared by the sun-struck path, <br>
