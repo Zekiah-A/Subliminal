@@ -79,13 +79,14 @@
             pointer-events: none;
         }
         .separator {
-            background: var(--text-colour);
+            background: transparent;
             width: 1px !important;
             min-width: 1px !important;
             border-radius: 0px !important;
             opacity: 0.1;
             margin-left: 8px;
             margin-right: 8px;
+            flex-grow: 1;
         }
 
         #poem-tags button {
@@ -193,6 +194,10 @@
                 height: calc(100% - 96px);
                 max-height: calc(100% - 96px);
             }
+
+            .separator {
+                background: var(--text-colour);
+            }
         }
     </style>
 </head>
@@ -242,10 +247,10 @@
             </div>
             <div><div>🖼️</div></div>
             <div class="separator"></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 72px;"><div>Page layout</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 72px;"><div>Background</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 72px;"><div>Rhyme suggestions</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 72px;"><div>Rhythm analyser</div></div>
+            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;"><div>Page layout ⯆</div></div>
+            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;"><div>Background ⯆</div></div>
+            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Rhyme finder ➕</div></div>
+            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Auto rhythm ➕</div></div>
         </div>
         <hr>
     </div>
