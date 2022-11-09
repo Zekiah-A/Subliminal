@@ -141,12 +141,13 @@
             }
 
             .section {
-                flex-direction: column;
+                flex-direction: column-reverse;
+
             }
 
             .presenter-container {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 width: 100%;
             }
         }
@@ -216,10 +217,10 @@
 
         <p style="padding-left: 5%;" class="profile-title">Get started</p>
         <div id="getStartedSection" class="section">
-            <div style="display: flex; flex-direction: column;width: 60%;">
-                <presenter style="position: relative; width: 100%; border-radius: 4px; overflow: hidden;">
+            <div class="presenter-container">
+                <div class="presenter">
                     <img src="Resources/AccountProfile.png" style="filter: saturate(0.5);">
-                </presenter>
+                </div>
                 <span class="presenter-caption">You can acess 99% of site features without an account. But if you really want to become a renowned writer, then making an account is well.... Sublime.</span>
             </div>
 
