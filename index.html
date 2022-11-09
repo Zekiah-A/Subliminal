@@ -50,13 +50,14 @@
         }
 
         .scroll-in {
-            opacity: 1;
+            opacity: 1 !important;
+            transform: unset !important;
         }
 
         .scroll-unseen {
             opacity: 0;
-            transform: translateY(16px) scale(1.1);
-            transition: .2s opacity, .2s transform; 
+            transform: translateY(64px) scale(1.1);
+            transition: 0.5s opacity, 0.5s transform; 
         }
 
 
@@ -209,19 +210,21 @@
 <script>
     function handleIntersect(entries, observer) {
         entries.forEach(entry => {
-            //entry.target.style.opacity = entry.intersectionRatio
-            entry.style.classList.add("scroll-unseen")
-            entry.style.classList.add("scroll-in")
-            observer.unobserve(entry.target)
+            if (entry.isIntersecting) {
+                entry.target.classList.add("scroll-in")
+                //entry.target.style.opacity = entry.intersectionRatio observer.unobserve(entry.target)
+            }
         })
     }
 
-    initialiseHeader()
+    //initialiseHeader()
 
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-    [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection].forEach((element) => {
+    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection]
+    obseravbles.forEach((element) => {
         observer.observe(element)
+        element.classList.add("scroll-unseen")
     })
 </script>
 </html>
