@@ -482,7 +482,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poemJson)
         }).then(res => {
-            if (!res.ok()) {
+            if (!res.ok) {
                 console.error("Cricical error in uploading" + res)
                 licenseAgreePopup.style.display = "none"
                 alert("Sorry! 😭\n\nFailed to upload poem to purgatory. Maybe try again...")
