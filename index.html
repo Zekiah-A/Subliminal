@@ -207,7 +207,7 @@
      <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2022</p>
 </body>
 <script>
-    function handleElementsIntersect(entries, observer) {
+    function handleIntersect(entries, observer) {
         entries.forEach(entry => {
             //entry.target.style.opacity = entry.intersectionRatio
             entry.style.classList.add("scroll-unseen")
@@ -216,10 +216,10 @@
         })
     }
 
-    //Global code
     initialiseHeader()
+
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
-    let observer = new IntersectionObserver(handleElementsIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
+    let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
     [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection].forEach((element) => {
         observer.observe(element)
     })
