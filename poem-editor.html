@@ -488,6 +488,7 @@
                 alert("Sorry! 😭\n\nFailed to upload poem to purgatory. Maybe try again...")
                 return
             }
+            
             console.log("Upload sucessful, redirecting.")
             window.onbeforeunload = () => {} 
             window.location.href = "./contents?purgatorynew=true"

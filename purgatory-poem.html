@@ -126,8 +126,13 @@ ___________________________________________________________
         fetch("https://server.poemanthology.org:81/PurgatoryRate", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(ratingObject) + localStorage.accountCode ? "\"" + localStorage.accountCode + "\"": ""
+            body: JSON.stringify(ratingObject)
         }).then(res => {
+            if (!res.ok) {
+                console.error("Failed to rate poem " + res)
+                alert("Failed to rate this poem, sorry! 😭\nMaybe try again...")
+                return
+            }
             alert('Rating success!')
             let ratingName = Object.keys(ratingType)
                 .find(key => ratingType[key] === rating)
