@@ -80,22 +80,19 @@ header a {
 
 header img {
     align-self: center;
-}
-
-header custom {
-    flex-grow: 1;
-}
-
-header > img {
     cursor: pointer;
     transition: .2s transform;
 }
 
-header > img:hover {
+header img:hover {
     transform: rotate(10deg) scale(1.5);
 }
-header > img:active {
+header img:active {
     transform: rotate(8deg) scale(1.1);
+}
+
+header custom {
+    flex-grow: 1;
 }
 
 #headerFrame {
