@@ -50,7 +50,8 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    width: calc(100%);
+    width: 100%;
+    max-width: 100%;
     backdrop-filter: blur(5px);
     background: transparent;
     z-index: 3;
@@ -372,13 +373,17 @@ p, a {
     }
 
     header a {
-        font-size: 3.4vw;
+        /*font-size: 3.4vw;*/
+        flex: 1 1 auto;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     header > div {
         margin-left: 8px;
         margin-right: 8px;
         height: 48px;
+        column-gap: 4px;
     }
 
     .searchbar {
