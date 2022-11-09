@@ -71,6 +71,7 @@ header p {
     font-style: italic;
     opacity: 0.6;
     line-height: 64px;
+    white-space: nowrap;
 }
 
 header a {
