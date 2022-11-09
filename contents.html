@@ -9,6 +9,7 @@
         content="The contents page of the weirdest poetry anthology to ever exist. Manage your account, and search for poems here.">
     <meta name="keywords" content="Poetry, Contents, Anthology, Subliminal, Search">
     <link rel="stylesheet" href="styles.css">
+    <script src="header.js"></script>
     <style>
         .section-span {
             cursor: pointer;
@@ -548,6 +549,7 @@
     <a href="./" class="back">
         <- Back</a>
 </body>
+<script></script>
 <script>
     const params = new URLSearchParams(document.location.search)
     let collapsedSections = new Set()
@@ -702,6 +704,7 @@
     }
 
     //Site scripts
+    initialiseHeader()
     addPurgatoryEntries("new")
 
     filtersBar.addEventListener("mousemove", event => {
