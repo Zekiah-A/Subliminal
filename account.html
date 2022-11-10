@@ -6,6 +6,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="./styles.css">
    <script src="header.js"></script>
+   <script src="account.js"></script>
    <style>
 		.role-grid {
 			display: grid;
@@ -54,14 +55,14 @@
 		<br>
 		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="8" oninput="setProfileRole(value)">
 		<br>
-		<div class="popup-button" onclick="profileRole.style.display = 'none'; updateProfile()">Done</div>
+		<div class="popup-button" onclick="profileRole.style.display = 'none'; updateProfileAction(actionType.UpdateRole, role)">Done</div>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
 	</div>
 	<div id="accountEmail" style="height: fit-content; width: 30%; display: none;" class="popup">
 		<h2>Enter your email:</h2>
 		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="8" oninput="setProfileEmail(value)">
 		<br>
-		<div class="popup-button" onclick="accountEmail.style.display = 'none'; updateProfile()">Done</div>
+		<div class="popup-button" onclick="accountEmail.style.display = 'none'; updateProfileAction(actionType.UpdateEmail, email)">Done</div>
 	</div>
 	<div id="accountNumber" style="height: fit-content; width: 30%; display: none;" class="popup">
 		<h2>Enter your phone number:</h2>
@@ -70,14 +71,14 @@
 			<input id="accountNumberInput" type="text" class="popup-input" style="flex-grow: 1; display: inline;" placeholder="0123456789">
 		</div>
 		<br>
-		<div class="popup-button" onclick="accountNumber.style.display = 'none'; setProfileNumber(accountCCodeInput.value + accountNumberInput.value); updateProfile()">Done</div>
+		<div class="popup-button" onclick="accountNumber.style.display = 'none'; setProfileNumber(accountCCodeInput.value + accountNumberInput.value); updateProfileAction(actionType.UpdateNumber, number)">Done</div>
 	</div>
 	<div id="profileAvatarUrl" style="height: fit-content; width: 40%; display: none;" class="popup"> <!--display: none;-->
 		<h2>Set profile image</h2>
 		<p>Enter image link:</p>
 		<input id="profileAvatarInput" type="text" placeholder="https://public.keskofiles.com/f/k-ruoka/product/7350126081371" style="width:calc(100% - 8px);display:block;line-height:200%">
 		<br>
-		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
+		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfileAction(actionType.UpdateAvatar, avatarUrl)">Done</div>
 	</div>
 	<!--
 	<div id="adminPanel" style="height: fit-content; width: 40%;" class="popup">
@@ -102,7 +103,7 @@
 		ACCOUNT GUID: ... | BADGE INDEX: ... | REMOVE OR ADD (remove/add): ...
 		POEM GUID: ... | REMOVE OR ADD (remove/add): ...
 		<br>
-		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); updateProfile()">Done</div>
+		<div class="popup-button">Done</div>
 		<p style="opacity:0.6;">Be responsible, never use admin privilages to suppress, grief, or cause other discord on the site. Always be impartial.</p>
 	</div>
 	-->
@@ -112,11 +113,11 @@
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
 			<div style="flex-direction:column">
-				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfile()" onkeydown="if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p><p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
+				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfileAction(actionType.UpdateName, profileName.textContent)" onkeydown="if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p><p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
 				<p style="width: min(442px, 100%); line-break: anywhere;" contenteditable="true" id="profileBiography" onkeydown="if (this.textContent.length >= 360) this.textContent = this.textContent.substring(0, 360);">Click here to start writing your bio!</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
-					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" onblur="updateProfile()">Planet of Earth, Milky Way</span></div>
-					<div>📌&nbsp;<span contenteditable="true" id="profilePinned" onblur="updateProfile()">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
+					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" onblur="updateProfileAction(actionType.UpdateLocation, profileLocation.textContent)">Planet of Earth, Milky Way</span></div>
+					<div>📌&nbsp;<span id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
 				</div>
 				<div id="profileBadges"></div>
 			</div>
@@ -196,7 +197,6 @@
 	let avatarUrl = ""
 	let number = ""
 	let email = ""
-	let data = {}
 
 
 	//TODO: Move all this to my custom profile template frame component
@@ -293,19 +293,17 @@
 	}
 
 	//We only send profile from the acocunt data to the server, fields outside profile requre a separate kind of request to modify
-	async function updateProfile() {
-		data.profile.penName = profileName.textContent || data.profile.penName
-		data.profile.biography = profileBiography.textContent || data.profile.biography
-		data.profile.location = profileLocation.textContent || data.profile.location
-		data.profile.role = role || data.profile.role
-		data.profile.pinnedPoems = profilePinned.textContent.split(", ") || []
-		data.profile.avatarUrl = avatarUrl || data.profile.avatarUrl
-		data.profile.code = localStorage.accountCode
+	async function updateProfileAction(type, actionValue) {
+		let accountAction = {
+			code: localStorage.accountCode,
+			actionType: type,
+			value: actionValue
+		}
 
-		fetch('https://server.poemanthology.org:81/UpdateAccountProfile', {
+		fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(data.profile)
+			body: JSON.stringify(accountAction)
 		})
 	}
 
@@ -339,7 +337,6 @@
 			setProfileRole(signinObject.profile?.role || "writer")
 			setProfileAvatar(signinObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
 			setProfileBadges(signinObject.profile?.badges)
-			data = signinObject
 		})
 		.catch((e) => confirmFail())
 	}
