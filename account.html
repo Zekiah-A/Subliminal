@@ -18,6 +18,20 @@
 			flex-direction: column;
 			row-gap: 16px;
 		}
+
+		#followingAccounts {
+			width: 100%;
+			display: grid;
+			grid-template-columns: 50%;
+			grid-gap: 8px;
+			margin-bottom: 16px;
+		}
+
+		@media screen and (orientation:portrait) {
+			#followingAccounts {
+				grid-template-columns: 100%;
+			}
+		}
    </style>
 </head>
 
@@ -127,6 +141,16 @@
 			Edit Phone Number
 			<div class="button-tooltip">Use 2FA with your account, and allow us to send you messages about account activity, or just send random sms funnnies</div>
 		</button>
+		<h2>Following:</h2>
+		<div id="followingAccounts">
+			<div class="following-card">
+				<img src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg">
+				<div>
+					<h4>Zekiah</h4>
+					<p class="poem-preview">✍️&nbsp;I live in a society. This is one of the sites ever, and I write some of the poems ever. I also run this ship (to the bottom of the ocean).</p>
+				</div>
+			</div>
+		</div>
 		<h2>Draft poems:</h2>
 		<div id="draftPoems">
 			<div class="poem-card">

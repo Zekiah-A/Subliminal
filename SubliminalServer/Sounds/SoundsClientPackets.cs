@@ -1,4 +1,4 @@
-namespace SubliminalServer;
+namespace SubliminalServer.Sounds;
 
 public enum SoundsClientPackets
 {

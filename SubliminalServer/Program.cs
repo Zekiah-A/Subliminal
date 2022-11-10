@@ -1,9 +1,10 @@
 using System.Globalization;
-using System.Net.Mime;
+using SubliminalServer.Account;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SubliminalServer;
+using SubliminalServer.AccountActions;
 using SubliminalServer.LiveEdit;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -80,11 +81,11 @@ var liveEditServer = new LiveEditSocketServer(1235, false);
 //TODO: Add ability for account ratings, fix undoapprove/vetologic and make it so that it is 1 per account too, with credential argument for rating.
 httpServer.MapPost("/PurgatoryRate", async (PurgatoryAuthenticatedRating rating) => {
     var target = Path.Join(purgatoryDir.Name, rating.Guid);
-    if (!File.Exists(target)) return;
+    if (!File.Exists(target)) return Results.Problem("Poem with GUID " + rating.Guid + " could not be found.");
     
     await using var openStream = File.OpenRead(target);
     var entry = await JsonSerializer.DeserializeAsync<PurgatoryEntry>(openStream, Utils.DefaultJsonOptions);
-    if (entry is null) return;
+    if (entry is null) return Results.Problem("Purgatory entry was null");
     
     entry.Approves = rating.Type switch
     {
@@ -102,6 +103,7 @@ httpServer.MapPost("/PurgatoryRate", async (PurgatoryAuthenticatedRating rating)
 
     await using var stream = new FileStream(target, FileMode.Truncate);
     await JsonSerializer.SerializeAsync(stream, entry, Utils.DefaultJsonOptions);
+    return Results.Ok();
 });
 
 httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
@@ -109,6 +111,7 @@ httpServer.MapGet("/PurgatoryReport/{guid}", (string guid) =>
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine($"WIP: Report function - Poem {guid} has been reported, please investigate!");
     Console.ResetColor();
+    return Results.Ok();
 });
 
 httpServer.MapGet("/PurgatoryPicks", async () =>
@@ -135,26 +138,9 @@ httpServer.MapGet("/PurgatoryAll", () =>
 );
 
 
-httpServer.MapGet("/Purgatory/{guid}", async (string guid, string? code) =>
-{
-    if (code is null)
-    {
-        return Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)));
-    }
-
-    if (!await Account.CodeIsValid(code))
-    {
-        return Results.Problem("Account code was invalid");
-    }
-    
-    var profileBadges = (await Account.GetAccountData(await Account.GetGuid(code))).Profile.Badges;
-    if (profileBadges is null || !profileBadges.Contains(AccountBadge.Based))
-    {
-        return Results.Problem("Not authenticated to access this poem");
-    }
-    
-    return Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)));
-});
+httpServer.MapGet("/Purgatory/{guid}", async (string guid) =>
+    Results.Json(await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, guid)))
+);
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
 {
@@ -208,7 +194,6 @@ httpServer.MapPost("/DraftsUpload", async (PurgatoryAuthenticatedEntry entry) =>
     
     //Link newly uploaded draft to account data
     var accountData = await Account.GetAccountData(accountGuid);
-    accountData.Drafts ??= new List<string>();
     accountData.Drafts.Add(guid.ToString());
     await Account.SaveAccountData(accountData);
     
@@ -225,16 +210,8 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     var guid = Guid.NewGuid();
     for (var i = 0; i < 10; i++) code += base64Alphabet[random.Next(0, 63)];
     
-    var profile = new AccountProfile
-    {
-        PenName = penName,
-        JoinDate = DateTime.Now.ToString(CultureInfo.InvariantCulture),
-        Badges = new List<AccountBadge> { AccountBadge.New }
-    };
-    var account = new AccountData(Account.HashSha256String(code), guid.ToString())
-    {
-        Profile = profile
-    };
+    var profile = new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture));
+    var account = new AccountData(Account.HashSha256String(code), guid.ToString(), profile);
 
     await using var createStream = File.Create(Path.Join(accountsDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, account, Utils.DefaultJsonOptions);
@@ -265,35 +242,6 @@ var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringF
 if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
 */
 
-
-//Updates an accounts profile with new data, such as a snazzy new profile image (only if they are authenticated).
-httpServer.MapPost("/UpdateAccountProfile", async (AccountAuthenticatedProfile profileUpdate) =>
-{
-    if (!await Account.CodeIsValid(profileUpdate.Code))
-    {
-        return Results.Problem("You are not authenticated to modify this account profile.");
-    }
-
-    var guid = await Account.GetGuid(profileUpdate.Code);
-    var accountData = await Account.GetAccountData(guid);
-    
-    //TODO: Cleanup
-    if (profileUpdate.PenName is {Length: >= 16}) profileUpdate.PenName = profileUpdate.PenName[..16];
-    if (profileUpdate.Biography is {Length: >= 360}) profileUpdate.Biography = profileUpdate.Biography[..360];
-    if (profileUpdate.Role is {Length: >= 8}) profileUpdate.Role = profileUpdate.Role[..8];
-
-    //Equals ignores any user changeable/mutable properties, therefore we can ensure client does not change anything they shouldn't 
-    if (!accountData.Profile.CheckUserUnchanged(profileUpdate))
-    {
-        return Results.Problem("You attempted to change a profile property that is not user modifiable.");
-    }
-    
-    accountData.Profile = profileUpdate;
-    
-    await Account.SaveAccountData(accountData);
-    return Results.Ok();
-});
-
 //Get public facing data for an account
 httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
 {
@@ -301,6 +249,148 @@ httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
     var accountData = await Account.GetAccountData(guid);
     return Results.Json(accountData.Profile);
 });
+
+httpServer.MapPost("/ExecuteAccountAction", async (BaseAccountAction action) =>
+{
+    if (action is not SingleValueAccountAction singleValueAccountAction)
+    {
+        return Results.Problem("Can not process account action (not single value).");
+    }
+    
+    if (!await Account.CodeIsValid(singleValueAccountAction.Code))
+    {
+        return Results.Problem("Failed to authorise account action.");
+    }
+    
+    var account = await Account.GetAccountData(await Account.GetGuid(singleValueAccountAction.Code));
+
+    switch (singleValueAccountAction.ActionType)
+    {
+        case SingleValueAccountActionType.BlockUser when singleValueAccountAction.Value is string userGuid:
+        {
+            if (!Account.GuidIsValid(userGuid)) break;
+            var targetUser = await Account.GetAccountData(userGuid);
+            
+            if (account.Blocked.Contains(targetUser.Guid)) break;
+            account.Blocked.Add(targetUser.Guid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.UnblockUser when singleValueAccountAction.Value is string userGuid:
+        {
+            if (!Account.GuidIsValid(userGuid)) break;
+            var targetUser = await Account.GetAccountData(userGuid);
+
+            if (!account.Blocked.Contains(targetUser.Guid)) break;
+            account.Blocked.Remove(targetUser.Guid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.FollowUser when singleValueAccountAction.Value is string userGuid:
+        {
+            if (!Account.GuidIsValid(userGuid)) break;
+            var targetUser = await Account.GetAccountData(userGuid);
+
+            account.FollowUser(ref targetUser);
+            await Account.SaveAccountData(targetUser);
+            break;
+        }
+        
+        case SingleValueAccountActionType.UnfollowUser when singleValueAccountAction.Value is string userGuid:
+        {
+            if (!Account.GuidIsValid(userGuid)) break;
+            var targetUser = await Account.GetAccountData(userGuid);
+
+            account.UnfollowUser(ref targetUser);
+            await Account.SaveAccountData(targetUser);
+            break;
+        }
+        
+        case SingleValueAccountActionType.LikePoem when singleValueAccountAction.Value is string poemGuid:
+        {
+            if (poemGuid.Length != 36 || account.LikedPoems.Contains(poemGuid)) break;
+            account.LikedPoems.Add(poemGuid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.UnlikePoem when singleValueAccountAction.Value is string poemGuid:
+        {
+            if (!account.LikedPoems.Contains(poemGuid)) break;
+            account.LikedPoems.Remove(poemGuid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.PinPoem when singleValueAccountAction.Value is string poemGuid:
+        {
+            if (poemGuid.Length != 36 || account.Profile.PinnedPoems.Contains(poemGuid)) break;
+            account.Profile.PinnedPoems.Add(poemGuid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.UnpinPoem when singleValueAccountAction.Value is string poemGuid:
+        {
+            if (!account.Profile.PinnedPoems.Contains(poemGuid)) break;
+            account.Profile.PinnedPoems.Remove(poemGuid);
+            break;
+        }
+        
+        case SingleValueAccountActionType.UpdateEmail when singleValueAccountAction.Value is string email:
+        {
+            //TODO: Investigate possible problems with AES decryption.
+            account.Email = AesEncryptor.EncryptStringToBytes(email, aes.Key, aes.IV);
+            break;
+        }
+        case SingleValueAccountActionType.UpdateNumber when singleValueAccountAction.Value is string number:
+        {
+            //TODO: Investigate possible problems with AES decryption.
+            account.PhoneNumber = AesEncryptor.EncryptStringToBytes(number, aes.Key, aes.IV);
+            break;
+        }
+        case SingleValueAccountActionType.UpdatePenName when singleValueAccountAction.Value is string penName:
+        {
+            account.Profile.PenName = penName.Length <= 16 ? penName : penName[..16];
+            break;
+        }
+        
+        case SingleValueAccountActionType.UpdateBiography when singleValueAccountAction.Value is string biography:
+        {
+            account.Profile.Biography = biography.Length <= 360 ? biography : biography[..360];
+            break;
+        }
+
+        case SingleValueAccountActionType.UpdateLocation when singleValueAccountAction.Value is string location:
+        {
+            account.Profile.Location = location.Length <= 16 ? location : location[..16];
+            break;
+        }
+
+        case SingleValueAccountActionType.UpdateRole when singleValueAccountAction.Value is string role:
+        {
+            account.Profile.Role = role.Length <= 16 ? role : role[..16];
+            break;
+        }
+
+        case SingleValueAccountActionType.UpdateAvatar when singleValueAccountAction.Value is string avatarUrl:
+        {
+            var simplifiedUrl = avatarUrl
+                [..(avatarUrl.Length <= 512 ? avatarUrl.Length : 256)] //Trim URL length to a maximum reasonable value
+                [..(avatarUrl.IndexOf("?", StringComparison.Ordinal) == 0 ? avatarUrl.Length : avatarUrl.IndexOf("?", StringComparison.Ordinal))] //Remove all URL queries
+                .Replace("http://", "https://"); //Use HTTPS if url contains a HTTP link
+
+            account.Profile.AvatarUrl = simplifiedUrl;
+            break;
+        }
+
+        default:
+        {
+            return Results.Problem("Specified account action failed or did not exist.");
+        }
+    }
+    
+    await Account.SaveAccountData(account);
+    return Results.Ok();
+});
+
 
 httpServer.Run();
 //await liveEditServer.Start();

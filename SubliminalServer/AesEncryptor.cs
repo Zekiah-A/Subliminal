@@ -1,11 +1,8 @@
-using System;
-using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace SubliminalServer;
 
-public class AesEncryptor
+public static class AesEncryptor
 {
     public static byte[] EncryptStringToBytes(string plainText, byte[] key, byte[] iv)
     {

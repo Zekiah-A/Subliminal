@@ -2,12 +2,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace SubliminalServer;
+namespace SubliminalServer.Account;
 
 public static class Account
 {
-    private static readonly DirectoryInfo accountsDir = new ("Accounts");
-    private static readonly FileInfo codeHashGuidFile = new (Path.Join(accountsDir.Name, "code-hash-guid.txt"));
+    private static readonly DirectoryInfo AccountsDir = new ("Accounts");
+    private static readonly FileInfo CodeHashGuidFile = new (Path.Join(AccountsDir.Name, "code-hash-guid.txt"));
     
     /// <summary>
     /// Uses SHA256 hashing to convert a code into a unique hash, that can not be read by someone who somehow gains access to raw account data.
@@ -23,7 +23,7 @@ public static class Account
     /// </summary>
     public static async Task<string> GetGuid(string code)
     {
-        var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
+        var map = await File.ReadAllLinesAsync(CodeHashGuidFile.FullName);
         var codeHash = HashSha256String(code);
 
         foreach (var line in map)
@@ -46,29 +46,24 @@ public static class Account
     /// <param name="code"></param>
     public static async Task<bool> CodeIsValid(string code)
     {
-        var map = await File.ReadAllLinesAsync(codeHashGuidFile.FullName);
+        var codeHashMap = await File.ReadAllLinesAsync(CodeHashGuidFile.FullName);
         var codeHash = HashSha256String(code);
 
-        foreach (var line in map)
-        {
-            var split = line.Split(" ");
-            if (split.Length < 2) continue;
-        
-            var accountCode = split[0];
-            if (accountCode.Equals(codeHash)) return true;
-        }
-
-        return false;
+        return codeHashMap
+            .Select(line => line.Split(" "))
+            .Where(split => split.Length >= 2)
+            .Select(split => split[0])
+            .Any(accountCode => accountCode.Equals(codeHash));
     }
 
     public static bool GuidIsValid(string guid)
     {
-        return File.Exists(Path.Join(accountsDir.Name, guid));
+        return File.Exists(Path.Join(AccountsDir.Name, guid));
     }
 
     public static async Task<AccountData> GetAccountData(string guid)
     {
-        await using var openStream = File.OpenRead(Path.Join(accountsDir.Name, guid));
+        await using var openStream = File.OpenRead(Path.Join(AccountsDir.Name, guid));
         var accountData = await JsonSerializer.DeserializeAsync<AccountData>(openStream, Utils.DefaultJsonOptions);
         if (accountData is null) throw new NullReferenceException(nameof(accountData));
         
@@ -77,7 +72,7 @@ public static class Account
 
     public static async Task SaveAccountData(AccountData data)
     {
-        await using var stream = new FileStream(Path.Join(accountsDir.Name, data.Guid), FileMode.Truncate);
+        await using var stream = new FileStream(Path.Join(AccountsDir.Name, data.Guid), FileMode.Truncate);
         await JsonSerializer.SerializeAsync(stream, data, Utils.DefaultJsonOptions);
     }
 }

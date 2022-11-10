@@ -1,5 +1,5 @@
 using System.Buffers.Binary;
-using System.Security.Cryptography.X509Certificates;
+using SubliminalServer.Account;
 using System.Text;
 using System.Text.Json;
 using WatsonWebsocket;
@@ -40,7 +40,7 @@ public class LiveEditSocketServer
                     // Bytes after will be draftGuid
                     var draftGuid = Encoding.UTF8.GetString(args.Data[42..]);
 
-                    if (!await Account.CodeIsValid(code))
+                    if (!await Account.Account.CodeIsValid(code))
                     {
                         await DisconnectClient(args.Client, "Unable to authorise account ownership.");
                         return;
@@ -60,7 +60,7 @@ public class LiveEditSocketServer
                         sessions.Add(draftGuid, draftData);
                     }
                     
-                    var clientGuid = await Account.GetGuid(code);
+                    var clientGuid = await Account.Account.GetGuid(code);
 
                     //If client is authed in this draft's data, or is literally the poem owner, then we allow them into the session
                     if (!sessions[draftGuid].AuthorGuid.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))

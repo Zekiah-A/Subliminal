@@ -279,13 +279,13 @@ p, a {
     padding-right: 16px;
     cursor: pointer;
 }
-.poem-card .poem-preview {
+.poem-preview {
     position: relative;
     margin: 0px;
     padding: 8px;
     overflow: hidden;
 }
-.poem-card .poem-preview::after {
+.poem-preview::after {
     opacity: 1;
     width: 100%;
     height: 100%;
@@ -327,6 +327,32 @@ p, a {
     margin: 8px;
     display: flex;
     column-gap: 8px;
+}
+
+.following-card {
+    width: 100%;
+    height: 96px;
+    background-color: var(--button-opaque);
+    border-radius: 8px;
+    display: flex;
+    column-gap: 8px;
+    cursor: pointer;
+}
+
+.following-card > img {
+    width: 96px;
+    height: 96px;
+    border-radius: 8px 0px 0px 8px;
+}
+.following-card > div {
+    align-self: center;
+    user-select: none;
+}
+.following-card h4 {
+    margin: 0px;
+}
+.following-card p {
+    max-height: 32px;
 }
 
 /*Dark Mode Optimisations*/
