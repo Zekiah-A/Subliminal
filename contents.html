@@ -647,30 +647,29 @@
             headers: { 'Content-Type': 'application/json' },
             body: '"' + penName + '"'
         })
-            .then((response) => {
-                if (!response.ok) { confirmFail("signup response was denied."); return }
-                return response.json()
+        .then((response) => {
+            if (!response.ok) { confirmFail("signup response was denied."); return }
+            return response.json()
+        })
+        .then((dataObject) => {
+            localStorage.accountCode = dataObject.code
+            localStorage.accountGuid = dataObject.guid
+
+            loginCodeText.textContent = dataObject.code
+
+            let qr = new QRious({
+                element: loginCodeQR,
+                background: "white",
+                foreground: "#007bd3",
+                level: "L",
+                size: 512,
+                value: window.location + "?accountCode=" + dataObject.code
             })
-            .then((data) => {
-                let dataObject = JSON.parse(data)
-                localStorage.accountCode = dataObject.code
-                localStorage.accountGuid = dataObject.guid
+            loginCodeQR.src = qr.toDataURL()
 
-                loginCodeText.textContent = dataObject.code
-
-                let qr = new QRious({
-                    element: loginCodeQR,
-                    background: "white",
-                    foreground: "#007bd3",
-                    level: "L",
-                    size: 512,
-                    value: window.location + "?accountCode=" + dataObject.code
-                })
-                loginCodeQR.src = qr.toDataURL()
-
-                showMyAccount()
-            })
-            .catch((e) => confirmFail(e))
+            showMyAccount()
+        })
+        .catch((e) => confirmFail(e))
     }
 
     //Impossible to log in without code, GUID can be retrieved though
