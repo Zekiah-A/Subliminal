@@ -100,6 +100,16 @@ header custom {
     flex-grow: 1;
 }
 
+/*Site-Wide font*/
+p, a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 110%;
+}
+
+h2 {
+    margin-top: 0px;
+}
+
 #headerFrame {
     width: 100%;
     height: 100%;
@@ -170,15 +180,6 @@ header custom {
     font-size: small;
 }
 
-h2 {
-    margin-top: 0px;
-}
-
-/*Site-Wide font*/
-p, a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 110%;
-}
 
 .comment-date {
     position: absolute;
@@ -356,6 +357,25 @@ p, a {
 }
 .following-card p {
     max-height: 32px;
+}
+
+.options {
+    background-color: var(--button-opaque);
+    border-radius: 4px;
+    margin-top: 4px;
+    border: 1px solid darkgray;
+}
+
+.options > div:hover {
+    background-color: var(--background-opaque);
+}
+
+.options-parent .options {
+    display: none;
+}
+
+.options-parent:active .options {
+    display: block;
 }
 
 /*Dark Mode Optimisations*/

@@ -247,8 +247,22 @@
             </div>
             <div><div>🖼️</div></div>
             <div class="separator"></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;"><div>Page layout ⯆</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;"><div>Background ⯆</div></div>
+            <div class="options-parent" onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;">
+                <div>Page layout ⯆</div>
+                <div class="options">
+                    <div onclick="changePageStyle('poem-centre')">Poem centre</div>
+                    <div onclick="changePageStyle('poem-centre-wide')">Poem wide</div>
+                    <div onclick="changePageStyle('centre')">Centre</div>
+                </div>                
+            </div>
+            <div onclick="alert('Error, try again later.')" style="width: 112px; min-width: 112px;">
+                <div>Background ⯆</div>
+                <!--<div class="options">
+                    <div>From link</div>
+                    <div>Upload file</div>
+                    <div>Built-in free</div>
+                </div>-->                
+            </div>
             <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Rhyme finder ➕</div></div>
             <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Auto rhythm ➕</div></div>
         </div>
@@ -261,13 +275,6 @@
            Tools:
            <span class="tools-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
         </span>
-        Page layout: <br>
-        <select class="tool" onchange="changePageStyle(value)" style="margin-top: 5px; width: 100%;">
-           <option value="poem-centre" selected="">Poem Centre</option>
-           <option value="poem-centre-wide">Poem Centre Wide</option>
-           <option value="centre">Centre</option>
-        </select>
-        <br>
         Background image: <br>
         <input type="file" multiple="" accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         Poem summary: <br>
