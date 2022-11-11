@@ -424,7 +424,7 @@ p, a {
         padding-left: 10px;
         padding-right: 10px;
         line-height: 40px;
-        top: 10px;
+        top: 64px;
         z-index: 2;
         left: 50%;
         transform: translateX(-50%);
