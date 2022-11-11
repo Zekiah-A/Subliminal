@@ -113,8 +113,8 @@
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
 			<div style="flex-direction:column">
-				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfileAction(actionType.UpdateName, profileName.textContent)" onkeydown="if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p><p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
-				<p style="width: min(442px, 100%); line-break: anywhere;" contenteditable="true" id="profileBiography" onkeydown="if (this.textContent.length >= 360) this.textContent = this.textContent.substring(0, 360);">Click here to start writing your bio!</p>
+				<p class="profile-title">I'm </p><p class="profile-title" id="profileName" contenteditable="true" onblur="updateProfileAction(actionType.UpdatePenName, profileName.textContent)" onkeydown="if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p><p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
+				<p style="width: min(442px, 100%); line-break: anywhere;" contenteditable="true" id="profileBiography" onkeydown="if (this.textContent.length >= 360) this.textContent = this.textContent.substring(0, 360);" onblur="updateProfileAction(actionType.UpdateBiography, profileBiography.textContent)">Click here to start writing your bio!</p>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
 					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" onblur="updateProfileAction(actionType.UpdateLocation, profileLocation.textContent)">Planet of Earth, Milky Way</span></div>
 					<div>📌&nbsp;<span id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
@@ -293,12 +293,11 @@
 	}
 
 	//We only send profile from the acocunt data to the server, fields outside profile requre a separate kind of request to modify
-	async function updateProfileAction(type, actionValue) {
-		let accountAction = {
-			code: localStorage.accountCode,
-			actionType: type,
-			value: actionValue
-		}
+	async function updateProfileAction(type, value) {
+		let accountAction = { }
+		accountAction.code = localStorage.accountCode
+		accountAction.actionType = type
+		accountAction.value = value
 
 		fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
 			method: "POST",
