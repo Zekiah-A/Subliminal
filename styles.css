@@ -78,6 +78,9 @@ header p {
 header a {
     align-self: center;
     white-space: nowrap;
+    /*Click hitboxes*/
+    padding-top: 24px;
+    padding-bottom: 24px;
 }
 
 header img {
@@ -399,11 +402,13 @@ p, a {
     }
 
     header a {
-        /*font-size: 3.4vw;*/
         font-size: 4vw;
         flex: 1 1 auto;
         white-space: nowrap;
         overflow: hidden;
+        /*Click hitboxes*/
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
 
     header > div {
