@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace SubliminalServer.Account;
 
 public class AccountData
@@ -34,7 +36,22 @@ public class AccountData
         Blocked = new List<string>();
         LikedPoems = new List<string>();
     }
-    
+
+    /// <summary>
+    /// This is the constructor used by the JSON serializer in order to deserialize a saved file into an accountdata class, contains all props.
+    /// Not for internal use, use main constructor instead.
+    /// </summary>
+    [JsonConstructor] 
+    public AccountData(string codeHash, string guid, AccountProfile profile, List<string> drafts, List<string> blocked, List<string> likedPoems)
+    {
+        CodeHash = codeHash;
+        Guid = guid;
+        Profile = profile;
+        Drafts = drafts;
+        Blocked = blocked;
+        LikedPoems = likedPoems;
+    }
+
     public void FollowUser(ref AccountData user)
     {
         if (Profile.Following.Contains(user.Guid)) return;

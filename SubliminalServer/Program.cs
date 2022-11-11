@@ -224,12 +224,13 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 });
 
 //Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
-httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
+httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
 {
     if (!await Account.CodeIsValid(signinCode))
     {
         return Results.Problem("Could not sign in to retrieve account data.");
     }
+    
     var guid = await Account.GetGuid(signinCode);
     return Results.Json(await Account.GetAccountData(guid));
 });
