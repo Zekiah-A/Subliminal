@@ -224,7 +224,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 });
 
 //Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
-httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
+httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
 {
     if (!await Account.CodeIsValid(signinCode))
     {
@@ -232,15 +232,21 @@ httpServer.MapPost("/Signin", async ([FromBody] string signinCode) =>
     }
     
     var guid = await Account.GetGuid(signinCode);
-    return Results.Json(await Account.GetAccountData(guid));
+    var account = await Account.GetAccountData(guid);
+    
+    var ip = context.Connection.RemoteIpAddress?.ToString();
+    if (ip is null)
+    {
+        return Results.Problem("Could not sign in, IP address was null");
+    }
+    
+    var ips = account.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.Key, aes.IV));
+    if (!ips.Contains(ip)) account.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
+    await Account.SaveAccountData(account);
+    
+    return Results.Json(account);
 });
 /*
-var ip = context.Connection.RemoteIpAddress?.ToString();
-if (ip is null) return Results.Problem("Remote IP address was null");
-accountData.KnownIPs ??= new List<byte[]>();
-
-var ips = accountData.KnownIPs.Select(encryptedIp => AesEncryptor.DecryptStringFromBytes(encryptedIp, aes.IV, aes.Key));
-if (!ips.Contains(ip)) accountData.KnownIPs.Add(AesEncryptor.EncryptStringToBytes(ip, aes.IV, aes.Key));
 */
 
 //Get public facing data for an account
@@ -251,23 +257,19 @@ httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
     return Results.Json(accountData.Profile);
 });
 
-httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
+//TODO: Switch to base account action, or another dynamic solution so we can have account actions.
+httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction action) =>
 {
-    if (action is not SingleValueAccountAction singleValueAccountAction)
-    {
-        return Results.Problem("Can not process account action (not single value).");
-    }
-    
-    if (!await Account.CodeIsValid(singleValueAccountAction.Code))
+    if (!await Account.CodeIsValid(action.Code))
     {
         return Results.Problem("Failed to authorise account action.");
     }
     
-    var account = await Account.GetAccountData(await Account.GetGuid(singleValueAccountAction.Code));
+    var account = await Account.GetAccountData(await Account.GetGuid(action.Code));
 
-    switch (singleValueAccountAction.ActionType)
+    switch (action.ActionType)
     {
-        case SingleValueAccountActionType.BlockUser when singleValueAccountAction.Value is string userGuid:
+        case SingleValueAccountActionType.BlockUser when action.Value is string userGuid:
         {
             if (!Account.GuidIsValid(userGuid)) break;
             var targetUser = await Account.GetAccountData(userGuid);
@@ -277,7 +279,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
             break;
         }
         
-        case SingleValueAccountActionType.UnblockUser when singleValueAccountAction.Value is string userGuid:
+        case SingleValueAccountActionType.UnblockUser when action.Value is string userGuid:
         {
             if (!Account.GuidIsValid(userGuid)) break;
             var targetUser = await Account.GetAccountData(userGuid);
@@ -287,7 +289,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
             break;
         }
         
-        case SingleValueAccountActionType.FollowUser when singleValueAccountAction.Value is string userGuid:
+        case SingleValueAccountActionType.FollowUser when action.Value is string userGuid:
         {
             if (!Account.GuidIsValid(userGuid)) break;
             var targetUser = await Account.GetAccountData(userGuid);
@@ -297,7 +299,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
             break;
         }
         
-        case SingleValueAccountActionType.UnfollowUser when singleValueAccountAction.Value is string userGuid:
+        case SingleValueAccountActionType.UnfollowUser when action.Value is string userGuid:
         {
             if (!Account.GuidIsValid(userGuid)) break;
             var targetUser = await Account.GetAccountData(userGuid);
@@ -307,71 +309,73 @@ httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
             break;
         }
         
-        case SingleValueAccountActionType.LikePoem when singleValueAccountAction.Value is string poemGuid:
+        case SingleValueAccountActionType.LikePoem when action.Value is string poemGuid:
         {
             if (poemGuid.Length != 36 || account.LikedPoems.Contains(poemGuid)) break;
             account.LikedPoems.Add(poemGuid);
             break;
         }
         
-        case SingleValueAccountActionType.UnlikePoem when singleValueAccountAction.Value is string poemGuid:
+        case SingleValueAccountActionType.UnlikePoem when action.Value is string poemGuid:
         {
             if (!account.LikedPoems.Contains(poemGuid)) break;
             account.LikedPoems.Remove(poemGuid);
             break;
         }
         
-        case SingleValueAccountActionType.PinPoem when singleValueAccountAction.Value is string poemGuid:
+        case SingleValueAccountActionType.PinPoem when action.Value is string poemGuid:
         {
             if (poemGuid.Length != 36 || account.Profile.PinnedPoems.Contains(poemGuid)) break;
             account.Profile.PinnedPoems.Add(poemGuid);
             break;
         }
         
-        case SingleValueAccountActionType.UnpinPoem when singleValueAccountAction.Value is string poemGuid:
+        case SingleValueAccountActionType.UnpinPoem when action.Value is string poemGuid:
         {
             if (!account.Profile.PinnedPoems.Contains(poemGuid)) break;
             account.Profile.PinnedPoems.Remove(poemGuid);
             break;
         }
         
-        case SingleValueAccountActionType.UpdateEmail when singleValueAccountAction.Value is string email:
+        case SingleValueAccountActionType.UpdateEmail when action.Value is string email:
         {
             //TODO: Investigate possible problems with AES decryption.
             account.Email = AesEncryptor.EncryptStringToBytes(email, aes.Key, aes.IV);
             break;
         }
-        case SingleValueAccountActionType.UpdateNumber when singleValueAccountAction.Value is string number:
+        
+        case SingleValueAccountActionType.UpdateNumber when action.Value is string number:
         {
             //TODO: Investigate possible problems with AES decryption.
             account.PhoneNumber = AesEncryptor.EncryptStringToBytes(number, aes.Key, aes.IV);
             break;
         }
-        case SingleValueAccountActionType.UpdatePenName when singleValueAccountAction.Value is string penName:
+        
+        case SingleValueAccountActionType.UpdatePenName when action.Value is string penName:
         {
             account.Profile.PenName = penName.Length <= 16 ? penName : penName[..16];
             break;
         }
         
-        case SingleValueAccountActionType.UpdateBiography when singleValueAccountAction.Value is string biography:
+        case SingleValueAccountActionType.UpdateBiography when action.Value is string biography:
         {
             account.Profile.Biography = biography.Length <= 360 ? biography : biography[..360];
             break;
         }
 
-        case SingleValueAccountActionType.UpdateLocation when singleValueAccountAction.Value is string location:
+        case SingleValueAccountActionType.UpdateLocation when action.Value is string location:
         {
             account.Profile.Location = location.Length <= 16 ? location : location[..16];
             break;
         }
 
-        case SingleValueAccountActionType.UpdateRole when singleValueAccountAction.Value is string role:
+        case SingleValueAccountActionType.UpdateRole when action.Value is string role:
         {
             account.Profile.Role = role.Length <= 16 ? role : role[..16];
             break;
         }
 
-        case SingleValueAccountActionType.UpdateAvatar when singleValueAccountAction.Value is string avatarUrl:
+        case SingleValueAccountActionType.UpdateAvatar when action.Value is string avatarUrl:
         {
             var simplifiedUrl = avatarUrl
                 [..(avatarUrl.Length <= 512 ? avatarUrl.Length : 256)] //Trim URL length to a maximum reasonable value
@@ -384,7 +388,9 @@ httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
 
         default:
         {
-            return Results.Problem("Specified account action failed or did not exist.");
+            var stream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(stream, action);
+            return Results.Problem("Specified account action failed or did not exist." + stream);
         }
     }
     
