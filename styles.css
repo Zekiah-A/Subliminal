@@ -374,7 +374,7 @@ h2 {
     display: none;
 }
 
-.options-parent:active .options {
+.options-parent:hover .options {
     display: block;
 }
 
