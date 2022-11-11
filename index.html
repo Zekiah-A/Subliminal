@@ -296,8 +296,8 @@
             <div id="poemProcessSubInfo">
                 <div><p>💡 Burst of inspiration at the most unexpected moment.</p></div>
                 <div style="/*margin-top: 12px;*/"><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
-                <div style="/*margin-top: -4px;*/"><p>🪦 Writer's block.</p></div>
-                <div style="/*margin-top: 8px;*/"><p>💨 A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
+                <div style="/*margin-top: -4px;*/"><p>😨 Writer's block.</p></div>
+                <div style="/*margin-top: 8px;*/"><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
                 <div style="/*margin-top: -12px;*/"><p>🎉 Finally completed poem! Sign a breath of relief.</p></div>
                 <div style="/*margin-top: 16px;*/"><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
             </div>
@@ -311,7 +311,7 @@
 
         <p style="padding-left: 5%;" class="profile-title">Other stuff</p>
         <div id="otherSection" class="section section-double">
-            <div class="section">
+            <div id="rplaceAdSection" class="section">
                 <img alt="A fun game to play in your free time" src="Resources/Advert2.png">
                 <div style="flex-grow: 1">
                     <p>Rplace.tk, a spinoff of the reddit place event!</p>
@@ -319,7 +319,7 @@
                 </div>
             </div>
 
-            <div class="section">
+            <div id="supportAdSection" class="section">
                 <video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
                     <source src="Resources/Advert3.webm" type="video/webm">
                 </video>       
@@ -347,7 +347,7 @@
 
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, otherSection]
+    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection]
     obseravbles.forEach((element) => {
         observer.observe(element)
         element.classList.add("scroll-unseen")

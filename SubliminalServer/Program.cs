@@ -251,7 +251,7 @@ httpServer.MapGet("/AccountProfile/{guid}", async (string guid) =>
     return Results.Json(accountData.Profile);
 });
 
-httpServer.MapPost("/ExecuteAccountAction", async (BaseAccountAction action) =>
+httpServer.MapPost("/ExecuteAccountAction", async (object action) =>
 {
     if (action is not SingleValueAccountAction singleValueAccountAction)
     {

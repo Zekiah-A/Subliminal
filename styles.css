@@ -78,6 +78,9 @@ header p {
 header a {
     align-self: center;
     white-space: nowrap;
+    /*Click hitboxes*/
+    padding-top: 24px;
+    padding-bottom: 24px;
 }
 
 header img {
@@ -95,6 +98,16 @@ header img:active {
 
 header custom {
     flex-grow: 1;
+}
+
+/*Site-Wide font*/
+p, a {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 110%;
+}
+
+h2 {
+    margin-top: 0px;
 }
 
 #headerFrame {
@@ -167,15 +180,6 @@ header custom {
     font-size: small;
 }
 
-h2 {
-    margin-top: 0px;
-}
-
-/*Site-Wide font*/
-p, a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 110%;
-}
 
 .comment-date {
     position: absolute;
@@ -355,6 +359,25 @@ p, a {
     max-height: 32px;
 }
 
+.options {
+    background-color: var(--button-opaque);
+    border-radius: 4px;
+    margin-top: 4px;
+    border: 1px solid darkgray;
+}
+
+.options > div:hover {
+    background-color: var(--background-opaque);
+}
+
+.options-parent .options {
+    display: none;
+}
+
+.options-parent:hover .options {
+    display: block;
+}
+
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) {
     body {
@@ -399,11 +422,13 @@ p, a {
     }
 
     header a {
-        /*font-size: 3.4vw;*/
         font-size: 4vw;
         flex: 1 1 auto;
         white-space: nowrap;
         overflow: hidden;
+        /*Click hitboxes*/
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
 
     header > div {
@@ -419,7 +444,7 @@ p, a {
         padding-left: 10px;
         padding-right: 10px;
         line-height: 40px;
-        top: 10px;
+        top: 64px;
         z-index: 2;
         left: 50%;
         transform: translateX(-50%);
