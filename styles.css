@@ -364,18 +364,12 @@ h2 {
     border-radius: 4px;
     margin-top: 4px;
     border: 1px solid darkgray;
-}
-
-.options > div:hover {
-    background-color: var(--background-opaque);
-}
-
-.options-parent .options {
+    pointer-events: all !important;
     display: none;
 }
 
-.options-parent:hover .options {
-    display: block;
+.options div:hover {
+    background-color: darkgray;
 }
 
 /*Dark Mode Optimisations*/
@@ -507,6 +501,14 @@ h2 {
     .profile-container {
         flex-direction: column-reverse;
     }    
+
+    .options {
+        position: absolute;
+        z-index: 2;
+        top: calc(100% + 48px);
+        left: 50%;
+        transform: translateX(-50%) scale(2);
+    }
 }
 
 @media screen and (orientation:landscape) {
