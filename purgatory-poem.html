@@ -144,8 +144,7 @@ ___________________________________________________________
 
     function togglePoemLike(liked) {
         if (!localStorage.liked) {
-            let liked = [ "" ]
-            localStorage.liked = JSON.stringify(liked)
+            localStorage.liked = JSON.stringify([])
         }
 
         if (liked == "true") {
@@ -177,37 +176,16 @@ ___________________________________________________________
     }
 
     function togglePoemPin(pinned) {
-        if (!localStorage.pinned) {
-            let pinned = [ "" ]
-            localStorage.pinned = JSON.stringify(pinned)
-        }
-
         if (pinned == "true") { 
             pinButton.setAttribute("pinned", false)
             pinButton.children[1].style.fill = "transparent"
-
-            if (localStorage.accountCode) {
-                executeAccountAction(actionType.UnpinPoem, guid)
-                return
-            }
-
-            let storePinned = JSON.parse(localStorage.pinned)
-            storePinned = storePinned.splice(storePinned.indexOf(guid), 1)
-            localStorage.pinned = JSON.stringify(storePinned)
+            executeAccountAction(actionType.UnpinPoem, guid)
             return
         }
 
         pinButton.setAttribute('pinned', true)
         pinButton.children[1].style.fill = "url(#b)"
-
-        if (localStorage.accountCode) {
-            executeAccountAction(actionType.PinPoem, guid)
-            return
-        }
-
-        let storePinned = JSON.parse(localStorage.pinned)
-        storePinned = storePinned.push(guid)
-        localStorage.pinned = JSON.stringify(storePinned)
+        executeAccountAction(actionType.PinPoem, guid)
     }
 
     function ratePoem(rating) {
@@ -294,7 +272,11 @@ ___________________________________________________________
 
     // You can not pin a poem unless you have an account
     if (!localStorage.accountCode) {
-        pinButton.onclick = ""
+        pinButton.onclick = () => {
+            alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
+        }
+
+        
     }
 </script>
 </html>
