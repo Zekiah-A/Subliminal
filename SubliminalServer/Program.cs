@@ -159,7 +159,6 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
         
         //Link newly uploaded poem to account profile
         var accountData = await Account.GetAccountData(accountGuid);
-        accountData.Profile.PoemGuids ??= new List<string>();
         accountData.Profile.PoemGuids.Add(guid.ToString());
         await Account.SaveAccountData(accountData);
     }

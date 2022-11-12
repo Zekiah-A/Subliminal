@@ -52,7 +52,16 @@ async function getAccountData() {
 }
 
 async function getPublicProfile(guid) {
-    //WIP
+    let profile = null
+
+    fetch('https://server.poemanthology.org:81/AccountProfile/' + guid, {
+        method: "GET",
+        headers: { 'Content-Type': 'application/json' },
+    })
+    .then((res) => res.json())
+    .then((profileObject) => profile = profileObject)
+
+    return profile
 }
 
 async function executeAccountAction(action, value) {

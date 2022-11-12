@@ -122,15 +122,16 @@
 				<div id="profileBadges"></div>
 			</div>
 		</div>
-		<br>
+		<br><br>
+
 		<h2>Recent works:</h2>
-		<div id="recentWorks">
-			<div class="poem-card">
-				<h4>London</h4>
-				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
-			</div>
-		</div>
-		<br><br><br><br><br> <!--TEMP-->
+		<div id="recentWorks"></div>
+
+		<h2>Following:</h2>
+		<div id="followingAccounts"></div>
+
+		<br><br><br><br><br>
+
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
@@ -138,20 +139,12 @@
 			Edit Email
 			<div class="button-tooltip">Allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or just spam your inbox with random stuff</div>
 		</button>
+
 		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountNumber.style.display = 'block';">
 			Edit Phone Number
 			<div class="button-tooltip">Use 2FA with your account, and allow us to send you messages about account activity, or just send random sms funnnies</div>
 		</button>
-		<h2>Following:</h2>
-		<div id="followingAccounts">
-			<div class="following-card">
-				<img src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg">
-				<div>
-					<h4>Zekiah</h4>
-					<p class="poem-preview">✍️&nbsp;I live in a society. This is one of the sites ever, and I write some of the poems ever. I also run this ship (to the bottom of the ocean).</p>
-				</div>
-			</div>
-		</div>
+
 		<h2>Draft poems:</h2>
 		<div id="draftPoems">
 			<div class="poem-card">
@@ -159,7 +152,9 @@
 				<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
 			</div>
 		</div>
-		<br><br><br><br><br> <!--TEMP-->
+
+		<br><br><br><br><br>
+
 		<hr>
 		<h1>Account agreement:</h1>
 		<h2>Privacy &amp; Security:</h2>
@@ -242,6 +237,79 @@
 		number = newNumber
 	}
 
+
+	// This method should produce:
+	// <div class="following-card">
+	//		<img src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg">
+	//		<div>
+	//			<h4>Zekiah</h4>
+	//			<p class="poem-preview">✍️&nbsp;I live in a society. This is one of the sites ever, and I write some of the poems ever. I also run this ship (to the bottom of the ocean).</p>
+	//		</div>
+	// </div>
+	async function setProfileFollowing(newGuids) {
+		if (newGuids == null) return
+
+		while (followingAccounts.firstChild) {
+			followingAccounts.removeChild(followingAccounts.lastChild)
+		}
+
+		for (let guid of newGuids) {
+			let profile = await getPublicProfile(guid)
+			if (profile == null) continue 
+
+			let el = document.createElement("div")
+			el.className = "following-card"
+			
+			let profileImage = document.createElement("img")
+			profileImage.avatarUrl = profile.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" 
+			el.appendChild(profileImage)
+
+			let profileInfo = document.createElement("div")
+
+			let profileName = document.createElement("h4")
+			profileName.textContent = profile.penName || "Nameless"
+			profileInfo.appendChild(profileName)
+
+			let profileBio = document.createElement("p")
+			profileBio.className = "poem-preview"
+			profileBio.textContent = "✍️&nbsp;" + profile.biography || "I have no biography, I am the unknown."
+			profileInfo.appendChild(profileBio)
+			el.appendChild(profileInfo)
+
+			followingAccounts.appendChild(el)
+		}
+	}
+
+	// This method should produce:
+	// <div class="poem-card">
+	//		<h4>London</h4>
+	//		<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+	// </div>
+	async function setProfileRecent(newGuids) {
+		if (newGuids == null) return
+
+		while (recentWorks.firstChild) {
+			recentWorks.removeChild(recentWorks.lastChild)
+		}
+
+		for (let guid of newGuids) {
+			let poem = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
+
+			let el = document.createElement("div")
+			el.className = "poem-card"
+
+			let title = document.createElement("h4")
+			title.textContent = poem.poemName
+			el.appendChild(title)
+
+			let preview = document.createElement("p")
+			preview.textContent = poem.poemContent
+			el.appendChild(preview)
+
+			recentWorks.appendChild(el)
+		}
+	}
+
 	async function setProfileBadges(newBadges) {
 		if (newBadges == null) return
 		
@@ -296,6 +364,8 @@
 			setProfileRole(signinObject.profile?.role || "writer")
 			setProfileAvatar(signinObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
 			setProfileBadges(signinObject.profile?.badges)
+			setProfileFollowing(signinObject.profile?.following)
+			setProfileRecent(signinObject.profile?.poemGuids)
 		})
 		.catch((e) => confirmFail())
 	}

@@ -385,6 +385,10 @@ h2 {
         color: var(--text-colour);
     }
 
+    header img {
+        filter: invert(1);
+    }
+
     #contentWarning {
         background:#1e1e1e33;
     }
