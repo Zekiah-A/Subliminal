@@ -264,7 +264,7 @@ ___________________________________________________________
                 (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
         }
 
-        if ((localStorage.accountCode && getAccountData().likedPoems.includes(guid)) ||
+        if ((localStorage.accountCode && (await getAccountData()).likedPoems.includes(guid)) ||
             (localStorage.liked && JSON.parse(localStorage.liked) && JSON.parse(localStorage.liked).includes(guid))) {
             likeButton.setAttribute("liked", true)
             likeButton.children[0].style.fill = "#ffd500"
