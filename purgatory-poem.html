@@ -157,7 +157,8 @@ ___________________________________________________________
             }
 
             let storeLiked = JSON.parse(localStorage.liked)
-            storeLiked = storeLiked.splice(storeLiked.indexOf(guid), 1)
+            if (storeLiked.indexOf(guid) == -1) return
+            storeLiked.splice(storeLiked.indexOf(guid), 1)
             localStorage.liked = JSON.stringify(storeLiked)
             return
         }
@@ -171,7 +172,7 @@ ___________________________________________________________
         }
 
         let storeLiked = JSON.parse(localStorage.liked)
-        storeLiked = storeLiked.push(guid)
+        storeLiked.push(guid)
         localStorage.liked = JSON.stringify(storeLiked)
     }
 
@@ -261,6 +262,12 @@ ___________________________________________________________
             editNote.style.display = "block"
             editLink.href = window.location.protocol + '\/\/' + window.location.hostname + 
                 (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
+        }
+
+        if ((localStorage.accountCode && getAccountData().likedPoems.includes(guid)) ||
+            (localStorage.liked && JSON.parse(localStorage.liked) && JSON.parse(localStorage.liked).includes(guid))) {
+            likeButton.setAttribute("liked", true)
+            likeButton.children[0].style.fill = "#ffd500"
         }
 
         //Probably useless since pages are procedurally generated...

@@ -48,7 +48,17 @@ function getBadgeInfo(badge) {
 }
 
 async function getAccountData() {
+    let data = null
     
+    fetch('https://server.poemanthology.org:81/Signin', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: '"' + localStorage.accountCode + '"'
+    })
+    .then((res) => res.json())
+    .then((dataObject) => data = dataObject)
+
+    return data
 }
 
 async function getPublicProfile(guid) {
