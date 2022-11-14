@@ -316,9 +316,13 @@
             <div>New</div>
             <tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
         </div>
-        <div onclick="addPurgatoryEntries('picks')">
+        <!--<div onclick="addPurgatoryEntries('picks')">
             <div>Picks</div>
             <tooltip class="button-tooltip">The best of the best - These are the poems we reccomend you should check out!</tooltip>
+        </div> TODO: Merge picks into new, make them appear as the first poems on new, with a special "picks" notice-->
+        <div onclick="addPurgatoryEntries('liked')">
+            <div>Liked</div>
+            <tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
         </div>
         <div onclick="addPurgatoryEntries('all')">
             <div>All</div>
@@ -595,7 +599,7 @@
             purgatoryFlex.style.display = "flex"
 
             while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
-            let entries = await (await fetch("https://server.poemanthology.org:81/" + (filter == "new" ? "PurgatoryNew" : "PurgatoryPicks"))).json()
+            let entries = filter == "liked" ? (await isLoggedIn() ? getAccountData().likedPoems : localStorage.liked) : await (await fetch("https://server.poemanthology.org:81/" + (filter == "new" ? "PurgatoryNew" : "PurgatoryPicks"))).json()
             for (let entry of entries) { await appendEntry(entry, purgatoryFlex, entryTemplate) }
         }
         else {

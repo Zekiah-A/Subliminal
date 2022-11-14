@@ -86,3 +86,17 @@ async function executeAccountAction(action, value) {
         body: JSON.stringify(accountAction)
     })
 }
+
+async function isLoggedIn() {
+    if (!localStorage.accountCode) return false;
+
+    let authed = null
+    fetch('https://server.poemanthology.org:81/Signin', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: '"' + localStorage.accountCode + '"'
+    })
+    .then((res) => authed = res.ok)
+    
+    return authed;
+}
