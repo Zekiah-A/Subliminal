@@ -9,6 +9,7 @@
     <meta name="keywords" content="Poetry, Contents, Anthology, Subliminal, Search">
     <link rel="stylesheet" href="styles.css">
     <script src="header.js"></script>
+    <script src="account.js"></script>
     <style>
         .section-span {
             cursor: pointer;
@@ -699,12 +700,15 @@
         accountButton.style.display = 'block'
     }
 
-    if (params.get("accountCode")) {
-        signin(params.get("accountCode"))
+    async function initialise() {
+        if (params.get("accountCode")) {
+            signin(params.get("accountCode"))
+        }
+        else if (await isLoggedIn()) {
+            showMyAccount()
+        }
     }
-    else if (localStorage.accountCode) {
-        showMyAccount()
-    }
+
 
     //Site scripts
     initialiseHeader()

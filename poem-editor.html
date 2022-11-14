@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./styles.css">
+    <script type="text/javascript" src="./account.js"></script>
     <style>
         .tool {
             margin: 1px;
@@ -539,11 +540,12 @@
         //Converting back to utf8, because converitng a bytearray into JSON does not have any poisitive effects on storage
         loadObject.signature = decoder.decode(getSignCanvasBits())
 
-        upload(loadObject)
+        //WARNING: Calling async function without await may cause issues
+        upload(loadObject) 
     }
 
-    function upload(poemJson) {
-        poemJson.code = localStorage.accountCode || null
+    async function upload(poemJson) {
+        if (await isLoggedIn()) poemJson.code = localStorage.accountCode
 
         fetch("https://server.poemanthology.org:81/PurgatoryUpload", {
             method: "POST",

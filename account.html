@@ -342,7 +342,7 @@
 	}
 
 	async function initialise() {
-		if (!localStorage.accountCode) {
+		if (!await isLoggedIn()) {
 			alert("You don't seem to have an account here, or are not logged in.\n\nHead over to the contents page to create one or sign in.")
 			return
 		}

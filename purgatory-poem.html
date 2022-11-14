@@ -142,7 +142,7 @@ ___________________________________________________________
         UndoVeto: 3
     }
 
-    function togglePoemLike(liked) {
+    async function togglePoemLike(liked) {
         if (!localStorage.liked) {
             localStorage.liked = JSON.stringify([])
         }
@@ -151,7 +151,7 @@ ___________________________________________________________
             likeButton.setAttribute("liked", false)
             likeButton.children[0].style.fill = "transparent"
 
-            if (localStorage.accountCode) {
+            if (await isloggedIn()) {
                 executeAccountAction(actionType.UnlikePoem, guid)
                 return
             }
@@ -166,7 +166,7 @@ ___________________________________________________________
         likeButton.setAttribute("liked", true)
         likeButton.children[0].style.fill = "#ffd500"
 
-        if (localStorage.accountCode) {
+        if (await isloggedIn()) {
             executeAccountAction(actionType.LikePoem, guid)
             return
         }
@@ -226,6 +226,14 @@ ___________________________________________________________
         if (!localStorage.getItem('vetoed'))
             localStorage.vetoed = new Set()
 
+        // You can not pin a poem unless you have an account
+        if (!await isloggedIn()) {
+            pinButton.onclick = () => {
+                alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
+            }
+        }
+
+
         //fetch poem data
         let poemData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
         
@@ -264,7 +272,7 @@ ___________________________________________________________
                 (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
         }
 
-        if ((localStorage.accountCode && (await getAccountData()).likedPoems.includes(guid)) ||
+        if ((await isloggedIn() && (await getAccountData()).likedPoems.includes(guid)) ||
             (localStorage.liked && JSON.parse(localStorage.liked) && JSON.parse(localStorage.liked).includes(guid))) {
             likeButton.setAttribute("liked", true)
             likeButton.children[0].style.fill = "#ffd500"
@@ -276,14 +284,5 @@ ___________________________________________________________
     }
     
     initialise()
-
-    // You can not pin a poem unless you have an account
-    if (!localStorage.accountCode) {
-        pinButton.onclick = () => {
-            alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
-        }
-
-        
-    }
 </script>
 </html>
