@@ -110,6 +110,12 @@ h2 {
     margin-top: 0px;
 }
 
+/*Hovering any direct parent of a button tooltip will cause it to appear */
+*:hover > .button-tooltip {
+    pointer-events: all;
+    opacity: 1;
+}
+
 #headerFrame {
     width: 100%;
     height: 100%;
@@ -310,10 +316,6 @@ h2 {
     text-align: center;
     line-height: 32px;
     position: relative;
-}
-.profile-badge:hover .button-tooltip {
-    pointer-events: all;
-    opacity: 1;
 }
 
 .button-tooltip {

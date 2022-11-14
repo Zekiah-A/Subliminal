@@ -122,6 +122,23 @@
             height: 64px;
         }
 
+        entry .special-notification {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            color: #017cff;
+            position: absolute;
+            top: 44%;
+            text-align: center;
+            width: 100%;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        entry .button-tooltip {
+            left: 0px !important;
+            top: 40px !important;
+        }
+
         entry .preview::after {
             opacity: 1;
             width: 100%;
@@ -180,11 +197,6 @@
             border-radius: 32px;
             user-select: none;
             pointer-events: none;
-        }
-
-        #filtersBar > div:hover .button-tooltip {
-            pointer-events: all;
-            opacity: 1;
         }
 
         .sounds-button {
@@ -593,24 +605,37 @@
     }
 
     async function addPurgatoryEntries(filter) {
-        let entryTemplate = await (await fetch("./Other/purgatory-entry-template")).text()
+        let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
 
-        if (filter != "all") {
-            purgatoryGrid.style.display = "none"
-            purgatoryFlex.style.display = "flex"
+        while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
+        while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
 
-            while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
-            let entries = filter == "liked" ? (await isLoggedIn() ? getAccountData().likedPoems : localStorage.liked) : await (await fetch("https://server.poemanthology.org:81/" + (filter == "new" ? "PurgatoryNew" : "PurgatoryPicks"))).json()
-            for (let entry of entries) { await appendEntry(entry, purgatoryFlex, entryTemplate) }
-        }
-        else {
+        purgatoryGrid.style.display = "none"
+        purgatoryFlex.style.display = "flex"
+
+        let entries = null;
+        if (filter == "all") {
             purgatoryFlex.style.display = "none"
             purgatoryGrid.style.display = "grid"
 
-            while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
-            let entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
-            for (let entry of entries) { await appendEntry(entry, purgatoryGrid, entryTemplate) }
+            entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
         }
+        else if (filter == "liked") {
+            entries = await isLoggedIn() ? getAccountData().likedPoems : JSON.parse(localStorage.liked)
+        }
+        else if (filter == "new") {
+            //Picks appear first on new, and have a different template
+            let picks = await (await fetch("https://server.poemanthology.org:81/PurgatoryPicks")).json()
+            let pickTemplate = entryTemplate.valueOf()
+            pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
+            pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal teeam to be something that you SHOULd see now!"
+
+            for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, pickTemplate) }
+
+            entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
+        }
+
+        for (let entry of entries) { await appendEntry(entry, purgatoryFlex, entryTemplate) }
 
         if (!params.get("purgatorynew") || !purgatoryFlex.children[0]) return
         purgatoryFlex.children[0].classList.add("entry-new")
@@ -623,7 +648,7 @@
 
     async function appendEntry(entry, element, template) {
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
-        let newE = stringToHtml(template.valueOf())
+        let newE = template.valueOf()
         newE.setAttribute("guid", entryData?.guid)
         newE.querySelector("#_poemPreview").textContent = (
             entryData.poemContent?.substring(0, 56)
