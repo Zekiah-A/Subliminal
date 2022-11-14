@@ -151,7 +151,7 @@ ___________________________________________________________
             likeButton.setAttribute("liked", false)
             likeButton.children[0].style.fill = "transparent"
 
-            if (await isloggedIn()) {
+            if (await isLoggedIn()) {
                 executeAccountAction(actionType.UnlikePoem, guid)
                 return
             }
@@ -166,7 +166,7 @@ ___________________________________________________________
         likeButton.setAttribute("liked", true)
         likeButton.children[0].style.fill = "#ffd500"
 
-        if (await isloggedIn()) {
+        if (await isLoggedIn()) {
             executeAccountAction(actionType.LikePoem, guid)
             return
         }
@@ -227,7 +227,7 @@ ___________________________________________________________
             localStorage.vetoed = new Set()
 
         // You can not pin a poem unless you have an account
-        if (!await isloggedIn()) {
+        if (!await isLoggedIn()) {
             pinButton.onclick = () => {
                 alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
             }
@@ -272,7 +272,7 @@ ___________________________________________________________
                 (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
         }
 
-        if ((await isloggedIn() && (await getAccountData()).likedPoems.includes(guid)) ||
+        if ((await isLoggedIn() && (await getAccountData()).likedPoems.includes(guid)) ||
             (localStorage.liked && JSON.parse(localStorage.liked) && JSON.parse(localStorage.liked).includes(guid))) {
             likeButton.setAttribute("liked", true)
             likeButton.children[0].style.fill = "#ffd500"
