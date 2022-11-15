@@ -502,20 +502,26 @@
         confirm("Page sucessfully created!\nDownload and create a pull request on github, in order to have your new poem merged into the main site.");
     }
 
+    // TEST:
+    // let number = 255
+    // let gen = number
+    // let shift = 0
+    // gen ^= 1 << (7 - shift)
+    // We pad the leading number because JS numbers can't have leading zeros
+    // console.log(number.toString(2).padStart(8, 0) + " : " + gen.toString(2).padStart(8, 0) + " -> " + gen)
     function getSignCanvasBits() {
         let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height
-        let buffer = new Uint8Array(bufWidth * bufHeight)
+        let buffer = new Uint8Array(bufWidth * bufHeight).fill(255) //11111111
         let data = ctx.getImageData(0, 0, signCanvas.width, signCanvas.height, { colorSpace: "srgb" }).data
 
         for (let h = 0; h < signCanvas.height; h++) {
             for (let w = 0; w < signCanvas.width; w++) {
                 let byteI = Math.floor(w / 8) * bufHeight
                 let shiftI = w % 8
+                console.log(shiftI)
 
-                if (data[(w * 4) - 1 + (signCanvas.width * h)] == 255) {
-                    let mask = 1 << shiftI
-                    buffer[byteI] = buffer[byteI] & ~mask | (1 << shiftI) & mask
-                }
+                //We set the bit to zero if the color at this position is not black
+                if (data[(w * 4) - 1 + (signCanvas.width * h)] == 0) buffer[byteI] ^= 255 << (8 - shiftI)
             }
         }
 
