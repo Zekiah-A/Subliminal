@@ -216,34 +216,35 @@ h2 {
     visibility: hidden;
 }
 
-/* TODO: Move license agree + login / license agree buttons + login buttons to this style. */
 .popup {
     position: fixed;
-    left:50%;
-    top:50%;
+    left: 50%;
+    top: 50%;
     transform:translate(-50%,-50%);
-    border-radius:8px;
-    padding:8px;
-    box-shadow:0 0 16px #000;
-    z-index:3;
-    backdrop-filter:blur(16px);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 0 16px #000;
+    z-index: 3;
+    backdrop-filter: blur(16px);
     width: 50%;
+    max-height: calc(100% - 32px);
+    overflow: scroll;
 }
 
 .popup-button {
     font-family: Arial, Helvetica, sans-serif;
-    border-radius:4px;
-    padding:8px;
-    text-align:center;
-    cursor:pointer;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
     background-color: var(--button-opaque);
     flex-grow: 1;
 }
 
 .popup-input {
-    width:calc(100% - 8px);
-    display:block;
-    line-height:200%;
+    width: calc(100% - 8px);
+    display: block;
+    line-height: 200%;
 }
 
 .button-tooltip {

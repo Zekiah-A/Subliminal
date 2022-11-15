@@ -161,11 +161,6 @@
             height: 512px;
         }
 
-        #builtinFreePopup {
-            max-height: calc(100% - 32px) !important;
-            overflow: scroll;
-        }
-
         #builtinFreePopup img {
             border-radius: 4px;
             max-width: 100%;
@@ -332,8 +327,6 @@
            Tools:
            <span class="tools-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
         </span>
-        Background image: <br>
-        <input type="file" multiple="" accept="image/*" onchange="handleBackgroundDrop(this)" style="width: 100%;">
         Poem summary: <br>
         <textarea id="summaryArea" type="text" maxlength="160" style="min-height: 50px; width: calc(100% - 5px); height: 50px; max-width: calc(100% - 5px); max-height: 150px;"></textarea>
         Poem tags: <br>
@@ -653,12 +646,11 @@
         let json = {}
 
         if (path.includes("/")) {
-            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + amend)
+            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + path)
             json = await data.json()
         }
-        else { //then we are amending a poem that is in purgatory, load it already as json from the purgatory server
+        else {
             json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + path)).json()
-            json.amends = path
         }
 
         return json
