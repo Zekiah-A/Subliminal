@@ -142,6 +142,12 @@ h2 {
     overflow-wrap: break-word;
 }
 
+.contents-div-centre {
+    margin: auto;
+    width: min(1112px, 100%);
+    padding: 10px;
+}
+
 .warning-centre {
     position: absolute;
     top: 50%;
@@ -470,7 +476,6 @@ h2 {
     .contents-div-centre {
         margin: 0px;
         width: calc(100% - 20px);
-        padding: 10px;
     }
 
     .comment {
@@ -537,12 +542,6 @@ h2 {
         top: 2px;
         z-index: 1;
         flex-grow: 1;
-    }
-
-    .contents-div-centre {
-        margin: auto;
-        width: 60%;
-        padding: 10px;
     }
 
     .comment {
