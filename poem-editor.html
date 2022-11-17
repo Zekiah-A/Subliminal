@@ -521,7 +521,7 @@
 
                 // We use 4n (n = pixel iteration we are looking at) - 1 to get where 255 (for black) would be.
                 // We set the bit to zero if the color at this position is not black
-                if (data[4 * (signCanvas.width * h + w) - 1] == 0) buffer[byteI] ^= 1 << (7 - shiftI)
+                if (data[4 * (signCanvas.width * h + w) + 3] == 0) buffer[byteI] ^= 1 << (7 - shiftI)
             }
         }
 
