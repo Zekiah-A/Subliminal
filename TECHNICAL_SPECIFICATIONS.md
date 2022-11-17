@@ -22,7 +22,7 @@ This means that we must split the image into bytes, each 8 pixels across is one 
 
 **Limitations:**
 
-Canvas has to be a multiple of 8 in width, else special byte operations would be necessary to wrap around the end of a row. We must convert back to unicode, as the server uses JSON, saving a bytearray as json has no advantage, as [ 128, 14, 26 ] as UTF-8 text is much more consuming than a garbled á or corrupted unicode char.
+Canvas has to be a multiple of 8 in width, else special byte operations would be necessary to wrap around the end of a row. We must convert back to unicode, as the server uses JSON, saving a pure bytearray as json has no advantage, as [ 128, 14, 26 ] as each character here will be a byte each. Therefore we should encode it to a base64 string, which is the most compact you can get with json.
 
 ## The poem styling protocol
 This engine is responsible for providing a cross platform solution for rendering poems on subliminal with rich text features. It's function is to be as easy to integrate both into a poem rich text editor, with little intense string manipulation or calculation in order to display the correct styles, to be small, or easily compressable, to make poem loading and server storage quick, and to be easily decodable, into HTML or another alike markup language, by a poem styling engine implementation.

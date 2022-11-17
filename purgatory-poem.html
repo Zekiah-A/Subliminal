@@ -135,6 +135,7 @@ ___________________________________________________________
 </body>
 <script>
     const params = new URLSearchParams(document.location.search)
+    const ctx = signCanvas.getContext('2d')
     const encoder = new TextEncoder()
     const guid = params.get("guid")
     const ratingType = {
@@ -264,8 +265,15 @@ ___________________________________________________________
 
         //Draw sign canvas bits if it's a signed poem
         if (poemData.signature) {
-            let signBuffer = encoder.encode(poemData.signature) //SHOULD BE DECODER
-            //tbc
+            //We decode the base64 back to binary/bytes
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            let buffer = (poemData.signature)
+
+            for (let h = 0; h < signCanvas.height; h++) {
+                for (let w = 0; w < signCanvas.width; w++) {
+                    if (buffer[w + h] != 0) ctx.fillRect(w, h, 1, 1)
+                }
+            }
         }
 
         //If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well

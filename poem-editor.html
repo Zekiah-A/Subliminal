@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+p<!DOCTYPE html>
 <html>
 <head>
     <title>Subliminal</title>
@@ -531,8 +531,7 @@
     function uploadCurrent() {
         saveCurrent()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
-        //Converting back to utf8, because converitng a bytearray into JSON does not have any poisitive effects on storage
-        loadObject.signature = decoder.decode(getSignCanvasBits()) //SHOULD BE ENCODER
+        loadObject.signature = (getSignCanvasBits())
 
         //WARNING: Calling async function without await may cause issues
         upload(loadObject) 
