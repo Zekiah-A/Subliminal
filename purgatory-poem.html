@@ -75,6 +75,7 @@
         <p id="poemContent">
             CONTENT
         </p>
+        <canvas id="signCanvas" height="96" width="256" style="width: 128px; height: 48px;"></canvas>
         <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <div class="rating-container">
@@ -134,6 +135,7 @@ ___________________________________________________________
 </body>
 <script>
     const params = new URLSearchParams(document.location.search)
+    const encoder = new TextEncoder()
     const guid = params.get("guid")
     const ratingType = {
         Approve: 0,
@@ -259,6 +261,12 @@ ___________________________________________________________
         poemContent.innerHTML = poemData.poemContent
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
+
+        //Draw sign canvas bits if it's a signed poem
+        if (poemData.signature) {
+            let signBuffer = encoder.encode(poemData.signature) //SHOULD BE DECODER
+            //tbc
+        }
 
         //If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well
         if (poemData.amends) {
