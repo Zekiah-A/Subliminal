@@ -628,7 +628,7 @@
             //Picks appear first on new, and have a different template
             
             let picks = await (await fetch("https://server.poemanthology.org:81/PurgatoryPicks")).json()
-            let pickTemplate = entryTemplate.cloneNode()
+            let pickTemplate = entryTemplate.cloneNode(true)
             pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
             pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal teeam to be something that you SHOULd see now!"
             
@@ -649,7 +649,7 @@
 
     async function appendEntry(entry, element, template) {
         let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
-        let newE = template.cloneNode()
+        let newE = template.cloneNode(true)
         newE.setAttribute("guid", entryData?.guid)
         newE.querySelector("#_poemPreview").textContent = (
             entryData.poemContent?.substring(0, 56)
