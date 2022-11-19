@@ -51,6 +51,13 @@
     .action-icon:hover path {
         stroke-width: 2.5px !important;
     }
+
+    @media screen and (orientation:landscape) {
+        .profileFrame {
+            height: 512px;
+            width: 60%;
+        }
+    }
     </style>
 </head>
 
@@ -99,7 +106,7 @@
         <br>
         <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
     </div>
-    <div id="profileFrame" style="height: 512px; width: 60%; display: none;" class="popup">
+    <div id="profileFrame" style="display: none;" class="popup">
         <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
         <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
 	</div>

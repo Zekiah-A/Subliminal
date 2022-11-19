@@ -10,7 +10,9 @@ public record PurgatoryEntry
     string? CWarningAdditions  = null,
     string? PageStyle  = null,
     string? PageBackground  = null,
-    bool? Amends = null
+    string? Amends = null,
+    string? Edits = null,
+    string? Signature = null
 )
 {
     // Parts of an entry that is modifiable & necessary, serialiseable

@@ -625,6 +625,10 @@
         }
         else if (filter == "liked") {
             entries = await isLoggedIn() ? (await getAccountData()).likedPoems : JSON.parse(localStorage.liked)
+
+            if (entries == null || entries.length == 0) {
+                purgatoryFlex.innerHTML = "<p style=\"text-align: center; width: 100%;\">😢 You haven't liked any poems...<br>Press the star icon on a poem to add one to your liked list!</p>"
+            }
         }
         else if (filter == "new") {
             //Picks appear first on new, and have a different template
