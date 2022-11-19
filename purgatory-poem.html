@@ -82,7 +82,7 @@
         <p id="poemContent">
             CONTENT
         </p>
-        <canvas id="signCanvas" height="96" width="256" style="width: 128px; height: 48px;"></canvas>
+        <canvas id="signCanvas" height="96" width="256" style="width: 128px; height: 48px; display: none;"></canvas>
         <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <div class="rating-container">
@@ -272,8 +272,10 @@ ___________________________________________________________
 
         //Draw sign canvas bits if it's a signed poem
         if (poemData.signature) {
-            //We decode the base64 back to binary/bytes
+            signCanvas.style.display = "block"
             ctx.fillStyle = "rgb(0, 0, 0)";
+
+            //We decode the base64 back to binary/bytes
             let buffer = new Uint8Array([...window.atob(poemData.signature)].map(char => char.charCodeAt(0)))
 
             for (let h = 0; h < signCanvas.height; h++) {
