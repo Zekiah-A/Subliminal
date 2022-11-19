@@ -646,9 +646,14 @@
         for (let entry of entries) { await appendEntry(entry, element, entryTemplate) }
 
         if (!params.get("purgatorynew") || purgatoryFlex.style.display == "none" || !purgatoryFlex.children[0]) return
-        purgatoryFlex.children[0].classList.add("entry-new")
-        window.scrollTo(0, 0)
 
+        let newTemplate = entryTemplate.cloneNode(true)
+        newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
+        pickTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
+        await appendEntry(params.get("purgatorynew"), newTemplate, entryTemplate)
+        
+        window.scrollTo(0, 0)
+        purgatoryFlex.children[0].classList.add("entry-new")
         setTimeout(() => purgatoryFlex.children[0].classList.remove("entry-new"), 800)
     }
 
