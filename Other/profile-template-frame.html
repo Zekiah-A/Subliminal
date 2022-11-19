@@ -80,20 +80,14 @@
 			return
         }
 
-		fetch('https://server.poemanthology.org:81/AccountProfile/' + params.get("guid"), {
-			method: "GET",
-			headers: { 'Content-Type': 'application/json' },
-		})
-		.then((res) => res.json())
-		.then((profileObject) => {
-			profileName.textContent = profileObject.penName || "Nameless"
-			profileBiography.textContent = profileObject.biography || "I have no biography, I am the unknown."
-			profileLocation.textContent = profileObject.location || "Planet Earth, Milky Way"
-			profilePinned.textContent = (profileObject.pinnedPoems?.length > 0 ? profileObject.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
-			setProfileRole(profileObject.role || "writer")
-			setProfileAvatar(profileObject.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
-			setProfileBadges(profileObject.badges)
-		})
+		let profileObject = await getPublicProfile(params.get("guid"))
+		profileName.textContent = profileObject.penName || "Nameless"
+		profileBiography.textContent = profileObject.biography || "I have no biography, I am the unknown."
+		profileLocation.textContent = profileObject.location || "Planet Earth, Milky Way"
+		profilePinned.textContent = (profileObject.pinnedPoems?.length > 0 ? profileObject.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
+		setProfileRole(profileObject.role || "writer")
+		setProfileAvatar(profileObject.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
+		setProfileBadges(profileObject.badges)
     }
 
     initialise()

@@ -50,7 +50,7 @@ function getBadgeInfo(badge) {
 async function getAccountData() {
     let data = null
     
-    fetch('https://server.poemanthology.org:81/Signin', {
+    await fetch('https://server.poemanthology.org:81/Signin', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: '"' + localStorage.accountCode + '"'
@@ -64,7 +64,7 @@ async function getAccountData() {
 async function getPublicProfile(guid) {
     let profile = null
 
-    fetch('https://server.poemanthology.org:81/AccountProfile/' + guid, {
+    await fetch('https://server.poemanthology.org:81/AccountProfile/' + guid, {
         method: "GET",
         headers: { 'Content-Type': 'application/json' },
     })

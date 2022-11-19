@@ -613,20 +613,21 @@
         purgatoryGrid.style.display = "none"
         purgatoryFlex.style.display = "flex"
 
-        let entries = []
+        let entries = null
+        let element = purgatoryFlex
 
         if (filter == "all") {
             purgatoryFlex.style.display = "none"
             purgatoryGrid.style.display = "grid"
+            element = purgatoryGrid
 
             entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
         }
         else if (filter == "liked") {
-            entries = await isLoggedIn() ? getAccountData().likedPoems : JSON.parse(localStorage.liked)
+            entries = await isLoggedIn() ? (await getAccountData()).likedPoems : JSON.parse(localStorage.liked)
         }
         else if (filter == "new") {
             //Picks appear first on new, and have a different template
-            
             let picks = await (await fetch("https://server.poemanthology.org:81/PurgatoryPicks")).json()
             let pickTemplate = entryTemplate.cloneNode(true)
             pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
@@ -638,7 +639,7 @@
             entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
         }
 
-        for (let entry of entries) { await appendEntry(entry, purgatoryFlex, entryTemplate) }
+        for (let entry of entries) { await appendEntry(entry, element, entryTemplate) }
 
         if (!params.get("purgatorynew") || purgatoryFlex.style.display == "none" || !purgatoryFlex.children[0]) return
         purgatoryFlex.children[0].classList.add("entry-new")
