@@ -274,7 +274,7 @@ ___________________________________________________________
         if (poemData.signature) {
             //We decode the base64 back to binary/bytes
             ctx.fillStyle = "rgb(0, 0, 0)";
-            let buffer = (poemData.signature)
+            let buffer = window.atob(poemData.signature)
 
             for (let h = 0; h < signCanvas.height; h++) {
                 for (let w = 0; w < signCanvas.width; w++) {

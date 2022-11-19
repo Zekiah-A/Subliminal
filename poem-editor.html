@@ -531,7 +531,7 @@
     function uploadCurrent() {
         saveCurrent()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
-        loadObject.signature = (getSignCanvasBits())
+        loadObject.signature = window.btoa(getSignCanvasBits())
 
         //WARNING: Calling async function without await may cause issues
         upload(loadObject) 
