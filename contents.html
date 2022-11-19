@@ -645,7 +645,7 @@
 
         for (let entry of entries) { await appendEntry(entry, element, entryTemplate) }
 
-        if (!params.get("purgatorynew") || purgatoryFlex.style.display == "none" || !purgatoryFlex.children[0]) return
+        if (!params.get("purgatorynew") || filter != "new" || !purgatoryFlex.children[0]) return
 
         let newTemplate = entryTemplate.cloneNode(true)
         newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
@@ -656,6 +656,7 @@
         purgatoryFlex.scrollTo(1e4, 0) //TEMP 
         newElement.classList.add("entry-new")
         setTimeout(() => newElement.classList.remove("entry-new"), 800)
+        params.delete("purgatorynew")
     }
 
     async function appendEntry(entry, element, template) {
