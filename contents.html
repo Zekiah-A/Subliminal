@@ -649,7 +649,7 @@
 
         let newTemplate = entryTemplate.cloneNode(true)
         newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
-        pickTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
+        newTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
         await appendEntry(params.get("purgatorynew"), newTemplate, entryTemplate)
         
         window.scrollTo(0, 0)
