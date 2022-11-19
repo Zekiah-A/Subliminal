@@ -650,9 +650,10 @@
         let newTemplate = entryTemplate.cloneNode(true)
         newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
         newTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
-        await appendEntry(params.get("purgatorynew"), newTemplate, entryTemplate)
+        await appendEntry(params.get("purgatorynew"), purgatoryFlex, newTemplate)
         
         window.scrollTo(0, 0)
+        purgatoryFlex.scrollTo(1e4, 0) //TEMP 
         purgatoryFlex.children[0].classList.add("entry-new")
         setTimeout(() => purgatoryFlex.children[0].classList.remove("entry-new"), 800)
     }
