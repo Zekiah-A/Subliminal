@@ -136,7 +136,7 @@
 
         entry .button-tooltip {
             left: 0px !important;
-            top: 40px !important;
+            top: 0px !important;
         }
 
         entry .preview::after {
@@ -635,7 +635,7 @@
             let picks = await (await fetch("https://server.poemanthology.org:81/PurgatoryPicks")).json()
             let pickTemplate = entryTemplate.cloneNode(true)
             pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
-            pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal teeam to be something that you SHOULd see now!"
+            pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal team to be something that you SHOULD see now!"
             
            
             for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, pickTemplate) }
@@ -650,12 +650,12 @@
         let newTemplate = entryTemplate.cloneNode(true)
         newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
         newTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
-        await appendEntry(params.get("purgatorynew"), purgatoryFlex, newTemplate)
+        let newElement = await appendEntry(params.get("purgatorynew"), purgatoryFlex, newTemplate)
         
         window.scrollTo(0, 0)
         purgatoryFlex.scrollTo(1e4, 0) //TEMP 
-        purgatoryFlex.children[0].classList.add("entry-new")
-        setTimeout(() => purgatoryFlex.children[0].classList.remove("entry-new"), 800)
+        newElement.classList.add("entry-new")
+        setTimeout(() => newElement.classList.remove("entry-new"), 800)
     }
 
     async function appendEntry(entry, element, template) {
@@ -674,6 +674,7 @@
         newE.querySelector("#_vetoes").textContent = entryData.vetoes || 0
 
         element.appendChild(newE)
+        return newE
     }
 
     function confirmFail(e) {
@@ -749,6 +750,7 @@
 
     //Site scripts
     initialiseHeader()
+    initialise()
     addPurgatoryEntries("new")
 
     filtersBar.addEventListener("mousemove", event => {
