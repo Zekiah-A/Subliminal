@@ -169,7 +169,7 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
     //We convert them back to PurgatoryEntry when saving to not leak code (safety)
     await JsonSerializer.SerializeAsync(createStream, entry as PurgatoryEntry, Utils.DefaultJsonOptions);
     await JsonSerializer.SerializeAsync(backupStream, entry as PurgatoryEntry, Utils.DefaultJsonOptions);
-    return Results.Ok();
+    return Results.Text(entry.Guid);
 });
 
 httpServer.MapGet("/Drafts/{guid}", (string guid) =>
@@ -199,7 +199,7 @@ httpServer.MapPost("/DraftsUpload", async (PurgatoryAuthenticatedEntry entry) =>
     //Save draft to fs
     await using var createStream = File.Create(Path.Join(purgatoryDir.Name, guid.ToString()));
     await JsonSerializer.SerializeAsync(createStream, entry as PurgatoryEntry, Utils.DefaultJsonOptions);
-    return Results.Ok();
+    return Results.Text(entry.Guid);
 });
 
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account

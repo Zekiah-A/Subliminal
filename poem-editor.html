@@ -554,12 +554,17 @@
                 console.error("Cricical error in uploading" + res)
                 licenseAgreePopup.style.display = "none"
                 alert("Sorry! 😭\n\nFailed to upload poem to purgatory. Maybe try again...")
-                return
+                return null
             }
-            
+
+            return res.text()
+        })
+        .then(guidResponse => {            
+            if (guidResponse == null) return
+
             console.log("Upload sucessful, redirecting.")
             window.onbeforeunload = () => {} 
-            window.location.href = "./contents?purgatorynew=true"
+            window.location.href = "./contents?purgatorynew=" + guidResponse
         })
     }
 
