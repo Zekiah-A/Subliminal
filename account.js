@@ -88,7 +88,7 @@ async function executeAccountAction(action, value) {
 }
 
 async function isLoggedIn() {
-    if (!localStorage.accountCode) return false;
+    if (!localStorage.accountCode) return false
 
     let response = await (await fetch('https://server.poemanthology.org:81/Signin', { method: "POST", headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}))
     return response.ok

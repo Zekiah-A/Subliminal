@@ -25,12 +25,12 @@ This means that we must split the image into bytes, each 8 pixels across is one 
 Canvas has to be a multiple of 8 in width, else special byte operations would be necessary to wrap around the end of a row. We must convert back to unicode, as the server uses JSON, saving a pure bytearray as json has no advantage, as [ 128, 14, 26 ] as each character here will be a byte each. Therefore we should encode it to a base64 string, which is the most compact you can get with json.
 
 ## The poem styling protocol
-This engine is responsible for providing a cross platform solution for rendering poems on subliminal with rich text features. It's function is to be as easy to integrate both into a poem rich text editor, with little intense string manipulation or calculation in order to display the correct styles, to be small, or easily compressable, to make poem loading and server storage quick, and to be easily decodable, into HTML or another alike markup language, by a poem styling engine implementation.
+This engine is responsible for providing a cross platform solution for rendering poems on subliminal with rich text features. It's function is to be as easy to integrate both into a poem rich text editor, with little intense string manipulation or calculation in order to display the correct styles, to be small, or easily compressable, to make poem loading and server storage quick, and to be easily decodable, or into HTML or another alike markup language, by a poem styling engine implementation.
 
 ### Intended function:
-In *uncompressed* mode, the protocol consists of a marker, which identifies the style that the unicode character proceeding it should inherit, multiple markers may be placed before a character to allow it to inherit multiple styles, such as bold and italic, the marker type used when only referencing the next character, and no more (one char) is an end marker, to tell the engine that it does not need to seek for any closes to that style after.
+In *uncompressed* mode, the protocol consists of a marker, which identifies the style that the unicode character proceeding it should inherit, multiple markers may be placed before a character to allow it to inherit multiple styles, such as bold and italic. The end marker type is used when only referencing the next character, to tell the engine that it does not need to seek for any closes to that style after.
 
-In *compressed* mode, these markers perform much more like HTML elements, with the markers consisting of a start and end range (using start and end markers), where everything between the start and end marker (with the character proceeding the end marker included) inheriting that style.
+In *compressed* mode, these markers perform much more like HTML tags, with the markers consisting of a start and end range (using start and end markers), where everything between the start and end marker (with the character proceeding the end marker included) inheriting that style.
 
 
 **Markers:**
@@ -38,7 +38,7 @@ In *compressed* mode, these markers perform much more like HTML elements, with t
 \0x00..\0x80
 (0 - 128)
 
-Marker codes (done in HEX in real world):
+Marker codes:
  - 0 : Bold start
  - 1 : Italic start
  - 2 : Underline start

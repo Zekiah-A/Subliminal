@@ -11,10 +11,10 @@ namespace SubliminalServer.LiveEdit;
 /// </summary>
 public class LiveEditSocketServer
 {
-    private WatsonWsServer app;
+    private readonly WatsonWsServer app;
     // List of draft guids + draft poem data that currently have clients connected
-    private Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();
-    private Dictionary<ClientMetadata, LiveEditClient> clients = new();
+    private readonly Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();
+    private readonly Dictionary<ClientMetadata, LiveEditClient> clients = new();
 
     private readonly DirectoryInfo draftsDir = new(@"Drafts");
 
@@ -47,7 +47,7 @@ public class LiveEditSocketServer
                     }
 
                     //Create session if does not exist, and load poem data into mem
-                    if (!sessions.Keys.Contains(draftGuid))
+                    if (!sessions.ContainsKey(draftGuid))
                     {
                         await using var openStream = File.OpenRead(Path.Join(draftsDir.Name, draftGuid));
                         var draftData = await JsonSerializer.DeserializeAsync<PurgatoryAuthenticatedEntry>(openStream, Utils.DefaultJsonOptions);
