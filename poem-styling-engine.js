@@ -2,46 +2,60 @@
 // See TECHNICAL_SPECIFICATIONS.md for information on how this works.
 
 const markerType = {
+    EndChar: 0,
+
     // Absolute marker values
-    BoldStart: 0,
-    ItalicStart: 1,
-    UnderlineStart: 2,
-    MonospaceStart: 3,
-    FantasyStart: 4,
-    CursiveStart: 5,
-    SerifStart: 6,
+    BoldStart: 1,
+    ItalicStart: 2,
+    UnderlineStart: 3,
+    MonospaceStart: 4,
+    FantasyStart: 5,
+    CursiveStart: 6,
+    SerifStart: 7,
 
     // Ranges 7..39, 40..72, 73..105
-    TextRedStart: 7,
-    TextBlueStart: 40,
-    TextGreenStart: 73,
-    AnnotationRegionStart: 105,
+    TextRedStart: 8,
+    TextBlueStart: 41,
+    TextGreenStart: 74,
 
     //Absolute marker values
-    BoldEnd: 128,
-    ItalicEnd: 129,
-    UnderlineEnd: 130,
-    MonospaceEnd: 131,
-    FantasyEnd: 132,
-    CursiveEnd: 133,
-    SerifEnd: 134
+    BoldEnd: 107,
+    ItalicEnd: 108,
+    UnderlineEnd: 109,
+    MonospaceEnd: 110,
+    FantasyEnd: 111,
+    CursiveEnd: 112,
+    SerifEnd: 113,
 
     // Ranges
-    //tbc.
+    TextRedEnd: 114,
+    TextBlueEnd: 147,
+    TextGreenEnd: 180,
 }
 
 const encoder = new TextEncoder()
-const decoded = new TextDecoder("utf-8")
+const decoded = new TextDecoder()
 
 // Creates the data that should be appened to the current buffer,
 // that contains the character shifted by one byte, with styles attached 
-function createCharacterData(character, withStyles) {
-    //Create character and shift by one byte
-    let dataBuffer = new Uint8Array()
-    let view = new DataView(dataBuffer)
+function createCharacterData(character, withStyles = []) {
+    // Create character and shift by one byte, data = char(2) + endcharMarker (1) + withStyles(length)
+    let data = new Uint8Array(3 + withStyles.length)
+    let view = new DataView(data.buffer)
     let shifted = encoder.encode(character)[0] + 256
     
-    //Write the code (if marker is an end marker) of each style to dataview, then write the char itself finally
+    let i = 0;
+    while (i < withStyles.length) {
+        if (style <= BoldEnd || style >= TextGreenEnd) continue
+        view.setUint8(i, withStyles[i])
+        i++
+    }
+    
+    // UFT8-16
+    view.setUint16(i, shifted)
+    view.setUint8(i+=2, markerType.EndChar)
+    
+    return view.buffer;    
 }
 
 // Iterate through each character, and appply the appropiate styles to each.
