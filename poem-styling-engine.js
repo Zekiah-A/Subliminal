@@ -2,7 +2,9 @@
 // See TECHNICAL_SPECIFICATIONS.md for information on how this works.
 
 const markerType = {
+    // Specials
     EndChar: 0,
+    StartChar: 255,
 
     // Absolute marker values
     BoldStart: 1,
@@ -39,23 +41,25 @@ const decoded = new TextDecoder()
 // Creates the data that should be appened to the current buffer,
 // that contains the character shifted by one byte, with styles attached 
 function createCharacterData(character, withStyles = []) {
-    // Create character and shift by one byte, data = char(2) + endcharMarker (1) + withStyles(length)
-    let data = new Uint8Array(3 + withStyles.length)
+    // Create character, data = char(2) + endcharMarker (1) + withStyles(length)
+    let data = new Uint8Array(4 + withStyles.length)
     let view = new DataView(data.buffer)
-    let shifted = encoder.encode(character)[0] + 256
+    let char = encoder.encode(character)[0]
     
     let i = 0;
     while (i < withStyles.length) {
-        if (style <= BoldEnd || style >= TextGreenEnd) continue
+        if (withStyles[i] <= markerType.BoldEnd || withStyles[i] >= markerType.TextGreenEnd) continue
         view.setUint8(i, withStyles[i])
         i++
     }
     
-    // UFT8-16
-    view.setUint16(i, shifted)
+    // UFT8-16, we assume char code will never be 0 or 255 because that is stupid
+    console.log(i)
+    view.setUint16(i, markerType.StartChar)
+    view.setUint16(i++, char)
     view.setUint8(i+=2, markerType.EndChar)
     
-    return view.buffer;    
+    return view.buffer
 }
 
 // Iterate through each character, and appply the appropiate styles to each.
