@@ -234,7 +234,8 @@ h2 {
     backdrop-filter: blur(16px);
     width: 50%;
     max-height: calc(100% - 32px);
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .popup-button {
