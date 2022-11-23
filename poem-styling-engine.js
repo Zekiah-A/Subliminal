@@ -46,7 +46,7 @@ function createCharacterData(character, withStyles = []) {
     let view = new DataView(data.buffer)
     let char = encoder.encode(character)[0]
     
-    let i = 0;
+    let i = 0
     while (i < withStyles.length) {
         if (withStyles[i] <= markerType.BoldEnd || withStyles[i] >= markerType.TextGreenEnd) continue
         view.setUint8(i, withStyles[i])
@@ -55,7 +55,7 @@ function createCharacterData(character, withStyles = []) {
     
     // UFT8-16, we assume char code will never be 0 or 255 because that is stupid
     console.log(i)
-    view.setUint16(i, markerType.StartChar)
+    view.setUint8(i, markerType.StartChar)
     view.setUint16(i++, char)
     view.setUint8(i+=2, markerType.EndChar)
     
