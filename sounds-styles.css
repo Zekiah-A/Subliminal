@@ -63,26 +63,13 @@ input[type="range"] {
     border-radius: 4px;
 }
 
-input[type="range"]::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb, input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     height: 100%;
     background: #096BB1;
     cursor: pointer;
-    transform: translateX(-10px);
-    width: 20px;
-    box-shadow: -1010px 0px 0px 1000px #096bb1;
-    border: none;
-    border-radius: 0px 10px 10px 0px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    height: 100%;
-    background: #096BB1;
-    cursor: pointer;
-    transform: translateX(-10px);
-    width: 20px;
-    box-shadow: -1010px 0px 0px 1000px #096bb1;
+    width: 5px;
+    box-shadow: -1005px 0px 0px 1000px #096bb1;
     border: none;
     border-radius: 0px 10px 10px 0px;
 }
