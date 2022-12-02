@@ -166,11 +166,6 @@
             max-width: 100%;
         }
 
-        #tagContainer button {
-            margin: 1px;
-            padding: 4px;
-        }
-
         .background-grid {
             display: grid;
             grid-template-columns: auto auto auto;
@@ -180,7 +175,6 @@
         .background-grid > div {
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
 
         .background-grid > div:hover > div {
@@ -196,7 +190,6 @@
             transition: .2s top;
             background-color: var(--button-opaque);
             user-select: none;
-            padding: 4px;
         }
 
         @media screen and (orientation:portrait) {
@@ -338,7 +331,7 @@
         <textarea id="summaryArea" type="text" maxlength="160" style="min-height: 50px; width: calc(100% - 5px); height: 50px; max-width: calc(100% - 5px); max-height: 150px;"></textarea>
         Poem tags: <br>
         <div id="tagContainer"></div>
-        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeydown="if (!this.value.trim()) return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { if (!this['spaces']) { this['spaces'] = 0; } this['spaces']++; if (this['spaces'] < 2) return; add(); this['spaces'] = 0 }">
+        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (this.value.trim() == '') return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { this.spaces++; if (this.spaces < 2) return; add(); this.spaces = 0 }">
         Content Warning: <br>
         <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
         <label for="cWarningCheckbox"> Enabled</label><br>
@@ -538,8 +531,12 @@
     function uploadCurrent() {
         saveCurrent()
         let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
-        //Converting back to utf8, because converitng a bytearray into JSON does not have any poisitive effects on storage
-        loadObject.signature = decoder.decode(getSignCanvasBits()) //SHOULD BE ENCODER
+        
+        //Only apply if they actually used the signature
+        let signBits = getSignCanvasBits()
+        if (!signBits.every(item => item === 0)) {
+            loadObject.signature = window.btoa(String.fromCharCode(...new Uint8Array(signBits)))
+        }
 
         //WARNING: Calling async function without await may cause issues
         upload(loadObject) 
@@ -557,12 +554,17 @@
                 console.error("Cricical error in uploading" + res)
                 licenseAgreePopup.style.display = "none"
                 alert("Sorry! 😭\n\nFailed to upload poem to purgatory. Maybe try again...")
-                return
+                return null
             }
-            
+
+            return res.text()
+        })
+        .then(guidResponse => {            
+            if (guidResponse == null) return
+
             console.log("Upload sucessful, redirecting.")
             window.onbeforeunload = () => {} 
-            window.location.href = "./contents?purgatorynew=true"
+            window.location.href = "./contents?purgatorynew=" + guidResponse
         })
     }
 
@@ -712,3 +714,18 @@
     })
 </script>
 </html>
+
+<!--
+else { //DEPRECATED: Maybe this can be refitted for loading up downloaded poem HTML files
+    let poemHtml = pageToHtml(await data.text())
+    json = {
+        //Summary, tags, content warning, etc is unrecoverable with poems web1 poems, so we use default values
+        poemName: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[0],
+        poemAuthor: poemHtml.querySelector("body > div> h2").innerText.split(" - By ")[1],
+        poemContent: poemHtml.querySelector("body div > p").innerHTML, //poem html
+        pageStyle: poemHtml.querySelector("body div:has(p)").className, //poem visual format
+        pageBackground: poemHtml.style.background, //poem background image
+        amends: edit
+    }
+}
+-->
