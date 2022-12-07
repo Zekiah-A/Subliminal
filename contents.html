@@ -209,7 +209,9 @@
 
         #login {
             width: 400px;
-            height: unset;
+            max-height: 180px;
+            transition: max-height 0.2s;
+            height: auto;
         }
 
         #login[currentpage="signin"] > #loginSignin {
@@ -220,6 +222,9 @@
             display: block !important;
         }
 
+        #login[currentpage="code"] {
+            max-height: 400px;
+        }
         #login[currentpage="code"] > #loginCode {
             display: block !important;
         }
