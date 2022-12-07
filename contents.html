@@ -15,6 +15,9 @@
             cursor: pointer;
             max-width: 20%;
             width: 20%;
+            transition: .2s all;
+            transition: all 500ms ease;
+            transition-property: max-width, width, font-weight;
         }
 
         .section-body {
@@ -22,6 +25,14 @@
             border-left: 2px solid grey;
             padding-left: 5px;*/
             transition: transform .5s;
+        }
+
+        .section-collapsed {
+            position: absolute;
+            top: 32px;
+            transform: translate(-50%);
+            right: 16px;
+            display: none;
         }
 
         .grid-container {
@@ -38,6 +49,27 @@
             margin: 8px;
             padding: 8px;
             background-color: var(--panel-transparent);
+            position: relative;
+            transition: max-height .2s;
+        }
+
+        .grid-sub-container[collapsed] {
+            max-height: 64px;
+            overflow: clip;
+        }
+
+        .grid-sub-container[collapsed] > .section-span {
+            max-width: 100%;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .grid-sub-container[collapsed] > .section-body {
+            transform: translateX(110%);
+        }
+
+        .grid-sub-container[collapsed] > .section-collapsed {
+            display: block;
         }
 
         .poem-preview {
@@ -209,8 +241,6 @@
 
         #login {
             width: 400px;
-            max-height: 180px;
-            transition: max-height 0.2s;
             height: auto;
         }
 
@@ -222,9 +252,6 @@
             display: block !important;
         }
 
-        #login[currentpage="code"] {
-            max-height: 400px;
-        }
         #login[currentpage="code"] > #loginCode {
             display: block !important;
         }
@@ -277,7 +304,7 @@
     <div id="login" style="display: none;" class="popup" currentpage="signin">
         <h2>Login to Subliminal:</h2>
         <div id="loginSignin" style="display: none;">
-            <input id="loginSigninInput" type="text" class="popup-input" placeholder="account code">
+            <input id="loginSigninInput" type="text" class="popup-input" placeholder="Account code">
             <div style="display:flex;column-gap:8px;margin-top:8px">
                 <div class="popup-button" onclick="login.setAttribute('currentpage', 'signup');">I don't have an account
                 </div>
@@ -322,10 +349,6 @@
             <div>New</div>
             <tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
         </div>
-        <!--<div onclick="addPurgatoryEntries('picks')">
-            <div>Picks</div>
-            <tooltip class="button-tooltip">The best of the best - These are the poems we reccomend you should check out!</tooltip>
-        </div> TODO: Merge picks into new, make them appear as the first poems on new, with a special "picks" notice-->
         <div onclick="addPurgatoryEntries('liked')">
             <div>Liked</div>
             <tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
@@ -345,8 +368,9 @@
         <div>
             <h3>Volume 1: (Phrenes and Memes)</h3>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-1')">War and Phrenics:</p>
-                <div id="section-1" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">War and Phrenics:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
                     <br>
                     <a href="./poem?path=/Volume-1/War-And-Phrenics/the-sitting-down-of-the-opacity-brigade">2. The sitting down of the opacity brigade - By Bushi</a>
@@ -376,8 +400,9 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-2')">Really Stupid Stuff:</p>
-                <div id="section-2" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Really Stupid Stuff:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
                     <br>
                     <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/sylable-of-obamama">2. Sylable Of Obamama - By Bushi</a>
@@ -425,8 +450,9 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-3')">Parodies and Adaptations:</p>
-                <div id="section-3" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Parodies and Adaptations:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
                     <br>
                     <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/stuff-on-the-iso">2. Stuff On The Iso - By Zekiah</a>
@@ -453,8 +479,9 @@
         <div>
             <h3>Volume 2: (Idiots and Revelations)</h3>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-4')">Idiots:</p>
-                <div id="section-4" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Idiots:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
                     <br>
                     <a href="./poem?path=/Volume-2/Idiots/industrial-society">2. Industrial Society - By Bushi</a>
@@ -504,8 +531,9 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-5')">Sublime and Revelation:</p>
-                <div id="section-5" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Sublime and Revelation:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
                     <br>
                     <a href="./poem?path=/Volume-2/Sublime-And-Revelation/chiss">2. Chiss - By Zekiah</a>
@@ -519,8 +547,9 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-6')">Tales and Tomes:</p>
-                <div id="section-6" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Tales and Tomes:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
                     <br>
                     <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-burial-of-herr-fischer-vi">2. The Burial of Herr Fischer VI - By Bushi</a>
@@ -531,8 +560,9 @@
             </div>
             <h3>Other stuff:</h3>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-6')">Copypastas:</p>
-                <div id="section-6" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Copypastas:</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="Other/a-joke">1. A joke - By Zekiah</a>
                     <br>
                     <a href="Other/the-redditor">2. The Redditor - By Bushi</a>
@@ -540,8 +570,9 @@
                 </div>
             </div>
             <div class="grid-sub-container">
-                <p class="section-span" onclick="toggleCollapsed('section-6')">Sussy songs</p>
-                <div id="section-6" class="section-body">
+                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Sussy songs</p>
+                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                <div class="section-body">
                     <a href="#">1. AQGay (Lyrics) - By Zekiah (as SussZ)</a>
                     <br>
                     <a href="#">2. Filthy French (Lyrics) - By Zekiah (as SussZ)</a>
@@ -557,7 +588,6 @@
 <script></script>
 <script>
     const params = new URLSearchParams(document.location.search)
-    let collapsedSections = new Set()
 
     let stringToHtml = text => {
         let htmlObject = document.createElement('temp')
@@ -577,19 +607,6 @@
             if (!value.toLowerCase().trim()) return
             else lnb.style.display = 'none'
         })
-    }
-
-    //style.display = "none"; //style.display="initial"
-    function toggleCollapsed(sectionId) {
-        if (collapsedSections.has(sectionId)) { //uncollapse
-            document.getElementById(sectionId).style.transform = "initial"
-            document.getElementById(sectionId).parentElement.style.height = "auto"
-            collapsedSections.delete(sectionId)
-            return
-        } //collapse
-        document.getElementById(sectionId).style.transform = "translateY(-40%) scaleY(0.2)"
-        document.getElementById(sectionId).parentElement.style.height = document.getElementById(sectionId).style.height;
-        collapsedSections.add(sectionId)
     }
 
     async function addPurgatoryEntries(filter) {
