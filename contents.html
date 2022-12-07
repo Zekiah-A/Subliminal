@@ -50,11 +50,11 @@
             background-color: var(--panel-transparent);
             position: relative;
             transition: max-height .2s;
+            overflow: hidden;
         }
 
         .grid-sub-container[collapsed] {
             max-height: 64px;
-            overflow: clip;
         }
 
         .grid-sub-container[collapsed] > .section-span {
