@@ -190,6 +190,7 @@
             transition: .2s top;
             background-color: var(--button-opaque);
             user-select: none;
+            pointer-events: none;
         }
 
         @media screen and (orientation:portrait) {
@@ -253,7 +254,7 @@
     <div id="builtinFreePopup" class="popup" style="display: none;">
         <h2>Built-in backgrounds:</h2>
         <p>These backgrounds are free for you to use to jazz up your poem's look! Drawn and shot by members of the subliminal team.</p>
-        <div class="background-grid">
+        <div class="background-grid" onclick="applyBuiltinBackground(event.target)">
             <div><img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg"><div>Taken somewhere in the Chilterns, UK.</div></div>
             <div><img loading="lazy" src="./Resources/Backgrounds/FinlandIntersection.jpg"><div>Taken at an intersection somewhere between Uusikaupunki and Helsinki, Finland.</div></div>
             <div><img loading="lazy" src="./Resources/Backgrounds/IsoBoy.jpg"><div>A fish that mysteriously disappeared the next day, Island near Uusikaupunki, Finland.</div></div>
@@ -608,6 +609,11 @@
         reader.onloadend = () => {
             document.body.style.background = `url('${reader.result}')`;
         }
+    }
+
+    function applyBuiltinBackground(target) {
+        if (!target.src) return
+        document.body.style.background = `url('${target.src}')`
     }
 
     function addPoemTag(tagName) {
