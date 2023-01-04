@@ -23,7 +23,7 @@
             /*border-radius: 10px;
             border-left: 2px solid grey;
             padding-left: 5px;*/
-            transition: transform .5s;
+            transition: transform .5s, opacity .5s;
         }
 
         .section-collapsed {
@@ -33,6 +33,10 @@
             right: 16px;
             transform-origin: center;
             transition: .2s transform;
+        }
+
+        .section-collapsed > svg {
+            fill: var(--text-colour);
         }
 
         .grid-container {
@@ -66,6 +70,7 @@
 
         .grid-sub-container[collapsed] > .section-body {
             transform: translateX(110%);
+            opacity: 0;
         }
 
         .grid-sub-container[collapsed] > .section-collapsed {
@@ -601,7 +606,12 @@
         document.querySelectorAll(".section-body a").forEach((elem) => {
             elem.style.display = 'inline-block'
             if (!value.toLowerCase().trim()) return
-            if (!elem.textContent.toLowerCase().includes(value.toLowerCase().trim())) elem.style.display = 'none'
+            if (!elem.textContent.toLowerCase().includes(value.toLowerCase().trim())) {
+                elem.style.display = 'none'
+                return
+            }
+
+            elem.parentElement.parentElement.removeAttribute("collapsed")
         })
         document.querySelectorAll(".section-body br").forEach((lnb) => {
             lnb.style.display = 'inline-block'
@@ -746,6 +756,12 @@
     }
 
     async function initialise() {
+        // If on mobile, collapse sections by default to make site more compact
+        if (window.matchMedia("(orientation: portrait)").matches) {
+            document.querySelectorAll(".grid-sub-container")
+                .forEach(elem => elem.setAttribute("collapsed", true))
+        }
+
         if (params.get("accountCode")) {
             signin(params.get("accountCode"))
         }
