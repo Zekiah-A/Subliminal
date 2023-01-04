@@ -44,14 +44,19 @@
 
         .document-tools {
             position: fixed;
-            top: 146px;
-            right: 16px;
-            width: 180px;
+            top: 130px;
+            right: 0px;
+            width: max(16%, 250px);
             padding: 8px;
-            border-radius: 8px;
-            background-color: var(--button-transparent); /*var(--background-transparent);*/
+            background-color: var(--button-transparent);
             backdrop-filter: blur(5px);
+            box-shadow: 0px 0px 8px grey;
             z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
+            overflow-y: scroll;
         }
 
         #formattingToolbar {
@@ -152,13 +157,35 @@
             margin-bottom: 4px;
         }
 
-        #loadDiv {
+        #loadedContainer {
             display: flex;
             flex-direction: column;
             row-gap: 5px;
             max-height: 512px;
             overflow: scroll;
             height: 512px;
+        }
+
+        #summaryArea {
+            min-height: 50px;
+            width: calc(100% - 16px);
+            height: 254px;
+            resize: none;
+            background: var(--button-opaque);
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 8px;
+            transition: .2s box-shadow;
+        }
+
+        #tagContainer, #cWarningContainer, #summaryArea {
+            transition: .2s box-shadow;
+        }
+
+        #summaryArea:hover, #tagContainer:hover, #cWarningContainer:hover {
+            box-shadow: 0px 0px 8px darkgray;
         }
 
         #builtinFreePopup img {
@@ -199,9 +226,11 @@
             }
 
             .document-tools {
-                position: inherit !important;
                 width: calc(100% - 12px);
-                margin-top: 16px;
+                height: 60%;
+                bottom: 0px;
+                top: inherit;
+                padding-top: 0px;
             }
 
             #signCanvas {
@@ -216,7 +245,7 @@
                 overflow-x: scroll;
             }
 
-            #loadDiv {
+            #loadedContainer {
                 height: calc(100% - 96px);
                 max-height: calc(100% - 96px);
             }
@@ -274,7 +303,7 @@
 
     <div id="loadPoemPopup" class="popup" style="display: none/*block;*/">
         <h2>Load poem:</h2>
-        <div id="loadDiv"></div>
+        <div id="loadedContainer"></div>
         <div class="popup-button" style="margin-top: 8px;" onclick="loadPoemPopup.style.display =  'none';">Done</div>
     </div>
 
@@ -286,6 +315,15 @@
         </div>
         <hr>
         <div id="formattingToolbar">
+            <div class="options-parent" style="width: 72px; min-width: 72px;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                <div>File ⯆</div>
+                <div class="options" style="width: 120px;">
+                    <div onclick="">Download poem</div>
+                    <div onclick="">Save poem</div>
+                    <div onclick="">See my drafts</div>
+                    <div onclick="">Upload to site</div>
+                </div>                
+            </div>    
             <div onclick="format('undo', null)" style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
             <div onclick="format('redo', null)" style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
             <div onclick="format('bold', null)"><div style="font-weight: bold;">B</div></div>
@@ -320,50 +358,75 @@
         </div>
         <hr>
     </div>
-    <div style="position: fixed; top: 90px;">
+
+    <div style="position: absolute; left: 16px;display: flex;flex-direction: column;">
+        Online editors:
+        <div style="position: relative;margin-bottom: -16px; display: flex;">
+            <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
+            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
+        </div>
+        <div style="position: relative;margin-bottom: -16px; display: flex;">
+            <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
+            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
+        </div>
+        <div style="position: relative;margin-bottom: -16px; display: flex;">
+            <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
+            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
+        </div>
+        <div style="position: relative;margin-bottom: -16px; display: flex;">
+            <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
+            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
+        </div>
     </div>
-    <div class="text-tools" collapsed="false">
-        <span class="tool-header" onclick="this.parentElement.setAttribute('collapsed', this.parentElement.getAttribute('collapsed') == 'true' ? 'false' : 'true')">
-           Tools:
-           <span class="tools-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-        </span>
-        Poem summary: <br>
-        <textarea id="summaryArea" type="text" maxlength="160" style="min-height: 50px; width: calc(100% - 5px); height: 50px; max-width: calc(100% - 5px); max-height: 150px;"></textarea>
-        Poem tags: <br>
-        <div id="tagContainer"></div>
-        <input type="text" placeholder="Add new tag" style="width: calc(100% - 5px); height: 24px;" onkeypress="if (this.value.trim() == '') return; let add = () => { addPoemTag(this.value); this.value = '' }; if (event.key == 'Enter') { add() } else if (event.key == 'Space') { this.spaces++; if (this.spaces < 2) return; add(); this.spaces = 0 }">
-        Content Warning: <br>
-        <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
-        <label for="cWarningCheckbox"> Enabled</label><br>
-        <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
-    </div>
-    <div id="toolbox" class="document-tools">
-        <span class="tool-header">Document Management:</span>
-        <input id="saveButton" class="tool" onclick="saveCurrent()" type="button" value="Save draft poem 💾" style="width: 100%;height: 32px;">        
-        <button class="management-button" id="loadButton" onclick="loadPoemPopup.style.display = 'block';">
-            <p name="tooltip" class="button-tooltip">Will open the load poem menu. Allowing you to acess your poem editor saved poems, or open a poem autosaved to the subliminal cloud* (only applies if you have a subliminal account).</p>Load Poem
-        </button>
-        <button id="downloadButton" onclick="download()" class="management-button">
-            <p name="tooltip" class="button-tooltip">This will download a formatted subliminal HTML file, containing the whole page for your created poem.<br><br>You can then visit the <a href="https://github.com/Zekiah-A/Subliminal">github</a>, and create a pull request, to have your poem reviewed, and added to the site.</p>
-            Download edited page
-           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" xmlns:v="https://vecta.io/nano" width="18px" style="transform: translateY(8px);">
-              <path d="M36.5 17v32.761m-8.695-8.116L36.5 50.31l8.695-8.665M27.5 55h18"></path>
-           </svg>
-        </button>
-        <button id="uploadButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button">
-            <p name="tooltip" class="button-tooltip">This will send your poem to the <strong>poem purgatory</strong> section of the site, where anyone can view it immediately.<br><br><em>Note: Anyone will be able to rate your poem, if it gets enough approvals, it will officially be added to the site.</em></p>
-            Upload to site 📨
-        </button>
-        <button id="amendButton" onclick="licenseAgreePopup.style.display = 'block';" class="management-button" style="display: none;">
-            <p name="tooltip" class="button-tooltip">This will send the changes to your current poem to the <strong>poem purgatory</strong> section of the site, if approved, that poem will be amended with your changes.</p>Propose poem changes ✋
-        </button>
-     </div>
+
     <div id="main" class="poem-centre">
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
             Click On Me to Start Editing
         </p>
         <p id="originalContent" style="display: none;"></p>
     </div>
+
+    <div id="side" class="document-tools" collapsed="false">
+        <div>
+            <div style="display: flex;flex-direction: row;height: 48px;">
+                <p style="margin: 0px; align-self: center;">Poem summary:</p>
+            </div>
+            <textarea id="summaryArea" type="text" maxlength="160"></textarea>
+        </div>
+        
+        <div>
+            <div style="display: flex;flex-direction: row;height: 48px;">
+                <p style="margin: 0px; align-self: center;">Poem tags:</p>
+            </div>
+
+            <div id="tagContainer" style="background: var(--button-opaque);border-radius: 8px; display: grid; grid-template-columns: 33% 33% 33%; padding: 8px; grid-template-rows: auto auto;grid-gap: 2px;">
+                <div style="border-radius: 4px;height:64px;background: lightgrey;padding: 4px; text-align: center;">War &amp; conflict</div>
+                <div style="border-radius: 4px;height:64px;background: lightgrey;padding: 4px; text-align: center;">Society</div>
+                <div style="border-radius: 4px;height:64px;background: lightgrey;padding: 4px; text-align: center;line-height: 64px;">+</div>
+            </div>
+        </div>
+
+        <div>
+            <div style="display: flex;flex-direction: row;height: 48px;">
+                <p style="margin: 0px; align-self: center;">Content Warning:</p>
+            </div>
+
+            <div id="cWarningContainer" style="background: var(--button-opaque);border-radius: 8px; padding: 8px;">
+                <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
+                <label for="cWarningCheckbox"> Enabled</label>
+                <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
+            </div>
+        </div>
+
+        <button style="width: 100%;height: 32px;">Upload to site</button>
+
+        <div style="width: 60%;height: 48px;border: 1px solid gray;position: relative;border-radius: 64px;align-self: center;margin-top: 32px;">
+            <svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20" style="height: calc(100% - 16px);left: 50%;position: relative;transform: translateX(-50%);fill: gray;top: 8px;">
+              <path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
+            </svg>
+        </div>
+    </div>
+
     <a href="../contents" class="back"> <- Back</a>
 </body>
 <script>
@@ -411,7 +474,7 @@
             cardPreview.textContent = pContent
 
             cardEl.appendChild(cardPreview)
-            loadDiv.appendChild(cardEl)
+            loadedContainer.appendChild(cardEl)
         }
     }
 
@@ -678,7 +741,6 @@
         loadButton.setAttribute("disabled", true)
         loadPoemPopup.style.display = 'none'
         amendButton.style.display = "block"
-        loadDiv.innerText = "Loading poems is disabled, as you are in poem amendment mode."
         originalContent.style.display = "block"
         originalContent.style.top = content.offsetTop + "px"
         originalContent.style.maxWidth = content.offsetWidth + "px"

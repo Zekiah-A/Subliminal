@@ -31,7 +31,8 @@
             top: 32px;
             transform: translate(-50%);
             right: 16px;
-            display: none;
+            transform-origin: center;
+            transition: .2s transform;
         }
 
         .grid-container {
@@ -68,7 +69,7 @@
         }
 
         .grid-sub-container[collapsed] > .section-collapsed {
-            display: block;
+            transform: translate(-50%) rotate(-90deg);
         }
 
         .poem-preview {
