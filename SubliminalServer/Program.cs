@@ -155,22 +155,24 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
     var poem = await database.CreateRecord<PurgatoryEntry>(entry);
     
     //Account-poem link if uploaded by a user who is signed in
-    if (entry.Code is not null)
+    if (entry.Code is null)
     {
-        var account = (await database.FindRecords<AccountData, string>("Code", entry.Code)).FirstOrDefault();
+        return Results.Text(entry.Guid);
+    }
+    
+    var account = (await database.FindRecords<AccountData, string>("Code", entry.Code)).FirstOrDefault();
 
-        if (account is null)
-        {
-            return Results.Unauthorized();
-        }
-
-        var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
-        entry.AuthorProfileKey = account.Data.ProfileReference;
-
-        profile.Data.PoemReferences.Add(new InterKey<PurgatoryEntry>(poem));
-        await database.UpdateRecord(profile);
+    if (account is null)
+    {
+        return Results.Unauthorized();
     }
 
+    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
+    entry.AuthorProfileKey = account.Data.ProfileReference;
+
+    profile.Data.PoemReferences.Add(new InterKey<PurgatoryEntry>(poem));
+    
+    await database.UpdateRecord(profile);
     return Results.Text(entry.Guid);
 });
 

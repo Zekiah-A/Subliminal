@@ -42,23 +42,6 @@
             rotate: 0deg;
         }
 
-        .document-tools {
-            position: fixed;
-            top: 130px;
-            right: 0px;
-            width: max(16%, 250px);
-            padding: 8px;
-            background-color: var(--button-transparent);
-            backdrop-filter: blur(5px);
-            box-shadow: 0px 0px 8px grey;
-            z-index: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            row-gap: 8px;
-            overflow-y: scroll;
-        }
-
         #formattingToolbar {
             display: flex;
             padding-left: 8px;
@@ -122,6 +105,61 @@
         }
         .sign-buttons > div {
             flex-grow: 1;
+        }
+
+        #side {
+            position: fixed;
+            top: 130px;
+            right: 0px;
+            width: max(16%, 250px);
+            padding: 8px;
+            background-color: var(--button-transparent);
+            backdrop-filter: blur(5px);
+            box-shadow: 0px 0px 8px grey;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
+            overflow-y: scroll;
+            transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height;
+        }
+
+        #side[collapsed] {
+            width: 0px;
+            padding-left: 48px;
+            padding-right: 0px;
+            overflow: hidden;
+            box-shadow: none;
+            border-left: 2px solid black;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            background: transparent;
+        }
+
+        .side-close-button {
+            width: 80%;
+            height: 48px;
+            border: 1px solid gray;
+            position: relative;
+            border-radius: 64px;
+            align-self: center;
+            margin-top: 32px;
+            transition: .2s transform;
+            cursor: pointer;
+        }
+
+        .side-close-button > svg {
+            height: calc(100% - 16px);
+            left: 50%;
+            position: relative;
+            transform: translateX(-50%);
+            fill: gray;
+            top: 8px;
+        }
+
+        .side-close-button:hover {
+            transform: scale(1.1);
         }
 
         .management-button {
@@ -226,12 +264,30 @@
                 width: calc(100% - 12px);
             }
 
-            .document-tools {
+            #side {
                 width: calc(100% - 12px);
                 height: 60%;
                 bottom: 0px;
                 top: inherit;
                 padding-top: 0px;
+            }
+
+            #side[collapsed] {
+                height: 0px;
+                padding-top: 48px;
+                width: 100%;
+                padding-left: 0px;
+                padding-right: 0px;
+                border-top: 2px solid black;
+                border-left: none;
+                left: 0px;
+                z-index: -1;
+                cursor: pointer;
+                overflow: clip;
+            }
+
+            .side-close-button {
+                width: 60%;
             }
 
             #signCanvas {
@@ -283,7 +339,12 @@
     <div id="builtinFreePopup" class="popup" style="display: none;">
         <h2>Built-in backgrounds:</h2>
         <p>These backgrounds are free for you to use to jazz up your poem's look! Drawn and shot by members of the subliminal team.</p>
-        <div class="background-grid" onclick="applyBuiltinBackground(event.target)">
+        <div class="background-grid" onclick="
+            if (event.target == this)
+                return
+            applyBuiltinBackground(event.target)
+            builtinFreePopup.style.display = 'none'
+        ">
             <div><img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg"><div>Taken somewhere in the Chilterns, UK.</div></div>
             <div><img loading="lazy" src="./Resources/Backgrounds/FinlandIntersection.jpg"><div>Taken at an intersection somewhere between Uusikaupunki and Helsinki, Finland.</div></div>
             <div><img loading="lazy" src="./Resources/Backgrounds/IsoBoy.jpg"><div>A fish that mysteriously disappeared the next day, Island near Uusikaupunki, Finland.</div></div>
@@ -382,7 +443,7 @@
         <p id="originalContent" style="display: none;"></p>
     </div>
 
-    <div id="side" class="document-tools" collapsed="false">
+    <div id="side" class="document-tools" collapsed="false" onclick="if (side.getAttribute('collapsed')) side.removeAttribute('collapsed')">
         <div>
             <div style="display: flex;flex-direction: row;height: 48px;">
                 <p style="margin: 0px; align-self: center;">Poem summary:</p>
@@ -414,10 +475,12 @@
             </div>
         </div>
 
-        <button style="width: 100%;height: 32px;" onclick="licenseAgreePopup.style.display = 'block'">Upload to site</button>
+        <div class="popup-button" style="flex-grow: inherit;" onclick="
+            licenseAgreePopup.style.display = 'block'
+        ">Upload to site</div>
 
-        <div style="width: 60%;height: 48px;border: 1px solid gray;position: relative;border-radius: 64px;align-self: center;margin-top: 32px;">
-            <svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20" style="height: calc(100% - 16px);left: 50%;position: relative;transform: translateX(-50%);fill: gray;top: 8px;">
+        <div class="side-close-button" onclick="side.setAttribute('collapsed', true); event.stopPropagation();">
+            <svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20">
               <path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
             </svg>
         </div>
