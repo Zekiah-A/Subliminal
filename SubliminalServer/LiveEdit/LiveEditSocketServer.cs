@@ -18,12 +18,12 @@ public class LiveEditSocketServer
 
     private readonly DirectoryInfo draftsDir = new(@"Drafts");
 
-    public LiveEditSocketServer(int port, bool ssl) //X509Certificate cert, X509Certificate key
+    public LiveEditSocketServer(int port, bool ssl)
     {
-        app = new WatsonWsServer("localhost", port, ssl);
+        app = new WatsonWsServer(port);
     }
     
-    public async Task Start()
+    public async Task StartAsync()
     {
         //In the server's eyes, client does not exist until it has sent a join session packet, therefore no onconnect handler.
         
@@ -40,11 +40,11 @@ public class LiveEditSocketServer
                     // Bytes after will be draftGuid
                     var draftGuid = Encoding.UTF8.GetString(args.Data[42..]);
 
-                    if (!await Account.Account.CodeIsValid(code))
+                    /*if (!await Account.Account.CodeIsValid(code))
                     {
                         await DisconnectClient(args.Client, "Unable to authorise account ownership.");
                         return;
-                    }
+                    }*/
 
                     //Create session if does not exist, and load poem data into mem
                     if (!sessions.ContainsKey(draftGuid))
@@ -59,11 +59,12 @@ public class LiveEditSocketServer
                         
                         sessions.Add(draftGuid, draftData);
                     }
-                    
-                    var clientGuid = await Account.Account.GetGuid(code);
+
+                    //TODO: Use database
+                    var clientGuid = "";//await Account.Account.GetGuid(code);
 
                     //If client is authed in this draft's data, or is literally the poem owner, then we allow them into the session
-                    if (!sessions[draftGuid].AuthorGuid.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
+                    if (!sessions[draftGuid].AuthorProfileKey.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
                     {
                         await DisconnectClient(args.Client, "You are not an authorised editor of this poem.");
                         return;
@@ -78,7 +79,7 @@ public class LiveEditSocketServer
                             (
                                 draftGuid,
                                 clientGuid,
-                                sessions[draftGuid].AuthorGuid == clientGuid ? LiveEditClientType.Owner : LiveEditClientType.Editor
+                                sessions[draftGuid].AuthorProfileKey == clientGuid ? LiveEditClientType.Owner : LiveEditClientType.Editor
                             )
                         );
                     }

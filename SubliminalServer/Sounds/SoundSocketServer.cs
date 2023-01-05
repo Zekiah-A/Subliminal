@@ -1,52 +1,56 @@
+using WatsonWebsocket;
+
 namespace SubliminalServer.Sounds;
 
 public class SoundsSocketServer
 {
-    //var websocketServer = new WatsonWsServer("localhost", 1234, false);
-    //var clients = new Dictionary<string, Client>();
-    /*
-    websocketServer.ClientConnected += (object sender, ClientConnectedEventArgs args) =>
-    {
-        clients.Add(args.IpPort, new Client());
-    };
+    WatsonWsServer app = new WatsonWsServer(1234);
+    Dictionary<ClientMetadata, SoundsClient> clients = new();
 
-    websocketServer.MessageReceived += (object sender, MessageReceivedEventArgs args) =>
+    public async Task StartAsync()
     {
-        switch ((ClientPackets) args.Data[0])
+        app.ClientConnected += (object sender, ClientConnectedEventArgs args) =>
         {
-            case ClientPackets.Play:
+            clients.Add(args.Client, new SoundsClient());
+        };
+
+        app.MessageReceived += (object sender, MessageReceivedEventArgs args) =>
+        {
+            switch ((SoundsClientPacket) args.Data[0])
+            {
+                case SoundsClientPacket.Play:
                 
-                return;
-            case ClientPackets.SyncHost:
-                break;
-            case ClientPackets.SyncZombie:
-                break;
-            case ClientPackets.UnsyncZombie:
-                break;
-            case ClientPackets.Time:
-                break;
-            case ClientPackets.Lyrics:
-                break;
-            case ClientPackets.Search:
-                break;
-            case ClientPackets.Purgatory:
-                break;
-            case ClientPackets.Approve:
-                break;
-            case ClientPackets.Veto:
-                break;
-            case ClientPackets.SearchRandom:
-                break;
-            case ClientPackets.SongInfo:
-                break;
-        }
-    };
+                    return;
+                case SoundsClientPacket.SyncHost:
+                    break;
+                case SoundsClientPacket.SyncZombie:
+                    break;
+                case SoundsClientPacket.UnsyncZombie:
+                    break;
+                case SoundsClientPacket.Time:
+                    break;
+                case SoundsClientPacket.Lyrics:
+                    break;
+                case SoundsClientPacket.Search:
+                    break;
+                case SoundsClientPacket.Purgatory:
+                    break;
+                case SoundsClientPacket.Approve:
+                    break;
+                case SoundsClientPacket.Veto:
+                    break;
+                case SoundsClientPacket.SearchRandom:
+                    break;
+                case SoundsClientPacket.SongInfo:
+                    break;
+            }
+        };
 
-    websocketServer.ClientDisconnected += (object sender, ClientDisconnectedEventArgs args) =>
-    {
-        clients.Remove(args.IpPort);
-    };
+        app.ClientDisconnected += (object sender, ClientDisconnectedEventArgs args) =>
+        {
+            clients.Remove(args.Client);
+        };
 
-    websocketServer.Start();
-    */
+        app.Start();
+    }
 }
