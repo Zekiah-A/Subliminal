@@ -18,7 +18,11 @@ const actionType = {
     UpdateRole: 11,
     UpdateAvatar: 12,
     PinPoem: 13,
-    UnpinPoem: 14
+    UnpinPoem: 14,
+
+    UploadDraft: 16,
+    DeleteDraft: 17,
+    GetDraft: 18
 }
 
 const badgeType = {
@@ -80,11 +84,11 @@ async function executeAccountAction(action, value) {
     accountAction.actionType = action
     accountAction.value = value
 
-    fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
+    return await (fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(accountAction)
-    })
+    }))
 }
 
 async function isLoggedIn() {
