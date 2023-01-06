@@ -1,3 +1,3 @@
 namespace SubliminalServer;
 
-public record PurgatoryAuthenticatedRating(string? Code) : PurgatoryRating;
+public record PurgatoryAuthenticatedRating(string? Code, string PoemKey, PurgatoryRatingType Type) : PurgatoryRating(PoemKey, Type);

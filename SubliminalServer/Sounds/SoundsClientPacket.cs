@@ -1,6 +1,6 @@
 namespace SubliminalServer.Sounds;
 
-public enum SoundsClientPackets
+public enum SoundsClientPacket
 {
     SyncHost = 0,
     SyncZombie,

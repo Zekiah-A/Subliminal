@@ -1,22 +1,19 @@
 using System.Text.Json.Serialization;
+using UnbloatDB.Keys;
 
 namespace SubliminalServer.Account;
 
 public class AccountData
 {
     public string CodeHash { get; init; }
-    public string Guid { get; init; }
-    public AccountProfile Profile { get; init; }
+    public InterKey<AccountProfile> ProfileReference { get; init; }
 
-    // Private and encrypted
-    public List<byte[]> KnownIPs { get; set; } = new();
-    public byte[]? Email { get; set; }
-    public byte[]? PhoneNumber { get; set; }
-
-    // Private but not encrypted
-    public List<string> Drafts { get; set; }
-    public List<string> Blocked { get; set; }
-    public List<string> LikedPoems { get; set; }
+    public List<string> KnownIPs { get; set; } = new();
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public List<InterKey<PurgatoryEntry>> Drafts { get; set; }
+    public List<InterKey<AccountProfile>> Blocked { get; set; }
+    public List<InterKey<PurgatoryEntry>> LikedPoems { get; set; }
 
 
     /// <summary>
@@ -25,44 +22,14 @@ public class AccountData
     /// <param name="code"></param>
     /// <param name="guid"></param>
     /// <param name="profile"></param>
-    public AccountData(string code, string guid, AccountProfile profile)
+    public AccountData(string code, InterKey<AccountProfile> accountProfileReference)
     {
         CodeHash = code;
-        Guid = guid;
-        Profile = profile;
+        ProfileReference = accountProfileReference;
 
-        KnownIPs = new List<byte[]>();
-        Drafts = new List<string>();
-        Blocked = new List<string>();
-        LikedPoems = new List<string>();
-    }
-
-    /// <summary>
-    /// This is the constructor used by the JSON serializer in order to deserialize a saved file into an accountdata class, contains all props.
-    /// Not for internal use, use main constructor instead.
-    /// </summary>
-    [JsonConstructor] 
-    public AccountData(string codeHash, string guid, AccountProfile profile, List<string> drafts, List<string> blocked, List<string> likedPoems)
-    {
-        CodeHash = codeHash;
-        Guid = guid;
-        Profile = profile;
-        Drafts = drafts;
-        Blocked = blocked;
-        LikedPoems = likedPoems;
-    }
-
-    public void FollowUser(ref AccountData user)
-    {
-        if (Profile.Following.Contains(user.Guid)) return;
-        Profile.Following.Add(user.Guid);
-        user.Profile.Followers.Add(Guid);
-    }
-
-    public void UnfollowUser(ref AccountData user)
-    {
-        if (!Profile.Following.Contains(user.Guid)) return;
-        Profile.Following.Remove(user.Guid);
-        user.Profile.Followers?.Remove(Guid);
+        KnownIPs = new List<string>();
+        Drafts = new List<InterKey<PurgatoryEntry>>();
+        Blocked = new List<InterKey<AccountProfile>>();
+        LikedPoems = new List<InterKey<PurgatoryEntry>>();
     }
 };

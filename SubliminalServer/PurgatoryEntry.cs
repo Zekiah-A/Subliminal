@@ -21,7 +21,7 @@ public record PurgatoryEntry
     [JsonInclude] public string PoemAuthor { get; set; }
 
     // Server only changeable - does not need to be serialisable
-    public string AuthorGuid { get; set; }
+    public string AuthorProfileKey { get; set; }
     public string Guid { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }
