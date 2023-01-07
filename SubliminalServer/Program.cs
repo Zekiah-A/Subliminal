@@ -4,13 +4,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
 using SubliminalServer.LiveEdit;
 using UnbloatDB;
 using UnbloatDB.Keys;
 using UnbloatDB.Serialisers;
-using Config = SubliminalServer.Config;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
@@ -20,27 +20,27 @@ var purgatoryDir = new DirectoryInfo(@"Purgatory");
 var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
 var purgatoryDraftsDir = new DirectoryInfo(@"Drafts");
 var accountsDir = new DirectoryInfo(@"Data");
-var configFile = new FileInfo("config.txt");
+var profileImageDir = new DirectoryInfo(@"ProfileImages");
+var configFile = new FileInfo("config.json");
 
-var aes = Aes.Create();
 var random = new Random();
-
 var database = new Database(new UnbloatDB.Config(accountsDir.Name, new JsonSerialiser()));
+var config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
 
-if (!File.Exists(configFile.Name))
+if (config is null)
 {
-	File.WriteAllText(configFile.Name, "cert: " + Environment.NewLine + "key: " + Environment.NewLine + "port: " + Environment.NewLine + "use_https: ");
+    var stream = File.OpenWrite(configFile.Name);
+    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false));
 	Console.ForegroundColor = ConsoleColor.Green;
-	Console.WriteLine("[LOG]: Config created! Please check {0} and run this program again!", configFile);
+	Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
 	Console.ResetColor();
 	Environment.Exit(0);
 }
 
-var config = File.ReadAllLines(configFile.Name).Select(line => { line = line.Split(": ")[1]; return line; }).ToArray();
-
 Console.ForegroundColor = ConsoleColor.Yellow;
+
 //Regenerate required directories
-foreach (var path in new[] { purgatoryDir.FullName, purgatoryBackupDir.FullName, accountsDir.FullName, purgatoryDraftsDir.FullName })
+foreach (var path in new[] { purgatoryDir.FullName, purgatoryBackupDir.FullName, accountsDir.FullName, purgatoryDraftsDir.FullName, profileImageDir.FullName })
 {
     if (Directory.Exists(path)) continue;
     Console.WriteLine("[WARN] Could not find " + path + " directory, creating.");
@@ -49,8 +49,10 @@ foreach (var path in new[] { purgatoryDir.FullName, purgatoryBackupDir.FullName,
 Console.ResetColor();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration["Kestrel:Certificates:Default:Path"] = config[(int) Config.Cert];
-builder.Configuration["Kestrel:Certificates:Default:KeyPath"] = config[(int) Config.Key];
+
+builder.Configuration["Kestrel:Certificates:Default:Path"] = config.Certificate;
+builder.Configuration["Kestrel:Certificates:Default:KeyPath"] = config.Key;
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -59,6 +61,7 @@ builder.Services.AddCors(options =>
               .WithOrigins("https://zekiah-a.github.io/", "*");
     });
 });
+
 builder.Services.Configure<JsonOptions>(options =>
 {
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -66,12 +69,26 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 var httpServer = builder.Build();
+
 httpServer.Urls.Add(
-    $"{(bool.Parse(config[(int) Config.UseHttps]) ? "https" : "http")}://*:{int.Parse(config[(int) Config.Port])}"
+    $"{(config.UseHttps ? "https" : "http")}://*:{config.Port}"
 );
+
 httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
 );
+
+httpServer.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, profileImageDir.Name)),
+    RequestPath = "/ProfileImage"
+});
+
+httpServer.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, purgatoryDir.Name)),
+    RequestPath = "/Purgatory"
+});
 
 static string HashSha256String(string text)
 {
@@ -79,7 +96,7 @@ static string HashSha256String(string text)
     return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
 }
 
-//TODO: Add ability for account ratings, fix undoapprove/vetologic and make it so that it is 1 per account too, with credential argument for rating.
+// TODO: Port this to an AccountAction
 httpServer.MapPost("/PurgatoryRate", async (PurgatoryAuthenticatedRating rating) =>
 {
     var entry = await database.GetRecord<PurgatoryEntry>(rating.PoemKey);
@@ -116,9 +133,10 @@ httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
 });
 
 httpServer.MapGet("/PurgatoryPicks", async () =>
-    // TODO: REWRITE
-    Results.Text("")
-);
+{
+    var records = await database.FindRecords<PurgatoryEntry, bool>("Pick", true);
+    return Results.Json(records.Select(structure => structure.Data));
+});
 
 httpServer.MapGet("/PurgatoryNew", () =>
     Directory.GetFiles(purgatoryDir.Name)
@@ -138,11 +156,6 @@ httpServer.MapGet("/PurgatoryAll", () =>
         .ToArray()
 );
 
-
-httpServer.MapGet("/Purgatory/{poemKey}", async (string poemKey) =>
-    await File.ReadAllTextAsync(Path.Join(purgatoryDir.Name, poemKey))
-);
-
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
 {
     var guid = Guid.NewGuid();
@@ -151,7 +164,8 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
     entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-    
+    entry.Pick = false;
+
     var poem = await database.CreateRecord<PurgatoryEntry>(entry);
     
     //Account-poem link if uploaded by a user who is signed in
@@ -208,7 +222,7 @@ httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
 });
 
 //TODO: Switch to base account action, or another dynamic solution so we can have account actions.
-httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction action) =>
+httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction action, HttpContext context) =>
 {
     var account = (await database.FindRecords<AccountData, string>("Code", action.Code)).FirstOrDefault();
     
@@ -263,18 +277,26 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.LikePoem:
         {
             if (action.Value is not string poemGuid) break;
-            // TODO: Reimplement
-            //if (poemGuid.Length != 36 || account.LikedPoems.Contains(poemGuid)) break;
-            //account.LikedPoems.Add(poemGuid);
+            var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
+            if (poem is not null)
+            {
+                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+            }
+            
+            await database.UpdateRecord(account);
             break;
         }
         
         case SingleValueAccountActionType.UnlikePoem:
         {
-            if (action.Value is not string poemGuid) break;
-            // TODO: Reimplement
-            //if (!account.Data.LikedPoems.Contains(poemGuid)) break;
-            //account.Data.LikedPoems.Remove(poemGuid);
+            if (action.Value is not string poemKey) break;
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+
+            if (keyReference is not null)
+            {
+                account.Data.LikedPoems.Remove(keyReference);
+            }
+            
             await database.UpdateRecord(account);
             break;
         }
@@ -282,9 +304,12 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.PinPoem:
         {
             if (action.Value is not string poemGuid) break;
-            // TODO: Reimplement
-            //if (poemGuid.Length != 36 || account.Profile.PinnedPoems.Contains(poemGuid)) break;
-            //account.Profile.PinnedPoems.Add(poemGuid);
+            var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
+            if (poem is not null)
+            {
+                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+            }
+            
             await database.UpdateRecord(profile);
             break;
         }
@@ -292,9 +317,13 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.UnpinPoem:
         {
             if (action.Value is not string poemKey) break;
-            // TODO: Reimplement
-            //if (!profile.Data.PinnedPoems.Contains(poemKey)) break;
-            //profile.Data.PinnedPoems.Remove(poemKey);
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+
+            if (keyReference is not null)
+            {
+                profile.Data.PinnedPoems.Remove(keyReference);
+            }
+            
             await database.UpdateRecord(profile);
             break;
         }
@@ -304,6 +333,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             if (action.Value is not string email) break;
             // TODO: Email verification
             account.Data.Email = email;
+            await database.UpdateRecord(account);
             break;
         }
         
@@ -312,6 +342,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             if (action.Value is not string number) break;
             // TODO: Number verification
             account.Data.PhoneNumber = number;
+            await database.UpdateRecord(account);
             break;
         }
         
@@ -350,12 +381,37 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.UpdateAvatar:
         {
             if (action.Value is not string avatarUrl) break;
-            var simplifiedUrl = avatarUrl
-                [..(avatarUrl.Length <= 512 ? avatarUrl.Length : 256)] //Trim URL length to a maximum reasonable value
-                [..(avatarUrl.IndexOf("?", StringComparison.Ordinal) == 0 ? avatarUrl.Length : avatarUrl.IndexOf("?", StringComparison.Ordinal))] //Remove all URL queries
-                .Replace("http://", "https://"); //Use HTTPS if url contains a HTTP link
 
-            profile.Data.AvatarUrl = simplifiedUrl;
+            var permitted = new[]
+            {
+                "image/gif",
+                "image/png",
+                "image/webp",
+                "image/jpg"
+            };
+
+            // If the data is base64, then we send then we will host their profile image on our CDN to their profile
+            if (permitted.Any(mimeType => avatarUrl.StartsWith("data:" + mimeType)))
+            {
+                if (avatarUrl.Length > 10_000_000)
+                {
+                    break;
+                }
+
+                var imagePath = Path.Join(profileImageDir.Name, profile.MasterKey);
+                await File.WriteAllTextAsync(imagePath, avatarUrl);
+                profile.Data.AvatarUrl = Path.Combine(context.Request.PathBase, imagePath);
+            }
+            else
+            {
+                var simplifiedUrl = avatarUrl
+                    [..(avatarUrl.Length <= 256 ? avatarUrl.Length : 256)] //Trim URL length to a maximum reasonable value
+                    [..(!avatarUrl.Contains('?') ? avatarUrl.Length : avatarUrl.IndexOf("?", StringComparison.Ordinal))] //Remove all URL queries
+                    .Replace("http://", "https://"); //Use HTTPS if url contains a HTTP link
+
+                profile.Data.AvatarUrl = simplifiedUrl;
+            }
+
             await database.UpdateRecord(profile);
             break;
         }
@@ -366,8 +422,8 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         {
             var stream = new MemoryStream();
             await JsonSerializer.SerializeAsync(stream, action);
-            await stream.FlushAsync();
-            return Results.Problem("Specified account action failed or did not exist." + stream);
+            return Results.Problem("Specified account action failed or did not exist." +
+                                   Encoding.UTF8.GetString(stream.ToArray()));
         }
     }
     
@@ -375,5 +431,4 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
 });
 
 
-httpServer.Run();
-//await liveEditServer.Start();
+await httpServer.RunAsync();

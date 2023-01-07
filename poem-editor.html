@@ -403,11 +403,21 @@
         <div class="popup-button" style="margin-top: 8px;" onclick="loadPoemPopup.style.display =  'none';">Done</div>
     </div>
 
-    <div class="title-blur" style="z-index: 2;">
+    <div class="title-blur" style="z-index: 3;">
         <div style="display: flex;">
-            <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
+            <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="
+                if(event.key === 'Enter') {
+                    event.preventDefault()
+                    return false
+                }
+            " style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
             <h2 class="centre" style="display: inline;">&nbsp;- By&nbsp;</h2>
-            <h2 id="poemAuthor" onpaste="checkPaste(event)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }" style="display: inline;flex-grow: 1;text-align: left;" contenteditable="true">Click On Me to Start Editing</h2>
+            <h2 id="poemAuthor" onpaste="checkPaste(event)" onkeydown="
+                if(event.key === 'Enter') {
+                    event.preventDefault()
+                    return false
+                }
+            " style="display: inline;flex-grow: 1;text-align: left;" contenteditable="true">Click On Me to Start Editing</h2>
         </div>
         <hr>
         <div id="formattingToolbar">

@@ -2,7 +2,7 @@ namespace SubliminalServer;
 
 public enum Config
 {
-    Cert,
+    Certificate,
     Key,
     Port,
     UseHttps,
