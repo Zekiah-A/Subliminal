@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../account.js"></script>
+</head>
+<body>
+    <div style="height: fit-content; width: 40%;" class="popup">
+        <h2>Admin controls:</h2>
+        <p>No functions here will work if you are not an admin on subliminal. However, feel free to snoop around and see how we keep the site based!</p>
+        <div style="display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
+            <div class="popup-button" onclick="
+            ">View purgatory reports</div>
+            <div class="popup-button" onclick="
+                prompt('Enter poem GUID')
+                prompt('Enter deletion reason')
+                confirm('Are you sure you want to delete {NAME} for {REASON}?')
+            ">Remove purgatory poem</div>
+            <div class="popup-button" onclick="
+                prompt('Enter account GUID')
+                prompt('Enter termination reason')
+                confirm('Are you sure you want to terminate {NAME} for {REASON}?')
+            ">Terminate account</div>
+            <div class="popup-button" onclick="
+            ">Award or revoke badge</div>
+            <div class="popup-button" onclick="
+            ">Add or remove purgatory pick</div>
+        </div>
+        <div id="optionContent">
+
+        </div>
+        <div class="popup-button">Done</div>
+        <p style="opacity:0.6;">Be responsible, never use admin privilages to suppress, grief, or cause other discord on the site. Always be impartial.</p>
+    </div>
+</body>
+<script>
+    function viewPurgatoryReports() {
+        while (optionContent.firstChild) {
+            optionContent.removeChild(optionContent.firstChild)
+        }
+
+        for (let i = 0; i < 10; i++)
+        {
+            let url = "poemanthology.org/"
+            let reason = "Lorem ipsum dolor sit amet"
+
+            let el = document.createElement("div")
+            el.style.background = randomColour()
+            el.style.border = "1px solid black"
+            el.style.borderRadius = "8px"
+            el.style.padding = "8px"
+            el.innerHTML = `
+                <a href=''>View reporter</a>
+                <a href="${url}">View reported poem</a>
+                <p>${reason}</p>
+                <input type="button" value="Delete report">
+            `
+
+            optionContent.appendChild(el)
+        }
+    }
+
+    function randomColour() { 
+        return "hsl(" + 360 * Math.random() + ',' +
+             (25 + 70 * Math.random()) + '%,' + 
+             (85 + 10 * Math.random()) + '%)'
+    }
+</script>
+</html>
