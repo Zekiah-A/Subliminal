@@ -140,9 +140,10 @@
 
         #poemProcessSubInfo {
             display: flex;
-            column-gap: 4px;
+            column-gap: 64px;
             overflow-x: scroll;
             overflow-y: hidden;
+            transition: .2s column-gap;
         }
 
         #poemProcessSubInfo > div {
@@ -158,8 +159,16 @@
             transition: .2s opacity;
         }
 
+        #poemProcessSubInfo > div:hover {
+            background-color: var(--button-opaque-hover);
+        }
+
         #poemProcessSubInfo > div:hover > p {
             opacity: 1;
+        }
+
+        #poemProcessSubInfo.scroll-in {
+            column-gap: 4px;
         }
 
         #topBackground {
@@ -220,7 +229,7 @@
     <div id="topBackground"><img src="Resources/TopBackground.webp" class="index-image"></div>
 
     <div class="div-centre">
-        <br><br><br>
+        <br><br><br><br>
         <p class="profile-title">Subliminal</p>
 
         <p>The methallyne blue analogy of stuff.</p>
@@ -293,13 +302,13 @@
         <div id="getStartedInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
             <p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-            <div id="poemProcessSubInfo">
+            <div id="poemProcessSubInfo" onwheel="scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })">
                 <div><p>💡 Burst of inspiration at the most unexpected moment.</p></div>
-                <div style="/*margin-top: 12px;*/"><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
-                <div style="/*margin-top: -4px;*/"><p>😨 Writer's block.</p></div>
-                <div style="/*margin-top: 8px;*/"><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
-                <div style="/*margin-top: -12px;*/"><p>🎉 Finally completed poem! Sigh a breath of relief.</p></div>
-                <div style="/*margin-top: 16px;*/"><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
+                <div><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
+                <div><p>😨 Writer's block.</p></div>
+                <div><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
+                <div><p>🎉 Finally completed poem! Sigh a breath of relief.</p></div>
+                <div><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
             </div>
             <div style="padding-left: 32px;">
                 <p style="margin-left: 12px;">-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</p>

@@ -286,6 +286,7 @@ h2 {
     top: 0px;
     transition: opacity 0.5s;
     pointer-events: none;
+    padding: 8px;
 }
 
 .button-tooltip:hover {
