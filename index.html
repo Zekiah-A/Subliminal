@@ -138,12 +138,16 @@
             font-style: italic;
         }
 
+        #aboutInfo.scroll-unseen {
+            transform: translateX(-100%);
+        }
+
         #poemProcessSubInfo {
             display: flex;
             column-gap: 64px;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            transition: .2s column-gap;
+            overflow: hidden;
+            transition: .2s column-gap, .2s background-color;
+            user-select: none;
         }
 
         #poemProcessSubInfo > div {
@@ -302,7 +306,10 @@
         <div id="getStartedInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
             <p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-            <div id="poemProcessSubInfo" onwheel="scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })">
+            <div id="poemProcessSubInfo" onwheel="
+                scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })
+                event.preventDefault()
+            ">
                 <div><p>💡 Burst of inspiration at the most unexpected moment.</p></div>
                 <div><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
                 <div><p>😨 Writer's block.</p></div>
@@ -356,7 +363,7 @@
 
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection]
+    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]
     obseravbles.forEach((element) => {
         observer.observe(element)
         element.classList.add("scroll-unseen")

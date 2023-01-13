@@ -20,12 +20,12 @@
     <div id="editFrame" style="height: auto; width: 30%; display: none;" class="popup">
         <h2>Poem Editor:</h2>
         <div style="display: flex; column-gap: 8px;">
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = './poem-editor?amend=' + window.location.pathname + '.json' + '&version=2';">
+            <div class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.protocol + '\/\/' + window.location.hostname + '/poem-editor?amend=' + window.location.pathname + '.json' + '&version=2';">
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
                 </div>
             </div>
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = './poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
+            <div class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.protocol + '\/\/' + window.location.hostname + './poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
                 </div>
