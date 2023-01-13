@@ -1,5 +1,6 @@
 :root {
     --button-opaque: #f2f2f2;
+    --button-opaque-hover: #e9e9e9;
     --button-transparent: #f2f2f2b8;
     --panel-transparent: #f2f2f240;
     --background-opaque: #ffffff;
@@ -260,6 +261,11 @@ h2 {
     cursor: pointer;
     background-color: var(--button-opaque);
     flex-grow: 1;
+    transition: .2s background-color;
+}
+
+.popup-button:hover {
+    background-color: var(--button-opaque-hover);
 }
 
 .popup-input {
