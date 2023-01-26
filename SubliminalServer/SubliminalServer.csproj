@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -7,13 +6,7 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="BarCode" Version="2022.10.9871" />
-      <PackageReference Include="HtmlSanitizer" Version="7.1.542" />
-      <PackageReference Include="YamlDotNet" Version="12.3.1" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
     </ItemGroup>
@@ -40,4 +33,7 @@
       <Content Remove="UnbloatDB\UnbloatDB.Tests\**" />
     </ItemGroup>
 
-    </Project>
+    <ItemGroup>
+      <PackageReference Include="YamlDotNet" Version="12.3.1" />
+    </ItemGroup>
+</Project>

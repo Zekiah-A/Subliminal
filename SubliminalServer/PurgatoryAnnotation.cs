@@ -1,5 +1,3 @@
-using System;
-
 namespace SubliminalServer;
 
 public record PurgatoryAnnotation
