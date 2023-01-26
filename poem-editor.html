@@ -846,7 +846,7 @@
         return json
     }
 
-    async function amendMode() {
+    async function amendMode() { //TODO: Fix
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
         saveButton.setAttribute("disabled", true)
@@ -864,6 +864,15 @@
         load(currentJson)
     }
 
+    // https://rhymebrain.com/talk?function=getRhymes&word=hello
+
+    // https://rhymebrain.com/talk?function=getWordInfo&word=hello
+/*
+    async function getRhymes(word: string) : Array<Rhyme> {
+        let rhymes = await(await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)).json()
+        return rhymes
+    }
+*/
     async function editMode() {
         loadPoemPopup.style.display = 'none'
         let currentJson = await fetchPathJson(edit)

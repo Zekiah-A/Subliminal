@@ -78,6 +78,23 @@
             transform: translate(-50%) rotate(-90deg);
         }
 
+        .seminars-centre {
+            border-radius: 8px;
+            height: 400px;
+            background-color: var(--button-opaque);
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            background: linear-gradient(-90deg, #ee6352, #d16e8d);
+            flex-grow: 1;
+            flex-shrink: 0;
+            transition: .2s box-shadow;
+        }
+
+        .seminars-centre:hover {
+            box-shadow: 0px 0px 6px 2px lightgrey;
+        }
+
         .poem-preview {
             display: none;
             position: fixed;
@@ -395,9 +412,9 @@
             <p style="margin: 0px;font-size: 24px;">Writing a poem people will actually want to read</p>
             <p style="margin: 0px;">By Zekiah</p>
         </div>
-        <div style="border-radius: 8px;height: 400px;background-color: var(--button-opaque);display: flex;flex-direction: column;padding: 16px;background: linear-gradient(-90deg, #ee6352, #d16e8d);flex-grow: 1;flex-shrink: 0;">
+        <div class="seminars-centre">
             <p style="color: white;text-align: center;font-size: 32px;">Check out what's new, right now!</p>
-            <video style="flex-grow: 1;border-radius: 8px;" controls>
+            <video style="flex-grow: 1;border-radius: 8px;margin-left: 32px;margin-right: 32px;" controls>
                 <source src="movie.mp4" type="video/mp4">
             </video>
             <p style="color: white;text-align: center;font-size: 24px;">Learn more with subliminal seminars</p>
