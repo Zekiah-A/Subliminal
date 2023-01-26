@@ -21,7 +21,7 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
             border-radius: 2px;
-            transition: width 0.5s;
+            transition: width .5s;
         }
 
         .fixed:has(a > #advert3:target) {
@@ -57,7 +57,7 @@
         .scroll-unseen {
             opacity: 0;
             transform: translateY(64px) scale(1.1);
-            transition: 0.5s opacity, 0.5s transform; 
+            transition: .5s opacity, .5s transform; 
         }
 
         /* Sections, below main style */
@@ -138,11 +138,16 @@
             font-style: italic;
         }
 
+        #aboutInfo.scroll-unseen {
+            transform: translateX(-90%);
+        }
+
         #poemProcessSubInfo {
             display: flex;
-            column-gap: 4px;
-            overflow-x: scroll;
-            overflow-y: hidden;
+            column-gap: 64px;
+            overflow: hidden;
+            transition: .5s column-gap, .2s background-color;
+            user-select: none;
         }
 
         #poemProcessSubInfo > div {
@@ -158,8 +163,16 @@
             transition: .2s opacity;
         }
 
+        #poemProcessSubInfo > div:hover {
+            background-color: var(--button-opaque-hover);
+        }
+
         #poemProcessSubInfo > div:hover > p {
             opacity: 1;
+        }
+
+        #poemProcessSubInfo.scroll-in {
+            column-gap: 4px;
         }
 
         #topBackground {
@@ -220,7 +233,7 @@
     <div id="topBackground"><img src="Resources/TopBackground.webp" class="index-image"></div>
 
     <div class="div-centre">
-        <br><br><br>
+        <br><br><br><br>
         <p class="profile-title">Subliminal</p>
 
         <p>The methallyne blue analogy of stuff.</p>
@@ -293,7 +306,10 @@
         <div id="getStartedInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
             <p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-            <div id="poemProcessSubInfo">
+            <div id="poemProcessSubInfo" onwheel="
+                scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })
+                event.preventDefault()
+            ">
                 <div><p>💡 Burst of inspiration at the most unexpected moment.</p></div>
                 <div><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
                 <div><p>😨 Writer's block.</p></div>
@@ -332,7 +348,7 @@
      </div>
 
      <hr>
-     <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2022</p>
+     <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2023</p>
 </body>
 <script>
     function handleIntersect(entries, observer) {
@@ -347,7 +363,7 @@
 
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection]
+    let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]
     obseravbles.forEach((element) => {
         observer.observe(element)
         element.classList.add("scroll-unseen")

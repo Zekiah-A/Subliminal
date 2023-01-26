@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./styles.css">
     <script type="text/javascript" src="./account.js"></script>
     <style>
+        #main {
+            position: relative;
+        }
         .tool {
             margin: 1px;
             height: 24px;
@@ -292,6 +295,36 @@
             pointer-events: none;
         }
 
+        .suggestions {
+            width: 128px;
+            position: absolute;
+            background: #bdbdbd;
+            z-index: 3;
+            border-radius: 4px;
+            top: 0px;
+            display: flex;
+            background-color: var(--button-transparent);
+            flex-direction: column;
+            border: 1px solid gray;
+            max-height: 136px;
+            overflow: clip;
+            transition: .2s max-height;
+        }
+
+        .suggestions-item {
+            padding: 8px;
+            display: flex;
+        }
+
+        .suggestions:nth-child(1) {
+            flex-grow: 1;
+        }
+
+        .suggestions:nth-child(2) {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+    
         @media screen and (orientation:portrait) {
             .text-tools {
                 position: inherit !important;
@@ -486,9 +519,16 @@
     </div>
 
     <div id="main" class="poem-centre">
+        <div class="suggestions" style="display: none;">
+            <div style="padding:8px;display:flex"><span style="flex-grow:1">Bees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
+            <div style="padding:8px;display:flex"><span style="flex-grow:1">Knees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
+            <div style="padding:8px;display:flex"><span style="flex-grow:1">Trees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
+        </div>
+
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
             Click On Me to Start Editing
         </p>
+
         <p id="originalContent" style="display: none;"></p>
     </div>
 
@@ -664,11 +704,9 @@
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
     function downloadCurrent() {
         saveCurrent()
-        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
-        let element = document.createElement('a')
-        element.setAttribute('href', 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadObject))
+        element.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(formatDash(poemName.innerText))))
         element.setAttribute('download', formatDash(poemName.innerText) + ".json")
-        element.style.display = 'none'
+        element.style.display = "none"
         document.body.appendChild(element)
         element.click()
         document.body.removeChild(element)
@@ -848,7 +886,7 @@
         return json
     }
 
-    async function amendMode() {
+    async function amendMode() { //TODO: Fix
         downloadButton.setAttribute("disabled", true)
         uploadButton.setAttribute("disabled", true)
         saveButton.setAttribute("disabled", true)
@@ -864,6 +902,33 @@
         originalContent.innerHTML = currentJson.poemContent || ""
         currentJson.amends = amend
         load(currentJson)
+    }
+
+    // https://rhymebrain.com/talk?function=getRhymes&word=hello
+
+    // https://rhymebrain.com/talk?function=getWordInfo&word=hello
+    async function getRhymes(word) {
+        let response = await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)
+        if (!response.ok) {
+            return []
+        }
+
+        return await response.json()
+    }
+
+    async function spawnRhymePopup(event) {
+        const findWord = (text, position) => {
+            const after = text.substring(position).match(/^[a-zA-Z0-9-_]+/)
+            const before = text.substring(0, position).match(/[a-zA-Z0-9-_]+$/)
+            return (before || "") + (after || "")
+        }
+        
+        let selectedWord = findWord(event.target.value, event.target.selectionStart)
+        let rhymes = await getRhymes(selectedWord)
+
+        for (let rhyme of rhymes) {
+            //TODO: Append to popup
+        }
     }
 
     async function editMode() {

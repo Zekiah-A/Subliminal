@@ -333,7 +333,22 @@
         //Snow effect
 
         //Big word effect
+    }
 
+    drawGraph(() => {
+        return 1
+    }, 0, "")
+
+    const graphStep = 10
+    function drawGraph(fx, lineWidth, colour) {
+        ctx.save()
+        ctx.beginPath()
+        for (let x = 0; x <= lyricsCanvas.width; x += graphStep) {
+            let y = fx(x)
+            ctx.lineTo(x, y)
+        }
+        ctx.stroke()
+        ctx.restore()
     }
 
     async function testLyricLoad() {

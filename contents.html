@@ -55,6 +55,7 @@
             background-color: var(--panel-transparent);
             position: relative;
             transition: max-height .2s;
+            max-height: 1000px;
             overflow: hidden;
         }
 
@@ -75,6 +76,23 @@
 
         .grid-sub-container[collapsed] > .section-collapsed {
             transform: translate(-50%) rotate(-90deg);
+        }
+
+        .seminars-centre {
+            border-radius: 8px;
+            height: 400px;
+            background-color: var(--button-opaque);
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            background: linear-gradient(-90deg, #ee6352, #d16e8d);
+            flex-grow: 1;
+            flex-shrink: 0;
+            transition: .2s box-shadow;
+        }
+
+        .seminars-centre:hover {
+            box-shadow: 0px 0px 6px 2px lightgrey;
         }
 
         .poem-preview {
@@ -368,9 +386,49 @@
     </div>
     <div id="purgatoryGrid" style="display: none;">
     </div>
+    <a href="poem-editor">+Add a Poem</a>
+    <!--
+    <div class="popup" style=" width: 60%; position: fixed; height: 80%; display: none;">
+        <h2 style=" text-align: center;">Poem name - By User</h2>
+        <div class="poem-centre">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
+        <div style=" display: flex; position: sticky; column-gap: 8px; width: 100%; bottom: 16px; ">
+            <div style=" flex-grow: 1;"></div>
+            <div class="popup-button" style=" max-width: 35%; flex-basis: 0;">
+                <svg width="16" height="16" viewBox="0 -256 1850 1850">
+                    <g transform="matrix(1 0 0 -1 30.373 1426.9)">
+                        <path d="m1408 608v-320q0-119-84.5-203.5t-203.5-84.5h-832q-119 0-203.5 84.5t-84.5 203.5v832q0 119 84.5 203.5t203.5 84.5h704q14 0 23-9t9-23v-64q0-14-9-23t-23-9h-704q-66 0-113-47t-47-113v-832q0-66 47-113t113-47h832q66 0 113 47t47 113v320q0 14 9 23t23 9h64q14 0 23-9t9-23zm384 864v-512q0-26-19-45t-45-19-45 19l-176 176-652-652q-10-10-23-10t-23 10l-114 114q-10 10-10 23t10 23l652 652-176 176q-19 19-19 45t19 45 45 19h512q26 0 45-19t19-45z" fill="currentColor"></path>
+                    </g>
+                </svg>
+              Visit poem
+            </div>
+           <div class="popup-button" style=" max-width: 35%; flex-basis: 0;">Close</div>
+           <div style=" flex-grow: 1;"></div>
+        </div>
+    </div>
+    <h3 style="margin-bottom: 0px;">Seminars:</h3>
+    <div style="margin-bottom: 0px;width: 100%;padding: 16px;display: flex;column-gap: 16px;">
+        <div style="border-radius: 8px;height: 400px;background-color: var(--button-opaque);display: flex;flex-direction: column;padding: 16px;flex-shrink: 2;flex-basis: 20%;">
+            <div style="flex-grow: 1;">...</div>
+            <p style="margin: 0px;font-size: 24px;">Writing a poem people will actually want to read</p>
+            <p style="margin: 0px;">By Zekiah</p>
+        </div>
+        <div class="seminars-centre">
+            <p style="color: white;text-align: center;font-size: 32px;">Check out what's new, right now!</p>
+            <video style="flex-grow: 1;border-radius: 8px;margin-left: 32px;margin-right: 32px;" controls>
+                <source src="movie.mp4" type="video/mp4">
+            </video>
+            <p style="color: white;text-align: center;font-size: 24px;">Learn more with subliminal seminars</p>
+            <a href="" style="text-align: center;">poemanthology.org/seminars</a>
+        </div>
+        <div style="border-radius: 8px;height: 400px;background-color: var(--button-opaque);display: flex;flex-direction: column;padding: 16px;flex-shrink: 2;flex-basis: 20%;">
+            <div style="flex-grow: 1;">...</div>
+           <p style="margin: 0px;font-size: 24px;">Analysing a poetic work</p>
+           <p style="margin: 0px;">By Zekiah</p>
+        </div>
+    </div>
+    -->
+    <h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
     <div class="grid-container">
-        <a href="poem-editor">+Add a Poem</a>
-        <div></div>
         <div>
             <h3>Volume 1: (Phrenes and Memes)</h3>
             <div class="grid-sub-container">
@@ -587,8 +645,6 @@
             </div>
         </div>
     </div>
-    <br><br>
-    what are you doing down here? lol
     <a href="./" class="back"><- Back</a>
 </body>
 <script></script>
@@ -756,11 +812,8 @@
     }
 
     async function initialise() {
-        // If on mobile, collapse sections by default to make site more compact
-        if (window.matchMedia("(orientation: portrait)").matches) {
-            document.querySelectorAll(".grid-sub-container")
-                .forEach(elem => elem.setAttribute("collapsed", true))
-        }
+        document.querySelectorAll(".grid-sub-container")
+            .forEach(elem => elem.setAttribute("collapsed", true))
 
         if (params.get("accountCode")) {
             signin(params.get("accountCode"))
