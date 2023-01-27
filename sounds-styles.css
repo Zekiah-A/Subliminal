@@ -63,7 +63,18 @@ input[type="range"] {
     border-radius: 4px;
 }
 
-input[type="range"]::-moz-range-thumb, input[type="range"]::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 100%;
+    background: #096BB1;
+    cursor: pointer;
+    width: 5px;
+    box-shadow: -1005px 0px 0px 1000px #096bb1;
+    border: none;
+    border-radius: 0px 10px 10px 0px;
+}
+
+input[type="range"]::-moz-range-thumb {
     appearance: none;
     height: 100%;
     background: #096BB1;
@@ -109,6 +120,9 @@ input[type="text"] {
     cursor: pointer;
     text-decoration: none;
     height: 30px;
+    display: flex;
+    align-items: center;
+    column-gap: 4px;
 }
 
 .side-button:hover {
@@ -117,6 +131,13 @@ input[type="text"] {
 
 .side-button:focus {
     background-color: #d3d3d33b;
+}
+
+.side-button > svg {
+    opacity: 0.6;
+    color: white;
+    fill: white;
+    stroke: white;
 }
 
 .side-title {
@@ -268,7 +289,6 @@ input[type="text"] {
 #side {
     width: 256px;
     background-color: black;
-    border-right: 1px solid #242424;
     display: flex;
     flex-direction: column;
 }
@@ -292,7 +312,7 @@ input[type="text"] {
 
     #side {
         height: 90px;
-        width: 100%;
+        width: 100% !important;
         overflow: hidden;
         transition: height .5s;
         position: relative;
@@ -349,6 +369,8 @@ input[type="text"] {
 #currentPlaying {
     display: flex;
     flex: 1;
+    flex-basis: 0;
+    width: 0px;
 }
 
 #currentPlayingImage {
@@ -371,6 +393,7 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-content: center;
+    transition: .05s scale;
 }
 
 #playButton:hover {
@@ -440,7 +463,7 @@ input[type="text"] {
     display: none;
 }
 
-#lyricsCanvas {
+#lyricsCanvases, #lyricsCanvases > canvas {
     position: absolute;
     top: 0;
     width: 100%;

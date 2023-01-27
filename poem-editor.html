@@ -920,7 +920,8 @@
         if (offset == null || rhymes == null) return
 
         rhymes.sort((a, b) =>
-            Math.abs(selectedSyllables - a.syllables) <= Math.abs(selectedSyllables - b.syllables) ? 1 : -1)
+            Math.abs(selectedSyllables - a.syllables) < Math.abs(selectedSyllables - b.syllables) ? -1 : 
+            (Math.abs(selectedSyllables - a.syllables) == Math.abs(selectedSyllables - b.syllables)) ? 0 : 1)
 
         while (suggestions.lastElementChild) {
             suggestions.removeChild(suggestions.lastElementChild)
