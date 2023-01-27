@@ -296,7 +296,7 @@
         }
 
         .suggestions {
-            width: 128px;
+            min-width: 192px;
             position: absolute;
             background: #bdbdbd;
             z-index: 3;
@@ -307,6 +307,7 @@
             flex-direction: column;
             border: 1px solid gray;
             overflow: clip;
+            overflow-y: scroll;
         }
 
         .suggestions-item {
@@ -490,7 +491,8 @@
             <div class="options-parent" style="width: 112px; min-width: 112px;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                 <div>Background ⯆</div>
                 <div class="options">
-                    <div style="opacity: 0.6;">From link</div>
+                    <div onclick="document.body.style.background = ''">None</div>
+                    <div onclick="document.body.style.background = `url(\'${prompt('Enter the backgorund image URL')}\')`">From link</div>
                     <div style="opacity: 0.6;">Upload file</div>
                     <div onclick="builtinFreePopup.style.display = 'block';">Built-in free</div>
                 </div>                
@@ -911,7 +913,7 @@
         }
 
         let offset = document.getSelection().baseOffset
-        let selectedWord = findWord(event.target.innerHTML, offset)
+        let selectedWord = findWord(event.target.textContent, offset)
         let rhymes = await getRhymes(selectedWord)
         if (offset == null || rhymes == null) return
 
@@ -929,12 +931,14 @@
         suggestions.style.display = "block"
         suggestions.style.top = (event.offsetY + 48) + "px"
         suggestions.style.left = (event.offsetX + 16) + "px"
+        suggestions.scrollTo(0, 0)
         suggestions.animate([
             { maxHeight: '0px' },
             { maxHeight: '256px' },
         ], {
             duration: 200,
-            iterations: 1
+            iterations: 1,
+            fill: "both"
         })
     }
 
