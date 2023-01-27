@@ -517,21 +517,18 @@
     </div>
 
     <div id="main" class="poem-centre">
-        <div id="suggestions" class="suggestions" style="display: none;">
-            <div style="padding:8px;display:flex"><span style="flex-grow:1">Bees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
-            <div style="padding:8px;display:flex"><span style="flex-grow:1">Knees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
-            <div style="padding:8px;display:flex"><span style="flex-grow:1">Trees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
-        </div>
+        <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
 
         <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
-            onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">
-            Click On Me to Start Editing
-        </p>
+            onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
 
         <p id="originalContent" style="display: none;"></p>
     </div>
 
-    <div id="side" class="document-tools" collapsed="false" onclick="if (side.getAttribute('collapsed')) side.removeAttribute('collapsed')">
+    <div id="side" class="document-tools" collapsed="false" onclick="
+        if (side.getAttribute('collapsed'))
+            side.removeAttribute('collapsed')
+    ">
         <div>
             <div style="display: flex;flex-direction: row;height: 48px;">
                 <p style="margin: 0px; align-self: center;">Poem summary:</p>
@@ -840,23 +837,23 @@
     }
 
 
-    function signCanvasDown(e) {
-        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+    function signCanvasDown(event) {
+        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
         this.X = relativeX
         this.Y = relativeY
         this.color = 'rgb(0, 0, 0)'
-        e.preventDefault()
+        event.preventDefault()
     }
 
-    function signCanvasUp(e) {
+    function signCanvasUp(event) {
         this.down = false
-        e.preventDefault()
+        event.preventDefault()
     }
 
-    function signCanvasDrag(e) {
-        e.preventDefault()
-        let relativeX = (e.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (e.offsetY / signCanvas.offsetHeight * signCanvas.height)
+    function signCanvasDrag(event) {
+        event.preventDefault()
+        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return
         ctx.beginPath()
         ctx.moveTo(this.X, this.Y)
@@ -912,9 +909,11 @@
             const before = text.substring(0, position).match(/[a-zA-Z0-9-_]+$/)
             return (before || "") + (after || "")
         }
-        
-        let selectedWord = findWord(event.target.textContent, event.target.selectionStart)
+
+        let offset = document.getSelection().baseOffset
+        let selectedWord = findWord(event.target.innerHTML, offset)
         let rhymes = await getRhymes(selectedWord)
+        if (offset == null || rhymes == null) return
 
         while (suggestions.lastElementChild) {
             suggestions.removeChild(suggestions.lastElementChild)
