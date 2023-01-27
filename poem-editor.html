@@ -306,9 +306,7 @@
             background-color: var(--button-transparent);
             flex-direction: column;
             border: 1px solid gray;
-            max-height: 136px;
             overflow: clip;
-            transition: .2s max-height;
         }
 
         .suggestions-item {
@@ -316,11 +314,11 @@
             display: flex;
         }
 
-        .suggestions:nth-child(1) {
+        .suggestions-item > span:nth-child(1) {
             flex-grow: 1;
         }
 
-        .suggestions:nth-child(2) {
+        .suggestions-item > span:nth-child(2) {
             font-size: 10px;
             opacity: 0.6;
         }
@@ -519,13 +517,14 @@
     </div>
 
     <div id="main" class="poem-centre">
-        <div class="suggestions" style="display: none;">
+        <div id="suggestions" class="suggestions" style="display: none;">
             <div style="padding:8px;display:flex"><span style="flex-grow:1">Bees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
             <div style="padding:8px;display:flex"><span style="flex-grow:1">Knees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
             <div style="padding:8px;display:flex"><span style="flex-grow:1">Trees</span><span style="font-size:10px;opacity:.6">(4 syllables)</span></div>
         </div>
 
-        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)">
+        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
+            onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">
             Click On Me to Start Editing
         </p>
 
@@ -581,6 +580,7 @@
     const edit = params.get("edit")
     const amend = params.get("amend")
     const decoder = new TextDecoder()
+    let currentName = ""
     let poemTags = []
 
     //Make user confirm that they want to leave the page.
@@ -674,6 +674,7 @@
     }
 
     function loadKey(key) {
+        currentName = key
         let poemJson = JSON.parse(localStorage.getItem(key))
         load(poemJson)
     }
@@ -762,7 +763,7 @@
             if (!res.ok) {
                 console.error("Cricical error in uploading" + res)
                 licenseAgreePopup.style.display = "none"
-                alert("Sorry! 😭\n\nFailed to upload poem to purgatory. Maybe try again...")
+                alert("Sorry!\n\nFailed to upload poem to purgatory. Maybe try again...")
                 return null
             }
 
@@ -786,10 +787,6 @@
         selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
         document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
         document.getElementById("content").focus();
-    }
-
-    function formatImage() {
-        console.log(window.opener.document.getElementById("content").selectionStart);
     }
 
     function changePageStyle(newStyle) {
@@ -825,7 +822,7 @@
     }
 
     function addPoemTag(tagName) {
-        if (!tagName || poemTags.includes(tagName) || poemTags.length > 5) return
+        if (!tagName || poemTags.includes(tagName) || poemTags.length >= 5) return
         tagname = tagName.toLowerCase().trim()
         poemTags.push(tagName)
         let newTag = document.createElement("div")
@@ -886,13 +883,8 @@
         return json
     }
 
-    async function amendMode() { //TODO: Fix
-        downloadButton.setAttribute("disabled", true)
-        uploadButton.setAttribute("disabled", true)
-        saveButton.setAttribute("disabled", true)
-        loadButton.setAttribute("disabled", true)
+    async function amendMode() {
         loadPoemPopup.style.display = 'none'
-        amendButton.style.display = "block"
         originalContent.style.display = "block"
         originalContent.style.top = content.offsetTop + "px"
         originalContent.style.maxWidth = content.offsetWidth + "px"
@@ -905,8 +897,6 @@
     }
 
     // https://rhymebrain.com/talk?function=getRhymes&word=hello
-
-    // https://rhymebrain.com/talk?function=getWordInfo&word=hello
     async function getRhymes(word) {
         let response = await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)
         if (!response.ok) {
@@ -923,12 +913,34 @@
             return (before || "") + (after || "")
         }
         
-        let selectedWord = findWord(event.target.value, event.target.selectionStart)
+        let selectedWord = findWord(event.target.textContent, event.target.selectionStart)
         let rhymes = await getRhymes(selectedWord)
 
-        for (let rhyme of rhymes) {
-            //TODO: Append to popup
+        while (suggestions.lastElementChild) {
+            suggestions.removeChild(suggestions.lastElementChild)
         }
+
+        for (let rhyme of rhymes) {
+            let item = document.createElement("div")
+            item.className = "suggestions-item"
+            item.innerHTML = `<span>${rhyme.word}</span><span>(${rhyme.syllables} syllable${rhyme.syllables > 1 ? "s" : ""})</span>`
+            suggestions.appendChild(item)
+        }
+
+        suggestions.style.display = "block"
+        suggestions.style.top = (event.offsetY + 48) + "px"
+        suggestions.style.left = (event.offsetX + 16) + "px"
+        suggestions.animate([
+            { maxHeight: '0px' },
+            { maxHeight: '256px' },
+        ], {
+            duration: 200,
+            iterations: 1
+        })
+    }
+
+    function appendRhyme(event) {
+        console.log(event)
     }
 
     async function editMode() {
@@ -949,7 +961,7 @@
         }
     })
 
-    this.addEventListener('resize', event => {
+    addEventListener('resize', event => {
         originalContent.style.top = content.offsetTop + "px"
         originalContent.style.maxWidth = content.offsetWidth + "px"
     })
