@@ -275,7 +275,7 @@ input[type="text"] {
     }
 
     .main-content-page-topsection {
-        height: 64px;
+        height: 32px;
     }
 }
 
@@ -322,6 +322,43 @@ input[type="text"] {
     flex-direction: column;
     row-gap: 8px;
     color: white;
+}
+
+.action-button {
+    background-color: #096bb1;
+    border-radius: 80px;
+    height: 48px;
+    text-align: center;
+    line-height: 48px;
+    font-weight: bold;
+    user-select: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    flex: 1;
+    cursor: pointer;
+    transition: .2s background-color;
+}
+
+.action-button:hover {
+    background-color: #448dc2;
+}
+
+.discrete-button {
+    flex: 1;
+    font-weight: bold;
+    margin: 0px;
+    align-self: center;
+    height: 16px;
+    line-height: 16px;
+    padding: 8px;
+    border-radius: 0px;
+    transition: .2s border-radius, .2s background-color;
+    background-color: transparent;
+}
+
+.discrete-button:hover {
+    background-color: #ffffff2a;
+    border-radius: 32px;
 }
 
 /*on mobile, give nav a 100% width when it is opened, and hide when collapsed, making the main content 100% of the width*/

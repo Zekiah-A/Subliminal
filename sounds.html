@@ -202,9 +202,9 @@
         <p>Sync the same song on devices around the world, or get into a listening party with all your friends with 0 latency...</p>
         <img src="https://comnplayscience.eu/app/images/notfound.png" style="border-radius: 8px;">
         <div style="display: flex;column-gap: 8px;">
-           <div style="background-color: #096bb1;border-radius: 80px;height: 48px;text-align: center;line-height: 48px;font-weight: bold;user-select: none;padding-left: 16px;padding-right: 16px;flex: 1;">COPY LINK</div>
+           <div class="action-button">COPY LINK</div>
            <p>or</p>
-           <p style="flex: 1;font-weight: bold;">SCAN JOIN CODE</p>
+           <p class="discrete-button">SCAN JOIN CODE</p>
         </div>
      </div>
     </body>
@@ -350,6 +350,57 @@
         }
 
         setInterval(renderTick, 16)
+    }
+
+    const tilesEffectModes = {
+        Random : 1,
+        Crawl: 2,
+        Circle: 3
+    }
+
+    function renderTilesEffect(tiles = null) {
+        let canvas = newLyricCanvas()
+        const ctx = canvas.getContext("2d")
+        
+        tiles ??= {
+            frequency: 100,
+            sizeX: 100,
+            sizeY: 100,
+            mode: tilesEffectModes.Random
+        }
+
+        let crawl = 0
+
+        let renderTick = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            
+            switch (tiles.mode) {
+                case tilesEffectModes.Random:
+                    for (let x = 0; x < this.innerWidth / tiles.sizeX; x++) {
+                        for (let y = 0; y < this.innerHeight / tiles.sizeY; y++) {
+                            ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256) + 1},${Math.floor(Math.random() * 256) + 1},${Math.floor(Math.random() * 256) + 1})`
+                            ctx.fillRect(x * tiles.sizeX, y * tiles.sizeY, tiles.sizeX, tiles.sizeY)
+                        }
+                    }
+                    break
+                case tilesEffectModes.Crawl:
+                    let maxX = this.innerWidth / tiles.sizeX
+                    let maxY = this.innerHeight / tiles.sizeY
+                    for (let x = 0; x < maxX; x++) {
+                        for (let y = 0; y < maxY; y++) {
+                            ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256) + 1},${Math.floor(Math.random() * 256) + 1},${Math.floor(Math.random() * 256) + 1})`
+                            if (crawl % maxX > x && crawl / maxY > y) {
+                                ctx.fillRect(x * tiles.sizeX, y * tiles.sizeY, tiles.sizeX, tiles.sizeY)
+                            }
+                        }
+                    }
+                    crawl++
+                    break
+                
+            }
+        }
+
+        setInterval(renderTick, tiles.frequency)
 
     }
 
@@ -379,6 +430,7 @@
 
     //Site scripts
     initialise()
+    renderTilesEffect()
     renderDiscoBall()
 </script>
 </html>
