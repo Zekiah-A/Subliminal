@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./styles.css">
     <script type="text/javascript" src="./account.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/brain.js"></script> 
     <style>
         #main {
             position: relative;
@@ -199,15 +200,19 @@
             left: calc(-100% - 32px) !important;
         }
 
-        #originalContent {
+        .content-ghost {
             position: absolute;
             z-index: -1;
             opacity: 0.2;
             user-select: none;
             margin: 0px;
+            opacity: 0.6;
+            top: 28px;
+            left: 10px;
         }
+
         /* patches for if the poem is in centre style */
-        .centre > #originalContent {
+        .centre > .content-ghost {
             width: 100%;
             margin-top: -18px;
         }
@@ -314,7 +319,7 @@
         }
 
         .suggestions {
-            min-width: 192px;
+            width: 192px;
             position: absolute;
             background: #bdbdbd;
             z-index: 3;
@@ -557,10 +562,13 @@
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
 
-        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
+        <p id="content" contenteditable="true" onkeydown="
+            checkReturn(event)
+            updateCoauthorContent(event)
+        " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
             onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
-
-        <p id="originalContent" style="display: none;"></p>
+        <p id="originalContent" class="content-ghost" style="display: none;"></p>
+        <p id="networkContent" class="content-ghost"></p>
     </div>
 
     <div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
@@ -635,19 +643,26 @@
             <p>Options:</p>
             <div>
                 Base the AI's results off of:
-                <div class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                <div id="sideAiBasisOptions" class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                     <div>... ⯆</div>
                     <div class="options" style="display: none;" onclick="
                         if (event.target == this)
                             return
                         this.parentElement.children[0].innerText = event.target.innerText + ' ⯆'
+                        this.parentElement.setAttribute('basis', event.target.dataset.basis)
                     ">
                         <div data-basis="my">My work so far</div>
                         <div data-basis="subliminal">Subliminal poems</div>
                     </div>
                 </div>
             </div>
-            <div class="popup-button" style="flex-grow: inherit;" onclick="alert('An error occured! Please try again later.')">Start coauthor</div>
+            <div class="popup-button" style="flex-grow: inherit;" onclick="
+                let basis = sideAiBasisOptions.getAttribute('basis')
+                if (basis == 'my')
+                    startCoauthorMy()
+                else if (basis == 'subliminal')
+                    startCoauthorSubliminal()
+            ">Start coauthor</div>
         </div>
         <div class="side-content" close>
             <div class="side-close-button" onclick="
@@ -672,6 +687,7 @@
     const decoder = new TextDecoder()
     let currentName = ""
     let poemTags = []
+    let network = null
 
     //Make user confirm that they want to leave the page.
     window.onbeforeunload = () => true
@@ -795,12 +811,13 @@
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
     function downloadCurrent() {
         saveCurrent()
-        element.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(formatDash(poemName.innerText))))
-        element.setAttribute('download', formatDash(poemName.innerText) + ".json")
-        element.style.display = "none"
-        document.body.appendChild(element)
-        element.click()
-        document.body.removeChild(element)
+        let el = document.createElement("a")
+        el.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(formatDash(poemName.innerText))))
+        el.setAttribute('download', formatDash(poemName.innerText) + ".json")
+        el.style.display = "none"
+        document.body.appendChild(el)
+        el.click()
+        document.body.removeChild(el)
     }
 
     // let number = 255
@@ -984,6 +1001,33 @@
         originalContent.innerHTML = currentJson.poemContent || ""
         currentJson.amends = amend
         load(currentJson)
+    }
+
+    function updateCoauthorContent(event) {
+        if (network == null)
+            return
+
+        let offset = document.getSelection().baseOffset || document.getSelection().getRangeAt(0).startOffset
+        let slice = content.innerHTML.substring(0, offset)
+        let suggestion = network.run(slice)
+
+        networkContent.innerHTML = slice + "\n" + suggestion
+    }
+
+    function startCoauthorMy() {
+        const worker = new Worker('./network-worker.js')
+        network = new brain.recurrent.LSTM()
+
+        worker.addEventListener("message", (event) =>
+            network = network.fromJSON(JSON.parse(event.data)))
+        worker.postMessage(content.innerHTML)
+    }
+
+    async function startCoauthorSubliminal() {
+        let state = await (await fetch("./Ai/state.json")).json()
+        if (state == null) return
+
+        network = network.fromJSON(state)
     }
 
     async function rhymeFinderFind(word, apiPath) {
