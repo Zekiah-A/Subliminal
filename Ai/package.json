@@ -1,0 +1,14 @@
+{
+  "name": "taylor",
+  "version": "1.0.0",
+  "description": "A neural network, trained off of the poems on subliminal, aimed at allowing for smart suggestions in the poem editor.",
+  "main": "pretrain.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zekiah-A",
+  "dependencies": {
+    "brain.js": "^2.0.0-beta.18",
+    "path": "^0.12.7"
+  }
+}
