@@ -146,11 +146,7 @@
             display: none;
         }
 
-        #side[mode="upload"] > div[upload] {
-            display: flex;
-        }
-
-        #side[mode="rhyme"] > div[rhyme] {
+        #side[mode="upload"] > div[upload], #side[mode="rhyme"] > div[rhyme], #side[mode="coauthor"] > div[coauthor] {
             display: flex;
         }
         
@@ -345,6 +341,13 @@
             font-size: 10px;
             opacity: 0.6;
         }
+
+        .online-editors {
+            position: fixed;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+        }
     
         @media screen and (orientation:portrait) {
             .text-tools {
@@ -401,6 +404,13 @@
 
             .background-grid {
                 grid-template-columns: auto auto;
+            }
+
+            .online-editors {
+                bottom: 8px;
+                right: 8px;
+                left: unset;
+                z-index: 2;
             }
         }
     </style>
@@ -523,27 +533,24 @@
                 </div>                
             </div>
             <div onclick="
-                side.setAttribute('collapsed', true)
                 side.removeAttribute('collapsed')
                 side.setAttribute('mode', 'rhyme')
             " style="width: 132px; min-width: 132px;"><div>Rhyme finder ➕</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>AI coauthor ➕</div></div>
+            <div onclick="
+                side.removeAttribute('collapsed')
+                side.setAttribute('mode', 'coauthor')
+                alert('This is an experimental feature, results may not be perfect')
+            " style="width: 132px; min-width: 132px;"><div>AI coauthor ➕</div></div>
         </div>
         <hr>
     </div>
 
-    <div style="position: fixed; left: 16px;display: flex;flex-direction: column;">
+    <div class="online-editors">
         Online editors:
         <div style="position: relative;margin-bottom: -16px; display: flex;">
             <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
             <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
         </div>
-        <!--
-            TODO:
-            On moible
-                bottom: 8px;
-                right: 8px;
-        -->
         <a href style="margin-top: 24px;" onclick="">+ Invite editor</a>
     </div>
 
@@ -560,7 +567,7 @@
         if (side.getAttribute('collapsed'))
             side.removeAttribute('collapsed')
     ">
-        <div class="side-content" upload="">
+        <div class="side-content" upload>
             <div>
                 <div style="display: flex;flex-direction: row;height: 48px;">
                     <p style="margin: 0px; align-self: center;">Poem summary:</p>
@@ -594,7 +601,7 @@
                 licenseAgreePopup.style.display = 'block'
             ">Upload to site</div>
         </div>
-        <div class="side-content" rhyme="">
+        <div class="side-content" rhyme>
             <p>Poem Rhyme finder:</p>
             <input id="rhymeFinderInput" style="font-size: 16px;" type="text" placeholder="Enter word">
             <p style="opacity: 0.6; font-size: 10px;">Use * to match any word ending, or ?? to match anything within a word, for example pai* (paint, pain), p???t (paint, print)</p>
@@ -621,6 +628,26 @@
             </div>
             <div id="sideRhymeMatches"><!--Container for side rhyme match elements--></div>
             <p style="opacity: 0.6; font-size: 10px;">Credits to datamuse for their fantastic API. https://www.datamuse.com/</p>
+        </div>
+        <div class="side-content" coauthor>
+            <p>Poem AI coauthor:</p>
+            <span style="opacity: 0.6;">Use the subliminal poem writing AI to help cowrite your work! Trained off of poems uploaded to subliminal</span>
+            <p>Options:</p>
+            <div>
+                Base the AI's results off of:
+                <div class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                    <div>... ⯆</div>
+                    <div class="options" style="display: none;" onclick="
+                        if (event.target == this)
+                            return
+                        this.parentElement.children[0].innerText = event.target.innerText + ' ⯆'
+                    ">
+                        <div data-basis="my">My work so far</div>
+                        <div data-basis="subliminal">Subliminal poems</div>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-button" style="flex-grow: inherit;" onclick="alert('An error occured! Please try again later.')">Start coauthor</div>
         </div>
         <div class="side-content" close>
             <div class="side-close-button" onclick="
