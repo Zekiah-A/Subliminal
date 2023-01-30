@@ -121,9 +121,6 @@
             box-shadow: 0px 0px 8px grey;
             z-index: 2;
             height: calc(100% - 146px);
-            display: flex;
-            flex-direction: column;
-            row-gap: 8px;
             overflow-y: scroll;
             transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height;
         }
@@ -143,6 +140,24 @@
 
         #side[collapsed] > .side-close-button {
             display: none;
+        }
+
+        #side > div {
+            display: none;
+        }
+
+        #side[mode="upload"] > div[upload] {
+            display: flex;
+        }
+
+        #side[mode="rhyme"] > div[rhyme] {
+            display: flex;
+        }
+        
+        .side-content {
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
         }
 
         .side-close-button {
@@ -168,6 +183,12 @@
 
         .side-close-button:hover {
             transform: scale(1.1);
+        }
+
+        #sideRhymeMatches {
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
         }
 
         .management-button {
@@ -497,8 +518,12 @@
                     <div onclick="builtinFreePopup.style.display = 'block';">Built-in free</div>
                 </div>                
             </div>
-            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Rhyme finder ➕</div></div>
-            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>Auto rhythm ➕</div></div>
+            <div onclick="
+                side.setAttribute('collapsed', true)
+                side.removeAttribute('collapsed')
+                side.setAttribute('mode', 'rhyme')
+            " style="width: 132px; min-width: 132px;"><div>Rhyme finder ➕</div></div>
+            <div onclick="alert('Error, try again later.')" style="width: 132px; min-width: 132px;"><div>AI coauthor ➕</div></div>
         </div>
         <hr>
     </div>
@@ -527,47 +552,82 @@
         <p id="originalContent" style="display: none;"></p>
     </div>
 
-    <div id="side" class="document-tools" collapsed="false" onclick="
+    <div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
         if (side.getAttribute('collapsed'))
             side.removeAttribute('collapsed')
     ">
-        <div>
-            <div style="display: flex;flex-direction: row;height: 48px;">
-                <p style="margin: 0px; align-self: center;">Poem summary:</p>
+        <div class="side-content" upload="">
+            <div>
+                <div style="display: flex;flex-direction: row;height: 48px;">
+                    <p style="margin: 0px; align-self: center;">Poem summary:</p>
+                </div>
+                <textarea id="summaryArea" type="text" maxlength="160"></textarea>
             </div>
-            <textarea id="summaryArea" type="text" maxlength="160"></textarea>
+            
+            <div>
+                <div style="display: flex;flex-direction: row;height: 48px;">
+                    <p style="margin: 0px; align-self: center;">Poem tags:</p>
+                </div>
+
+                <div id="tagContainer">
+                    <div add="true" style="line-height: 64px;" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">+</div>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex;flex-direction: row;height: 48px;">
+                    <p style="margin: 0px; align-self: center;">Content Warning:</p>
+                </div>
+
+                <div id="cWarningContainer" style="background: var(--button-opaque);border-radius: 8px; padding: 8px;">
+                    <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
+                    <label for="cWarningCheckbox"> Enabled</label>
+                    <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
+                </div>
+            </div>
+
+            <div class="popup-button" style="flex-grow: inherit;" onclick="
+                licenseAgreePopup.style.display = 'block'
+            ">Upload to site</div>
         </div>
-        
-        <div>
-            <div style="display: flex;flex-direction: row;height: 48px;">
-                <p style="margin: 0px; align-self: center;">Poem tags:</p>
+        <div class="side-content" rhyme="">
+            <p style="margin: 0px; align-self: center;">Poem Rhyme finder:</p>
+            <input id="rhymeFinderInput" style="font-size: 20px; width: 100%;" type="text" placeholder="enter word">
+            <p style="opacity: 0.6; font-size: 10px;">Use * to match any word ending, or ?? to match anything within a word, for example pai* (paint, pain), p???t (paint, print)</p>
+            <div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                <div>Word search type ⯆</div>
+                <div class="options" style="display: none;" onclick="
+                    this.querySelector('[selected]')?.removeAttribute('selected')
+                    if (event.target != this)
+                        return
+                    event.target.setAttribute('selected', true)
+                    rhymeFinderFind(rhymeFinderInput.value, event.target.dataset.api)
+                ">
+                    <div data-api="ml">Similar meaning</div>
+                    <div data-api="sl">Sound like</div>
+                    <div data-api="sp">Spelled similarly</div>
+                    <div data-api="rel_jjb">Adjectives used to describe</div>
+                    <div data-api="rel_jja">Nouns described by</div>
+                    <div data-api="rel_rhy">Perfect rhymes</div>
+                    <div data-api="rel_nry">Half rhymes</div>
+                    <div data-api="rel_nry">Homophones</div>
+                    <div data-api="rel_ant">Antonyms</div>
+                    <div data-api="rel_nry">Matching consonant</div>
+                </div>
             </div>
-
-            <div id="tagContainer">
-                <div add="true" style="line-height: 64px;" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">+</div>
-            </div>
+            <div id="sideRhymeMatches"><!--Container for side rhyme match elements--></div>
+            <p style="opacity: 0.6; font-size: 10px;">Credits to datamuse for their fantastic API. https://www.datamuse.com/</p>
         </div>
-
-        <div>
-            <div style="display: flex;flex-direction: row;height: 48px;">
-                <p style="margin: 0px; align-self: center;">Content Warning:</p>
+        <div class="side-content">
+            <div class="side-close-button" onclick="
+                side.setAttribute('collapsed', true)
+                side.setAttribute('mode', 'upload')
+                event.stopPropagation()
+            ">
+                <svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20">
+                    <path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
+                </svg>
             </div>
-
-            <div id="cWarningContainer" style="background: var(--button-opaque);border-radius: 8px; padding: 8px;">
-                <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
-                <label for="cWarningCheckbox"> Enabled</label>
-                <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
-            </div>
-        </div>
-
-        <div class="popup-button" style="flex-grow: inherit;" onclick="
-            licenseAgreePopup.style.display = 'block'
-        ">Upload to site</div>
-
-        <div class="side-close-button" onclick="side.setAttribute('collapsed', true); event.stopPropagation();">
-            <svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20">
-              <path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
-            </svg>
         </div>
     </div>
 
@@ -895,7 +955,30 @@
         load(currentJson)
     }
 
-    // 
+    async function rhymeFinderFind(word, apiPath) {
+        let path = "https://api.datamuse.com/words?" + apiPath + "=" + word.replaceAll(" ", "+")
+        if ((word.includes("*") || word.includes("?")) && apiPath != "sp") {
+            path += "&sp=" + word
+        }
+        
+        let response = await fetch()
+        let matches = response.ok ? await response.json() : []
+        
+        while (sideRhymeMatches.lastElementChild) {
+            sideRhymeMatches.removeChild(sideRhymeMatches.lastElementChild)
+        }
+
+        for (let matchObject of matches) {
+            let el = document.createElement("div")
+            el.textContent = match.word
+            let score = document.createElement("span")
+            score.style.opacity = "0.6"
+            score.textContent = match.score
+            el.appendChild(score)
+            sideRhymeMatches.appendChild(el)
+        }
+    }
+    
     async function getRhymes(word) {
         let response = await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)
         return response.ok ? await response.json() : []
