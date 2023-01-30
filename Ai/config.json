@@ -1,6 +1,6 @@
 {
-    "iterations": 4000, 
+    "iterations": 12000, 
     "poemStart": 0,
-    "poemEnd": 2,
+    "poemEnd": 10,
     "exclude": ["Besusk", "The sitting down of the opacity brigade", "Hän vaan istu"]
 }
