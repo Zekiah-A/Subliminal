@@ -544,7 +544,6 @@
             <div onclick="
                 side.removeAttribute('collapsed')
                 side.setAttribute('mode', 'coauthor')
-                alert('This is an experimental feature, results may not be perfect')
             " style="width: 132px; min-width: 132px;"><div>AI coauthor ➕</div></div>
         </div>
         <hr>
@@ -640,7 +639,7 @@
         <div class="side-content" coauthor>
             <p>Poem AI coauthor:</p>
             <span style="opacity: 0.6;">Use the subliminal poem writing AI to help cowrite your work! Trained off of poems uploaded to subliminal</span>
-            <p>Options:</p>
+            <span style="display: block; color: red; background-color: yellow;user-select: none;">WARNING: This is an experimental feature, results may not be perfect!</span>
             <div>
                 Base the AI's results off of:
                 <div id="sideAiBasisOptions" class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
@@ -1011,7 +1010,7 @@
         let slice = content.innerHTML.substring(0, offset)
         let suggestion = network.run(slice)
 
-        networkContent.innerHTML = slice + "\n" + suggestion
+        networkContent.innerHTML = slice + suggestion
     }
 
     function startCoauthorMy() {
@@ -1027,6 +1026,7 @@
         let state = await (await fetch("./Ai/state.json")).json()
         if (state == null) return
 
+        network = new brain.recurrent.LSTM()
         network = network.fromJSON(state)
     }
 
