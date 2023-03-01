@@ -5,6 +5,7 @@
     --panel-transparent: #f2f2f240;
     --background-opaque: #ffffff;
     --background-transparent: #ffffff33;
+    --input-hilight: #0074d9;
     --text-colour: black;
 }
 
@@ -56,6 +57,7 @@ header {
     backdrop-filter: blur(5px);
     background: transparent;
     z-index: 3;
+    user-select: none;
 }
 
 header > div {
@@ -82,6 +84,11 @@ header a {
     /*Click hitboxes*/
     padding-top: 24px;
     padding-bottom: 24px;
+}
+
+header a[current] {
+    background-color: #0074d90d;
+    border-bottom: 4px solid var(--input-hilight);
 }
 
 header img {
@@ -262,16 +269,34 @@ h2 {
     background-color: var(--button-opaque);
     flex-grow: 1;
     transition: .2s background-color;
+    user-select: none;
 }
 
-.popup-button:hover {
+.popup-button[disabled] {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.popup-button:not([disabled]):hover {
     background-color: var(--button-opaque-hover);
 }
 
 .popup-input {
     width: calc(100% - 8px);
     display: block;
-    line-height: 200%;
+    line-height: 1.5;
+    height: 2.1em;
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.3s;
+    width: calc(100% - 16px);
+}
+
+.popup-input:focus {
+    border: 1px solid var(--input-hilight);
+    outline: 0;
 }
 
 .button-tooltip {
@@ -397,6 +422,7 @@ h2 {
     border: 1px solid darkgray;
     pointer-events: all !important;
     display: none;
+    user-select: none;
 }
 
 .options div[selected] {
@@ -560,11 +586,8 @@ h2 {
     }
 
     .searchbar {
-        /*position: sticky;
-        left: 50%;
-        transform: translateX(-50%);*/
         width: 50%;
-        line-height: 200%;
+        line-height: 300%;
         top: 2px;
         z-index: 1;
         flex-grow: 1;

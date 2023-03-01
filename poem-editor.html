@@ -23,7 +23,7 @@
             width: 160px;
             padding: 8px;
             border-radius: 8px;
-            background-color: var(--button-transparent); /*var(--background-transparent);*/
+            background-color: var(--button-transparent);
             backdrop-filter: blur(5px);
             z-index: 1;
             transition: height .5s;
@@ -132,7 +132,7 @@
             padding-right: 0px;
             overflow: hidden;
             box-shadow: none;
-            border-left: 2px solid black;
+            border-left: 2px solid gray;
             cursor: pointer;
             backdrop-filter: blur(5px);
             background: transparent;
@@ -605,7 +605,7 @@
                 <div id="cWarningContainer" style="background: var(--button-opaque);border-radius: 8px; padding: 8px;">
                     <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
                     <label for="cWarningCheckbox"> Enabled</label>
-                    <input type="text" id="cWarningNotesInput" placeholder="Additional warning notes" style="width: calc(100% - 5px); height: 24px;" disabled="">
+                    <input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: calc(100% - 16px); height: 24px;" disabled="">
                 </div>
             </div>
 
@@ -615,7 +615,7 @@
         </div>
         <div class="side-content" rhyme>
             <p>Poem Rhyme finder:</p>
-            <input id="rhymeFinderInput" style="font-size: 16px;" type="text" placeholder="Enter word">
+            <input id="rhymeFinderInput" style="font-size: 16px; " type="text" class="popup-input" placeholder="Enter word">
             <p style="opacity: 0.6; font-size: 10px;">Use * to match any word ending, or ?? to match anything within a word, for example pai* (paint, pain), p???t (paint, print)</p>
             <div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                 <div>Word search type ⯆</div>

@@ -15,13 +15,10 @@ public record PurgatoryEntry
     string? Signature = null
 )
 {
-    // Parts of an entry that is modifiable & necessary, serialiseable
     [JsonInclude] public string PoemName { get; set; }
     [JsonInclude] public string PoemContent { get; set; }
     [JsonInclude] public string PoemAuthor { get; set; }
 
-    // Server only changeable - does not need to be serialisable
-    public string Guid { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }
     public int AdminApproves { get; set; }

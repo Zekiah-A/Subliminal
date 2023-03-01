@@ -5,12 +5,12 @@ async function initialiseHeader() {
         return htmlObject.firstElementChild
     }
     
-    let header = stringToHtml(await (await fetch("./Other/header-template")).text())
-    
-    //if (localStorage.accountCode) {
-    //      We are too limited for space to put an account button here, use a hamburger menu? Or just show a login button, or small icon instead of a fat full one
-    //    header.getElementsByTagName("account")[0].style.display = "flex"
-    //}
+    let header = stringToHtml(await (await fetch("./Other/header-template.html")).text())    
+    for (let child of header.children[0].childNodes) {
+        if (child.href == location.toString().replace(".html", "")) {
+            child.setAttribute("current", true)
+        }
+    }
     
     document.body.appendChild(header)
 }

@@ -26,6 +26,6 @@ public record AccountProfile(string PenName, string JoinDate)
     public string? AvatarUrl { get; set; }
     public List<AccountBadge> Badges { get; set; } = new() { AccountBadge.New };
     public List<InterKey<PurgatoryEntry>> PinnedPoems { get; set; } = new();
-    public List<InterKey<PurgatoryEntry>> PoemReferences { get; set; } = new();
+    public List<InterKey<PurgatoryEntry>> Poems { get; set; } = new();
     public List<InterKey<AccountProfile>> Following { get; set; } = new();
 };

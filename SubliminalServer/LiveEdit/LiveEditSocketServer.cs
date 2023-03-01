@@ -63,6 +63,7 @@ public class LiveEditSocketServer
                     var clientGuid = "";//await Account.Account.GetGuid(code);
 
                     //If client is authed in this draft's data, or is literally the poem owner, then we allow them into the session
+                    /*
                     if (!sessions[draftGuid].AuthorProfileKey.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
                     {
                         await DisconnectClient(args.Client, "You are not an authorised editor of this poem.");
@@ -85,7 +86,7 @@ public class LiveEditSocketServer
                     else
                     {
                         clients[args.Client] = clients[args.Client] with { Session = draftGuid };
-                    }
+                    }*/
                     break;
                 }
                 case LiveEditClientPacket.FormatText:

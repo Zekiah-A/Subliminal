@@ -157,8 +157,6 @@ httpServer.MapGet("/PurgatoryAll", () =>
 
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
 {
-    var guid = Guid.NewGuid();
-    entry.Guid = guid.ToString();
     entry.Approves = 0;
     entry.Vetoes = 0;
     entry.AdminApproves = 0;
@@ -170,23 +168,22 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
     //Account-poem link if uploaded by a user who is signed in
     if (entry.Code is null)
     {
-        return Results.Text(entry.Guid);
+        return Results.Text(poem);
     }
     
     var account = (await database.FindRecords<AccountData, string>("Code", entry.Code)).FirstOrDefault();
 
     if (account is null)
     {
-        return Results.Unauthorized();
+        return Results.Text(poem);
     }
-
+    
     var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
-    entry.AuthorProfileKey = account.Data.ProfileReference;
-
-    profile.Data.PoemReferences.Add(new InterKey<PurgatoryEntry>(poem));
+    profile.Data.Poems.Add(new InterKey<PurgatoryEntry>(poem));
     
     await database.UpdateRecord(profile);
-    return Results.Text(entry.Guid);
+
+    return Results.Text(poem);
 });
 
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
@@ -234,7 +231,8 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
     
     switch (action.ActionType)
     {
-        /*case SingleValueAccountActionType.BlockUser:
+        /*
+        case SingleValueAccountActionType.BlockUser:
         {
             if (action.Value is not string userGuid) break;
             if (!Account.GuidIsValid(userGuid)) break;
@@ -264,7 +262,8 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             account.FollowUser(ref targetUser);
             await Account.SaveAccountData(targetUser);
             break;
-        }*/
+        }
+        */
         
         case SingleValueAccountActionType.UnfollowUser:
         {
