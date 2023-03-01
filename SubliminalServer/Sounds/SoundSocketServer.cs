@@ -19,7 +19,6 @@ public class SoundsSocketServer
             switch ((SoundsClientPacket) args.Data[0])
             {
                 case SoundsClientPacket.Play:
-                
                     return;
                 case SoundsClientPacket.SyncHost:
                     break;

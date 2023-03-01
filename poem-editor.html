@@ -139,7 +139,7 @@
             z-index: 0;
         }
 
-        #side[collapsed] > .side-close-button {
+        #side[collapsed] .side-close-button {
             display: none;
         }
 
@@ -549,6 +549,12 @@
         <hr>
     </div>
 
+    <div id="editorsPopup" class="popup" style="display: none;">
+        <h2>Find someone to invite</h2>
+        <input type="text" placeholder="Search for user by username">
+        <div id="editorsResults" style="height: 500px;"></div>
+    </div>
+
     <div class="online-editors">
         Online editors:
         <div style="position: relative;margin-bottom: -16px; display: flex;">
@@ -567,7 +573,6 @@
         " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
             onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
         <p id="originalContent" class="content-ghost" style="display: none;"></p>
-        <p id="networkContent" class="content-ghost"></p>
     </div>
 
     <div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
@@ -638,8 +643,7 @@
         </div>
         <div class="side-content" coauthor>
             <p>Poem AI coauthor:</p>
-            <span style="opacity: 0.6;">Use the subliminal poem writing AI to help cowrite your work! Trained off of poems uploaded to subliminal</span>
-            <span style="display: block; color: red; background-color: yellow;user-select: none;">WARNING: This is an experimental feature, results may not be perfect!</span>
+            <span style="opacity: 0.6;">Use the subliminal poem writing AI to help cowrite your work!</span>
             <div>
                 Base the AI's results off of:
                 <div id="sideAiBasisOptions" class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
@@ -655,13 +659,7 @@
                     </div>
                 </div>
             </div>
-            <div class="popup-button" style="flex-grow: inherit;" onclick="
-                let basis = sideAiBasisOptions.getAttribute('basis')
-                if (basis == 'my')
-                    startCoauthorMy()
-                else if (basis == 'subliminal')
-                    startCoauthorSubliminal()
-            ">Start coauthor</div>
+            <div class="popup-button" style="flex-grow: inherit;" onclick="alert('An error occurred - please try again later')">Start coauthor</div>
         </div>
         <div class="side-content" close>
             <div class="side-close-button" onclick="
@@ -945,7 +943,6 @@
         }
     }
 
-
     function signCanvasDown(event) {
         let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
@@ -1000,34 +997,6 @@
         originalContent.innerHTML = currentJson.poemContent || ""
         currentJson.amends = amend
         load(currentJson)
-    }
-
-    function updateCoauthorContent(event) {
-        if (network == null)
-            return
-
-        let offset = document.getSelection().baseOffset || document.getSelection().getRangeAt(0).startOffset
-        let slice = content.innerHTML.substring(0, offset)
-        let suggestion = network.run(slice)
-
-        networkContent.innerHTML = slice + suggestion
-    }
-
-    function startCoauthorMy() {
-        const worker = new Worker('./network-worker.js')
-        network = new brain.recurrent.LSTM()
-
-        worker.addEventListener("message", (event) =>
-            network = network.fromJSON(JSON.parse(event.data)))
-        worker.postMessage(content.innerHTML)
-    }
-
-    async function startCoauthorSubliminal() {
-        let state = await (await fetch("./Ai/state.json")).json()
-        if (state == null) return
-
-        network = new brain.recurrent.LSTM()
-        network = network.fromJSON(state)
     }
 
     async function rhymeFinderFind(word, apiPath) {
