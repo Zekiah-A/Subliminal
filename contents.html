@@ -858,7 +858,10 @@
 
     filtersBar.addEventListener("mousemove", event => {
         for (let button of filtersBar.children) {
-            button.style.background = 'radial-gradient(at left ' + (event.screenX - button.offsetLeft) + 'px top ' + (event.screenY - button.offsetTop) + 'px, darkgray, white)'
+            button.style.background =
+                "radial-gradient(at left " + (event.screenX - button.offsetLeft) +
+                "px top " + (event.screenY - button.offsetTop) + "px, darkgray, " +
+                ((window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "black" : "white") + ")"
         }
     })
 

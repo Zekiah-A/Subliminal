@@ -520,7 +520,7 @@
             <div onclick="format('superscript', null)"><div>Sup</div></div>
             <div onclick="format('subscript', null)"><div>Sub</div></div>
             <div style="position: relative;">
-                <input class="tool" onchange="format('foreColor', this.value); formattingColourRect.style.background = this.value" value="#000000" style="opacity: 0;position: absolute; left: 0px;top: 0px;width: 100%;height: 100%;" type="color">
+                <input class="tool" oninput="format('foreColor', this.value); formattingColourRect.style.background = this.value" value="#000000" style="opacity: 0;position: absolute; left: 0px;top: 0px;width: 100%;height: 100%;" type="color">
                 <div id="formattingColourRect" style="background-color: black; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
             <div><div>🖼️</div></div>
@@ -1103,7 +1103,10 @@
     formattingToolbar.addEventListener("mousemove", event => {
         for (let button of formattingToolbar.children) {
             if (button.className == "separator") continue
-            button.style.background = 'radial-gradient(at left ' + (event.screenX - button.offsetLeft) + 'px top ' + (event.screenY - button.offsetTop) + 'px, darkgray, white)'
+            button.style.background =
+                "radial-gradient(at left " + (event.screenX - button.offsetLeft) +
+                "px top " + (event.screenY - button.offsetTop) + "px, darkgray, " +
+                ((window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "black" : "white") + ")"
         }
     })
 
