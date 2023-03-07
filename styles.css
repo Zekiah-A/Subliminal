@@ -575,7 +575,7 @@ h2 {
     .poem-centre {
         margin-left: auto;
         margin-right: auto;
-        width: 30%;
+        width: max(30%, 360px);
         padding: 10px;
     }
     

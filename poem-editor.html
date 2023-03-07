@@ -355,6 +355,10 @@
         }
     
         @media screen and (orientation:portrait) {
+            #main {
+                margin-bottom: 48px;
+            }
+
             .text-tools {
                 position: inherit !important;
                 width: calc(100% - 12px);
@@ -374,7 +378,7 @@
                 width: 100%;
                 padding-left: 0px;
                 padding-right: 0px;
-                border-top: 2px solid black;
+                border-top: 2px solid gray;
                 border-left: none;
                 left: 0px;
                 z-index: 0;
@@ -493,17 +497,18 @@
             <div class="options-parent" style="width: 72px; min-width: 72px;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                 <div>File ⯆</div>
                 <div class="options" style="width: 120px;">
+                    <div onclick="location.reload()">Open new</div>
                     <div onclick="downloadCurrent()">Download poem</div>
                     <div onclick="saveCurrent()">Save poem</div>
                     <div onclick="loadPoemPopup.style.display = 'block'">Open another</div>
                     <div onclick="
-                    if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
-                        licenseAgreePopup.style.display = 'block'
-                    }
-                    else {
-                        side.setAttribute('mode', 'upload')
-                        side.removeAttribute('collapsed')
-                    }
+                        if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
+                            licenseAgreePopup.style.display = 'block'
+                        }
+                        else {
+                            side.setAttribute('mode', 'upload')
+                            side.removeAttribute('collapsed')
+                        }
                     ">Upload to site</div>
                 </div>                
             </div>    
@@ -567,10 +572,7 @@
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
 
-        <p id="content" contenteditable="true" onkeydown="
-            checkReturn(event)
-            updateCoauthorContent(event)
-        " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
+        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
             onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
         <p id="originalContent" class="content-ghost" style="display: none;"></p>
     </div>
