@@ -684,17 +684,21 @@
     const edit = params.get("edit")
     const amend = params.get("amend")
     const decoder = new TextDecoder()
-    let currentName = ""
+    let currentGuid = ""
     let poemTags = []
     let network = null
 
-    //Make user confirm that they want to leave the page.
+    // Make user confirm that they want to leave the page.
     window.onbeforeunload = () => true
 
-    //format title to subliminal title format, used in poem save files
+    // format title to subliminal title format, used in poem download files
     let formatDash = (text) => text.trim().toLowerCase().replaceAll(" ", "-")
 
-    let pageToHtml = text => {
+    // Save poem with a unique GUID so that we do not encounter overlaps 
+    let newGuid = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, char =>
+                        (char ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> char / 4).toString(16))
+
+    let pageToHtml = (text) => {
       let htmlObject = document.createElement('body')
       htmlObject.innerHTML = text
       return htmlObject
@@ -717,14 +721,14 @@
             }
 
             let cardTitle = document.createElement("h4")
-            cardTitle.textContent = localStorage.key(i)
+            cardTitle.textContent = current.poemName
             cardEl.appendChild(cardTitle)
             
             let cardPreview = document.createElement("p")
             cardPreview.className = "poem-preview"
             let pContent
             try {
-                pContent = JSON.parse(localStorage.getItem(localStorage.key(i))).poemContent
+                pContent = JSON.parse(current).poemContent
             }
             catch (e) {
                 continue
@@ -772,14 +776,15 @@
             pageStyle: main.className, //poem visual format
             pageBackground: document.body.style.background //poem background image
         }
-        localStorage.setItem(formatDash(poemName.innerText), JSON.stringify(saveData))
+
+        localStorage.setItem(currentGuid || newGuid(), JSON.stringify(saveData))
 
         //Refresh load box with latest poem.
         fetchStorage()
     }
 
     function loadKey(key) {
-        currentName = key
+        currentGuid = key
         let poemJson = JSON.parse(localStorage.getItem(key))
         load(poemJson)
     }
@@ -811,7 +816,7 @@
     function downloadCurrent() {
         saveCurrent()
         let el = document.createElement("a")
-        el.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(formatDash(poemName.innerText))))
+        el.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(currentGuid)))
         el.setAttribute('download', formatDash(poemName.innerText) + ".json")
         el.style.display = "none"
         document.body.appendChild(el)
@@ -844,9 +849,9 @@
         return buffer
     }
 
-    function uploadCurrent() {
+    async function uploadCurrent() {
         saveCurrent()
-        let loadObject = JSON.parse(localStorage.getItem(formatDash(poemName.innerText)))
+        let loadObject = JSON.parse(localStorage.getItem(currentGuid))
         
         //Only apply if they actually used the signature
         let signBits = getSignCanvasBits()
@@ -854,18 +859,20 @@
             loadObject.signature = window.btoa(String.fromCharCode(...new Uint8Array(signBits)))
         }
 
-        //WARNING: Calling async function without await may cause issues
-        upload(loadObject) 
+        await upload(loadObject) 
     }
 
     async function upload(poemJson) {
-        if (await isLoggedIn()) poemJson.code = localStorage.accountCode
+        if (await isLoggedIn()) {
+            poemJson.code = localStorage.accountCode
+        }
 
         fetch("https://server.poemanthology.org:81/PurgatoryUpload", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poemJson)
-        }).then(res => {
+        })
+        .then(res => {
             if (!res.ok) {
                 console.error("Cricical error in uploading" + res)
                 licenseAgreePopup.style.display = "none"
@@ -876,7 +883,9 @@
             return res.text()
         })
         .then(guidResponse => {            
-            if (guidResponse == null) return
+            if (guidResponse == null) {
+                return
+            }
 
             console.log("Upload sucessful, redirecting.")
             window.onbeforeunload = () => {} 
@@ -939,14 +948,15 @@
 
     function removePoemTag(tagName) {
         poemTags.splice(poemTags.indexOf(tagName), 1)
-        for (let t of tagContainer.children) {
-            if (t.innerText == tagName)
-                tagContainer.removeChild(t)
+        for (let tag of tagContainer.children) {
+            if (tag.innerText == tagName)
+                tagContainer.removeChild(tag)
         }
     }
 
     function signCanvasDown(event) {
-        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
+        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width)
+        let relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         this.down = true
         this.X = relativeX
         this.Y = relativeY
@@ -961,7 +971,8 @@
 
     function signCanvasDrag(event) {
         event.preventDefault()
-        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width), relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
+        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width)
+        let relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return
         ctx.beginPath()
         ctx.moveTo(this.X, this.Y)
@@ -975,17 +986,9 @@
     }
 
     async function fetchPathJson(path) {
-        let json = {}
-
-        if (path.includes("/")) {
-            let data = await fetch(window.location.protocol + "\/\/" + window.location.hostname + path)
-            json = await data.json()
-        }
-        else {
-            json = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + path)).json()
-        }
-
-        return json
+        return await (await fetch((path.includes("/")
+            ? window.location.protocol + "\/\/" + window.location.hostname
+            : "https://server.poemanthology.org:81/Purgatory/") + path)).json()
     }
 
     async function amendMode() {
