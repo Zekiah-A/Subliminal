@@ -15,11 +15,10 @@ const styleCodes = {
 class EditorDocument {
     constructor(data) {
         this.data = data || ""
-        this.textPosition = 0 // Raw position
-        this.selection = { textPosition: 0, end: 0 } // Raw position
+        this.position = 0 // Raw position
+        this.selection = { position: 0, end: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
-        this.decoder = new TextDecoder()
     }
 
     formatToHtml(data) {
@@ -121,26 +120,28 @@ class EditorDocument {
     }
 
     addStyle(code, value = null) {
-        if (this.selection.textPosition != 0 && this.selection.end != 0
-            && this.selection.end - this.selection.textPosition == 0) {
+        if (this.selection.position != 0 && this.selection.end != 0
+            && this.selection.end - this.selection.position == 0) {
             
-            let buffer = new Uint8Array(code == styleCodes.colour ? 6 : 2)
+            let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
             buffer[1] = code 
+            buffer[2] = 0
 
             if (code == styleCodes.colour) {
                 buffer[2] = value & 0xff
                 buffer[3] = (value >> 8) & 0xff
                 buffer[4] = (value >> 16) & 0xff
                 buffer[5] = (value >> 24) & 0xff
+                buffer[6] = 0
             }
 
-            this.data = this.data.slice(0, this.selection.textPosition)
-                + this.decoder.decode(buffer)
-                + this.data.slice(this.this.selection.textPosition)
-
+            this.data = this.data.slice(0, this.selection.position)
+                + Array.from(buffer, byte => String.fromCharCode(byte)).join('')
+                + this.data.slice(this.selection.position)
+    
             this.data = this.data.slice(0, this.selection.end)
-                + "\x02"
+                + '\x02'
                 + this.data.slice(this.selection.end)
         }
         else {
@@ -155,22 +156,33 @@ class EditorDocument {
                 buffer[5] = (value >> 24) & 0xff
             }
 
-            this.data = this.data.slice(0, this.textPosition)
-                + this.decoder.decode(buffer)
-                + this.data.slice(this.this.textPosition)
+            this.data = this.data.slice(0, this.position)
+                + Array.from(buffer, byte => String.fromCharCode(byte)).join('')
+                + this.data.slice(this.position)
         }
     }
 
     addText(value) {
-        this.data = this.data.slice(0, this.textPosition) + value + this.data.slice(this.textPosition)
+        this.data = this.data.slice(0, this.position) + value + this.data.slice(this.position)
+        this.position += value.length
+    }
+    
+    addNewLine() {
+        this.data = this.data.slice(0, this.position) + '\x01' + this.data.slice(this.position)
+        this.position++
+    }
+
+    deleteText(count = 1) {
+        this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
+        this.position -= count
     }
 
     setSelection(start, end = null) {
         if (end == null) {
-            textPosition = this.toRawPosition(start)
+            this.position = this.toRawPosition(start)
         }
         else {
-            this.selection.textPosition = this.toRawPosition(start)
+            this.selection.position = this.toRawPosition(start)
             this.selection.end = this.toRawPosition(end)
         }
     }

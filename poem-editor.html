@@ -572,7 +572,26 @@
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
 
-        <p id="content" contenteditable="true" onkeydown="checkReturn(event)" onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
+        <p id="content" contenteditable="true" onkeydown="
+            if (event.key == 'Backspace') {
+                editor.deleteText()
+            }
+            else if (event.key == 'Enter') {
+                editor.addNewLine()
+            }
+            else if (event.key == 'Shift' || event.key == 'F5') { // TODO: Use event keycodes
+                // Discard
+                return
+            }
+            else {
+                editor.addText(event.key)
+            }
+            event.preventDefault()
+            // TODO: This is highly inefficient, and is only being done for round trip testing, later, we can
+            // rely on hoping that the editor is solid enough to stay in sync with the dom without having to prevent  
+            // the event and loopback with the editor data.
+            this.innerHTML = editor.formatToHtml(editor.data)
+        " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
             onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
         <p id="originalContent" class="content-ghost" style="display: none;"></p>
     </div>
@@ -684,6 +703,7 @@
     const edit = params.get("edit")
     const amend = params.get("amend")
     const decoder = new TextDecoder()
+    const editor = new EditorDocument()
     let currentGuid = ""
     let poemTags = []
     let network = null
@@ -908,15 +928,11 @@
         document.getElementById("main").className = newStyle;
     }
 
-    //PATCH: To get chrome support for proper <br> based formatting, instead of divs for each line.
-    function checkReturn(event) {
-        if (event.key === 'Enter') {
-            document.execCommand("insertLineBreak")
-            event.preventDefault()
-        }
-    }
+    //TODO : Update to editor document
     //PATCH: Stop pasting weird formatted text that could break things.
     function checkPaste(event) {
+        console.error("Checkpaste is deprecated, and is in need of updating. Please contact the developer.")
+        return
         event.preventDefault()
         const text = event.clipboardData.getData('text/plain')
         text.replace("\n", "<br>")
