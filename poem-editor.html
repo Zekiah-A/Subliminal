@@ -514,13 +514,16 @@
             </div>    
             <div onclick="format('undo', null)" style="width: 72px; min-width: 72px;"><div>↩ undo</div></div>
             <div onclick="format('redo', null)" style="width: 72px; min-width: 72px;"><div>redo ↪</div></div>
-            <div onclick="format('bold', null)"><div style="font-weight: bold;">B</div></div>
-            <div onclick="format('italic', null)"><div style="font-style: italic;">I</div></div>
-            <div onclick="formatCustom('code')"><div style="font-family: monospace;">C</div></div>
-            <div onclick="format('superscript', null)"><div>Sup</div></div>
-            <div onclick="format('subscript', null)"><div>Sub</div></div>
+            <div onclick="editor.addStyle(styleCodes.bold)"><div style="font-weight: bold;">B</div></div>
+            <div onclick="editor.addStyle(styleCodes.italic)"><div style="font-style: italic;">I</div></div>
+            <div onclick="editor.addStyle(styleCodes.monospace)"><div style="font-family: monospace;">C</div></div>
+            <div onclick="editor.addStyle(styleCodes.superscript)"><div>Sup</div></div>
+            <div onclick="editor.addStyle(styleCodes.subscript)"><div>Sub</div></div>
             <div style="position: relative;">
-                <input class="tool" oninput="format('foreColor', this.value); formattingColourRect.style.background = this.value" value="#000000" style="opacity: 0;position: absolute; left: 0px;top: 0px;width: 100%;height: 100%;" type="color">
+                <input class="tool" oninput="
+                    editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1)))
+                    formattingColourRect.style.background = this.value" value="#000000
+                " style="opacity: 0;position: absolute; left: 0px;top: 0px;width: 100%;height: 100%;" type="color">
                 <div id="formattingColourRect" style="background-color: black; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
             <div><div>🖼️</div></div>
@@ -709,7 +712,7 @@
     const edit = params.get("edit")
     const amend = params.get("amend")
     const decoder = new TextDecoder()
-    const editor = new EditorDocument()
+    const editor = new EditorDocument("Click On Me to Start Editing")
     let currentGuid = ""
     let poemTags = []
     let network = null
@@ -919,29 +922,18 @@
         })
     }
 
-    function format(command, value) {
-        document.execCommand(command, false, value);
-        content.focus();
-    }
-
-    function formatCustom(tag) {
-        selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
-        document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
-        content.focus();
-    }
-
     function changePageStyle(newStyle) {
         main.className = newStyle
     }
 
     document.addEventListener("selectionchange", () => {
-        let selection = document.getSelection()
-        if (!descendantOf(selection.anchorNode, content) || !descendantOf(selection.focusNode, content)) {
+        let selection = getSelection().getRangeAt(0)
+        if (selection.commonAncestorContainer != content || !descendantOf(selection.commonAncestorContainer, content)) {
             return
         }
 
-        editor.setSelection(selection.anchorOffset,
-            selection.focusOffset == selection.anchorOffset ? null : selection.focusOffset)
+        editor.setSelection(selection.startOffset,
+            selection.endOffset == selection.startOffset ? null : selection.endOffset)
     })
 
     function descendantOf(child, element) {

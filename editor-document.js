@@ -78,11 +78,25 @@ class EditorDocument {
         return html.join("")
     }
 
+    optimiseData(data) {
+        let i = 0
+        while (i < data.length - 1) {
+            if (data[i] == '\x00' && data[i + 1] == '\x00') {
+                data = data.slice(0, i) + data.slice(i + 2)
+                i++
+            }
+
+            i++
+        }
+
+        return data
+    }
+
     // Static
     toTextPosition(rawPosition, data) {
         let rawI = 0
         let textI = 0
-        let inStyle = false
+        let inStyle = this.inStyle(rawPosition, data)
         
         while (rawI < rawPosition) {
             if (data[rawI] == '\x00') {
@@ -104,15 +118,17 @@ class EditorDocument {
     toRawPosition(textPosition, data) {
         let rawI = 0
         let textI = 0
-        let inStyle = false
+        let inStyle = this.inStyle(textPosition, data)
 
-        while (textI < textPosition) {
-            if (data[textI] == '\0') {
-                inStyle = !inStyle
-                continue
+        for (let i = 0; i < data.length; i++) {
+            if (textI > textPosition) {
+                break
             }
 
-            if (!inStyle && data[textI] != '\x01' && data[textI] != '\x02') {
+            if (data[textI] == '\x00') {
+                inStyle = !inStyle
+            }
+            else if (!inStyle) {
                 textI++
             }
 
@@ -124,10 +140,9 @@ class EditorDocument {
 
     addStyle(code, value = null) {
         if (this.existingSelection()) {
-            
             let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
-            buffer[1] = code 
+            buffer[1] = code.charCodeAt(0)
             buffer[2] = 0
 
             if (code == styleCodes.colour) {
@@ -139,7 +154,7 @@ class EditorDocument {
             }
 
             this.data = this.data.slice(0, this.selection.position)
-                + Array.from(buffer, byte => String.fromCharCode(byte)).join('')
+                + String.fromCharCode(...buffer)
                 + this.data.slice(this.selection.position)
     
             this.data = this.data.slice(0, this.selection.end)
@@ -147,20 +162,24 @@ class EditorDocument {
                 + this.data.slice(this.selection.end)
         }
         else {
-            let buffer = new Uint8Array(code == styleCodes.colour ? 6 : 2)
+            let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
-            buffer[1] = code 
+            buffer[1] = code.charCodeAt(0)
+            buffer[2] = 0
 
             if (code == styleCodes.colour) {
                 buffer[2] = value & 0xff
                 buffer[3] = (value >> 8) & 0xff
                 buffer[4] = (value >> 16) & 0xff
                 buffer[5] = (value >> 24) & 0xff
+                buffer[6] = 0
             }
 
             this.data = this.data.slice(0, this.position)
-                + Array.from(buffer, byte => String.fromCharCode(byte)).join('')
+                + String.fromCharCode(...buffer)
                 + this.data.slice(this.position)
+            
+            this.position += buffer.length
         }
     }
 
@@ -207,12 +226,13 @@ class EditorDocument {
             this.position = this.toRawPosition(start, this.data)
         }
         else {
-            this.selection.position = this.toRawPosition(start, this.data)
-            this.selection.end = this.toRawPosition(end, this.data)
+            this.selection.position = this.toRawPosition(start < end ? start : end, this.data)
+            this.selection.end = this.toRawPosition(start < end ? end : start, this.data)
         }
     }
 
     selectAll() {
+        this.position = 0
         this.selection.position = 0
         this.selection.end = this.data.length
     }
@@ -220,5 +240,16 @@ class EditorDocument {
     existingSelection() {
         return (this.selection.position != 0 && this.selection.end != 0
                 && this.selection.end - this.selection.position != 0)
+    }
+
+    inStyle(position, data) {
+        let count = 0
+        for (let i = 0; i < data.slice(0, position); i++) {
+            if (data[i] == '\x00') {
+                count++
+            }
+        }
+
+        return count % 2  == 1
     }
 }
