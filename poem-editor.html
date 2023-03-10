@@ -576,20 +576,26 @@
             if (event.key == 'Backspace') {
                 editor.deleteText()
             }
+            else if (event.key == 'Delete') {
+                editor.deleteText(-1)
+            }
             else if (event.key == 'Enter') {
                 editor.addNewLine()
             }
-            else if (event.key == 'Shift' || event.key == 'F5') { // TODO: Use event keycodes
-                // Discard
+            else if (event.key == 'Shift' || event.key.length > 1) { // TODO: Use event keycodes
                 return
+            }
+            else if (event.ctrlKey && event.key.toLowerCase() == 'a') {
+                editor.selectAll()
             }
             else {
                 editor.addText(event.key)
             }
-            event.preventDefault()
+
             // TODO: This is highly inefficient, and is only being done for round trip testing, later, we can
             // rely on hoping that the editor is solid enough to stay in sync with the dom without having to prevent  
             // the event and loopback with the editor data.
+            event.preventDefault()
             this.innerHTML = editor.formatToHtml(editor.data)
         " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
             onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
@@ -915,18 +921,41 @@
 
     function format(command, value) {
         document.execCommand(command, false, value);
-        document.getElementById("content").focus();
+        content.focus();
     }
 
     function formatCustom(tag) {
         selectionText = window.getSelection(); //TODO: Make this toggle-able, like the rest.
         document.execCommand("insertHTML", false, "<"+tag+">" + selectionText + "</"+tag+">");
-        document.getElementById("content").focus();
+        content.focus();
     }
 
     function changePageStyle(newStyle) {
-        document.getElementById("main").className = newStyle;
+        main.className = newStyle
     }
+
+    document.addEventListener("selectionchange", () => {
+        let selection = document.getSelection()
+        if (!descendantOf(selection.anchorNode, content) || !descendantOf(selection.focusNode, content)) {
+            return
+        }
+
+        editor.setSelection(selection.anchorOffset,
+            selection.focusOffset == selection.anchorOffset ? null : selection.focusOffset)
+    })
+
+    function descendantOf(child, element) {
+        while (element.parentElement) {
+            if (child.parentElement == element) {
+                return true
+            }
+
+            element = element.parentElement
+        }
+
+        return false
+    }
+
 
     //TODO : Update to editor document
     //PATCH: Stop pasting weird formatted text that could break things.

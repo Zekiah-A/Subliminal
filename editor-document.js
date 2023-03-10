@@ -21,6 +21,7 @@ class EditorDocument {
         this.encoder = new TextEncoder()
     }
 
+    // Static
     formatToHtml(data) {
         let encoded = this.encoder.encode(data)
         let buffer = new ArrayBuffer(encoded.length)
@@ -77,6 +78,7 @@ class EditorDocument {
         return html.join("")
     }
 
+    // Static
     toTextPosition(rawPosition, data) {
         let rawI = 0
         let textI = 0
@@ -98,6 +100,7 @@ class EditorDocument {
         return textI
     }
 
+    // Static
     toRawPosition(textPosition, data) {
         let rawI = 0
         let textI = 0
@@ -120,8 +123,7 @@ class EditorDocument {
     }
 
     addStyle(code, value = null) {
-        if (this.selection.position != 0 && this.selection.end != 0
-            && this.selection.end - this.selection.position == 0) {
+        if (this.existingSelection()) {
             
             let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
@@ -163,27 +165,60 @@ class EditorDocument {
     }
 
     addText(value) {
+        if (this.existingSelection()) {
+            this.deleteSelection()
+        }
+
         this.data = this.data.slice(0, this.position) + value + this.data.slice(this.position)
         this.position += value.length
     }
     
     addNewLine() {
+        if (this.existingSelection()) {
+            this.deleteSelection()
+        }
+
         this.data = this.data.slice(0, this.position) + '\x01' + this.data.slice(this.position)
         this.position++
     }
 
+    deleteSelection() {
+        this.data = this.data.slice(0, this.selection.position) + this.data.slice(this.selection.end)
+        this.position -= this.selection.end - this.selection.position
+    }
+
     deleteText(count = 1) {
-        this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
-        this.position -= count
+        if (this.existingSelection()) {
+            this.deleteSelection()
+        }
+        else {
+            if (count > 0) {
+                this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
+                this.position -= count
+            }
+            else {
+                this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)
+            }    
+        }
     }
 
     setSelection(start, end = null) {
         if (end == null) {
-            this.position = this.toRawPosition(start)
+            this.position = this.toRawPosition(start, this.data)
         }
         else {
-            this.selection.position = this.toRawPosition(start)
-            this.selection.end = this.toRawPosition(end)
+            this.selection.position = this.toRawPosition(start, this.data)
+            this.selection.end = this.toRawPosition(end, this.data)
         }
+    }
+
+    selectAll() {
+        this.selection.position = 0
+        this.selection.end = this.data.length
+    }
+
+    existingSelection() {
+        return (this.selection.position != 0 && this.selection.end != 0
+                && this.selection.end - this.selection.position != 0)
     }
 }
