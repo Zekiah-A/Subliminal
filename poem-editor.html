@@ -10,6 +10,8 @@
     <style>
         #main {
             position: relative;
+            box-shadow: gray 0px 0px 2px;
+            border-radius: 4px;
         }
         .tool {
             margin: 1px;
@@ -436,8 +438,8 @@
            <canvas height="96" width="256" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
             <div class="sign-buttons">
                 <div class="popup-button" style="pointer-events: none; opacity: 0.2;">Smooth</div>
-                <div class="popup-button" onclick="ctx.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-                <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; ctx.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
+                <div class="popup-button" onclick="signContext.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
+                <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; signContext.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
             </div>
         </div>
         <p style="opacity:0.6;"><em>Please don't use a real signature you use on legal documents here. By pressing submit, you agree to all the terms stated above.</em></p>
@@ -574,7 +576,7 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-
+        <!--
         <p id="content" contenteditable="true" onkeydown="
             if (event.key == 'Backspace') {
                 editor.deleteText()
@@ -601,8 +603,31 @@
             event.preventDefault()
             this.innerHTML = editor.formatToHtml(editor.data)
         " onpaste="checkPaste(event)" oncontextmenu="event.preventDefault(); spawnRhymePopup(event)"
-            onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'">Click On Me to Start Editing</p>
-        <p id="originalContent" class="content-ghost" style="display: none;"></p>
+        onmousedown="suggestions.style.display = 'none'" onblur="suggestions.style.display = 'none'"></p>
+        -->
+        <canvas id="editorCanvas" style="display: block; width: 100%; height: 100%; cursor: text;" tabindex="-1" onkeydown="
+            if (event.key == 'Backspace') {
+                editor.deleteText()
+            }
+            else if (event.key == 'Delete') {
+                editor.deleteText(-1)
+            }
+            else if (event.key == 'Enter') {
+                editor.addNewLine()
+            }
+            else if (event.key == 'Shift' || event.key.length > 1) {
+                return
+            }
+            else if (event.ctrlKey && event.key.toLowerCase() == 'a') {
+                editor.selectAll()
+            }
+            else {
+                editor.addText(event.key)
+            }
+
+            editor.renderCanvasData(this)
+            event.preventDefault()
+        "></canvas>
     </div>
 
     <div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
@@ -707,7 +732,7 @@
     <a href="../contents" style="z-index: 1;" class="back"> <- Back</a>
 </body>
 <script>
-    const ctx = signCanvas.getContext('2d', { willReadFrequently: true })
+    const signContext = signCanvas.getContext("2d", { willReadFrequently: true })
     const params = new URLSearchParams(document.location.search)
     const edit = params.get("edit")
     const amend = params.get("amend")
@@ -862,7 +887,7 @@
     function getSignCanvasBits() {
         let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height
         let buffer = new Uint8Array(bufWidth * bufHeight).fill(255) //11111111
-        let data = ctx.getImageData(0, 0, signCanvas.width, signCanvas.height, { colorSpace: "srgb" }).data
+        let data = signContext.getImageData(0, 0, signCanvas.width, signCanvas.height, { colorSpace: "srgb" }).data
 
         for (let h = 0; h < signCanvas.height; h++) {
             for (let w = 0; w < signCanvas.width; w++) {
@@ -1011,13 +1036,13 @@
         let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width)
         let relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
         if (!this.down) return
-        ctx.beginPath()
-        ctx.moveTo(this.X, this.Y)
-        ctx.lineCap = 'round'
-        ctx.lineWidth = 3
-        ctx.lineTo(relativeX , relativeY )
-        ctx.strokeStyle = this.color
-        ctx.stroke()
+        signContext.beginPath()
+        signContext.moveTo(this.X, this.Y)
+        signContext.lineCap = 'round'
+        signContext.lineWidth = 3
+        signContext.lineTo(relativeX , relativeY )
+        signContext.strokeStyle = this.color
+        signContext.stroke()
         this.X = relativeX
         this.Y = relativeY
     }
@@ -1030,13 +1055,14 @@
 
     async function amendMode() {
         loadPoemPopup.style.display = 'none'
-        originalContent.style.display = "block"
-        originalContent.style.top = content.offsetTop + "px"
-        originalContent.style.maxWidth = content.offsetWidth + "px"
+        // TODO: Reimplement
+        //originalContent.style.display = "block"
+        //originalContent.style.top = content.offsetTop + "px"
+        //originalContent.style.maxWidth = content.offsetWidth + "px"
 
         //Load up amendment poem
         let currentJson = await fetchPathJson(amend)
-        originalContent.innerHTML = currentJson.poemContent || ""
+        //originalContent.innerHTML = currentJson.poemContent || ""
         currentJson.amends = amend
         load(currentJson)
     }
@@ -1150,9 +1176,33 @@
         }
     })
 
-    addEventListener('resize', event => {
-        originalContent.style.top = content.offsetTop + "px"
-        originalContent.style.maxWidth = content.offsetWidth + "px"
+    addEventListener("resize", event => {
+        editorCanvas.width = editorCanvas.offsetWidth
+        editorCanvas.height = editorCanvas.offsetHeight
+        editor.renderCanvasData(editorCanvas)
     })
+
+    // TODO: For some reason this does not work when I do it on the canvas itself
+    addEventListener("keydown", event => {
+        if (event.target != editorCanvas) {
+            return
+        }
+        editor.movePosition(
+            event.key == "ArrowLeft"
+            ? positionMovements.left
+            : event.key == "ArrowRight"
+            ? positionMovements.right
+            : event.key == "ArrowUp"
+            ? positionMovements.up
+            : event.key == "ArrowDown"
+            ? positionMovements.down
+            : positionMovements.none)
+
+        editor.renderCanvasData(editorCanvas)
+    })
+    
+    editorCanvas.width = editorCanvas.offsetWidth
+    editorCanvas.height = editorCanvas.offsetHeight
+    editor.renderCanvasData(editorCanvas)
 </script>
 </html>
