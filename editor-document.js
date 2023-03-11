@@ -40,7 +40,7 @@ class EditorDocument {
 
         let inStyle = false
         let html = []
-        
+
         for (let i = 0; i < data.length; i++) {
             if (data[i] == '\x00') {
                 inStyle = !inStyle
@@ -54,7 +54,7 @@ class EditorDocument {
                 html.push("</span>")
                 continue
             }
-            
+
             if (inStyle) {
                 switch (data[i]) {
                     case styleCodes.colour:
@@ -86,7 +86,7 @@ class EditorDocument {
         return html.join("")
     }
 
-    renderCanvasData(canvas) {
+    renderCanvasData(canvas, cursor = true) {
         const context = canvas.getContext("2d")
         const encoded = this.encoder.encode(this.data)
         const buffer = new ArrayBuffer(encoded.length)
@@ -125,24 +125,24 @@ class EditorDocument {
                 }
                 continue
             }
-            
-            if (inStyle) {
-                stylesStack.push(data[i])
 
-                if (data[i] == styleCodes.colour) {
-                    colourStack.push(view.getUint32(data[i + 1]))
+            if (inStyle) {
+                stylesStack.push(this.data[i])
+
+                if (this.data[i] == styleCodes.colour) {
+                    colourStack.push(view.getUint32(this.data[i + 1]))
                     i += 4
                 }
             }
             else {
                 // We draw characters one by one, instead of line by line so that we can make
                 // sure to apply the correct style onto each.
-                
-                if (colourStack.length > 0) {
-                    context.fillStyle = "#" + colourStack[colourStack.length - 1]
-                }
+                context.fillStyle = colourStack.length > 0 ? context.fillStyle = "#" + colourStack[colourStack.length - 1].toString(16) : getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
+                context.font = (stylesStack.includes(styleCodes.bold) ? "bold " : "")
+                    + (stylesStack.includes(styleCodes.italic) ? "italic " : "")
+                    + fontSize
+                    + (stylesStack.includes(styleCodes.monospace) ? "px monospace" : "px Arial, Helvetica, sans-serif")
 
-                context.font = fontSize + "px Arial, Helvetica, sans-serif"
                 let measure = context.measureText(currentLine)
 
                 // +fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
@@ -153,6 +153,10 @@ class EditorDocument {
         // Final line won't be pushed, so we do it now
         lines.push(currentLine)
         currentLine = ""
+
+        if (!cursor) {
+            return
+        }
 
         // Calculate line count up to position.
         let positionLineIndex = 0
@@ -175,7 +179,7 @@ class EditorDocument {
         context.font = fontSize + "px Arial, Helvetica, sans-serif"
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
-        context.fillRect(positionMeasure.width, positionLineIndex * fontSize + 2, 2, fontSize)
+        context.fillRect(positionMeasure.width, positionLineIndex * fontSize + 2, 1, fontSize)
     }
 
     optimiseData(data) {
@@ -197,7 +201,7 @@ class EditorDocument {
         let rawI = 0
         let textI = 0
         let inStyle = this.inStyle(rawPosition, data)
-        
+
         while (rawI < rawPosition) {
             if (data[rawI] == '\x00') {
                 inStyle = !inStyle
@@ -239,28 +243,47 @@ class EditorDocument {
     }
 
     movePosition(movement) {
-        switch (movement) {
-            case positionMovements.left:
-                this.position = Math.max(0, this.position - 1)
-                break
-            case positionMovements.right:
-                // console.log(this.positionInLine(this.position, this.getLines(this.data)))
-                break
+        if (movement == positionMovements.left) {
+            this.position = Math.max(0, this.position - 1)
+        }
+        else if (movement == positionMovements.right) {
+            this.position = Math.min(this.data.length, this.position + 1)
+        }
+        else if (movement == positionMovements.up || movement == positionMovements.down) {
+            let textPosition = this.toTextPosition(this.position, this.data)
+            let lines = this.getLines(this.data);
+            let linePosition = this.positionInLine(textPosition, lines)
+        
+            // Current line is the line count up to this line
+            let currentLine = this.getLines(this.data.slice(0, this.position)).length - 1
+        
+            let offset = movement == positionMovements.up ?
+                Math.max(0, lines[currentLine].slice(0, linePosition).length + lines[currentLine].slice(linePosition).length) :
+                Math.min(this.data.length, lines[currentLine].slice(linePosition).length + lines[currentLine].slice(0, linePosition).length)
+        
+            this.position += movement == positionMovements.up ? -offset : offset
         }
     }
 
-    // Static
+    // Static - returns textposition in text line, requires a textposition
     positionInLine(globalIndex, lines) {
+        let globalLineIndex = 0
+        for (let i = 0; i < globalIndex; i++) {
+            if (this.data[i] == '\x01') {
+                globalLineIndex++
+            }
+        }
+
         // Count all lines before position
         let linesCharLength = 0
-        for (let i = 0; i < lines.length - 1; i++) {
+        for (let i = 0; i < globalLineIndex; i++) {
             linesCharLength += lines[i].length
         }
 
         return globalIndex - linesCharLength
     }
 
-    // Static 
+    // Static - returns height of text line, requires a textposition
     getLineHeights(globalIndex, lines, spacing = 0) {
         let lineHeights = 0
         for (let line of lines.slice(0, globalIndex)) {
@@ -268,10 +291,10 @@ class EditorDocument {
             lineHeights += heightMeasure.actualBoundingBoxAscent + heightMeasure.actualBoundingBoxDescent
             lineHeights += spacing
         }
-        return lineHeights    
+        return lineHeights
     }
 
-    // Static
+    // Static - returns only text lines
     getLines(data) {
         let lines = []
         let current = ""
@@ -316,7 +339,7 @@ class EditorDocument {
             this.data = this.data.slice(0, this.selection.position)
                 + String.fromCharCode(...buffer)
                 + this.data.slice(this.selection.position)
-    
+
             this.data = this.data.slice(0, this.selection.end)
                 + '\x02'
                 + this.data.slice(this.selection.end)
@@ -338,7 +361,7 @@ class EditorDocument {
             this.data = this.data.slice(0, this.position)
                 + String.fromCharCode(...buffer)
                 + this.data.slice(this.position)
-            
+
             this.position += buffer.length
         }
     }
@@ -351,7 +374,7 @@ class EditorDocument {
         this.data = this.data.slice(0, this.position) + value + this.data.slice(this.position)
         this.position += value.length
     }
-    
+
     addNewLine() {
         if (this.existingSelection()) {
             this.deleteSelection()
@@ -377,7 +400,7 @@ class EditorDocument {
             }
             else {
                 this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)
-            }    
+            }
         }
     }
 
@@ -399,7 +422,7 @@ class EditorDocument {
 
     existingSelection() {
         return (this.selection.position != 0 && this.selection.end != 0
-                && this.selection.end - this.selection.position != 0)
+            && this.selection.end - this.selection.position != 0)
     }
 
     // Static
@@ -411,6 +434,6 @@ class EditorDocument {
             }
         }
 
-        return count % 2  == 1
+        return count % 2 == 1
     }
 }
