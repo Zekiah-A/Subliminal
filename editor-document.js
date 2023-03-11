@@ -387,6 +387,8 @@ class EditorDocument {
     deleteSelection() {
         this.data = this.data.slice(0, this.selection.position) + this.data.slice(this.selection.end)
         this.position -= this.selection.end - this.selection.position
+        this.position = Math.max(0, this.position)
+        this.clearSelection()
     }
 
     deleteText(count = 1) {
@@ -396,7 +398,7 @@ class EditorDocument {
         else {
             if (count > 0) {
                 this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
-                this.position -= count
+                this.position -= Math.max(0, count)
             }
             else {
                 this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)
@@ -414,6 +416,11 @@ class EditorDocument {
         }
     }
 
+    clearSelection() {
+        this.selection.position = 0
+        this.selection.end = 0
+    }
+
     selectAll() {
         this.position = 0
         this.selection.position = 0
@@ -421,8 +428,8 @@ class EditorDocument {
     }
 
     existingSelection() {
-        return (this.selection.position != 0 && this.selection.end != 0
-            && this.selection.end - this.selection.position != 0)
+        return !((this.selection.position == 0 && this.selection.end == 0)
+            || this.selection.end - this.selection.position == 0)
     }
 
     // Static
