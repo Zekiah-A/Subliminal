@@ -18,17 +18,17 @@ for (let poemPath of poemPaths) {
     while ((file = directory.readSync()) !== null) {
         let poemData = JSON.parse(fs.readFileSync(path.join(poemPath, file.name)))
         poemData.poemContent = poemData.poemContent
-            .replaceAll("<b>", '\x00\x04\x00')
-            .replaceAll("<strong>", '\x00\x04\x00')
-            .replaceAll("<em>", '\x00\x05\x00')
-            .replaceAll("<i>", '\x00\x05\x00')
-            .replaceAll("<code>", '\x00\x06\x00')
-            .replaceAll("<sup>", '\x00\x07\x00')
-            .replaceAll("<sub>", '\x00\x08\x00')
-            .replaceAll("<br>", '\x01')
+            .replaceAll("<b>", '\uE000\uE004\uE000')
+            .replaceAll("<strong>", '\uE000\uE004\uE000')
+            .replaceAll("<em>", '\uE000\uE005\uE000')
+            .replaceAll("<i>", '\uE000\uE005\uE000')
+            .replaceAll("<code>", '\uE000\uE006\uE000')
+            .replaceAll("<sup>", '\uE000\uE007\uE000')
+            .replaceAll("<sub>", '\uE000\uE008\uE000')
+            .replaceAll("<br>", '\uE001')
             .replaceAll("\n", "")
             .replaceAll(/(&nbsp;|<([^/>]+)>)/ig, "") // Remove all other HTML
-            .replaceAll(/(&nbsp;|<(\/[^>]+)>)/ig, '\x02') // Replace all HTMl closes
+            .replaceAll(/(&nbsp;|<(\/[^>]+)>)/ig, '\uE002') // Replace all HTMl closes
 
         console.log("✅ Completed poem " + file.name)
         fs.writeFileSync(path.join(poemPath, file.name), JSON.stringify(poemData))

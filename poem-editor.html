@@ -730,8 +730,9 @@
     // Make user confirm that they want to leave the page.
     window.onbeforeunload = () => true
 
-    // format title to subliminal title format, used in poem download files
-    let formatDash = (text) => text.trim().toLowerCase().replaceAll(" ", "-")
+    // format title to subliminal title format, used in poem download files, remove all non-fs friendly chars
+    let formatDash = (text) => text.trim().toLowerCase()
+        .replaceAll(" ", "-").replaceAll(/(^\.|[<>:"/\|?*])/g, "")
 
     // Save poem with a unique GUID so that we do not encounter overlaps 
     let newGuid = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, char =>

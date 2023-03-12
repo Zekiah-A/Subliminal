@@ -1,15 +1,17 @@
 // Code that handles logic for complex poem editor interactions
-// \x00 = start style
-// \x01 = new line (break)
-// \x02 = end style
+// We make use of private use areas in uncode for the data in our format
+// http://www.alanwood.net/unicode/private_use_area.html, '\uE002' == ""
+//  = 57344 = \uE000 = start style
+//  = 57345 = \uE001 = new line (break)
+//  = 57346 = \uE002 = end style
 
 const styleCodes = {
-    colour: '\x03', // code,  uint32
-    bold: '\x04',
-    italic: '\x05',
-    monospace: '\x06',
-    superscript: '\x07',
-    subscript: '\x08',
+    colour: '\uE003', // code,  uint32
+    bold: '\uE004',
+    italic: '\uE005',
+    monospace: '\uE006',
+    superscript: '\uE007',
+    subscript: '\uE008',
 }
 
 const positionMovements = {
@@ -44,15 +46,15 @@ class EditorDocument {
         let html = []
 
         for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] == '\x00') {
+            if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
-            else if (this.data[i] == '\x01') {
+            else if (this.data[i] == '\uE001') {
                 html.push("<br>")
                 continue
             }
-            else if (this.data[i] == '\x02') {
+            else if (this.data[i] == '\uE002') {
                 html.push("</span>")
                 continue
             }
@@ -112,16 +114,16 @@ class EditorDocument {
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] == '\x00') {
+            if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
-            else if (this.data[i] == '\x01') {
+            else if (this.data[i] == '\uE001') {
                 lines.push(currentLine)
                 currentLine = ""
                 continue
             }
-            else if (this.data[i] == '\x02') {
+            else if (this.data[i] == '\uE002') {
                 if (stylesStack.pop() == styleCodes.colour) {
                     colourStack.pop()
                 }
@@ -180,7 +182,7 @@ class EditorDocument {
         // Calculate line count up to position.
         let positionLineIndex = 0
         for (let i = 0; i < this.position; i++) {
-            if (this.data[i] == '\x01') {
+            if (this.data[i] == '\uE001') {
                 positionLineIndex++
             }
         }
@@ -205,7 +207,7 @@ class EditorDocument {
     optimiseData(data) {
         let i = 0
         while (i < data.length - 1) {
-            if (data[i] == '\x00' && data[i + 1] == '\x00') {
+            if (data[i] == '\uE000' && data[i + 1] == '\uE000') {
                 data = data.slice(0, i) + data.slice(i + 2)
                 i++
             }
@@ -222,12 +224,12 @@ class EditorDocument {
         let inStyle = EditorDocument.inStyle(rawPosition, data)
 
         while (rawI < rawPosition) {
-            if (data[rawI] == '\x00') {
+            if (data[rawI] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
 
-            if (!inStyle && data[rawI] != '\x01' && data[rawI] != '\x02') {
+            if (!inStyle && data[rawI] != '\uE001' && data[rawI] != '\uE002') {
                 textI++
             }
 
@@ -247,7 +249,7 @@ class EditorDocument {
                 break
             }
 
-            if (data[textI] == '\x00') {
+            if (data[textI] == '\uE000') {
                 inStyle = !inStyle
             }
             else if (!inStyle) {
@@ -287,7 +289,7 @@ class EditorDocument {
     positionInLine(globalIndex, lines) {
         let globalLineIndex = 0
         for (let i = 0; i < globalIndex; i++) {
-            if (this.data[i] == '\x01') {
+            if (this.data[i] == '\uE001') {
                 globalLineIndex++
             }
         }
@@ -319,11 +321,11 @@ class EditorDocument {
         let inStyle = false
 
         for (let i = 0; i < data.length; i++) {
-            if (data[i] == '\x00') {
+            if (data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
-            if (data[i] == '\x01') {
+            if (data[i] == '\uE001') {
                 lines.push(current)
                 current = ""
                 continue
@@ -359,7 +361,7 @@ class EditorDocument {
                 + this.data.slice(this.selection.position)
 
             this.data = this.data.slice(0, this.selection.end)
-                + '\x02'
+                + '\uE002'
                 + this.data.slice(this.selection.end)
         }
         else {
@@ -384,7 +386,7 @@ class EditorDocument {
 
             // Add a closure after to avoid weird stuff from hapenning
             this.data = this.data.slice(0, this.position)
-                + '\x02'
+                + '\uE002'
                 + this.data.slice(this.position)
         }
     }
@@ -403,7 +405,7 @@ class EditorDocument {
             this.deleteSelection()
         }
 
-        this.data = this.data.slice(0, this.position) + '\x01' + this.data.slice(this.position)
+        this.data = this.data.slice(0, this.position) + '\uE001' + this.data.slice(this.position)
         this.position++
     }
 
@@ -458,7 +460,7 @@ class EditorDocument {
     static inStyle(position, data) {
         let count = 0
         for (let i = 0; i < data.slice(0, position); i++) {
-            if (data[i] == '\x00') {
+            if (data[i] == '\uE000') {
                 count++
             }
         }
