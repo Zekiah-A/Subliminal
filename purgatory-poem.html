@@ -8,6 +8,7 @@
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <script src="account.js"></script>
+  <script type="text/javascript" src="./editor-document.js"></script>
   <style>
     .rating-container {
         user-select: none;
@@ -268,7 +269,7 @@ ___________________________________________________________
         poemAuthor.textContent = poemData.poemAuthor
         
         //Set up main poem content
-        poemContent.innerHTML = poemData.poemContent
+        poemContent.innerHTML = EditorDocument.formatToHtml(poemData.poemContent)
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
 

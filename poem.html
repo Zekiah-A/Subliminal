@@ -7,6 +7,7 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script type="text/javascript" src="./editor-document.js"></script>
 </head>
  
 <body style="background: initial;">
@@ -75,7 +76,7 @@
 
         //Place poem data into the DOM
         poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
-        poemContent.innerHTML = poemData.poemContent
+        poemContent.innerHTML = EditorDocument.formatToHtml(poemData.poemContent)
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
 
