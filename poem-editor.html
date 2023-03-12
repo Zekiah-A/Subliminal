@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./styles.css">
     <script type="text/javascript" src="./account.js"></script>
+    <script type="text/javascript" src="./polyfill.js"></script> 
     <script type="text/javascript" src="./editor-document.js"></script> 
     <style>
         #main {
@@ -13,6 +14,15 @@
             box-shadow: gray 0px 0px 2px;
             border-radius: 4px;
             background-color: var(--background-opaque);
+        }
+        #editorCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: text;
+        }
+        #editorCanvas:focus {
+            outline: none;
         }
         .tool {
             margin: 1px;
@@ -481,14 +491,14 @@
 
     <div class="title-blur" style="z-index: 3;">
         <div style="display: flex;">
-            <h2 id="poemName" onpaste="checkPaste(event)" onkeydown="
+            <h2 id="poemName" onpaste="event.preventDefault()" onkeydown="
                 if(event.key === 'Enter') {
                     event.preventDefault()
                     return false
                 }
             " style="display: inline;flex-grow: 1;text-align: right;" contenteditable="true">Click On Me to Start Editing</h2>
             <h2 class="centre" style="display: inline;">&nbsp;- By&nbsp;</h2>
-            <h2 id="poemAuthor" onpaste="checkPaste(event)" onkeydown="
+            <h2 id="poemAuthor" onpaste="event.preventDefault()" onkeydown="
                 if(event.key === 'Enter') {
                     event.preventDefault()
                     return false
@@ -577,7 +587,7 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-        <canvas id="editorCanvas" style="display: block; width: 100%; height: 100%; cursor: text;" tabindex="-1" onkeydown="
+        <canvas id="editorCanvas" tabindex="-1" onkeydown="
             if (event.key == 'Backspace') {
                 editor.deleteText()
             }
@@ -711,7 +721,8 @@
     const edit = params.get("edit")
     const amend = params.get("amend")
     const decoder = new TextDecoder()
-    const editor = new EditorDocument("Click On Me to Start Editing")
+    const editorScale = 1.5
+    const editor = new EditorDocument("Click On Me to Start Editing", editorScale, 18)
     let currentGuid = ""
     let poemTags = []
     let network = null
@@ -740,7 +751,7 @@
 
         // Fetch poems in localstorage
         for (let i = 0; i < localStorage.length; i++) {
-            let current = localStorage.getItem(localStorage.key(i))
+            let current = JSON.parse(localStorage.getItem(localStorage.key(i)))
             let cardEl = document.createElement("div")
             cardEl.className = "poem-card"
             cardEl.onclick = () => {
@@ -751,12 +762,12 @@
             let cardTitle = document.createElement("h4")
             cardTitle.textContent = current.poemName
             cardEl.appendChild(cardTitle)
-            
+
             let cardPreview = document.createElement("p")
             cardPreview.className = "poem-preview"
             let pContent
             try {
-                pContent = JSON.parse(current).poemContent
+                pContent = current.poemContent
             }
             catch (e) {
                 continue
@@ -800,7 +811,7 @@
             cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
             poemName: poemName.innerText,
             poemAuthor: poemAuthor.innerText, //poem header title
-            poemContent: content.innerHTML, //poem html
+            poemContent: editor.data, //poem html
             pageStyle: main.className, //poem visual format
             pageBackground: document.body.style.background //poem background image
         }
@@ -835,9 +846,10 @@
         cWarningNotesInput.value = poemJson.cWarningAdditions ?? ""
         poemName.innerText = poemJson.poemName ?? "undefined"
         poemAuthor.innerText = poemJson.poemAuthor?? "undefined"
-        content.innerHTML = poemJson.poemContent ?? "undefined"
+        editor.data = poemJson.poemContent ?? "undefined"
         document.body.style.background = poemJson.pageBackground ?? ""
         main.className = poemJson.pageStyle ?? "poem-centre"
+        editor.renderCanvasData(editorCanvas)
     }
 
     //This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
@@ -929,8 +941,8 @@
 
     // TODO : Update to editor document
     // PATCH: Stop pasting weird formatted text that could break things.
-    function checkPaste(event) {
-        console.error("Checkpaste is deprecated, and is in need of updating. Please contact the developer.")
+    function editorPaste(event) {
+        console.error("editorPaste is deprecated, and is in need of updating. Please contact the developer.")
         return
         event.preventDefault()
         const text = event.clipboardData.getData('text/plain')
@@ -1129,8 +1141,8 @@
     })
 
     addEventListener("resize", event => {
-        editorCanvas.width = editorCanvas.offsetWidth
-        editorCanvas.height = editorCanvas.offsetHeight
+        editorCanvas.width = editorCanvas.offsetWidth * editorScale
+        editorCanvas.height = editorCanvas.offsetHeight * editorScale
         editor.renderCanvasData(editorCanvas)
     })
 
@@ -1153,8 +1165,8 @@
         editor.renderCanvasData(editorCanvas)
     })
     
-    editorCanvas.width = editorCanvas.offsetWidth
-    editorCanvas.height = editorCanvas.offsetHeight
+    editorCanvas.width = editorCanvas.offsetWidth * editorScale
+    editorCanvas.height = editorCanvas.offsetHeight * editorScale
     editor.renderCanvasData(editorCanvas, false)
 </script>
 </html>

@@ -79,10 +79,11 @@ async function getPublicProfile(guid) {
 }
 
 async function executeAccountAction(action, value) {
-    let accountAction = { }
-    accountAction.code = localStorage.accountCode
-    accountAction.actionType = action
-    accountAction.value = value
+    let accountAction = {
+        code: localStorage.accountCode,
+        actionType: action,
+        value: value
+    }
 
     return await (fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
         method: "POST",

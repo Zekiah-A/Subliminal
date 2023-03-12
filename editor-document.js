@@ -21,16 +21,18 @@ const positionMovements = {
 }
 
 class EditorDocument {
-    constructor(data) {
+    // Data, text data that canvas will be initialised with, Scale, oversample factor of canvas
+    constructor(data = null, scale = 1, fontSize = 18) {
         this.data = data || ""
         this.position = this.data.length // Raw position
         this.selection = { position: 0, end: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
+        this.scale = scale
+        this.fontSize = fontSize * scale
     }
 
-    // Static
-    formatToHtml(data) {
+    static formatToHtml(data) {
         let encoded = this.encoder.encode(data)
         let buffer = new ArrayBuffer(encoded.length)
         for (let i = 0; i < encoded.length; i++) {
@@ -95,8 +97,7 @@ class EditorDocument {
         }
         const view = new DataView(buffer)
 
-        const fontSize = 18
-
+        let existingSelection = this.existingSelection()
         let inStyle = false
         let stylesStack = [] // Every style on this stack gets applied
         let colourStack = [] // Only the top style on this stack should be applied
@@ -104,9 +105,9 @@ class EditorDocument {
         let currentLine = ""
 
         // We precalculate how many lines the canvas will be 
-        let preCalcHeight = Math.max(360, this.getLines(this.data).length * fontSize)
+        let preCalcHeight = Math.max(360, EditorDocument.getLines(this.data).length * (this.fontSize / this.scale) + this.fontSize)
         canvas.style.height = preCalcHeight + "px"
-        canvas.height = preCalcHeight
+        canvas.height = preCalcHeight * this.scale
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         for (let i = 0; i < this.data.length; i++) {
@@ -140,13 +141,30 @@ class EditorDocument {
                 context.fillStyle = colourStack.length > 0 ? context.fillStyle = "#" + colourStack[colourStack.length - 1].toString(16) : getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
                 context.font = (stylesStack.includes(styleCodes.bold) ? "bold " : "")
                     + (stylesStack.includes(styleCodes.italic) ? "italic " : "")
-                    + fontSize
+                    + this.fontSize
                     + (stylesStack.includes(styleCodes.monospace) ? "px monospace" : "px Arial, Helvetica, sans-serif")
 
                 let measure = context.measureText(currentLine)
 
-                // +fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
-                context.fillText(this.data[i], measure.width, (lines.length + 1) * fontSize)
+                // +this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
+                context.fillText(this.data[i], measure.width, (lines.length + 1) * this.fontSize)
+
+                // Draw selection char by char as well to make life easier
+                if (existingSelection) {
+                    let thisCharMeasure = context.measureText(this.data[i])
+                    if (i >= this.selection.position && i <= this.selection.end) {
+                        context.fillStyle = "#c1e8fb63"
+                        context.beginPath()
+                        context.roundRect(
+                            measure.width,
+                            (lines.length) * this.fontSize,
+                            thisCharMeasure.width,
+                            this.fontSize,
+                            (i == this.selection.position ? [4, 0, 0, 4] : i == this.selection.end - 1 ? [0, 4, 0, 4] : [0]).map(value => value * this.scale))
+                        context.fill()
+                    }
+                }
+
                 currentLine += this.data[i]
             }
         }
@@ -176,10 +194,11 @@ class EditorDocument {
         let positionLine = lines[positionLineIndex]
         // TODO: We are measuring text here as if the cursor position line is made up of all default chars, we need to
         // instead loop over each, checking against the styles to ensure we are actually getting it correctly
-        context.font = fontSize + "px Arial, Helvetica, sans-serif"
+        context.font = this.fontSize + "px Arial, Helvetica, sans-serif"
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
-        context.fillRect(positionMeasure.width, positionLineIndex * fontSize + 2, 1, fontSize)
+        context.fillStyle = "black"
+        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1, this.fontSize)
     }
 
     optimiseData(data) {
@@ -196,11 +215,10 @@ class EditorDocument {
         return data
     }
 
-    // Static
-    toTextPosition(rawPosition, data) {
+    static toTextPosition(rawPosition, data) {
         let rawI = 0
         let textI = 0
-        let inStyle = this.inStyle(rawPosition, data)
+        let inStyle = EditorDocument.inStyle(rawPosition, data)
 
         while (rawI < rawPosition) {
             if (data[rawI] == '\x00') {
@@ -218,11 +236,10 @@ class EditorDocument {
         return textI
     }
 
-    // Static
-    toRawPosition(textPosition, data) {
+    static toRawPosition(textPosition, data) {
         let rawI = 0
         let textI = 0
-        let inStyle = this.inStyle(textPosition, data)
+        let inStyle = EditorDocument.inStyle(textPosition, data)
 
         for (let i = 0; i < data.length; i++) {
             if (textI > textPosition) {
@@ -250,22 +267,22 @@ class EditorDocument {
             this.position = Math.min(this.data.length, this.position + 1)
         }
         else if (movement == positionMovements.up || movement == positionMovements.down) {
-            let textPosition = this.toTextPosition(this.position, this.data)
-            let lines = this.getLines(this.data);
+            let textPosition = EditorDocument.toTextPosition(this.position, this.data)
+            let lines = EditorDocument.getLines(this.data);
             let linePosition = this.positionInLine(textPosition, lines)
-        
+
             // Current line is the line count up to this line
-            let currentLine = this.getLines(this.data.slice(0, this.position)).length - 1
-        
+            let currentLine = EditorDocument.getLines(this.data.slice(0, this.position)).length - 1
+
             let offset = movement == positionMovements.up ?
                 Math.max(0, lines[currentLine].slice(0, linePosition).length + lines[currentLine].slice(linePosition).length) :
                 Math.min(this.data.length, lines[currentLine].slice(linePosition).length + lines[currentLine].slice(0, linePosition).length)
-        
+
             this.position += movement == positionMovements.up ? -offset : offset
         }
     }
 
-    // Static - returns textposition in text line, requires a textposition
+    // Returns textposition in text line, requires a textposition
     positionInLine(globalIndex, lines) {
         let globalLineIndex = 0
         for (let i = 0; i < globalIndex; i++) {
@@ -283,8 +300,8 @@ class EditorDocument {
         return globalIndex - linesCharLength
     }
 
-    // Static - returns height of text line, requires a textposition
-    getLineHeights(globalIndex, lines, spacing = 0) {
+    // Returns height of text line, requires a textposition
+    static getLineHeights(globalIndex, lines, spacing = 0) {
         let lineHeights = 0
         for (let line of lines.slice(0, globalIndex)) {
             let heightMeasure = context.measureText(line)
@@ -294,8 +311,8 @@ class EditorDocument {
         return lineHeights
     }
 
-    // Static - returns only text lines
-    getLines(data) {
+    // Returns only text lines
+    static getLines(data) {
         let lines = []
         let current = ""
         let inStyle = false
@@ -363,6 +380,11 @@ class EditorDocument {
                 + this.data.slice(this.position)
 
             this.position += buffer.length
+
+            // Add a closure after to avoid weird stuff from hapenning
+            this.data = this.data.slice(0, this.position)
+                + '\x02'
+                + this.data.slice(this.position)
         }
     }
 
@@ -432,8 +454,7 @@ class EditorDocument {
             || this.selection.end - this.selection.position == 0)
     }
 
-    // Static
-    inStyle(position, data) {
+    static inStyle(position, data) {
         let count = 0
         for (let i = 0; i < data.slice(0, position); i++) {
             if (data[i] == '\x00') {
