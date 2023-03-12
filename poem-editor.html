@@ -861,7 +861,7 @@
         poemAuthor.innerText = poemJson.poemAuthor?? "undefined"
         editor.data = poemJson.poemContent ?? "undefined"
         document.body.style.background = poemJson.pageBackground ?? ""
-        main.className = poemJson.pageStyle ?? "poem-centre"
+        changePageStyle(poemJson.pageStyle ?? "poem-centre")
         editor.renderCanvasData(editorCanvas)
     }
 

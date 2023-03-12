@@ -6,7 +6,7 @@
     --background-opaque: #ffffff;
     --background-transparent: #ffffff33;
     --input-hilight: #0074d9;
-    --text-colour: black;
+    --text-colour: #000000;
 }
 
 @media(prefers-color-scheme: dark) {

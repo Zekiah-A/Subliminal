@@ -140,8 +140,8 @@ class EditorDocument {
             }
             else {
                 // We draw characters one by one, instead of line by line so that we can make
-                // sure to apply the correct style onto each.
-                context.fillStyle = colourStack.length > 0 ? context.fillStyle = "#" + colourStack[colourStack.length - 1].toString(16) : defaultTextColour
+                // sure to apply the correct style onto each. This abomination does that.
+                context.fillStyle = (colourStack.length == 0 ? defaultTextColour : colourStack[colourStack.length - 1].toString(16))
                 context.font = (stylesStack.includes(styleCodes.bold) ? "bold " : "")
                     + (stylesStack.includes(styleCodes.italic) ? "italic " : "")
                     + this.fontSize
@@ -149,25 +149,25 @@ class EditorDocument {
 
                 let measure = context.measureText(currentLine)
 
-                // +this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
-                context.fillText(this.data[i], measure.width, (lines.length + 1) * this.fontSize)
-
-                // Draw selection char by char as well to make life easier
-                if (existingSelection) {
+                // Draw selection char by char to make life easier
+                if (existingSelection && i >= this.selection.position && i < this.selection.end) {
+                    context.save()
                     let thisCharMeasure = context.measureText(this.data[i])
-                    if (i >= this.selection.position && i <= this.selection.end) {
-                        context.fillStyle = "#c1e8fb63"
-                        context.beginPath()
-                        context.roundRect(
-                            measure.width,
-                            (lines.length) * this.fontSize,
-                            thisCharMeasure.width,
-                            this.fontSize,
-                            (i == this.selection.position ? [4, 0, 0, 4] : i == this.selection.end - 1 ? [0, 4, 0, 4] : [0]).map(value => value * this.scale))
-                        context.fill()
-                    }
+                    context.fillStyle = "#c1e8fb63"
+                    context.beginPath()
+                    context.roundRect(
+                        measure.width,
+                        (lines.length) * this.fontSize,
+                        thisCharMeasure.width,
+                        this.fontSize,
+                        (i == this.selection.position ? [4, 0, 0, 4] : i == this.selection.end - 1 ? [0, 4, 0, 4] : [0]).map(value => value * this.scale))
+                    context.fill()
+                    context.restore()
                 }
 
+                // Finally draw character with all correct formatting and such
+                // + this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
+                context.fillText(this.data[i], measure.width, (lines.length + 1) * this.fontSize)
                 currentLine += this.data[i]
             }
         }
@@ -242,7 +242,7 @@ class EditorDocument {
             let measure = context.measureText(lines[line].slice(0, i))
             let distance = Math.abs(offsetX - measure.width)
             if (distance < closestValue) {
-                closestIndex = i + beforeLength
+                closestIndex = EditorDocument.toRawPosition(i + beforeLength, this.data)
                 closestValue = distance
             }
         }
@@ -277,14 +277,14 @@ class EditorDocument {
         let inStyle = EditorDocument.inStyle(textPosition, data)
 
         for (let i = 0; i < data.length; i++) {
-            if (textI > textPosition) {
+            if (textI >= textPosition) {
                 break
             }
 
             if (data[textI] == '\uE000') {
                 inStyle = !inStyle
             }
-            else if (!inStyle) {
+            else if (!inStyle && data[rawI] != '\uE001' && data[rawI] != '\uE002') {
                 textI++
             }
 
