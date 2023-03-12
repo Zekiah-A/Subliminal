@@ -269,7 +269,7 @@ ___________________________________________________________
         poemAuthor.textContent = poemData.poemAuthor
         
         //Set up main poem content
-        poemContent.innerHTML = EditorDocument.formatToHtml(poemData.poemContent)
+        poemContent.innerHTML = new EditorDocument(poemData.poemContent).formatToHtml()
         poemMain.setAttribute("class", poemData.pageStyle) 
         document.body.style.background = poemData.pageBackground
 

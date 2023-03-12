@@ -32,8 +32,8 @@ class EditorDocument {
         this.fontSize = fontSize * scale
     }
 
-    static formatToHtml(data) {
-        let encoded = this.encoder.encode(data)
+    formatToHtml() {
+        let encoded = this.encoder.encode(this.data)
         let buffer = new ArrayBuffer(encoded.length)
         for (let i = 0; i < encoded.length; i++) {
             buffer[i] = encoded[i]
@@ -43,24 +43,24 @@ class EditorDocument {
         let inStyle = false
         let html = []
 
-        for (let i = 0; i < data.length; i++) {
-            if (data[i] == '\x00') {
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i] == '\x00') {
                 inStyle = !inStyle
                 continue
             }
-            else if (data[i] == '\x01') {
+            else if (this.data[i] == '\x01') {
                 html.push("<br>")
                 continue
             }
-            else if (data[i] == '\x02') {
+            else if (this.data[i] == '\x02') {
                 html.push("</span>")
                 continue
             }
 
             if (inStyle) {
-                switch (data[i]) {
+                switch (this.data[i]) {
                     case styleCodes.colour:
-                        html.push(`<span style="colour: #${view.getUint32(data[i + 1])}";>`)
+                        html.push(`<span style="colour: #${view.getUint32(this.data[i + 1])}";>`)
                         i += 4
                         break
                     case styleCodes.bold:
@@ -81,7 +81,7 @@ class EditorDocument {
                 }
             }
             else {
-                html.push(data[i])
+                html.push(this.data[i])
             }
         }
 
