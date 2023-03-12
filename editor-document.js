@@ -218,6 +218,35 @@ class EditorDocument {
         return data
     }
 
+    realToTextPosition(offsetX, offsetY, canvas) {
+        const context = canvas.getContext("2d")
+        let lines = EditorDocument.getLines(this.data)
+        let line = Math.floor(Math.min(lines.length - 1, offsetY / this.fontSize))
+        
+        // TODO: currently we are assuming there are 0 styles, that is wrong
+        // we should be measuring *with* the styles at every char, but first this
+        // will require a new method that gets the lines, but preserves the styles
+        // at the same time
+        let stylesStack = []
+        context.font = this.fontSize + "px Arial, Helvetica, sans-serif"
+
+        // We measure up to every character in the line, then subtract it from the mouse
+        // offset X, allowing us to see which is closest (using a king of the hill approach)
+        let closestIndex = 0
+        let closestValue = Number.MAX_SAFE_INTEGER
+        let beforeLength = (lines.length > 1 ? lines.slice(0, line).reduce((accumulator, value) => accumulator + value.length, 0) : 0)
+        for (let i = 0; i < lines[line].length; i++) {
+            let measure = context.measureText(lines[line].slice(0, i))
+            let distance = Math.abs(offsetX - measure.width)
+            if (distance < closestValue) {
+                closestIndex = i + beforeLength
+                closestValue = distance
+            }
+        }
+
+        return closestIndex
+    }
+
     static toTextPosition(rawPosition, data) {
         let rawI = 0
         let textI = 0

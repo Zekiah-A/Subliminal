@@ -587,7 +587,19 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-        <canvas id="editorCanvas" tabindex="-1" onkeydown="
+        <canvas id="editorCanvas" tabindex="-1" onmousedown="
+            this['pressed'] = true
+            editor.clearSelection()
+            editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
+            editor.renderCanvasData(this)
+        " onmousemove="
+            if (this['pressed']) {
+                let endPosition = editor.realToTextPosition(event.offsetX, event.offsetY, this)
+                editor.selection.position = editor.position > endPosition ? endPosition : editor.position
+                editor.selection.end = editor.position > endPosition ? editor.position : endPosition
+                editor.renderCanvasData(this)
+            }
+        " onmouseup="this['pressed'] = false" onkeydown="
             if (event.key == 'Backspace') {
                 editor.deleteText()
             }
@@ -936,7 +948,7 @@
 
     function changePageStyle(newStyle) {
         main.className = newStyle
-        editorCanvas.width = editorCanvas.offsetWidth
+        editorCanvas.width = editorCanvas.offsetWidth * editorScale
         editor.renderCanvasData(editorCanvas)
     }
 
@@ -1152,6 +1164,8 @@
         if (event.target != editorCanvas) {
             return
         }
+
+        event.preventDefault()
         editor.movePosition(
             event.key == "ArrowLeft"
             ? positionMovements.left
