@@ -219,6 +219,9 @@ class EditorDocument {
     }
 
     realToTextPosition(offsetX, offsetY, canvas) {
+        offsetX *= this.scale
+        offsetY *= this.scale
+
         const context = canvas.getContext("2d")
         let lines = EditorDocument.getLines(this.data)
         let line = Math.floor(Math.min(lines.length - 1, offsetY / this.fontSize))
