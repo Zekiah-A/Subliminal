@@ -98,8 +98,9 @@ class EditorDocument {
         const view = new DataView(buffer)
 
         let existingSelection = this.existingSelection()
+        let defaultTextColour = getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
         let inStyle = false
-        let stylesStack = [] // Every style on this stack gets applied
+        let stylesStack = [] // Every style on this stack gets applied to a char
         let colourStack = [] // Only the top style on this stack should be applied
         let lines = []
         let currentLine = ""
@@ -138,7 +139,7 @@ class EditorDocument {
             else {
                 // We draw characters one by one, instead of line by line so that we can make
                 // sure to apply the correct style onto each.
-                context.fillStyle = colourStack.length > 0 ? context.fillStyle = "#" + colourStack[colourStack.length - 1].toString(16) : getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
+                context.fillStyle = colourStack.length > 0 ? context.fillStyle = "#" + colourStack[colourStack.length - 1].toString(16) : defaultTextColour
                 context.font = (stylesStack.includes(styleCodes.bold) ? "bold " : "")
                     + (stylesStack.includes(styleCodes.italic) ? "italic " : "")
                     + this.fontSize
@@ -197,7 +198,7 @@ class EditorDocument {
         context.font = this.fontSize + "px Arial, Helvetica, sans-serif"
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
-        context.fillStyle = "black"
+        context.fillStyle = defaultTextColour
         context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1, this.fontSize)
     }
 
