@@ -193,6 +193,7 @@ class EditorDocument {
         for (let before = 0; before < positionLineIndex; before++) {
             beforePositionLine += lines[before].length
         }
+        beforePositionLine = EditorDocument.toRawPosition(beforePositionLine, this.data)
 
         let positionLine = lines[positionLineIndex]
         // TODO: We are measuring text here as if the cursor position line is made up of all default chars, we need to
@@ -238,12 +239,17 @@ class EditorDocument {
         let closestIndex = 0
         let closestValue = Number.MAX_SAFE_INTEGER
         let beforeLength = (lines.length > 1 ? lines.slice(0, line).reduce((accumulator, value) => accumulator + value.length, 0) : 0)
-        for (let i = 0; i < lines[line].length; i++) {
+        for (let i = 0; i <= lines[line].length; i++) {
             let measure = context.measureText(lines[line].slice(0, i))
             let distance = Math.abs(offsetX - measure.width)
             if (distance < closestValue) {
                 closestIndex = EditorDocument.toRawPosition(i + beforeLength, this.data)
                 closestValue = distance
+            }
+            else {
+                // As distance is always going to decrease, reach a turning point, and then increase, we optimise
+                // by breaking as soon as we see diatnce increasing to avoid testing obviously false indexes
+                break
             }
         }
 
