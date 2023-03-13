@@ -573,8 +573,8 @@
             <div style="position: relative;">
                 <input class="tool" oninput="
                     editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
-                    formattingColourRect.style.background = this.value" value="#000000
-                " style="opacity: 0;position: absolute; left: 0px;top: 0px;width: 100%;height: 100%;" type="color">
+                    formattingColourRect.style.background = this.value" value="#000000"
+                    style="opacity: 0; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;" type="color">
                 <div id="formattingColourRect" style="background-color: black; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
             <div><div>🖼️</div></div>
@@ -1004,14 +1004,6 @@
         const text = event.clipboardData.getData('text/plain')
         text.replace("\n", "<br>")
         document.execCommand("insertText", false, text)
-    }
-
-    function handleBackgroundDrop(event) {
-        const reader = new FileReader();
-        reader.readAsDataURL(event.files[0]);
-        reader.onloadend = () => {
-            document.body.style.background = `url('${reader.result}')`;
-        }
     }
 
     function applyBuiltinBackground(target) {
