@@ -455,7 +455,7 @@ class EditorDocument {
         else {
             if (count > 0) {
                 this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
-                this.position -= Math.max(0, count)
+                this.position = Math.max(0, this.position - count)
             }
             else {
                 this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)

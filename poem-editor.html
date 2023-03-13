@@ -485,8 +485,30 @@
 
     <div id="loadPoemPopup" class="popup" style="display: none/*block;*/">
         <h2>Load poem:</h2>
+        <input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none" />
         <div id="loadedContainer"></div>
-        <div class="popup-button" style="margin-top: 8px;" onclick="loadPoemPopup.style.display =  'none';">Done</div>
+        <div class="popup-button" style="margin-bottom: 8px;" onclick="
+            poemImportInput.click() // TODO: Use new filesystem access API
+            for (let file of poemImportInput.files) {
+                if (file.name.endsWith('.txt')) {
+                    // TODO: Do a simple \n to our format replacement
+                }
+                else if (file.name.endsWith('.json')) {
+                    let guid = newGuid()
+                    let reader = new FileReader()
+                    reader.onload = () => {
+                        localStorage.setItem(guid, JSON.stringify(reader.result))
+                        loadKey(guid)
+                        loadPoemPopup.style.display = 'none'
+                    }
+                    reader.readAsText(file)
+                }
+                else {
+                    console.error('Uploaded poem was not a text (.txt) or JSON (.json) file, can not import!')
+                }
+            }
+        ">Import from local file</div>
+        <div class="popup-button" style="margin-top: 8px;" onclick="loadPoemPopup.style.display = 'none';">Done</div>
     </div>
 
     <div class="title-blur" style="z-index: 3;">
