@@ -449,7 +449,7 @@ class EditorDocument {
 
     deleteSelection() {
         this.data = this.data.slice(0, this.selection.position) + this.data.slice(this.selection.end)
-        this.position -= this.selection.end - this.selection.position
+        this.position = this.selection.position
         this.position = Math.max(0, this.position)
         this.clearSelection()
     }
