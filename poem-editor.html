@@ -625,7 +625,7 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-        <canvas id="editorCanvas" tabindex="-1" onmousedown="
+        <canvas id="editorCanvas" tabindex="-1" contenteditable virtualkeyboardpolicy="manual" onmousedown="
             this['pressed'] = true
             editor.clearSelection()
             editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
