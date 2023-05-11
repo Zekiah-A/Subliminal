@@ -548,7 +548,11 @@
             <div class="options-parent" style="width: 72px; min-width: 72px;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                 <div>File ⯆</div>
                 <div class="options" style="width: 120px;">
-                    <div onclick="location.reload()">Open new</div>
+                    <div onclick="
+					    params.delete('edit')
+                        params.delete('append')
+					    location.href = location.origin + '/poem-editor/' + params.toString()
+                    ">Open new</div>
                     <div onclick="downloadCurrent()">Download poem</div>
                     <div onclick="saveCurrent()">Save poem</div>
                     <div onclick="loadPoemPopup.style.display = 'block'">Open another</div>
@@ -872,7 +876,8 @@
             pageBackground: document.body.style.background //poem background image
         }
 
-        localStorage.setItem(currentGuid || newGuid(), JSON.stringify(saveData))
+        currentGuid ||= newGuid()
+        localStorage.setItem(currentGuid, JSON.stringify(saveData))
 
         //Refresh load box with latest poem.
         fetchStorage()
