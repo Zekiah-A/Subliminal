@@ -78,6 +78,10 @@
             border-radius: 4px;
             user-select: none;
             padding: 1px;
+            transition: 50ms transform;
+        }
+        #formattingToolbar > div:active{
+            transform: scale(0.98);
         }
         #formattingToolbar > div > div {
             background-color: var(--button-transparent);
@@ -595,7 +599,7 @@
                 <div>Background ⯆</div>
                 <div class="options">
                     <div onclick="document.body.style.background = ''">None</div>
-                    <div onclick="document.body.style.background = `url(\'${prompt('Enter the backgorund image URL')}\')`">From link</div>
+                    <div onclick="document.body.style.background = `url(\'${prompt('Enter the background image URL')}\')`">From link</div>
                     <div style="opacity: 0.6;">Upload file</div>
                     <div onclick="builtinFreePopup.style.display = 'block';">Built-in free</div>
                 </div>                
@@ -629,11 +633,18 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
+        <textarea id="editorInputCatcher" style="position: absolute; left: -1000px; z-index: -1;">
+            I am a hack to allow for mobile virtual keyboard and input because the virtual
+            keyboard API has stupid restrictions on where you can use .show(). I LoVe BROWSERS!!!!! 🥲🔫🔫🔫:)))
+        </textarea>
         <canvas id="editorCanvas" tabindex="-1" contenteditable virtualkeyboardpolicy="manual" onmousedown="
             this['pressed'] = true
             editor.clearSelection()
             editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
             editor.renderCanvasData(this)
+            editorInputCatcher.focus()
+            // TODO: handle virtkeyboard geometry in scrolldown
+            //navigator.virtualKeyboard?.overlaysContent = true
             navigator.virtualKeyboard?.show()
         " onmousemove="
             if (this['pressed']) {
@@ -1202,21 +1213,21 @@
 
     // TODO: For some reason this does not work when I do it on the canvas itself
     addEventListener("keydown", event => {
-        if (event.target != editorCanvas) {
+        if (event.target != editorCanvas && event.target != editorInputCatcher) {
             return
         }
 
         event.preventDefault()
-        editor.movePosition(
-            event.key == "ArrowLeft"
-            ? positionMovements.left
-            : event.key == "ArrowRight"
-            ? positionMovements.right
-            : event.key == "ArrowUp"
-            ? positionMovements.up
-            : event.key == "ArrowDown"
-            ? positionMovements.down
-            : positionMovements.none)
+        if (event.key == "ArrowLeft" || event.key == "ArrowRight" || event.key == "ArrowUp" || event.key == "ArrowDown") {
+            editor.movePosition(
+                event.key == "ArrowLeft"
+                ? positionMovements.left
+                : event.key == "ArrowRight"
+                ? positionMovements.right
+                : event.key == "ArrowUp"
+                ? positionMovements.up
+                : positionMovements.down, event.shiftKey)
+        }
 
         editor.renderCanvasData(editorCanvas)
     })

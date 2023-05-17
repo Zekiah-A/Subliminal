@@ -5,6 +5,7 @@
 //  = 57345 = \uE001 = new line (break)
 //  = 57346 = \uE002 = end style
 
+"use strict";
 const styleCodes = {
     colour: '\uE003', // code,  uint32
     bold: '\uE004',
@@ -27,7 +28,7 @@ class EditorDocument {
     constructor(data = null, scale = 1, fontSize = 18) {
         this.data = data || ""
         this.position = this.data.length // Raw position
-        this.selection = { position: 0, end: 0 } // Raw position
+        this.selection = { position: 0, end: 0, shiftKeyPivot: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
         this.scale = scale
@@ -175,7 +176,7 @@ class EditorDocument {
         lines.push(currentLine)
         currentLine = ""
 
-        if (!cursor) {
+        if (!cursor || this.existingSelection()) {
             return
         }
 
@@ -300,7 +301,11 @@ class EditorDocument {
         return rawI
     }
 
-    movePosition(movement) {
+    movePosition(movement, shiftPressed) {
+        if (shiftPressed && !this.selection.shiftKeyPivot) {
+            this.selection.shiftKeyPivot = editor.position
+        }
+
         if (movement == positionMovements.left) {
             this.position = Math.max(0, this.position - 1)
         }
@@ -320,6 +325,11 @@ class EditorDocument {
                 Math.min(this.data.length, lines[currentLine].slice(linePosition).length + lines[currentLine].slice(0, linePosition).length)
 
             this.position += movement == positionMovements.up ? -offset : offset
+        }
+
+        if (shiftPressed && this.selection.shiftKeyPivot) {
+            editor.selection.position = Math.min(this.selection.shiftKeyPivot, editor.position)
+            editor.selection.end = Math.max(this.selection.shiftKeyPivot, editor.position)
         }
     }
 
@@ -482,6 +492,7 @@ class EditorDocument {
     clearSelection() {
         this.selection.position = 0
         this.selection.end = 0
+        this.selection.shiftKeyPivot = 0
     }
 
     selectAll() {
