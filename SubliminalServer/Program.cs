@@ -8,7 +8,6 @@ using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
 using UnbloatDB;
-using UnbloatDB.Keys;
 using UnbloatDB.Serialisers;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -23,7 +22,7 @@ var profileImageDir = new DirectoryInfo(@"ProfileImages");
 var configFile = new FileInfo("config.json");
 
 var random = new Random();
-var database = new Database(new UnbloatDB.Config(accountsDir.Name, new JsonSerialiser()));
+var database = new Database(new UnbloatDB.Configuration(accountsDir.Name, new JsonSerialiser()));
 var config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
 
 if (config is null)
@@ -178,8 +177,8 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
         return Results.Text(poem);
     }
     
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
-    profile.Data.Poems.Add(new InterKey<PurgatoryEntry>(poem));
+    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
+    profile.Data.Poems.Add(poem);
     
     await database.UpdateRecord(profile);
 
@@ -197,7 +196,7 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     }
     
     var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-    await database.CreateRecord(new AccountData(HashSha256String(code), new InterKey<AccountProfile>(profileKey)));
+    await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
     
     var response = new AccountCredentials(code, profileKey);
     return Results.Json(response, Utils.DefaultJsonOptions);
@@ -227,7 +226,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         return Results.Unauthorized();
     }
 
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
+    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
     
     switch (action.ActionType)
     {
@@ -278,7 +277,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
             if (poem is not null)
             {
-                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+                profile.Data.PinnedPoems.Add(poem.MasterKey);
             }
             
             await database.UpdateRecord(account);
@@ -288,7 +287,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.UnlikePoem:
         {
             if (action.Value is not string poemKey) break;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
 
             if (keyReference is not null)
             {
@@ -305,7 +304,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
             if (poem is not null)
             {
-                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+                profile.Data.PinnedPoems.Add(poem.MasterKey);
             }
             
             await database.UpdateRecord(profile);
@@ -315,7 +314,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         case SingleValueAccountActionType.UnpinPoem:
         {
             if (action.Value is not string poemKey) break;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
 
             if (keyReference is not null)
             {
@@ -420,8 +419,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
         {
             var stream = new MemoryStream();
             await JsonSerializer.SerializeAsync(stream, action);
-            return Results.Problem("Specified account action failed or did not exist." +
-                                   Encoding.UTF8.GetString(stream.ToArray()));
+            return Results.Problem("Specified account action failed or did not exist." + Encoding.UTF8.GetString(stream.ToArray()));
         }
     }
     

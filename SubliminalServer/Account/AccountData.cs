@@ -1,18 +1,19 @@
-using UnbloatDB.Keys;
+using UnbloatDB.Attributes;
 
 namespace SubliminalServer.Account;
 
 public class AccountData
 {
     public string CodeHash { get; init; }
-    public InterKey<AccountProfile> ProfileReference { get; init; }
+    [KeyReference(ReferenceTargetType = typeof(AccountProfile))]
+    public string ProfileKey { get; init; }
 
     public List<string> KnownIPs { get; set; } = new();
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
-    public List<InterKey<PurgatoryEntry>> Drafts { get; set; }
-    public List<InterKey<AccountProfile>> Blocked { get; set; }
-    public List<InterKey<PurgatoryEntry>> LikedPoems { get; set; }
+    public List<string> Drafts { get; set; }
+    public List<string> Blocked { get; set; }
+    public List<string> LikedPoems { get; set; }
 
 
     /// <summary>
@@ -21,14 +22,14 @@ public class AccountData
     /// <param name="code"></param>
     /// <param name="guid"></param>
     /// <param name="profile"></param>
-    public AccountData(string code, InterKey<AccountProfile> accountProfileReference)
+    public AccountData(string code, string accountProfileKey)
     {
         CodeHash = code;
-        ProfileReference = accountProfileReference;
+        ProfileKey = accountProfileKey;
 
         KnownIPs = new List<string>();
-        Drafts = new List<InterKey<PurgatoryEntry>>();
-        Blocked = new List<InterKey<AccountProfile>>();
-        LikedPoems = new List<InterKey<PurgatoryEntry>>();
+        Drafts = new List<string>();
+        Blocked = new List<string>();
+        LikedPoems = new List<string>();
     }
 };
