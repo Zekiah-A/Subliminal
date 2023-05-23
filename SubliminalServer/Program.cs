@@ -23,12 +23,18 @@ var configFile = new FileInfo("config.json");
 
 var random = new Random();
 var database = new Database(new UnbloatDB.Configuration(accountsDir.Name, new JsonSerialiser()));
-var config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+ServerConfig? config = null;
+
+if (File.Exists(configFile.Name))
+{
+    config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+}
 
 if (config is null)
 {
-    var stream = File.OpenWrite(configFile.Name);
+    await using var stream = File.OpenWrite(configFile.Name);
     await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false));
+    await stream.FlushAsync();
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
 	Console.ResetColor();

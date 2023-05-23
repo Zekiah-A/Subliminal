@@ -4,17 +4,19 @@ namespace SubliminalServer.Account;
 
 public class AccountData
 {
+    [MustBeUnique]
     public string CodeHash { get; init; }
     [KeyReference(ReferenceTargetType = typeof(AccountProfile))]
     public string ProfileKey { get; init; }
 
     public List<string> KnownIPs { get; set; } = new();
+    [MustBeUnique]
     public string Email { get; set; }
+    [MustBeUnique]
     public string PhoneNumber { get; set; }
     public List<string> Drafts { get; set; }
     public List<string> Blocked { get; set; }
     public List<string> LikedPoems { get; set; }
-
 
     /// <summary>
     /// Constructor for account data, contains the private info for an account (encrypted), account login code (hashed), and public facing account profile.
