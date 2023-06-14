@@ -2,7 +2,7 @@ namespace SubliminalServer;
 
 public record PurgatoryAnnotation
 (
-    int? Start = null,
-    int? End = null,
-    string? Content = null
+    int Start = -1,
+    int End = -1,
+    string Content = ""
 );
