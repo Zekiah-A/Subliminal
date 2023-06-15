@@ -7,17 +7,18 @@
     <meta name="description" content="The contents page of the weirdest poetry anthology to ever exist. Manage your account, and search for poems here.">
     <meta name="keywords" content="Poetry, Contents, Anthology, Subliminal, Search">
     <link rel="stylesheet" href="styles.css">
-    <script src="header.js"></script>
     <script src="account.js"></script>
-    <script type="text/javascript" src="./Other/component-registrar.js"></script> 
-    <script type="text/javascript" src="./Other/purgatory-entry-template.js"></script>
+    <script src="./Other/component-registrar.js"></script> 
+    <script src="./Other/purgatory-entry-template.js"></script>
+    <script src="./Other/header-template.js"></script>
+    <script src="./Other/server.js"></script>
     <style>
         .section-span {
             cursor: pointer;
             max-width: 20%;
             width: 20%;
-            transition: .2s all;
-            transition: font-weight .2s;
+            margin: 20px;
+            transition: .2s font-weight, .2s margin, .2s max-width;
         }
 
         .section-body {
@@ -68,6 +69,9 @@
             max-width: 100%;
             width: 100%;
             font-weight: bold;
+            position: absolute;
+            margin: 20px;
+            overflow: clip;
         }
 
         .grid-sub-container[collapsed] > .section-body {
@@ -230,10 +234,11 @@
             }
         }
     </style>
-    <script type="text/javascript" src="./qrious-min.js"></script>
+    <script src="./qrious-min.js"></script>
 </head>
 
 <body class="contents-div-centre" onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
+    <subliminal-header></subliminal-header>
     <br><br><br>
     <div style="display: flex;margin-top: 40px;column-gap: 8px;">
         <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
@@ -551,16 +556,6 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Sussy songs</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="#">1. AQGay (Lyrics) - By Zekiah (as SussZ)</a>
-                    <br>
-                    <a href="#">2. Filthy French (Lyrics) - By Zekiah (as SussZ)</a>
-                    <br>
-                </div>
-            </div>
         </div>
     </div>
     <a href="./" class="back"><- Back</a>
@@ -622,7 +617,7 @@
             purgatoryGrid.style.display = "grid"
             element = purgatoryGrid
 
-            entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryAll")).json()
+            entries = await (await fetch(serverBaseAddress + "/PurgatoryAll")).json()
         }
         else if (filter == "liked") {
             entries = await isLoggedIn() ? (await getAccountData()).likedPoems : JSON.parse(localStorage.liked)
@@ -633,7 +628,7 @@
         }
         else if (filter == "new") {
             //Picks appear first on new, and have a different template
-            let picks = await (await fetch("https://server.poemanthology.org:81/PurgatoryPicks")).json()
+            let picks = await (await fetch(serverBaseAddress + "/PurgatoryPicks")).json()
             let pickTemplate = entryTemplate.cloneNode(true)
             pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
             pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal team to be something that you SHOULD see now!"
@@ -641,7 +636,7 @@
            
             for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, pickTemplate) }
             
-            entries = await (await fetch("https://server.poemanthology.org:81/PurgatoryNew")).json()
+            entries = await (await fetch(serverBaseAddress + "/PurgatoryNew")).json()
         }
 
         for (let entry of entries) { await appendEntry(entry, element, entryTemplate) }
@@ -661,7 +656,7 @@
     }
 
     async function appendEntry(entry, element, template) {
-        let entryData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + entry)).json()
+        let entryData = await (await fetch(serverBaseAddress + "/Purgatory/" + entry)).json()
         let newE = template.cloneNode(true)
         newE.setAttribute("guid", entryData?.guid)
         newE.querySelector("#_poemPreview").textContent = (
@@ -687,7 +682,7 @@
 
     async function signup(penName, email) {
         new Promise((resolve, reject) => {
-            fetch("https://server.poemanthology.org:81/Signup", {
+            fetch(serverBaseAddress + "/Signup", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: '"' + penName + '"'
@@ -728,7 +723,7 @@
 
     //Impossible to log in without code, GUID can be retrieved though
     async function signin(code) {
-        fetch('https://server.poemanthology.org:81/Signin', {
+        fetch(serverBaseAddress + "/Signin", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: '"' + code + '"'
@@ -764,7 +759,6 @@
 
 
     //Site scripts
-    initialiseHeader()
     initialise()
     addPurgatoryEntries("new")
 

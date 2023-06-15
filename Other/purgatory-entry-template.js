@@ -1,16 +1,21 @@
 class PurgatoryEntry extends HTMLElement {
     constructor() {
         super()
+        this.attachShadow({ mode: "open" })
     }
 
-    initialise() {
-        this.attachShadow({ mode: "open" })
-        this.shadowRoot.innerHTML = `
+    connectedCallback() {
+        this.shadowRoot.innerHTML = html`
             <div class="preview">${this.getAttribute('poem-preview')}</div>
-            ${this.getAttribute('special-notification') ?
-            ` <p class="special-notification">
-                <div class="button-tooltip">${this.getAttribute('special-notification')}</div>
-            </p>` : ``}
+            ${this.getAttribute('special-notification')
+                ? html`
+                    <p class="special-notification">
+                        ${this.getAttribute('special-notification')}
+                    </p>`
+                : ''}
+            ${this.getAttribute('special-tooltip')
+                ? html`<div class="button-tooltip">${this.getAttribute('special-tooltip')}</div></p>`
+                : ''}
             <h4>${this.getAttribute('poem-name')}</h4>
             <div class="info">
                 <span style="flex: 2;">By ${this.getAttribute('poem-author')}</span>
@@ -26,7 +31,7 @@ class PurgatoryEntry extends HTMLElement {
         `
 
         const style = document.createElement("style")
-        style.innerHTML = `
+        style.innerHTML = css`
             :host {
                 min-width: 200px;
                 height: 200px;
@@ -37,17 +42,6 @@ class PurgatoryEntry extends HTMLElement {
                 max-width: 200px;
                 transition: scale 1s, rotate 1s, background-color 1s, transform 1s, z-index 1s, box-shadow 1s;
             }
-
-            /*entry {
-                min-width: 200px;
-                height: 200px;
-                border-radius: 4px;
-                background-color: var(--button-opaque);
-                position: relative;
-                cursor: pointer;
-                max-width: 200px;
-                transition: scale 1s, rotate 1s, background-color 1s, transform 1s, z-index 1s, box-shadow 1s;
-            }*/
 
             h4 {
                 text-align: center;
@@ -141,6 +135,5 @@ class PurgatoryEntry extends HTMLElement {
             window.location.href = './purgatory-poem?guid=' + this.getAttribute('guid')
     }
 }
-
 
 customElements.define("purgatory-entry", PurgatoryEntry)

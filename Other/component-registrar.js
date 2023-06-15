@@ -3,6 +3,21 @@ function createFromData(name, data) {
     for (const [key, value] of Object.entries(data)) {
         element.setAttribute(key, value)
     }
-    element.initialise()
+    element.connectedCallback()
     return element
+}
+
+function html(strings, ...values) {
+    return strings.reduce((result, string, i) => {
+        const value = values[i] !== undefined ? values[i] : ""
+        return result + string + value;
+    }, "")
+}
+
+// Custom implementation of the css function
+function css(strings, ...values) {
+    return strings.reduce((result, string, i) => {
+        const value = values[i] !== undefined ? values[i] : ""
+        return result + string + value;
+    }, "")
 }

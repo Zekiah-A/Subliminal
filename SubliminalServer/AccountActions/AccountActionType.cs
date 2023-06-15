@@ -9,13 +9,16 @@ public enum AccountActionType
     UnfollowUser,
     LikePoem,
     UnlikePoem,
-    PurgatoryRate,
-    
+    RatePoem,
+    UploadDraft,
+    DeleteDraft,
+    GetDraft,
+
     // Location - Account data
     UpdateEmail,
     UpdateNumber,
     
-    //Location - Account profile
+    // Location - Account profile
     UpdatePenName,
     UpdateBiography,
     UpdateLocation,

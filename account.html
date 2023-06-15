@@ -5,7 +5,9 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="./styles.css">
-   <script src="header.js"></script>
+   <script src="./Other/component-registrar.js"></script> 
+   <script src="./Other/header-template.js"></script>
+   <script src="./Other/server.js"></script>
    <script src="account.js"></script>
    <style>
 		.role-grid {
@@ -37,6 +39,7 @@
 </head>
 
 <body>
+	<subliminal-header></subliminal-header>
 	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
 		<h2>Your profile role:</h2>
 		<div class="role-grid">
@@ -130,31 +133,23 @@
 		<hr>
 		<h1>Account agreement:</h1>
 		<h2>Privacy &amp; Security:</h2>
-		<p>While other things on this site may be, account security is no joke here, this site has no tracking, external
-			cookies, etc, and never will, and the same principle goes for accounts, we will NEVER ever sell, share, or
-			process ANYTHING related to personal information/accounts. Every non-public account detail is encrypted
-			using your account code, with your account code being encrypted too! This means that it is impossible for us,
-			or anyone else to ever acess any account detail without your account code, which can not be exfiltrated from
-			our servers due to itself being encrypted, however, it also means that your account code is very important for
-			security. If you think you have lost it, or someone else has gained access to it, please report here.
+		<p>While other things on this site may be, account security is no joke here, this site does not make use of tracking,
+			external cookies, etc, and the same principle goes for accounts, we will ever sell, share, or process ANYTHING
+			related to personal information or accounts. Every non-public account detail is safely stored using your account
+			code, If you think you have lost it, or someone else has gained access to it, please report <a href="mailto:zekiahamoako@outlook.com">here</a>.
 		</p>
-		<h2>Law and Regulations:</h2>
+		<h2>TOS and Regulations:</h2>
 		<p>This site aims to be a place for freedom of expresion through the medium of poetry. While we can not claim
 			responsibility for if you fall under punishment, penilisation, or persecution by an institution, government, or
-			other individual as a result of a work submitted here, we will always try to protect you whenever we can. This
-			means, never allowing your personal info to be shared with anyone but you, ensuring that minimal information
-			can be shared in the case of a data leak, and allowing you to remove any data you have uploaded here on request.
+			other individual as a result of a work submitted here, we will try to protect your works when possible. This
+			means, not allowing your personal info to be shared with anyone but you, ensuring that minimal information
+			can be accessed in the case of a data leak, and allowing you to remove any data you have uploaded here on request
+			as per compliance with GDPR regulations.
 		</p>
-		<p>If you use this site, with the explicit purpose to publicly post illegal, or plain morally objectable content,
-			your account may be removed, or IP blocked from submitting content to the site. It is both impossible, and
-			against our values to use any of your personal information against you, but, if you publicly post something
-			such as your location in a work you upload, others can, and may forward this on to relevant authorities. If you
-			post something publicly, people can see and use it.
-		</p>
-		<h2>Being subliminal:</h2>
-		<p>The final thing we'd like to note, is that this is a cool place. This site is supposed to be fun, experimental,
-			a bit wacky, so feel free to join in with our community, commenting, annotating, rating, or submitting your own
-			poems, no matter what you do here, if it is making subliminal a better place, we are all for it!
+		<p>If you use this site, with the explicit purpose to publicly post illegal, nsfw, or plain morally objectable content,
+			your account may be removed, or IP blocked from submitting content to the site. Keep in mind that if you post any
+			personally identifying information publicly on this site, it may be used against you by others, and we are not accountable
+			for any consequences that may become of it. 
 		</p>
 	</div>
 	<a href="./contents" class="back"> &lt;- Back</a>
@@ -218,7 +213,7 @@
 	//			<p class="poem-preview">✍️&nbsp;I live in a society. This is one of the sites ever, and I write some of the poems ever. I also run this ship (to the bottom of the ocean).</p>
 	//		</div>
 	// </div>
-	async function setProfileFollowing(newGuids) {
+	async function setProfileFollowing(newGuids) { // TODO: Move to component system
 		if (newGuids == null) return
 
 		while (followingAccounts.firstChild) {
@@ -257,7 +252,7 @@
 	//		<h4>London</h4>
 	//		<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
 	// </div>
-	async function setProfileRecent(newGuids) {
+	async function setProfileRecent(newGuids) { // TODO: Move to component system
 		if (newGuids == null) return
 
 		while (recentWorks.firstChild) {
@@ -265,7 +260,7 @@
 		}
 
 		for (let guid of newGuids) {
-			let poem = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
+			let poem = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
 
 			let el = document.createElement("div")
 			el.className = "poem-card"
@@ -319,7 +314,7 @@
 			return
 		}
 
-		fetch('https://server.poemanthology.org:81/Signin', {
+		fetch(serverBaseAddress + "/Signin", {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
 			body: '"' + localStorage.accountCode + '"'
@@ -342,7 +337,6 @@
 		.catch((e) => confirmFail())
 	}
 
-	initialiseHeader()
 	initialise()
 	console.log("%cYour account's data is held in browser local storage, a thing that can be acessed by putting code in this browser console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
 	console.log("%cTL;DR: Never put anything you do not understand here. Uncool things may happen.", "color: blue; font-size: x-large")
