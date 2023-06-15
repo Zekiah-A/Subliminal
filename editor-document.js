@@ -203,7 +203,7 @@ class EditorDocument {
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
         context.fillStyle = defaultTextColour
-        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1, this.fontSize)
+        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1.5, this.fontSize + 4)
     }
 
     optimiseData(data) {

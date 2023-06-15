@@ -387,7 +387,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-        case AccountActionType.PurgatoryRate:
+        case AccountActionType.RatePoem:
         {
             if (action.Value is not PurgatoryRating rating) goto default;
 

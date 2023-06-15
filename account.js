@@ -6,23 +6,23 @@ const actionType = {
     UnfollowUser: 3,
     LikePoem: 4,
     UnlikePoem: 5,
-    
+    RatePoem: 6,
+    UploadDraft: 7,
+    DeleteDraft: 8,
+    GetDraft: 9,
+
     // Location - Account data
-    UpdateEmail: 6,
-    UpdateNumber: 7,
+    UpdateEmail: 10,
+    UpdateNumber: 11,
     
     //Location - Account profile
-    UpdatePenName: 8,
-    UpdateBiography: 9,
-    UpdateLocation: 10,
-    UpdateRole: 11,
-    UpdateAvatar: 12,
-    PinPoem: 13,
-    UnpinPoem: 14,
-
-    UploadDraft: 16,
-    DeleteDraft: 17,
-    GetDraft: 18
+    UpdatePenName: 12,
+    UpdateBiography: 13,
+    UpdateLocation: 14,
+    UpdateRole: 15,
+    UpdateAvatar: 16,
+    PinPoem: 17,
+    UnpinPoem: 18
 }
 
 const badgeType = {
@@ -32,6 +32,13 @@ const badgeType = {
     Verified: 3,
     Original: 4,
     New: 5
+}
+
+const ratingType = {
+    Approve: 0,
+    Veto: 1,
+    UndoApprove: 2,
+    UndoVeto: 3
 }
 
 function getBadgeInfo(badge) {
@@ -54,7 +61,7 @@ function getBadgeInfo(badge) {
 async function getAccountData() {
     let data = null
     
-    await fetch('https://server.poemanthology.org:81/Signin', {
+    await fetch(serverBaseAddress + "/Signin", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: '"' + localStorage.accountCode + '"'
@@ -68,7 +75,7 @@ async function getAccountData() {
 async function getPublicProfile(guid) {
     let profile = null
 
-    await fetch('https://server.poemanthology.org:81/AccountProfile/' + guid, {
+    await fetch(serverBaseAddress + "/AccountProfile/" + guid, {
         method: "GET",
         headers: { 'Content-Type': 'application/json' },
     })
@@ -85,7 +92,7 @@ async function executeAccountAction(action, value) {
         value: value
     }
 
-    return await (fetch('https://server.poemanthology.org:81/ExecuteAccountAction', {
+    return await (fetch(serverBaseAddress + "/ExecuteAccountAction", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(accountAction)
@@ -95,6 +102,6 @@ async function executeAccountAction(action, value) {
 async function isLoggedIn() {
     if (!localStorage.accountCode) return false
 
-    let response = await (await fetch('https://server.poemanthology.org:81/Signin', { method: "POST", headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}))
+    let response = await (await fetch(serverBaseAddress + "/Signin", { method: "POST", headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}))
     return response.ok
 }
