@@ -23,6 +23,8 @@ class SubliminalNotification extends HTMLElement {
                 color: white;
                 border-radius: 16px;
                 overflow: clip;
+                font-family: Arial, Helvetica, sans-serif;
+                white-space: nowrap;
             }
         `
         this.shadowRoot.append(style)
@@ -31,7 +33,7 @@ class SubliminalNotification extends HTMLElement {
         messageElement.textContent = "🔔 " + this.getAttribute("message")
         messageElement.animate([
             { opacity: "0", maxWidth: "0" },
-            { opacity: "1", maxWidth: "100%" }
+            { opacity: "0.7", maxWidth: "100%" }
         ], {
             duration: 2000,
             easing: "ease-out",

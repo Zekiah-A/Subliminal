@@ -1089,7 +1089,7 @@
 
     async function fetchPathJson(path) {
         return await (await fetch((path.includes("/")
-            ? window.location.protocol + "\/\/" + window.location.hostname
+            ? window.location.origin
             : serverBaseAddress + "/Purgatory/") + path)).json()
     }
 
