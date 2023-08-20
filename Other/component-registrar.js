@@ -1,7 +1,7 @@
 function createFromData(name, data) {
     let element = document.createElement(name)
     for (const [key, value] of Object.entries(data)) {
-        element.setAttribute(key, value)
+        element.setAttribute(key, value.toString())
     }
     element.connectedCallback()
     return element

@@ -8,7 +8,7 @@ const app = express()
 const port = 3000
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-app.get("*", (req, res) => {    
+app.get("*", (req, res) => {
     let resourcePath = req.path
 
     if (!resourcePath || resourcePath == "/") {
@@ -16,8 +16,8 @@ app.get("*", (req, res) => {
         resourcePath = "index.html"
     }
     if (!fs.existsSync(path.join(__dirname, resourcePath))) {
-        // Likely an extensionless HTML.
-        resourcePath = resourcePath + ".html"
+        // Likely looking for an extensionless HTML
+        resourcePath = req.path + ".html"
     }
     if (!fs.existsSync(path.join(__dirname, resourcePath))) {
         // Then either this content literally does not exist, or it is intentionally wrong

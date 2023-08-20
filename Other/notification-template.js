@@ -27,7 +27,7 @@ class SubliminalNotification extends HTMLElement {
         `
         this.shadowRoot.append(style)
 
-        let messageElement = this.shadowRoot.getElementById('message')
+        let messageElement = this.shadowRoot.getElementById("message")
         messageElement.textContent = "🔔 " + this.getAttribute("message")
         messageElement.animate([
             { opacity: "0", maxWidth: "0" },
