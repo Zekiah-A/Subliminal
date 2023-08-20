@@ -8,7 +8,8 @@
     <meta name="description" content="Probably the weirdest poetry anthology to ever exist. This site is a spin-off of traditional poetic anthologies, intended to bring maximum humour.">
     <meta name="keywords" content="Poetry, Anthology, Subliminal, Methallyne blue, Poem">
     <link rel="stylesheet" href="styles.css">
-    <script src="header.js"></script>
+    <script src="./Other/component-registrar.js"></script> 
+    <script src="./Other/header-template.js"></script>
     <style>
         .fixed {
             vertical-align: middle;
@@ -230,7 +231,7 @@
 
 <body>
     <div id="topBackground"><img src="Resources/TopBackground.webp" class="index-image"></div>
-
+    <subliminal-header></subliminal-header>
     <div class="div-centre">
         <br><br><br><br>
         <p class="profile-title">Subliminal</p>
@@ -357,9 +358,7 @@
             }
         })
     }
-
-    initialiseHeader()
-
+    
     //A threshold of 0.1 means that when 10% of section is in view, it will be animated.
     let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
     let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]

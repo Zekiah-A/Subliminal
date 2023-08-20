@@ -8,28 +8,30 @@ using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
 using UnbloatDB;
-using UnbloatDB.Keys;
 using UnbloatDB.Serialisers;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
 const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-var purgatoryDir = new DirectoryInfo(@"Purgatory");
-var purgatoryBackupDir = new DirectoryInfo(@"PurgatoryBackups");
-var purgatoryDraftsDir = new DirectoryInfo(@"Drafts");
-var accountsDir = new DirectoryInfo(@"Data");
-var profileImageDir = new DirectoryInfo(@"ProfileImages");
+var dataDir = new DirectoryInfo("Data");
+var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
 var configFile = new FileInfo("config.json");
 
 var random = new Random();
-var database = new Database(new UnbloatDB.Config(accountsDir.Name, new JsonSerialiser()));
-var config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+var database = new Database(new Configuration(dataDir.Name, new JsonSerialiser()));
+ServerConfig? config = null;
+
+if (File.Exists(configFile.Name))
+{
+    config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+}
 
 if (config is null)
 {
-    var stream = File.OpenWrite(configFile.Name);
+    await using var stream = File.OpenWrite(configFile.Name);
     await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false));
+    await stream.FlushAsync();
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
 	Console.ResetColor();
@@ -37,13 +39,14 @@ if (config is null)
 }
 
 Console.ForegroundColor = ConsoleColor.Yellow;
-
-//Regenerate required directories
-foreach (var path in new[] { purgatoryDir.FullName, purgatoryBackupDir.FullName, accountsDir.FullName, purgatoryDraftsDir.FullName, profileImageDir.FullName })
+foreach (var dirPath in new[] { dataDir, profileImageDir, new DirectoryInfo(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))) })
 {
-    if (Directory.Exists(path)) continue;
-    Console.WriteLine("[WARN] Could not find " + path + " directory, creating.");
-    Directory.CreateDirectory(path);
+    if (!Directory.Exists(dirPath.FullName))
+    {
+        Directory.CreateDirectory(dirPath.FullName);
+        Console.WriteLine($"[WARN] Could not find {dirPath.Name} directory, creating.");
+
+    }
 }
 Console.ResetColor();
 
@@ -79,13 +82,13 @@ httpServer.UseCors(policy =>
 
 httpServer.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, profileImageDir.Name)),
+    FileProvider = new PhysicalFileProvider(profileImageDir.FullName),
     RequestPath = "/ProfileImage"
 });
 
 httpServer.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, purgatoryDir.Name)),
+    FileProvider = new PhysicalFileProvider(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))),
     RequestPath = "/Purgatory"
 });
 
@@ -94,34 +97,6 @@ static string HashSha256String(string text)
     var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
     return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
 }
-
-// TODO: Port this to an AccountAction
-httpServer.MapPost("/PurgatoryRate", async (PurgatoryAuthenticatedRating rating) =>
-{
-    var entry = await database.GetRecord<PurgatoryEntry>(rating.PoemKey);
-    if (entry is null)
-    {
-        return Results.NotFound();
-    }
-
-    entry.Data.Approves = rating.Type switch
-    {
-        PurgatoryRatingType.Approve => entry.Data.Approves + 1,
-        PurgatoryRatingType.UndoApprove => entry.Data.Approves - 1,
-        _ => entry.Data.Approves
-    };
-
-    entry.Data.Vetoes = rating.Type switch
-    {
-        PurgatoryRatingType.Veto => entry.Data.Vetoes + 1,
-        PurgatoryRatingType.UndoVeto => entry.Data.Vetoes - 1,
-        _ => entry.Data.Vetoes
-    };
-
-    await database.UpdateRecord(entry);
-
-    return Results.Ok();
-});
 
 httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
 {
@@ -138,7 +113,7 @@ httpServer.MapGet("/PurgatoryPicks", async () =>
 });
 
 httpServer.MapGet("/PurgatoryNew", () =>
-    Directory.GetFiles(purgatoryDir.Name)
+    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
         .Take(10)
         .Select(file => new FileInfo(file))
         .OrderBy(file => file.CreationTime)
@@ -148,7 +123,7 @@ httpServer.MapGet("/PurgatoryNew", () =>
 );
 
 httpServer.MapGet("/PurgatoryAll", () =>
-    Directory.GetFiles(purgatoryDir.Name)
+    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
         .Select(file => new FileInfo(file))
         .Reverse()
         .Select(file => file.Name)
@@ -178,8 +153,8 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry)
         return Results.Text(poem);
     }
     
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
-    profile.Data.Poems.Add(new InterKey<PurgatoryEntry>(poem));
+    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
+    profile.Data.Poems.Add(poem);
     
     await database.UpdateRecord(profile);
 
@@ -197,10 +172,10 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     }
     
     var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-    await database.CreateRecord(new AccountData(HashSha256String(code), new InterKey<AccountProfile>(profileKey)));
-    
-    var response = new AccountCredentials(code, profileKey);
-    return Results.Json(response, Utils.DefaultJsonOptions);
+    await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
+
+    var credentials = new { Code = code, Guid = profileKey };
+    return Results.Json(credentials, Utils.DefaultJsonOptions);
 });
 
 //Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
@@ -217,46 +192,46 @@ httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
     return profile is null ? Results.NotFound() : Results.Json(profile);
 });
 
-//TODO: Switch to base account action, or another dynamic solution so we can have account actions.
-httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction action, HttpContext context) =>
+
+httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpContext context) =>
 {
-    var account = (await database.FindRecords<AccountData, string>("Code", action.Code)).FirstOrDefault();
+    var account = (await database.FindRecords<AccountData, string>(nameof(AccountData.CodeHash), action.Code)).FirstOrDefault();
     
     if (account is null)
     {
         return Results.Unauthorized();
     }
 
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileReference))!;
+    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
     
     switch (action.ActionType)
     {
         /*
         case SingleValueAccountActionType.BlockUser:
         {
-            if (action.Value is not string userGuid) break;
-            if (!Account.GuidIsValid(userGuid)) break;
+            if (action.Value is not string userGuid) goto default;
+            if (!Account.GuidIsValid(userGuid)) goto default;
             var targetUser = await Account.GetAccountData(userGuid);
             
-            if (account.Blocked.Contains(targetUser.Guid)) break;
+            if (account.Blocked.Contains(targetUser.Guid)) goto default;
             account.Blocked.Add(targetUser.Guid);
             break;
         }
         
         case SingleValueAccountActionType.UnblockUser:
         {
-            if (action.Value is not string userGuid) break;
+            if (action.Value is not string userGuid) goto default;
             var targetUser = await Account.GetAccountData(userGuid);
 
-            if (!account.Blocked.Contains(targetUser.Guid)) break;
+            if (!account.Blocked.Contains(targetUser.Guid)) goto default;
             account.Blocked.Remove(targetUser.Guid);
             break;
         }
         
         case SingleValueAccountActionType.FollowUser:
         {
-            if (action.Value is not string userGuid) break;
-            if (!Account.GuidIsValid(userGuid)) break;
+            if (action.Value is not string userGuid) goto default;
+            if (!Account.GuidIsValid(userGuid)) goto default;
             var targetUser = await Account.GetAccountData(userGuid);
 
             account.FollowUser(ref targetUser);
@@ -264,31 +239,30 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             break;
         }
         */
-        
-        case SingleValueAccountActionType.UnfollowUser:
+        case AccountActionType.UnfollowUser:
         {
             // TODO: Reimplement
             await database.UpdateRecord(account);
             break;
         }
         
-        case SingleValueAccountActionType.LikePoem:
+        case AccountActionType.LikePoem:
         {
-            if (action.Value is not string poemGuid) break;
+            if (action.Value is not string poemGuid) goto default;
             var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
             if (poem is not null)
             {
-                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+                profile.Data.PinnedPoems.Add(poem.MasterKey);
             }
             
             await database.UpdateRecord(account);
             break;
         }
         
-        case SingleValueAccountActionType.UnlikePoem:
+        case AccountActionType.UnlikePoem:
         {
-            if (action.Value is not string poemKey) break;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+            if (action.Value is not string poemKey) goto default;
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
 
             if (keyReference is not null)
             {
@@ -299,23 +273,23 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             break;
         }
         
-        case SingleValueAccountActionType.PinPoem:
+        case AccountActionType.PinPoem:
         {
-            if (action.Value is not string poemGuid) break;
+            if (action.Value is not string poemGuid) goto default;
             var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
             if (poem is not null)
             {
-                profile.Data.PinnedPoems.Add(new InterKey<PurgatoryEntry>(poem.MasterKey));
+                profile.Data.PinnedPoems.Add(poem.MasterKey);
             }
             
             await database.UpdateRecord(profile);
             break;
         }
         
-        case SingleValueAccountActionType.UnpinPoem:
+        case AccountActionType.UnpinPoem:
         {
-            if (action.Value is not string poemKey) break;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Key.Equals(poemKey));
+            if (action.Value is not string poemKey) goto default;
+            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
 
             if (keyReference is not null)
             {
@@ -326,59 +300,59 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             break;
         }
         
-        case SingleValueAccountActionType.UpdateEmail:
+        case AccountActionType.UpdateEmail:
         {
-            if (action.Value is not string email) break;
+            if (action.Value is not string email) goto default;
             // TODO: Email verification
             account.Data.Email = email;
             await database.UpdateRecord(account);
             break;
         }
         
-        case SingleValueAccountActionType.UpdateNumber:
+        case AccountActionType.UpdateNumber:
         {
-            if (action.Value is not string number) break;
+            if (action.Value is not string number) goto default;
             // TODO: Number verification
             account.Data.PhoneNumber = number;
             await database.UpdateRecord(account);
             break;
         }
         
-        case SingleValueAccountActionType.UpdatePenName:
+        case AccountActionType.UpdatePenName:
         {
-            if (action.Value is not string penName) break;
+            if (action.Value is not string penName) goto default;
             profile.Data.PenName = penName.Length <= 16 ? penName : penName[..16];
             await database.UpdateRecord(profile);
             break;
         }
         
-        case SingleValueAccountActionType.UpdateBiography:
+        case AccountActionType.UpdateBiography:
         {
-            if (action.Value is not string biography) break;
+            if (action.Value is not string biography) goto default;
             profile.Data.Biography = biography.Length <= 360 ? biography : biography[..360];
             await database.UpdateRecord(profile);
             break;
         }
 
-        case SingleValueAccountActionType.UpdateLocation:
+        case AccountActionType.UpdateLocation:
         {
-            if (action.Value is not string location) break;
+            if (action.Value is not string location) goto default;
             profile.Data.Location = location.Length <= 16 ? location : location[..16];
             await database.UpdateRecord(profile);
             break;
         }
 
-        case SingleValueAccountActionType.UpdateRole:
+        case AccountActionType.UpdateRole:
         {
-            if (action.Value is not string role) break;
+            if (action.Value is not string role) goto default;
             profile.Data.Role = role.Length <= 16 ? role : role[..16];
             await database.UpdateRecord(profile);
             break;
         }
 
-        case SingleValueAccountActionType.UpdateAvatar:
+        case AccountActionType.UpdateAvatar:
         {
-            if (action.Value is not string avatarUrl) break;
+            if (action.Value is not string avatarUrl) goto default;
 
             var permitted = new[]
             {
@@ -413,15 +387,39 @@ httpServer.MapPost("/ExecuteAccountAction", async (SingleValueAccountAction acti
             await database.UpdateRecord(profile);
             break;
         }
-        
-        // TODO: Implement drafts here
+        case AccountActionType.RatePoem:
+        {
+            if (action.Value is not PurgatoryRating rating) goto default;
 
+            var entry = await database.GetRecord<PurgatoryEntry>(rating.PoemKey);
+		    if (entry is null)
+		    {
+		        return Results.NotFound();
+		    }
+
+		    entry.Data.Approves = rating.Type switch
+		    {
+		        PurgatoryRatingType.Approve => entry.Data.Approves + 1,
+		        PurgatoryRatingType.UndoApprove => entry.Data.Approves - 1,
+		        _ => entry.Data.Approves
+		    };
+
+		    entry.Data.Vetoes = rating.Type switch
+		    {
+		        PurgatoryRatingType.Veto => entry.Data.Vetoes + 1,
+		        PurgatoryRatingType.UndoVeto => entry.Data.Vetoes - 1,
+		        _ => entry.Data.Vetoes
+		    };
+
+		    await database.UpdateRecord(entry);
+            break;
+        }
+        // TODO: Implement purgatory drafts here
         default:
         {
             var stream = new MemoryStream();
             await JsonSerializer.SerializeAsync(stream, action);
-            return Results.Problem("Specified account action failed or did not exist." +
-                                   Encoding.UTF8.GetString(stream.ToArray()));
+            return Results.Problem("Specified account action failed, had an invalid value type, or did not exist." + Encoding.UTF8.GetString(stream.ToArray()));
         }
     }
     

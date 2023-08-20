@@ -1,6 +1,6 @@
 namespace SubliminalServer.AccountActions;
 
-public enum SingleValueAccountActionType
+public enum AccountActionType
 {
     // General account actions
     BlockUser,
@@ -9,12 +9,16 @@ public enum SingleValueAccountActionType
     UnfollowUser,
     LikePoem,
     UnlikePoem,
-    
+    RatePoem,
+    UploadDraft,
+    DeleteDraft,
+    GetDraft,
+
     // Location - Account data
     UpdateEmail,
     UpdateNumber,
     
-    //Location - Account profile
+    // Location - Account profile
     UpdatePenName,
     UpdateBiography,
     UpdateLocation,

@@ -174,7 +174,7 @@ public class LiveEditSocketServer
         {
             //Inform the client that they have been disconnected by server
             await app.SendAsync(client, Encoding.UTF8.GetBytes((byte) LiveEditServerPacket.ErrorMessage + reason));
-            app.DisconnectClient(client);
+            await app.DisconnectClientAsync(client);
         }
     }
 

@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./styles.css">
-    <script type="text/javascript" src="./account.js"></script>
-    <script type="text/javascript" src="./polyfill.js"></script> 
-    <script type="text/javascript" src="./editor-document.js"></script> 
+    <script src="./account.js"></script>
+    <script src="./polyfill.js"></script> 
+    <script src="./editor-document.js"></script>
+    <script src="./Other/component-registrar.js"></script>
+    <script src="./Other/notification-template.js"></script>
+    <script src="./Other/server.js"></script>
     <style>
         #main {
             position: relative;
@@ -250,6 +253,7 @@
             max-height: 512px;
             overflow-y: scroll;
             height: 512px;
+            margin-bottom: 8px;
         }
 
         #summaryArea {
@@ -551,14 +555,20 @@
         <div id="formattingToolbar">
             <div class="options-parent" style="width: 72px; min-width: 72px;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                 <div>File ⯆</div>
-                <div class="options" style="width: 120px;">
+                <div class="options" style="width: 140px;">
                     <div onclick="
 					    params.delete('edit')
                         params.delete('append')
 					    location.href = location.origin + '/poem-editor/' + params.toString()
                     ">Open new</div>
-                    <div onclick="downloadCurrent()">Download poem</div>
-                    <div onclick="saveCurrent()">Save poem</div>
+                    <div onclick="
+                        downloadCurrent()
+                        document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully downloaded poem data.', }))
+                    ">Download poem</div>
+                    <div onclick="
+                        saveCurrent()
+                        document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully saved poem', }))
+                    ">Save poem</div>
                     <div onclick="loadPoemPopup.style.display = 'block'">Open another</div>
                     <div onclick="
                         if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
@@ -633,11 +643,11 @@
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-        <textarea id="editorInputCatcher" style="position: absolute; left: -1000px; z-index: -1;">
-            I am a hack to allow for mobile virtual keyboard and input because the virtual
-            keyboard API has stupid restrictions on where you can use .show(). I LoVe BROWSERS!!!!! 🥲🔫🔫🔫:)))
+        <textarea id="editorInputCatcher" style="position: absolute; left: -10000px; top: -10000px; z-index: -1; opacity: 0; pointer-events: none;" hidden>
+            <!--I am a hack to allow for mobile virtual keyboard and input because the virtual
+            keyboard API has stupid restrictions on where you can use .show(). I LoVe BROWSERS!!!!! 🥲🔫🔫🔫:)))-->
         </textarea>
-        <canvas id="editorCanvas" tabindex="-1" contenteditable virtualkeyboardpolicy="manual" onmousedown="
+        <canvas id="editorCanvas" tabindex="-1" virtualkeyboardpolicy="manual" onmousedown="
             this['pressed'] = true
             editor.clearSelection()
             editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
@@ -980,7 +990,7 @@
             poemJson.code = localStorage.accountCode
         }
 
-        fetch("https://server.poemanthology.org:81/PurgatoryUpload", {
+        fetch(serverBaseAddress + "/PurgatoryUpload", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(poemJson)
@@ -1080,7 +1090,7 @@
     async function fetchPathJson(path) {
         return await (await fetch((path.includes("/")
             ? window.location.protocol + "\/\/" + window.location.hostname
-            : "https://server.poemanthology.org:81/Purgatory/") + path)).json()
+            : serverBaseAddress + "/Purgatory/") + path)).json()
     }
 
     async function amendMode() {

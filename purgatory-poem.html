@@ -8,7 +8,8 @@
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <script src="account.js"></script>
-  <script type="text/javascript" src="./editor-document.js"></script>
+  <script src="./editor-document.js"></script>
+  <script src="./Other/server.js"></script>
   <style>
     .rating-container {
         user-select: none;
@@ -88,8 +89,8 @@
         <p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
         <div class="rating-container">
             <div>
-                <a href="#contentWarning" onclick="ratePoem(/*localStorage.approved.has(guid) ? ratingType.UndoApprove : */ratingType.Approve)" class="rate-button">Approve</a>
-                <a href="#contentWarning" onclick="ratePoem(/*localStorage.vetoed.has(guid) ? ratingType.UndoVeto : */ratingType.Veto)" class="rate-button">Veto</a>
+                <a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Approve })" class="rate-button">Approve</a>
+                <a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Veto })" class="rate-button">Veto</a>
             </div>
             <a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
         </div>
@@ -148,12 +149,6 @@ ___________________________________________________________
     const ctx = signCanvas.getContext('2d')
     const encoder = new TextEncoder()
     const guid = params.get("guid")
-    const ratingType = {
-        Approve: 0,
-        Veto: 1,
-        UndoApprove: 2,
-        UndoVeto: 3
-    }
 
     async function togglePoemLike(liked) {
         if (!localStorage.liked) {
@@ -202,36 +197,6 @@ ___________________________________________________________
         executeAccountAction(actionType.PinPoem, guid)
     }
 
-    function ratePoem(rating) {
-        let ratingObject = {
-            guid: guid.toString(),
-            purgatoryRating: rating,
-            code: localStorage.accountCode || null
-        }
-     
-        fetch("https://server.poemanthology.org:81/PurgatoryRate", {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(ratingObject)
-        }).then(res => {
-            if (!res.ok) {
-                console.error("Failed to rate poem " + res)
-                alert("Failed to rate this poem, sorry! 😭\nMaybe try again...")
-                return
-            }
-            alert('Rating success!')
-            let ratingName = Object.keys(ratingType)
-                .find(key => ratingType[key] === rating)
-
-            /*switch(ratingName) {
-                case "Approve": localStorage.approved.add(guid); break;
-                case "Veto": localStorage.vetoed.add(guid); break;
-                case "UndoApprove": localStorage.approved.delete(guid); break;
-                case "UndoVeto": localStorage.vetoed.delete(guid); break;
-            }*/
-        })
-    }
-
     async function initialise() {
         //init localstorage
         if (!localStorage.getItem('approved')) 
@@ -248,12 +213,16 @@ ___________________________________________________________
 
 
         //fetch poem data
-        let poemData = await (await fetch("https://server.poemanthology.org:81/Purgatory/" + guid)).json()
+        let poemData = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
         
         //Set up title for vanity
         document.title = "Subliminal - " + poemData.poemName
 
         //Place poem data into the DOM
+        if (poemData.cWarning === true) {
+            document.body.insertBefore(
+                createFromData("content-warning", { addition: poemData.cWarningAdditions }), contentWarning)
+        }
         
         //If author has a GUID (account),link it to the poem
         if (poemData.authorGuid) {

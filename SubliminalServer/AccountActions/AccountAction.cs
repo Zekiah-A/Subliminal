@@ -6,4 +6,4 @@ namespace SubliminalServer.AccountActions;
 /// <param name="ActionType"></param>
 /// <param name="Code"></param>
 /// <param name="Guid"></param>
-public record SingleValueAccountAction(string Code, SingleValueAccountActionType ActionType, object Value) : BaseAccountAction(Code);
+public record AccountAction(string Code, AccountActionType ActionType, object Value);

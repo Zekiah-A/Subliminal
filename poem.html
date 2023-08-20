@@ -7,7 +7,9 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <script type="text/javascript" src="./editor-document.js"></script>
+  <script src="./editor-document.js"></script>
+  <script src="./Other/component-registrar.js"></script>
+  <script src="./Other/content-warning-template.js"></script>
 </head>
  
 <body style="background: initial;">
@@ -58,20 +60,8 @@
 
         //Display content warning with additions if needed
         if (poemData.cWarning === true) {
-            let cWarningHtml = stringToHtml(await (await fetch(window.location.origin + "/Other/content-warning-template.html")).text())
-            //split into chunks of max length 55, full cw line is 59 (pipe space, space pipe) + \n
-            let cwInsert = ""
-            if (poemData.cWarningAdditions) {
-                let chunks = poemData.cWarningAdditions.match(/.{1,55}/g)
-                for (let chunk of chunks) {
-                    chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
-                    chunk = "| ".concat(chunk) //add pipe start
-                    chunk = chunk.concat(" |") //add pipe end
-                    cwInsert = cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
-                }
-            }
-            cWarningHtml.getElementsByTagName("pre")[0].innerHTML = cWarningHtml.getElementsByTagName("pre")[0].innerHTML.replace("ADDITIONAL_NOTES", cwInsert)
-            document.body.insertBefore(cWarningHtml, back)
+            document.body.insertBefore(
+                createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
         }
 
         //Place poem data into the DOM
