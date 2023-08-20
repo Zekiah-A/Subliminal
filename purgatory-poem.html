@@ -293,12 +293,12 @@ ___________________________________________________________
         //If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well
         if (poemData.amends) {
             amendmentNote.style.display = "block"
-            amendmentLink.href = window.location.protocol + '\/\/' + window.location.hostname + 
+            amendmentLink.href = window.location.origin + 
                 (poemData.amends.includes("/") ? "/poem?path=" + poemData.amends : "purgatory-poem?guid=" + poemData.amends)
         }
         else if (poemData.edits) {
             editNote.style.display = "block"
-            editLink.href = window.location.protocol + '\/\/' + window.location.hostname + 
+            editLink.href = window.location.origin + 
                 (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
         }
 

@@ -33,10 +33,19 @@
             right: 16px;
             transform-origin: center;
             transition: .2s transform;
+            border: 1px solid lightgray;
+            border-radius: 100%;
+            width: 36px;
+            height: 36px;
+            background-color: white;
+            z-index: 2;
+            cursor: pointer;
         }
 
         .section-collapsed > svg {
             fill: var(--text-colour);
+            padding: 8px;
+            box-sizing: border-box;
         }
 
         .grid-container {
@@ -437,9 +446,9 @@
     <div class="grid-container">
         <div>
             <h3>Volume 1: (Phrenes and Memes)</h3>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">War and Phrenics:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">War and Phrenics:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
                     <br>
@@ -469,9 +478,9 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Really Stupid Stuff:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Really Stupid Stuff:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
                     <br>
@@ -519,9 +528,9 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Parodies and Adaptations:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Parodies and Adaptations:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
                     <br>
@@ -548,9 +557,9 @@
         </div>
         <div>
             <h3>Volume 2: (Idiots and Revelations)</h3>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Idiots:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Idiots:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
                     <br>
@@ -600,9 +609,9 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Sublime and Revelation:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Sublime and Revelation:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
                     <br>
@@ -616,9 +625,9 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Tales and Tomes:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Tales and Tomes:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
                     <br>
@@ -629,9 +638,9 @@
                 </div>
             </div>
             <h3>Other stuff:</h3>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Copypastas:</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Copypastas:</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="Other/a-joke">1. A joke - By Zekiah</a>
                     <br>
@@ -639,9 +648,9 @@
                     <br>
                 </div>
             </div>
-            <div class="grid-sub-container">
-                <p class="section-span" onclick="this.parentElement.toggleAttribute('collapsed')">Sussy songs</p>
-                <span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="24" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Sussy songs</p>
+                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                 <div class="section-body">
                     <a href="#">1. AQGay (Lyrics) - By Zekiah (as SussZ)</a>
                     <br>
