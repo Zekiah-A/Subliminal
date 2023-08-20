@@ -85,7 +85,7 @@ ___________________________________________________________
             chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
             chunk = "| ".concat(chunk) //add pipe start
             chunk = chunk.concat(" |") //add pipe end
-            cwInsert = cwInsert.concat("\n", chunk) //Add \n followed by chunk to end of cwinsert
+            cwInsert = cwInsert.concat(chunk, "\n") //Add \n followed by chunk to end of cwinsert
         }
         this.shadowRoot.getElementById("addition").textContent = cwInsert
     }
