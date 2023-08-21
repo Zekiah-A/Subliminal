@@ -7,7 +7,7 @@ class SubliminalHeader extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = html`
             <div>
-                <img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.protocol + '\/\/' + window.location.hostname">
+                <img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.origin">
                 <h1 style="margin: 0px; align-self: center;">Subliminal</h1>
                 <a href="contents">-&gt; Poems</a>
                 <a href="disclaimer">-&gt; Disclaimer</a>
@@ -121,6 +121,16 @@ class SubliminalHeader extends HTMLElement {
                     margin-right: 8px;
                     height: 48px;
                     column-gap: 4px;
+                }
+            }
+
+            @media(prefers-color-scheme: dark) {
+                img {
+                    filter: invert(1);
+                }
+
+                a:link, a:visited {
+                    color: lightblue;
                 }
             }
         `
