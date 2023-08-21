@@ -30,8 +30,8 @@
 
         .section-collapsed {
             position: absolute;
-            top: 32px;
-            transform: translate(-50%);
+            top: 40px;
+            transform: translate(-50%, -50%);
             right: 16px;
             transform-origin: center;
             transition: .2s transform;
@@ -71,7 +71,9 @@
         }
 
         .grid-sub-container[collapsed] {
+            height: 64px;
             max-height: 64px;
+            cursor: pointer;
         }
 
         .grid-sub-container[collapsed] > .section-span {
@@ -89,7 +91,7 @@
         }
 
         .grid-sub-container[collapsed] > .section-collapsed {
-            transform: translate(-50%) rotate(-90deg);
+            transform: translate(-50%, -50%) rotate(-90deg);
         }
 
         .seminars-centre {

@@ -10,10 +10,20 @@
    <script src="./Other/server.js"></script>
    <script src="account.js"></script>
    <style>
+		input, textarea {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 16px;
+		}
+
 		.role-grid {
 			display: grid;
 			grid-template-columns: auto auto auto;
 			grid-gap: 8px;
+		}
+
+		#profileName {
+			display: inline-block;
+			min-width: 140px;
 		}
 
 		#recentWorks {
@@ -32,7 +42,9 @@
 
 		.editable {
 			position: relative;
+			border: none;
 		}
+
 		.editable:focus {
 			background-color: #001dff1c;
 			border: 1px solid gray;
@@ -41,14 +53,14 @@
 		}
 		.editable::after {
 			content: " ";
-			background-image: url("Resources/edit.svg");
+			background-image: url("Resources/Edit.svg");
 			background-size: 16px;
 			position: absolute;
 			right: -16px;
 			top: -8px;
 			width: 16px;
 			height: 16px;
-			opacity: 0.6;
+			opacity: 0.2;
 		}
 
 		@media screen and (orientation:portrait) {
@@ -111,14 +123,22 @@
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
 			<div style="flex-direction:column;display: flex;">
-				<div style="width: 120%;">
+				<div>
 					<p class="profile-title">I'm </p>
-					<p class="profile-title editable" id="profileName" contenteditable="true" style="min-width: 32px;" onblur="executeAccountAction(actionType.UpdatePenName, profileName.textContent)" oninput="this.textContent = this.textContent; if (this.textContent.length >= 16) this.textContent = this.textContent.substring(0, 16);">Nameless</p>
-					<p class="profile-title" id="profileRoleText" style="cursor: pointer;" onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';" onclick="profileRole.style.display = 'block';">, a writer</p>
+					<input id="profileName" type="text" class="profile-title editable"  placeholder="username"
+						maxlength="16" oninput="this.size = this.value.length"
+						onblur="executeAccountAction(actionType.UpdatePenName, profileName.value)" value="Nameless">
+					<p class="profile-title" id="profileRoleText" style="cursor: pointer;"
+						onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';"
+						onclick="profileRole.style.display = 'block';">, a writer</p>
 				</div>
-				<p style="width: min(442px, 100%); line-break: anywhere;" contenteditable="true" class="editable" id="profileBiography" oninput="this.textContent = this.textContent; if (this.textContent.length >= 360) this.textContent = this.textContent.substring(0, 360);" onblur="executeAccountAction(actionType.UpdateBiography, this.textContent)">Click here to start writing your bio!</p>
+				<textarea id="profileBiography" style="width: min(442px, 100%); line-break: anywhere; resize: none; margin-top: 16px; min-height: 72px;"
+					class="editable" placeholder="Click here to start writing your bio!" maxlength="360"
+					onblur="executeAccountAction(actionType.UpdateBiography, profileBiography.value)"></textarea>
 				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
-					<div>🌍&nbsp;<span contenteditable="true" id="profileLocation" class="editable" onblur="executeAccountAction(actionType.UpdateLocation, profileLocation.textContent)">Planet of Earth, Milky Way</span></div>
+					<div>🌍&nbsp;<input id="profileLocation" type="text" class="editable"
+						onblur="executeAccountAction(actionType.UpdateLocation, profileLocation.value)"
+						placeholder="Planet of Earth, Milky Way" maxlength="36"></div>
 					<div>📌&nbsp;<span id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
 				</div>
 				<div id="profileBadges"></div>
@@ -352,9 +372,11 @@
 			return signinResponse.json() 
 		})
 		.then((signinObject) => {
-			profileName.textContent = signinObject.profile?.penName || "Nameless"
-			profileBiography.textContent = signinObject.profile?.biography || "Click here to start writing your bio!"
-			profileLocation.textContent = signinObject.profile?.location || "Planet Earth, Milky Way"
+			profileName.value = signinObject.profile?.penName || "Nameless"
+			profileName.size = profileName.value.length
+			
+			profileBiography.value = signinObject.profile?.biography || "Click here to start writing your bio!"
+			profileLocation.value = signinObject.profile?.location || "Planet Earth, Milky Way"
 			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
 			setProfileRole(signinObject.profile?.role || "writer")
 			setProfileAvatar(signinObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
