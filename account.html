@@ -10,6 +10,11 @@
    <script src="./Other/server.js"></script>
    <script src="account.js"></script>
    <style>
+		body {
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
+
 		input, textarea {
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 16px;
@@ -21,9 +26,15 @@
 			grid-gap: 8px;
 		}
 
+		.profile-title-container {
+			display: flex;
+		}
+
 		#profileName {
+			--contentWidth: 186px;
 			display: inline-block;
-			min-width: 140px;
+			min-width: 186px;
+			width: 186px;
 		}
 
 		#recentWorks {
@@ -66,6 +77,10 @@
 		@media screen and (orientation:portrait) {
 			#followingAccounts {
 				grid-template-columns: 100%;
+			}
+
+			.profile-title-container {
+				flex-wrap: wrap;
 			}
 		}
    </style>
@@ -122,15 +137,16 @@
 		<br><br><br>
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
-			<div style="flex-direction:column;display: flex;">
-				<div>
+			<div style="flex-direction:column;display: flex;flex-wrap: wrap;">
+				<div class="profile-title-container">
 					<p class="profile-title">I'm </p>
 					<input id="profileName" type="text" class="profile-title editable"  placeholder="username"
-						maxlength="16" oninput="this.size = this.value.length"
+						maxlength="16" oninput="this.style.width = 0; this.style.setProperty('--contentWidth', this.scrollWidth + 'px'); this.style.width = 'var(--contentWidth)';"
 						onblur="executeAccountAction(actionType.UpdatePenName, profileName.value)" value="Nameless">
+					<p class="profile-title">, </p>
 					<p class="profile-title" id="profileRoleText" style="cursor: pointer;"
 						onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';"
-						onclick="profileRole.style.display = 'block';">, a writer</p>
+						onclick="profileRole.style.display = 'block';">a writer</p>
 				</div>
 				<textarea id="profileBiography" style="width: min(442px, 100%); line-break: anywhere; resize: none; margin-top: 16px; min-height: 72px;"
 					class="editable" placeholder="Click here to start writing your bio!" maxlength="360"
@@ -177,7 +193,7 @@
 		<br><br>
 		<hr>
 		<h2 style="cursor: pointer;"
-			onclick="accountAgreement.style.display = accountAgreement.style.display == 'none' ? 'block' : 'none';">Account agreement</h2>
+			onclick="accountAgreement.style.display = accountAgreement.style.display == 'none' ? 'block' : 'none';">Account agreement +</h2>
 		<div id="accountAgreement" style="display: none;">
 			<h3>Privacy and Security:</h3>
 			<p>While other things on this site may be, account security is no joke here, this site does not make use of tracking,
@@ -228,7 +244,7 @@
 
 		role = role.substring(0, 8)
 		role = newRole
-		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? ", an " : ", a ") + role
+		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(role[0].toLowerCase()) !== -1 ? "an " : "a ") + role
 	}
 
 	function setProfileEmail(newEmail) {
@@ -374,7 +390,7 @@
 		.then((signinObject) => {
 			profileName.value = signinObject.profile?.penName || "Nameless"
 			profileName.size = profileName.value.length
-			
+
 			profileBiography.value = signinObject.profile?.biography || "Click here to start writing your bio!"
 			profileLocation.value = signinObject.profile?.location || "Planet Earth, Milky Way"
 			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
