@@ -107,30 +107,6 @@
             margin: 2px;
         }
 
-        #signCanvas {
-            background: var(--button-opaque);
-            width:50%;
-            height:50%;
-            border-radius:4px
-        }
-        .sign-container {
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-content:center;
-            row-gap:4px;
-            align-items:center;
-            user-select:none;
-        }
-        .sign-buttons {
-            display:flex;
-            column-gap:8px;
-            width:50%;
-        }
-        .sign-buttons > div {
-            flex-grow: 1;
-        }
-
         #side {
             position: fixed;
             top: 130px;
@@ -411,14 +387,6 @@
                 width: 60%;
             }
 
-            #signCanvas {
-                width: 100%;
-            }
-
-            .sign-buttons {
-                width: 100%;
-            }
-
             #formattingToolbar {
                 overflow-x: scroll;
             }
@@ -446,22 +414,19 @@
     </style>
 </head>
 <body style="max-width: 100%; overflow-x: hidden; overflow-y: scroll;">
-    <div id="licenseAgreePopup" class="popup" style="display: none;">
-        <h2>License agreement:</h2>
-        <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
-        <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
-        <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here. We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
-        <p>You will always be the lone copyright owner of your work, we will never, ever take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
-        <p>If you want to, you can <strong>sign</strong> your poem off below.</p>
-        <div class="sign-container">
-           <canvas height="96" width="256" id="signCanvas" onmousedown="signCanvasDown(event)" onmousemove="signCanvasDrag(event)" onmouseup="signCanvasUp(event)" ontouchstart="signCanvasDown(event)" ontouchmove="signCanvasDrag(event)" ontouchend="signCanvasUp(event)"></canvas>
-            <div class="sign-buttons">
-                <div class="popup-button" style="pointer-events: none; opacity: 0.2;">Smooth</div>
-                <div class="popup-button" onclick="signContext.clearRect(0, 0, signCanvas.width, signCanvas.height);">Clear</div>
-                <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; signContext.clearRect(0, 0, signCanvas.width, signCanvas.height); uploadCurrent();">Submit</div>
-            </div>
+    <div id="licenseAgreePopup" class="popup" style="display: none; width: max(30%, 500px);">
+        <h2>You're almost there!</h2>
+        <img src="Resources/Celebration.png" style="width: 100%;">
+        <p>When you click submit, your poem will be uploaded publicly to the poem purgatory. For more information, see the license agreement below.</p>
+        <hr>
+        <h2 style="cursor: pointer;" onclick="licenseAgreement.style.display = licenseAgreement.style.display == 'none' ? 'block' : 'none';">License agreement +</h2>
+        <div style="display: none;" id="licenseAgreement">
+            <p>All content on this site must be licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0, in order to make open source contribution easy, with the underlying source code used to format and display that content licensed under the GNU GPL-3 license. Summaries of these licenses are available at CC BY-NC-SA and GPL-3.</p>
+            <p>By uploading your work to this site, you give consent for your poem to be licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0.</p>
+            <p>You also agree to allow us permission to store and process your work. We can also accept no responsibility, if you write something that gets you in trouble with people you know, an institution, or local government, you agree that you WILLINGLY chose to upload it here. We accept no responsibility how your work is interpreted, and what consequences may or may not come as a result of it.</p>
+            <p>You will always be the lone copyright owner of your work, we will never take ownership of what you made from you, and we will always comply if you ask for your poem to be modified, and or taken down from this site.</p>
         </div>
-        <p style="opacity:0.6;"><em>Please don't use a real signature you use on legal documents here. By pressing submit, you agree to all the terms stated above.</em></p>
+        <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; uploadCurrent();">Submit</div>
     </div>
 
     <div id="builtinFreePopup" class="popup" style="display: none;">
@@ -792,7 +757,6 @@
     <a href="../contents" style="z-index: 1;" class="back"> <- Back</a>
 </body>
 <script>
-    const signContext = signCanvas.getContext("2d", { willReadFrequently: true })
     const params = new URLSearchParams(document.location.search)
     const edit = params.get("edit")
     const amend = params.get("amend")
@@ -947,41 +911,10 @@
         document.body.removeChild(el)
     }
 
-    // let number = 255
-    // let gen = number
-    // let shift = 0
-    // gen ^= 1 << (7 - shift)
-    // We pad the leading number because JS numbers can't have leading zeros
-    // console.log(number.toString(2).padStart(8, 0) + " : " + gen.toString(2).padStart(8, 0) + " -> " + gen)
-    function getSignCanvasBits() {
-        let bufWidth = signCanvas.width / 8, bufHeight = signCanvas.height
-        let buffer = new Uint8Array(bufWidth * bufHeight).fill(255) //11111111
-        let data = signContext.getImageData(0, 0, signCanvas.width, signCanvas.height, { colorSpace: "srgb" }).data
-
-        for (let h = 0; h < signCanvas.height; h++) {
-            for (let w = 0; w < signCanvas.width; w++) {
-                let byteI = Math.floor((signCanvas.width * h + w) / 8)
-                let shiftI = w % 8
-
-                // We use 4n (n = pixel iteration we are looking at) - 1 to get where 255 (for black) would be.
-                // We set the bit to zero if the color at this position is not black
-                if (data[4 * (signCanvas.width * h + w) + 3] == 0) buffer[byteI] ^= 1 << (7 - shiftI)
-            }
-        }
-
-        return buffer
-    }
-
     async function uploadCurrent() {
         saveCurrent()
         let loadObject = JSON.parse(localStorage.getItem(currentGuid))
         
-        //Only apply if they actually used the signature
-        let signBits = getSignCanvasBits()
-        if (!signBits.every(item => item === 0)) {
-            loadObject.signature = window.btoa(String.fromCharCode(...new Uint8Array(signBits)))
-        }
-
         await upload(loadObject) 
     }
 
@@ -1054,37 +987,6 @@
             if (tag.innerText == tagName)
                 tagContainer.removeChild(tag)
         }
-    }
-
-    function signCanvasDown(event) {
-        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width)
-        let relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
-        this.down = true
-        this.X = relativeX
-        this.Y = relativeY
-        this.color = 'rgb(0, 0, 0)'
-        event.preventDefault()
-    }
-
-    function signCanvasUp(event) {
-        this.down = false
-        event.preventDefault()
-    }
-
-    function signCanvasDrag(event) {
-        event.preventDefault()
-        let relativeX = (event.offsetX / signCanvas.offsetWidth * signCanvas.width)
-        let relativeY = (event.offsetY / signCanvas.offsetHeight * signCanvas.height)
-        if (!this.down) return
-        signContext.beginPath()
-        signContext.moveTo(this.X, this.Y)
-        signContext.lineCap = 'round'
-        signContext.lineWidth = 3
-        signContext.lineTo(relativeX , relativeY )
-        signContext.strokeStyle = this.color
-        signContext.stroke()
-        this.X = relativeX
-        this.Y = relativeY
     }
 
     async function fetchPathJson(path) {

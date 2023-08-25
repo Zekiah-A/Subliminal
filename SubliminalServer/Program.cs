@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
-using UnbloatDB;
-using UnbloatDB.Serialisers;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
@@ -16,10 +14,11 @@ const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv
 
 var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
+var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
 
 var random = new Random();
-var database = new Database(new Configuration(dataDir.Name, new JsonSerialiser()));
+//var database = new Database(new Configuration(dataDir.Name, new JsonSerialiser()));
 ServerConfig? config = null;
 
 if (File.Exists(configFile.Name))
@@ -39,7 +38,7 @@ if (config is null)
 }
 
 Console.ForegroundColor = ConsoleColor.Yellow;
-foreach (var dirPath in new[] { dataDir, profileImageDir, new DirectoryInfo(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))) })
+foreach (var dirPath in new[] { dataDir, profileImageDir,new DirectoryInfo(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))) })
 {
     if (!Directory.Exists(dirPath.FullName))
     {

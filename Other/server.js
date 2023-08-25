@@ -1,1 +1,1 @@
-const serverBaseAddress = "https://server.poemanthology.org/subliminal"
+const serverBaseAddress = "http://localhost:1234"//"https://server.poemanthology.org/subliminal"

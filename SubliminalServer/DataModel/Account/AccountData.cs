@@ -1,18 +1,16 @@
-using UnbloatDB.Attributes;
-
 namespace SubliminalServer.Account;
 
 public class AccountData
 {
-    [MustBeUnique]
+    // [MustBeUnique]
     public string CodeHash { get; init; }
-    [KeyReference(ReferenceTargetType = typeof(AccountProfile))]
+    // [KeyReference(ReferenceTargetType = typeof(AccountProfile))]
     public string ProfileKey { get; init; }
 
     public List<string> KnownIPs { get; set; } = new();
-    [MustBeUnique]
+    // [MustBeUnique]
     public string Email { get; set; }
-    [MustBeUnique]
+    // [MustBeUnique]
     public string PhoneNumber { get; set; }
     public List<string> Drafts { get; set; }
     public List<string> Blocked { get; set; }
