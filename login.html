@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subliminal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="styles.css">
+    <script src="./account.js"></script>
+    <script src="./Other/component-registrar.js"></script>
+    <script src="./Other/header-template.js"></script>
+    <script src="./Other/login-template.js"></script>
+</head>
+<body>
+    <subliminal-header nologin="true"></subliminal-header>
+    <login-signup></login-signup>
+    <a href="./" class="back"> &lt;- Back</a>
+</body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const referer = params.get("referer")
+
+    //on login finished:
+    //if (referer) {
+    //    window.location.href = window.location.origin + referer;
+    //}
+</script>
+</html>
