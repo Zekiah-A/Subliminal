@@ -174,12 +174,14 @@ h2 {
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 4px;
     padding: 8px;
-    text-align: center;
     cursor: pointer;
     background-color: var(--button-opaque);
     flex-grow: 1;
     transition: .2s background-color;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .popup-button[disabled] {
@@ -375,30 +377,10 @@ h2 {
     a:visited {
         color: #bbb8b8;
     }
-
-    .searchbar {
-        color: var(--text-colour);
-        background-color: #ffffff33;
-        backdrop-filter: blur(10px);
-        z-index: 1;
-        border: 1px solid gray;
-    }
 }
 
 /*Mobile and thin screen optimisations*/
 @media screen and (orientation:portrait) {
-    .searchbar {
-        position: fixed;
-        width: calc(100% - 40px);
-        padding-left: 10px;
-        padding-right: 10px;
-        line-height: 40px;
-        top: 64px;
-        z-index: 2;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
     .poem-centre {
         margin-left: 0px;
         margin-right: 0px;
@@ -465,14 +447,6 @@ h2 {
         margin-left: 30%;
         width: 60%;
         padding: 10px;
-    }
-
-    .searchbar {
-        width: 50%;
-        line-height: 300%;
-        top: 2px;
-        z-index: 1;
-        flex-grow: 1;
     }
 
     .comment {

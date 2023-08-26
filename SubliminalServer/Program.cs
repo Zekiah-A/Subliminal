@@ -1,5 +1,4 @@
 using System.Globalization;
-using SubliminalServer.Account;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -7,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
+using SubliminalServer.DataModel.Account;
+using SubliminalServer.DataModel.Purgatory;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
@@ -18,7 +19,7 @@ var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
 
 var random = new Random();
-//var database = new Database(new Configuration(dataDir.Name, new JsonSerialiser()));
+await using var database = new DatabaseContext(Path.Join(dataDir.FullName, "subliminal.db"));
 ServerConfig? config = null;
 
 if (File.Exists(configFile.Name))
@@ -205,8 +206,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
     
     switch (action.ActionType)
     {
-        /*
-        case SingleValueAccountActionType.BlockUser:
+        case AccountActionType.BlockUser:
         {
             if (action.Value is not string userGuid) goto default;
             if (!Account.GuidIsValid(userGuid)) goto default;
@@ -216,8 +216,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             account.Blocked.Add(targetUser.Guid);
             break;
         }
-        
-        case SingleValueAccountActionType.UnblockUser:
+        case AccountActionType.UnblockUser:
         {
             if (action.Value is not string userGuid) goto default;
             var targetUser = await Account.GetAccountData(userGuid);
@@ -226,8 +225,7 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             account.Blocked.Remove(targetUser.Guid);
             break;
         }
-        
-        case SingleValueAccountActionType.FollowUser:
+        case AccountActionType.FollowUser:
         {
             if (action.Value is not string userGuid) goto default;
             if (!Account.GuidIsValid(userGuid)) goto default;
@@ -237,7 +235,11 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await Account.SaveAccountData(targetUser);
             break;
         }
-        */
+        case AccountActionType.Report:
+        {
+            
+            break;
+        }
         case AccountActionType.UnfollowUser:
         {
             // TODO: Reimplement

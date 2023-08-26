@@ -1,4 +1,4 @@
-namespace SubliminalServer.Account;
+namespace SubliminalServer.DataModel.Account;
 
 public record AccountCredentials
 (

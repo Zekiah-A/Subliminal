@@ -1,4 +1,4 @@
-namespace SubliminalServer;
+namespace SubliminalServer.DataModel.Purgatory;
 
 public enum PurgatoryRatingType
 {

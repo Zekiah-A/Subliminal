@@ -10,19 +10,20 @@ const actionType = {
     UploadDraft: 7,
     DeleteDraft: 8,
     GetDraft: 9,
+    Report: 10,
 
     // Location - Account data
-    UpdateEmail: 10,
-    UpdateNumber: 11,
+    UpdateEmail: 11,
+    UpdateNumber: 12,
     
     //Location - Account profile
-    UpdatePenName: 12,
-    UpdateBiography: 13,
-    UpdateLocation: 14,
-    UpdateRole: 15,
-    UpdateAvatar: 16,
-    PinPoem: 17,
-    UnpinPoem: 18
+    UpdatePenName: 13,
+    UpdateBiography: 14,
+    UpdateLocation: 15,
+    UpdateRole: 16,
+    UpdateAvatar: 17,
+    PinPoem: 18,
+    UnpinPoem: 19
 }
 
 const badgeType = {
@@ -37,8 +38,7 @@ const badgeType = {
 const ratingType = {
     Approve: 0,
     Veto: 1,
-    UndoApprove: 2,
-    UndoVeto: 3
+    Undo: 2,
 }
 
 function getBadgeInfo(badge) {
@@ -102,6 +102,12 @@ async function executeAccountAction(action, value) {
 async function isLoggedIn() {
     if (!localStorage.accountCode) return false
 
-    let response = await (await fetch(serverBaseAddress + "/Signin", { method: "POST", headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}))
+    let response = await fetch(serverBaseAddress + "/Signin", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}
+    )
     return response.ok
 }
+
+console.log("%cYour account's data is held in browser local storage, a thing that can be acessed by putting code in this browser console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
+console.log("%cTL;DR: Never put anything you do not understand here. Uncool things may happen.", "color: blue; font-size: x-large")

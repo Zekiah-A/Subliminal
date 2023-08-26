@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SubliminalServer.Account;
+using SubliminalServer.DataModel.Account;
+using SubliminalServer.DataModel.Purgatory;
 
 namespace SubliminalServer;
 

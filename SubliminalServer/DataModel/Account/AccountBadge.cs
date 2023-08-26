@@ -1,4 +1,4 @@
-namespace SubliminalServer;
+namespace SubliminalServer.DataModel.Account;
 
 public enum AccountBadge
 {

@@ -1,23 +1,19 @@
-namespace SubliminalServer.Account;
+namespace SubliminalServer.DataModel.Account;
 
 /// <summary>
 /// The public facing account info anyone can see/access via the user's account GUID.
 /// Customisable by the user via account actions.
 /// </summary>
-/// <param name="PenName">Username displayed on profile. (Necessary)</param>
-/// <param name="JoinDate">Account join date used miscellaneously. (Necessary)</param>
-/// <param name="Biography">Account description displayed on profile. (Not necessary, nullable)</param>
-/// <param name="Location">Account location displayed on profile. (Not necessary, nullable)</param>
-/// <param name="Role">Account role displayed on profile. (Not necessary, nullable)</param>
-/// <param name="AvatarUrl">Account avatar URL displayed on profile. (Not necessary, nullable)</param>
-/// <param name="PinnedPoems">Account poems that they have pinned displayed on profile. (Necessary) (GUID)</param>
-/// <param name="Badges">Account badges displayed on profile + used for authentication. (Necessary)</param>
-/// <param name="PoemGuids">Account poems that they have uploaded. (Necessary) (GUID)</param>
-/// <param name="Followers">Account followers displayed on profile. (Necessary) (GUID)</param>
-/// <param name="Following">Account following displayed on profile. (Necessary) (GUID)</param>
-public record AccountProfile(string PenName, string JoinDate)
+public class AccountProfile
 {
-    public string PenName { get; set; } = PenName;
+    public AccountProfile(string penName, string joinDate)
+    {
+        JoinDate = joinDate;
+        PenName = penName;
+    }
+
+    public string ProfileKey { get; set; }
+    public string PenName { get; set; }
     public string? Biography { get; set; }
     public string? Location { get; set; }
     public string? Role { get; set; }
@@ -26,4 +22,7 @@ public record AccountProfile(string PenName, string JoinDate)
     public List<string> PinnedPoems { get; set; } = new();
     public List<string> Poems { get; set; } = new();
     public List<string> Following { get; set; } = new();
-};
+
+    /// <summary>Account join date used miscellaneously. (Necessary)</summary>
+    public string JoinDate { get; set; }
+}

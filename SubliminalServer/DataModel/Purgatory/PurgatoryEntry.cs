@@ -1,20 +1,21 @@
 using System.Text.Json.Serialization;
 
-namespace SubliminalServer;
+namespace SubliminalServer.DataModel.Purgatory;
 
 public class PurgatoryEntry
 {
     // Client submitted
-    public string? Summary { get; init; }
-    public string? Tags { get; init; }
-    public bool? CWarning { get; init; }
-    public string? CWarningAdditions { get; init; }
-    public string? PageStyle { get; init; }
-    public string? PageBackground { get; init; }
-    public string? AmendsKey { get; init; }
-    public string? EditsKey { get; init; }
+    public string? Summary { get; set; }
+    public string? Tags { get; set; }
+    public bool? CWarning { get; set; }
+    public string? CWarningAdditions { get; set; }
+    public string? PageStyle { get; set; }
+    public string? PageBackground { get; set; }
+    public string? AmendsKey { get; set; }
+    public string? EditsKey { get; set; }
     
     // Server managed
+    public string EntryKey { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }
     public int AdminApproves { get; set; }

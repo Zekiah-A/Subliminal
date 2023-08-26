@@ -4,7 +4,7 @@ class ContentWarning extends HTMLElement {
         this.attachShadow({ mode: "open" })
     }
 
-    connectedCallback() { // TODO: Fix this.parentElement.parentElement.parentElement JANK
+    connectedCallback() {
         this.shadowRoot.innerHTML = html`
             <div id="contentWarning">
                 <span class="warning-centre">
@@ -16,7 +16,7 @@ ___________________________________________________________
 | or the beliefs of any author in any way.                |
 |                                                         |</pre><pre id="addition"></pre><pre>
 |                                                         |
-| <a class="continue" href="#" onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.style.visibility = 'hidden';">Continue -></a>                                             |
+| <a class="continue" href="#" onclick="event.preventDefault(); this.shadowThis.contentWarning.style.visibility = 'hidden';">Continue -></a>                                             |
 | <a href="../../disclaimer">See Disclaimer -></a>                                       |
 |                                                         |
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
@@ -76,6 +76,7 @@ ___________________________________________________________
             }
         `
         this.shadowRoot.append(style)
+        defineAndInject(this, this.shadowRoot)
 
         let cwInsert = ""
         let addition = this.getAttribute("addition")
@@ -87,7 +88,7 @@ ___________________________________________________________
             chunk = chunk.concat(" |") //add pipe end
             cwInsert = cwInsert.concat(chunk, "\n") //Add \n followed by chunk to end of cwinsert
         }
-        this.shadowRoot.getElementById("addition").textContent = cwInsert
+        this.addition.textContent = cwInsert
     }
 }
 

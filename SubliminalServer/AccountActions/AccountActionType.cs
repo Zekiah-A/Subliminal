@@ -13,6 +13,7 @@ public enum AccountActionType
     UploadDraft,
     DeleteDraft,
     GetDraft,
+    Report,
 
     // Location - Account data
     UpdateEmail,

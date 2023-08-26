@@ -13,9 +13,10 @@ class SubliminalHeader extends HTMLElement {
                 <a href="disclaimer">-&gt; Disclaimer</a>
                 <a href="sounds">-&gt; Sounds</a>
                 <div class="hilight" id="hilight"></div>
-                <custom>
-                    ${this.innerHTML || html`<p>The coolest crowdsourced anthology on the web</p>`}
-                </custom>
+                <div id="right">
+                    <input id="loginButton" onclick="" type="button" value="Login to Subliminal">
+                    <input id="accountButton" id="accountButton" onclick="window.location.href = window.location.origin + '/account'" type="button" value="My subliminal account">
+                </div>
             </div>
             <hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
 
@@ -41,6 +42,7 @@ class SubliminalHeader extends HTMLElement {
                 margin-left: 16px;
                 margin-right: 16px;
                 height: 64px;
+                position: relative;
             }
             
             p {
@@ -88,8 +90,12 @@ class SubliminalHeader extends HTMLElement {
                 transform: rotate(8deg) scale(1.1);
             }
             
-            custom {
+            #right {
                 flex-grow: 1;
+                display: flex;
+                justify-content: right;
+                column-gap: 8px;
+                padding: 8px;
             }
 
             @media screen and (orientation:portrait) {
@@ -111,9 +117,12 @@ class SubliminalHeader extends HTMLElement {
                     flex: 1 1 auto;
                     white-space: nowrap;
                     overflow: hidden;
-                    /*Click hitboxes*/
-                    padding-top: 16px;
-                    padding-bottom: 16px;
+                    height: 100%;
+                    box-sizing: border-box;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             
                 :host > div {
@@ -121,6 +130,10 @@ class SubliminalHeader extends HTMLElement {
                     margin-right: 8px;
                     height: 48px;
                     column-gap: 4px;
+                }
+
+                #right {
+                    padding: 2px;
                 }
             }
 
@@ -141,6 +154,20 @@ class SubliminalHeader extends HTMLElement {
                 child.setAttribute("current", true)
             }
         }
+
+        this.shadowRoot.getElementById("loginButton").onclick = function() {
+            
+        }
+
+        ;(async function(_this){
+            if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
+                _this.shadowRoot.getElementById("right").style.display = 'none'
+                console.warn("WARN: Page has not imported account.js or is requesting nologin. Login UI disabled")
+                return
+            }
+
+            _this.shadowRoot.getElementById(await isLoggedIn() ? "loginButton" : "accountButton").style.display = 'none'
+        })(this)
     }
 }
 
