@@ -139,6 +139,13 @@
             display: none;
         }
 
+        /* Small hack to hide overflowing contents when side has collapsed */
+        #side[collapsed] > div {
+            transition: .0s opacity;
+            transition-delay: .2s;
+            opacity: 0;
+        }
+
         #side > :not(div[close]) {
             display: none;
         }
@@ -266,13 +273,25 @@
         }
 
         #tagContainer > div:hover {
-            background: linear-gradient(45deg, #b92a2a, #e914149c);
             color: white;
         }
 
         #tagContainer > div[add]:hover {
-            background: linear-gradient(45deg, #2ab936, #26e9149c);
             color: white;
+        }
+
+        #tagContainer > div::after {
+            background: linear-gradient(45deg, #b92a2a, #e914149c);
+            opacity: 0;
+            transition: .2s opacity;
+        }
+
+        #tagContainer > div[add]::after  {
+            background: linear-gradient(45deg, #2ab936, #26e9149c);
+        }
+
+        #tagContainer > div:hover::after {
+            opacity: 1;
         }
 
         #tagContainer, #cWarningContainer, #summaryArea {
@@ -349,6 +368,23 @@
             left: 16px;
             display: flex;
             flex-direction: column;
+        }
+
+        .online-editors > div {
+            position: relative;
+            margin-bottom: -16px;
+            display: flex;
+            cursor: pointer;
+            padding-left: 8px;
+            padding-right: 8px;
+            transition: .2s margin-bottom, .2s margin-top, .2s background-color;
+        }
+
+        .online-editors > div:hover {
+            margin-bottom: 0px;
+            margin-top: 8px;
+            background-color: var(--button-opaque);
+            border-radius: 8px;
         }
     
         @media screen and (orientation:portrait) {
@@ -557,7 +593,7 @@
                 <input class="tool" oninput="
                     editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
                     formattingColourRect.style.background = this.value" value="#000000"
-                    style="opacity: 0; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;" type="color">
+                    style="opacity: 0; position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;box-sizing: border-box;padding: 0px;margin: 0px;" type="color">
                 <div id="formattingColourRect" style="background-color: black; width: calc(100% - 2px); height: calc(100% - 2px); margin: 1px;border-radius: 4px;"></div>
             </div>
             <div><div>🖼️</div></div>
@@ -599,7 +635,7 @@
 
     <div class="online-editors">
         Online editors:
-        <div style="position: relative;margin-bottom: -16px; display: flex;">
+        <div>
             <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
             <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
         </div>
@@ -1114,6 +1150,13 @@
             button.style.background =
                 "radial-gradient(at left " + (event.screenX - button.offsetLeft) +
                 "px top " + (event.screenY - button.offsetTop) + "px, darkgray, var(--background-opaque)"
+        }
+    })
+
+    formattingToolbar.addEventListener("mouseleave", event => {
+        for (let button of formattingToolbar.children) {
+            if (button.className == "separator") continue
+            button.style.background = 'none'
         }
     })
 

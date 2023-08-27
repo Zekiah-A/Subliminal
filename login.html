@@ -12,16 +12,20 @@
 </head>
 <body>
     <subliminal-header nologin="true"></subliminal-header>
-    <login-signup></login-signup>
+    <login-signup id="loginSignup"></login-signup>
     <a href="./" class="back"> &lt;- Back</a>
 </body>
 <script>
     const params = new URLSearchParams(window.location.search);
     const referer = params.get("referer")
 
-    //on login finished:
-    //if (referer) {
-    //    window.location.href = window.location.origin + referer;
-    //}
+    loginSignup.addEventListener("finished", (e) => {
+        if (referer) {
+            window.location.href = window.location.origin + referer
+            return
+        }
+
+        window.location.href = window.location.origin
+    })
 </script>
 </html>

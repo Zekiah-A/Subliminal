@@ -14,8 +14,12 @@ class SubliminalHeader extends HTMLElement {
                 <a href="sounds">-&gt; Sounds</a>
                 <div class="hilight" id="hilight"></div>
                 <div id="right">
-                    <input id="loginButton" onclick="" type="button" value="Login to Subliminal">
-                    <input id="accountButton" id="accountButton" onclick="window.location.href = window.location.origin + '/account'" type="button" value="My subliminal account">
+                    <input id="loginButton" type="button" value="Login to Subliminal"
+                        onclick="
+                            let loginSignup = createOrUpdateFromData('login-signup');
+                            if (loginSignup) this.parentDocument.body.appendChild(loginSignup)">
+                    <input id="accountButton" type="button" value="My subliminal account"
+                        onclick="window.location.href = window.location.origin + '/account'">
                 </div>
             </div>
             <hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
@@ -113,7 +117,7 @@ class SubliminalHeader extends HTMLElement {
                 }
             
                 a {
-                    font-size: 4vw;
+                    font-size: 3.4vw;
                     flex: 1 1 auto;
                     white-space: nowrap;
                     overflow: hidden;
@@ -148,6 +152,7 @@ class SubliminalHeader extends HTMLElement {
             }
         `
         this.shadowRoot.append(style)
+        defineAndInject(this, this.shadowRoot)
 
         for (let child of this.shadowRoot.children[0].childNodes) {
             if (child.href == location.toString().replace(".html", "")) {
@@ -155,13 +160,9 @@ class SubliminalHeader extends HTMLElement {
             }
         }
 
-        this.shadowRoot.getElementById("loginButton").onclick = function() {
-            
-        }
-
         ;(async function(_this){
             if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
-                _this.shadowRoot.getElementById("right").style.display = 'none'
+                _this.right.style.display = 'none'
                 console.warn("WARN: Page has not imported account.js or is requesting nologin. Login UI disabled")
                 return
             }

@@ -13,9 +13,9 @@ class LoginSignup extends HTMLElement {
         this.shadowRoot.innerHTML = html`
             <link rel="stylesheet" href="styles.css"> <!-- TODO: Find a more efficient way if possible, perhaps a separate popup CSS which styles imports, but just this component could import -->
             <div id="login" class="popup" currentpage="signin">
-                <div style="display: flex;">
+                <div style="display: flex;flex-grow: 1;">
                     <div id="back" onclick="this.shadowThis.login.setAttribute('currentpage', 'signin')">
-                        <svg xmlns="http://www.w3.org/2000/svg" id="back" viewBox="0 -960 960 960" height="32" width="32"><path d="m274-450 248 248-42 42-320-320 320-320 42 42-248 248h526v60H274Z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" height="32" width="32"><path d="m274-450 248 248-42 42-320-320 320-320 42 42-248 248h526v60H274Z"></path></svg>
                     </div>
                     <h2>Login to Subliminal:</h2>
                 </div>
@@ -34,7 +34,7 @@ class LoginSignup extends HTMLElement {
                 <div id="loginSignup" class="page">
                     <input id="loginPenName" type="text" class="popup-input" oninput="this.shadowThis.validateLoginSignup()"
                         placeholder="Pen name*">
-                    <input id="loginEmail" type="text" oninput="this.shadowThis.validateLoginSignup()" class="popup-input" placeholder="Email">
+                    <input id="loginEmail" type="text" oninput="this.shadowThis.validateLoginSignup()" class="popup-input" placeholder="Email*">
                     <div>
                         <label for="loginPromise">I promise to be a cool member of subliminal*</label>
                         <input id="loginPromise" type="checkbox" oninput="this.shadowThis.validateLoginSignup()">
@@ -64,8 +64,12 @@ class LoginSignup extends HTMLElement {
                             width="64" height="64">
                     </div>
                     <br>
-                    <div id="loginClose" class="popup-button"
-                        onclick="login.setAttribute('currentpage', 'signin'); login.style.display = 'none';" disabled="">Close
+                    <div id="loginClose" class="popup-button" onclick="
+                            this.shadowThis.login.setAttribute('currentpage', 'signin')
+                            this.shadowThis.login.style.display = 'none'
+                            const finishEvent = new CustomEvent('finished', { type: 'signup' })
+                            this.dispatchEvent(finishEvent)
+                        " disabled="">Close
                     </div>
                 </div>
                 <div id="loginError" class="page">
@@ -83,9 +87,17 @@ class LoginSignup extends HTMLElement {
                 display: flex;
                 flex-direction: column;
                 max-width: 400px;
-                min-height: 200px;
+                max-height: 200px;
                 height: auto;
-                transition: .1s min-height;
+                transition: .2s max-height;
+            }
+
+            #login[currentpage="signup"] {
+                max-height: 220px;
+            }
+
+            #login[currentpage="code"] {
+                max-height: 680px;
             }
 
             #back {
@@ -112,32 +124,12 @@ class LoginSignup extends HTMLElement {
             }
             
             #login > .page {
-                flex-grow: 1;
                 flex-direction: column;
                 row-gap: 4px;
             }
 
-            #login[currentpage="signup"] {
-                min-height: 220px;
-            }
-
-            #login[currentpage="code"] {
-                min-height: 680px;
-            }
-
-            #login[currentpage="signin"] > #loginSignin {
-                display: flex !important;
-            }
-            
-            #login[currentpage="signup"] > #loginSignup {
-                display: flex !important;
-            }
-
-            #login[currentpage="loginerror"] > #loginError {
-                display: flex !important;
-            }
-            
-            #login[currentpage="code"] > #loginCode {
+            #login[currentpage="signin"] > #loginSignin, #login[currentpage="signup"] > #loginSignup,
+                #login[currentpage="loginerror"] > #loginError, #login[currentpage="code"] > #loginCode {
                 display: flex !important;
             }
         `
@@ -147,12 +139,13 @@ class LoginSignup extends HTMLElement {
         // all elements with IDs on this component's `this` 
         defineAndInject(this, this.shadowRoot)
     }
+
     async signup(penName, email) {
         try {
             const response = await fetch(serverBaseAddress + "/Signup", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(penName) // Convert to JSON format
+                body: { PenName: JSON.stringify(penName), Email: JSON.stringify(email) } // Convert to JSON format
             })
             
             if (!response.ok) {
@@ -180,7 +173,6 @@ class LoginSignup extends HTMLElement {
         catch (error) {
             this.confirmFail(error)
         }
-        
     }
     
     //Impossible to log in without code, GUID can be retrieved though
@@ -207,6 +199,9 @@ class LoginSignup extends HTMLElement {
         catch (error) {
             this.confirmFail(error)
         }
+
+        const finishEvent = new CustomEvent("finished", { type: "signin" })
+        this.dispatchEvent(finishEvent)
     }
 
     confirmFail(err) {
