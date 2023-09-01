@@ -6,8 +6,7 @@ namespace SubliminalServer;
 
 public class DatabaseContext : DbContext
 {
-    public DbSet<AccountProfile> AccountProfiles { get; set; }
-    public DbSet<AccountData> AccountDatas { get; set; }
+    public DbSet<AccountData> Accounts { get; set; }
     public DbSet<PurgatoryEntry> PurgatoryEntries { get; set; }
     public DbSet<PurgatoryAnnotation> PurgatoryAnnotations { get; set; }
     public DbSet<PurgatoryRating> PurgatoryRatings { get; set; }

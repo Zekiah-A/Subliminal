@@ -32,14 +32,15 @@ hr {
     margin: 8px;
 }
 
-button, input[type="button"] {
+button, input[type="button"], .options-parent {
     background-color: var(--button-opaque);
     color: var(--text-colour);
     border: 1px solid #8f8f9d;
     border-radius: 4px;
+    cursor: default;
 }
 
-button:hover, input[type="button"]:hover {
+button:hover, input[type="button"]:hover, .options-parent:hover {
     background-color: #85859269;
 }
 
@@ -341,21 +342,43 @@ h2 {
     max-height: 32px;
 }
 
+.options-parent {
+    padding-left: 4px;
+    padding-right: 4px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    position: relative;
+    user-select: none;
+}
+
 .options {
-    background-color: var(--button-opaque);
+    background-color: var(--button-transparent);
     border-radius: 4px;
-    margin-top: 4px;
+    margin-top: 8px;
     border: 1px solid darkgray;
     pointer-events: all !important;
     display: none;
     user-select: none;
+    position: absolute;
+    width: max-content;
+    top: 100%;
 }
 
-.options div[selected] {
+.options > div {
+    padding-left: 4px;
+    padding-right: 4px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.options > div[selected] {
     background-color: darkgray;
 }
 
-.options div:hover {
+.options > div:hover {
     background-color: darkgray;
 }
 

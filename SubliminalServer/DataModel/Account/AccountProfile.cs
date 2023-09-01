@@ -1,28 +1,30 @@
 namespace SubliminalServer.DataModel.Account;
 
 /// <summary>
-/// The public facing account info anyone can see/access via the user's account GUID.
+/// The public facing account info anyone can see/access via the user's account key.
 /// Customisable by the user via account actions.
 /// </summary>
 public class AccountProfile
 {
-    public AccountProfile(string penName, string joinDate)
-    {
-        JoinDate = joinDate;
-        PenName = penName;
-    }
-
-    public string ProfileKey { get; set; }
+    // Unique, Primary key
+    public string AccountKey { get; set; }
+    
+    // Unique
+    public string Username { get; set; }
+    
     public string PenName { get; set; }
     public string? Biography { get; set; }
     public string? Location { get; set; }
     public string? Role { get; set; }
     public string? AvatarUrl { get; set; }
-    public List<AccountBadge> Badges { get; set; } = new() { AccountBadge.New };
-    public List<string> PinnedPoems { get; set; } = new();
-    public List<string> Poems { get; set; } = new();
-    public List<string> Following { get; set; } = new();
-
-    /// <summary>Account join date used miscellaneously. (Necessary)</summary>
+    
+    // Navigation property
+    public List<BadgeType> Badges { get; set; }
+    // Navigation property
+    public List<string> PinnedPoems { get; set; }
+    // Navigation property
+    public List<string> Poems { get; set; }
+    // Navigation property
+    public List<string> Following { get; set; }
     public string JoinDate { get; set; }
 }

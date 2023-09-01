@@ -20,9 +20,10 @@ class LoginSignup extends HTMLElement {
                     <h2>Login to Subliminal:</h2>
                 </div>
                 <div id="loginSignin" class="page">
-                    <input id="loginSigninInput" type="text" class="popup-input" placeholder="Account code">
+                    <input id="loginSigninUsername" type="text" class="popup-input" placeholder="Username">
+                    <input id="loginSigninEmail" type="text" class="popup-input" placeholder="Email">
                     <input id="loginQRInput" type="file" accept="image/*" capture="environment" style="display: none;">
-                    <div class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninInput.value); this.shadowThis.login.style.display = 'none';"
+                    <div class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value); this.shadowThis.login.style.display = 'none';"
                         style="margin-bottom: 8px;">Login</div>
 
                     <div style="display:flex;column-gap:8px;margin-top:8px">
@@ -32,8 +33,8 @@ class LoginSignup extends HTMLElement {
                     </div>
                 </div>
                 <div id="loginSignup" class="page">
-                    <input id="loginPenName" type="text" class="popup-input" oninput="this.shadowThis.validateLoginSignup()"
-                        placeholder="Pen name*">
+                    <input id="loginUsername" type="text" class="popup-input" oninput="this.shadowThis.validateLoginSignup()"
+                        placeholder="Username*">
                     <input id="loginEmail" type="text" oninput="this.shadowThis.validateLoginSignup()" class="popup-input" placeholder="Email*">
                     <div>
                         <label for="loginPromise">I promise to be a cool member of subliminal*</label>
@@ -42,7 +43,7 @@ class LoginSignup extends HTMLElement {
                     <div style="display:flex;column-gap:8px;margin-top:8px">
                         <div id="signupButton" class="popup-button"
                             onclick="
-                                this.shadowThis.signup(this.shadowThis.loginPenName.value, this.shadowThis.loginEmail.value)
+                                this.shadowThis.signup(this.shadowThis.loginUsername.value, this.shadowThis.loginEmail.value)
                                     .then(() => {
                                         this.shadowThis.login.setAttribute('currentpage', 'code');
                                         setTimeout(() => this.shadowThis.loginClose.removeAttribute('disabled'), 4000);
@@ -87,17 +88,16 @@ class LoginSignup extends HTMLElement {
                 display: flex;
                 flex-direction: column;
                 max-width: 400px;
-                max-height: 200px;
-                height: auto;
-                transition: .2s max-height;
+                height: 230px;
+                transition: .2s height;
             }
 
             #login[currentpage="signup"] {
-                max-height: 220px;
+                height: 220px;
             }
 
             #login[currentpage="code"] {
-                max-height: 680px;
+                height: 680px;
             }
 
             #back {
@@ -140,24 +140,24 @@ class LoginSignup extends HTMLElement {
         defineAndInject(this, this.shadowRoot)
     }
 
-    async signup(penName, email) {
+    async signup(username, email) {
         try {
             const response = await fetch(serverBaseAddress + "/Signup", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: { PenName: JSON.stringify(penName), Email: JSON.stringify(email) } // Convert to JSON format
+                body: { Username: JSON.stringify(username), Email: JSON.stringify(email) } // Convert to JSON format
             })
-            
+
             if (!response.ok) {
                 confirmFail("Signup response was denied.")
                 return
             }
-        
+
             const dataObject = await response.json()
             localStorage.accountCode = dataObject.code
             localStorage.accountGuid = dataObject.guid
             loginCodeText.textContent = dataObject.code
-        
+
             const qr = new QRious({
                 element: loginCodeQR,
                 background: "white",
@@ -167,33 +167,34 @@ class LoginSignup extends HTMLElement {
                 value: window.location + "?accountCode=" + dataObject.code
             })
             loginCodeQR.src = qr.toDataURL()
-        
+
             showMyAccount()
         }
         catch (error) {
             this.confirmFail(error)
         }
     }
-    
+
     //Impossible to log in without code, GUID can be retrieved though
-    async signin(code) {
+    async signin(username, email) {
         try {
             const signinResponse = await fetch(serverBaseAddress + "/Signin", {
-              method: "POST",
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(code) // Convert to JSON format
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ Username: username, Email: email })
             })
-        
+
             if (!signinResponse.ok) {
                 this.confirmFail("Signin response was denied.")
                 return
             }
-        
+
             const signinData = await signinResponse.json()
         
-            localStorage.accountCode = code
-            localStorage.accountGuid = signinData.guid
-        
+            localStorage.accountUsername = username
+            localStorage.accountEmail = email
+            //localStorage.accountGuid = signinData.guid
+
             showMyAccount()
         }
         catch (error) {
@@ -208,11 +209,11 @@ class LoginSignup extends HTMLElement {
         this.errorMessage.textContent = err
         this.login.setAttribute("currentPage", "loginerror")
     }
-    
+
     validateLoginSignup() {
         const validEmailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-        if (!this.loginPromise.checked || this.loginPenName.value.length == 0
+        if (!this.loginPromise.checked || this.loginUsername.value.length == 0
             || !this.loginEmail.value.match(validEmailPattern)) {
             this.signupButton.setAttribute("disabled", "true")
         }

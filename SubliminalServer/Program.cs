@@ -18,8 +18,7 @@ var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImag
 var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
 
-var random = new Random();
-await using var database = new DatabaseContext(Path.Join(dataDir.FullName, "subliminal.db"));
+var database = new DatabaseContext(Path.Join(dataDir.FullName, "subliminal.db"));
 ServerConfig? config = null;
 
 if (File.Exists(configFile.Name))
@@ -30,7 +29,10 @@ if (File.Exists(configFile.Name))
 if (config is null)
 {
     await using var stream = File.OpenWrite(configFile.Name);
-    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false));
+    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false), new JsonSerializerOptions()
+    {
+        WriteIndented = true,
+    });
     await stream.FlushAsync();
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
@@ -71,10 +73,7 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 var httpServer = builder.Build();
-
-httpServer.Urls.Add(
-    $"{(config.UseHttps ? "https" : "http")}://*:{config.Port}"
-);
+httpServer.Urls.Add($"{(config.UseHttps ? "https" : "http")}://*:{config.Port}");
 
 httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
@@ -84,12 +83,6 @@ httpServer.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(profileImageDir.FullName),
     RequestPath = "/ProfileImage"
-});
-
-httpServer.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))),
-    RequestPath = "/Purgatory"
 });
 
 static string HashSha256String(string text)
@@ -106,31 +99,31 @@ httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
     return Results.Ok();
 });
 
-httpServer.MapGet("/PurgatoryPicks", async () =>
+httpServer.MapGet("/PurgatoryPicks", () =>
 {
-    var records = await database.FindRecords<PurgatoryEntry, bool>("Pick", true);
-    return Results.Json(records.Select(structure => structure.Data));
+    var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
+    return Results.Json(records);
 });
 
-httpServer.MapGet("/PurgatoryNew", () =>
+httpServer.MapGet("/PurgatoryAfter", (PurgatoryBeforeAfter since) =>
+{
+    
+});
+
+httpServer.MapGet("/PurgatoryBefore", (PurgatoryBeforeAfter before) =>
+{
+    
+});
+
+httpServer.MapGet("/PurgatoryReccomended", () =>
     Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
-        .Take(10)
         .Select(file => new FileInfo(file))
-        .OrderBy(file => file.CreationTime)
         .Reverse()
         .Select(file => file.Name)
         .ToArray()
 );
 
-httpServer.MapGet("/PurgatoryAll", () =>
-    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
-        .Select(file => new FileInfo(file))
-        .Reverse()
-        .Select(file => file.Name)
-        .ToArray()
-);
-
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
+httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
 {
     entry.Approves = 0;
     entry.Vetoes = 0;
@@ -178,9 +171,15 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     return Results.Json(credentials, Utils.DefaultJsonOptions);
 });
 
-//Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
-httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
+//Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation.
+httpServer.MapPost("/Signin/{token}", async ([FromBody] string signinCode, HttpContext context) =>
 {
+    
+});
+
+httpServer.MapPost("/Signin/{name}:{email}", async ([FromBody] string signinCode, HttpContext context) =>
+{
+    var account = database.Accounts.First()
     var account = (await database.FindRecords<AccountData, string>("Code", signinCode)).FirstOrDefault();
     return account is null ? Results.Unauthorized() : Results.Json(account.Data);
 });

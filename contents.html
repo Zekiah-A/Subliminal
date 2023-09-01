@@ -204,6 +204,16 @@
             border: 1px solid gray;
         }
 
+        .classics-header {
+            top: 78px;
+            display: flex;
+            column-gap: 8px;
+            position: sticky;
+            line-height: 40px;
+            z-index: 3;
+            margin-top: 16px;
+        }
+
 
         @media screen and (orientation:portrait) {
             .grid-container {
@@ -211,16 +221,12 @@
             }
 
             .searchbar {
-                position: fixed;
-                width: calc(100% - 40px);
-                padding-left: 10px;
-                padding-right: 10px;
-                line-height: 40px;
+                height: 48px;
+                flex-grow: 1;
+            }
+
+            .classics-header {
                 top: 64px;
-                z-index: 2;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 3;
             }
 
             .grid-sub-container {
@@ -253,9 +259,6 @@
 <body class="contents-div-centre" onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
     <subliminal-header></subliminal-header>
     <br><br><br>
-    <div style="display: flex;margin-top: 40px;column-gap: 8px;">
-        <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-    </div>
     <div class="poem-preview">
         <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance">
 
@@ -322,6 +325,25 @@
     </div>
     -->
     <h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
+    <div class="classics-header">
+        <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
+        <div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+            <div>Volume ⯆</div>
+            <div class="options" style="display: none;">
+                <div>All</div>
+                <hr>
+                <div>War and Phrenics</div>
+                <div>Really Stupid Stuff</div>
+                <div>Parodies and Adaptations</div>
+                <hr>
+                <div>Idiots</div>
+                <div>Sublime and Revelation</div>
+                <div>Tales and Tomes</div>
+                <hr>
+                <div>Copypastas</div>
+            </div>
+        </div>
+    </div>
     <div class="grid-container">
         <div>
             <h3>Volume 1: (Phrenes and Memes)</h3>
