@@ -17,7 +17,6 @@ public enum AccountActionType
 
     // Location - Account data
     UpdateEmail,
-    UpdateNumber,
     
     // Location - Account profile
     UpdatePenName,

@@ -4,27 +4,32 @@ namespace SubliminalServer.DataModel.Purgatory;
 
 public class PurgatoryEntry
 {
+    // Unique, Primary key
+    public string EntryKey { get; set; }
+
     // Client submitted
-    public string? Summary { get; set; }
-    public string? Tags { get; set; }
-    public bool? CWarning { get; set; }
-    public string? CWarningAdditions { get; set; }
+    // Navigation property to PurgatoryTag
+    public List<PurgatoryTag> Tags { get; set; }
+    public string Summary { get; set; }
+    public bool CWarning { get; set; }
+    public string CWarningAdditions { get; set; }
     public string? PageStyle { get; set; }
     public string? PageBackground { get; set; }
+    public string PoemName { get; set; }
+    public string PoemContent { get; set; }
+
+    // Foreign key AccountData
+    public string? AuthorKey { get; set; }
+    // Foreign key PurgatoryEntry
     public string? AmendsKey { get; set; }
+    // Foreign key PurgatoryEntry
     public string? EditsKey { get; set; }
     
     // Server managed
-    public string EntryKey { get; set; }
     public int Approves { get; set; }
     public int Vetoes { get; set; }
-    public int AdminApproves { get; set; }
-    public string DateCreated { get; set; }
+    public DateTime DateCreated { get; set; }
     public bool Pick { get; set; }
-
-    [JsonInclude] public string PoemName { get; set; }
-    [JsonInclude] public string PoemContent { get; set; }
-    [JsonInclude] public string AuthorKey { get; set; }
 }
 
 /*

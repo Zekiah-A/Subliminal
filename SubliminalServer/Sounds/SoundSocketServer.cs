@@ -1,3 +1,4 @@
+using DataProto;
 using WatsonWebsocket;
 
 namespace SubliminalServer.Sounds;
@@ -7,16 +8,18 @@ public class SoundsSocketServer
     WatsonWsServer app = new WatsonWsServer(1234);
     Dictionary<ClientMetadata, SoundsClient> clients = new();
 
-    public async Task StartAsync()
+    public void Start()
     {
-        app.ClientConnected += (object sender, ClientConnectedEventArgs args) =>
+        app.ClientConnected += (sender, args) =>
         {
             clients.Add(args.Client, new SoundsClient());
         };
 
-        app.MessageReceived += (object sender, MessageReceivedEventArgs args) =>
+        app.MessageReceived += (sender, args) =>
         {
-            switch ((SoundsClientPacket) args.Data[0])
+            var packet = new ReadablePacket(args.Data.ToArray());
+            
+            switch ((SoundsClientPacket) packet.ReadByte())
             {
                 case SoundsClientPacket.Play:
                     return;
@@ -45,7 +48,7 @@ public class SoundsSocketServer
             }
         };
 
-        app.ClientDisconnected += (object sender, ClientDisconnectedEventArgs args) =>
+        app.ClientDisconnected += (sender, args) =>
         {
             clients.Remove(args.Client);
         };

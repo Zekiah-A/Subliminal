@@ -12,6 +12,13 @@ using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 //Webserver configuration
 const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+var defaultJsonOptions = new JsonSerializerOptions
+{
+    PropertyNameCaseInsensitive = true,
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    WriteIndented = true,
+    IncludeFields = true
+};
 
 var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
@@ -52,6 +59,14 @@ foreach (var dirPath in new[] { dataDir, profileImageDir,new DirectoryInfo(Path.
 }
 Console.ResetColor();
 
+// Helpers
+static string HashSha256String(string text)
+{
+    var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
+    return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
+}
+
+// Build web application and configure services
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration["Kestrel:Certificates:Default:Path"] = config.Certificate;
@@ -72,6 +87,8 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
+// Configure middlewares and runtime services, including global authorization middleware that will
+// validate accounts for all site endpoints
 var httpServer = builder.Build();
 httpServer.Urls.Add($"{(config.UseHttps ? "https" : "http")}://*:{config.Port}");
 
@@ -85,11 +102,11 @@ httpServer.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProfileImage"
 });
 
-static string HashSha256String(string text)
-{
-    var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
-    return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
-}
+httpServer.UseMiddleware<AuthorizationMiddleware>(database);
+
+var authRequiredEndpoints = new List<string>();
+var rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
+var sizeLimitEndpoints = new Dictionary<string, PayloadSize>(); // Should only really be needed on POST endpoints
 
 httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
 {
@@ -98,61 +115,63 @@ httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
     Console.ResetColor();
     return Results.Ok();
 });
+authRequiredEndpoints.Add("/PurgatoryReport");
+rateLimitEndpoints.Add("/PurgatoryReport", (1, TimeSpan.FromSeconds(5)));
+sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
 httpServer.MapGet("/PurgatoryPicks", () =>
 {
     var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
     return Results.Json(records);
 });
+rateLimitEndpoints.Add("/PurgatoryPicks", (1, TimeSpan.FromSeconds(2)));
 
 httpServer.MapGet("/PurgatoryAfter", (PurgatoryBeforeAfter since) =>
 {
     
 });
+rateLimitEndpoints.Add("/PurgatoryAfter", (1, TimeSpan.FromSeconds(2)));
+
 
 httpServer.MapGet("/PurgatoryBefore", (PurgatoryBeforeAfter before) =>
 {
     
 });
+rateLimitEndpoints.Add("/PurgatoryBefore", (1, TimeSpan.FromSeconds(2)));
 
-httpServer.MapGet("/PurgatoryReccomended", () =>
+
+httpServer.MapGet("/PurgatoryRecommended", () =>
     Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
         .Select(file => new FileInfo(file))
         .Reverse()
         .Select(file => file.Name)
         .ToArray()
 );
+authRequiredEndpoints.Add("/PurgatoryRecommended");
+rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
 
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry) =>
+httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, HttpContext context) =>
 {
     entry.Approves = 0;
     entry.Vetoes = 0;
-    entry.AdminApproves = 0;
     entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture);
     entry.Pick = false;
 
-    var poem = await database.CreateRecord<PurgatoryEntry>(entry);
+    var account = (AccountData) context.Items["Account"]!;
     
-    //Account-poem link if uploaded by a user who is signed in
-    if (entry.Code is null)
-    {
-        return Results.Text(poem);
-    }
     
-    var account = (await database.FindRecords<AccountData, string>("Code", entry.Code)).FirstOrDefault();
-
-    if (account is null)
-    {
-        return Results.Text(poem);
-    }
+    database.PurgatoryEntries.Add(entry);
     
     var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
     profile.Data.Poems.Add(poem);
     
     await database.UpdateRecord(profile);
 
-    return Results.Text(poem);
+    return Results.Ok();
 });
+authRequiredEndpoints.Add("/PurgatoryUpload");
+rateLimitEndpoints.Add("/PurgatoryUpload", (1, TimeSpan.FromSeconds(60)));
+sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromMegabytes(1));
 
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
 httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
@@ -168,21 +187,24 @@ httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
     await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
 
     var credentials = new { Code = code, Guid = profileKey };
-    return Results.Json(credentials, Utils.DefaultJsonOptions);
+    return Results.Json(credentials);
 });
+rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(60)));
+sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromKilobytes(100));
 
-//Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation.
+// Allows a user to signin and receive account data
 httpServer.MapPost("/Signin/{token}", async ([FromBody] string signinCode, HttpContext context) =>
 {
     
 });
-
-httpServer.MapPost("/Signin/{name}:{email}", async ([FromBody] string signinCode, HttpContext context) =>
+httpServer.MapPost("/Signin/{name}:{email}", async (string name, string email, HttpContext context) =>
 {
-    var account = database.Accounts.First()
+    var account = database.Accounts.First(account => account.Username == name && account.Email == email);
     var account = (await database.FindRecords<AccountData, string>("Code", signinCode)).FirstOrDefault();
     return account is null ? Results.Unauthorized() : Results.Json(account.Data);
 });
+rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
+sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(100));
 
 //Get public facing data for an account
 httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
@@ -190,20 +212,11 @@ httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
     var profile = await database.GetRecord<AccountProfile>(profileKey);
     return profile is null ? Results.NotFound() : Results.Json(profile);
 });
+rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
 
-
-httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpContext context) =>
+httpServer.MapPost("/ExecuteAccountAction", (AccountAction action, HttpContext context) =>
 {
-    var account = (await database.FindRecords<AccountData, string>(nameof(AccountData.CodeHash), action.Code)).FirstOrDefault();
-    
-    if (account is null)
-    {
-        return Results.Unauthorized();
-    }
-
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
-    
-    switch (action.ActionType)
+     switch (action.ActionType)
     {
         case AccountActionType.BlockUser:
         {
@@ -245,7 +258,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(account);
             break;
         }
-        
         case AccountActionType.LikePoem:
         {
             if (action.Value is not string poemGuid) goto default;
@@ -258,7 +270,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(account);
             break;
         }
-        
         case AccountActionType.UnlikePoem:
         {
             if (action.Value is not string poemKey) goto default;
@@ -272,7 +283,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(account);
             break;
         }
-        
         case AccountActionType.PinPoem:
         {
             if (action.Value is not string poemGuid) goto default;
@@ -285,7 +295,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-        
         case AccountActionType.UnpinPoem:
         {
             if (action.Value is not string poemKey) goto default;
@@ -299,7 +308,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-        
         case AccountActionType.UpdateEmail:
         {
             if (action.Value is not string email) goto default;
@@ -308,16 +316,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(account);
             break;
         }
-        
-        case AccountActionType.UpdateNumber:
-        {
-            if (action.Value is not string number) goto default;
-            // TODO: Number verification
-            account.Data.PhoneNumber = number;
-            await database.UpdateRecord(account);
-            break;
-        }
-        
         case AccountActionType.UpdatePenName:
         {
             if (action.Value is not string penName) goto default;
@@ -325,7 +323,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-        
         case AccountActionType.UpdateBiography:
         {
             if (action.Value is not string biography) goto default;
@@ -333,7 +330,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-
         case AccountActionType.UpdateLocation:
         {
             if (action.Value is not string location) goto default;
@@ -341,7 +337,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-
         case AccountActionType.UpdateRole:
         {
             if (action.Value is not string role) goto default;
@@ -349,7 +344,6 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
             await database.UpdateRecord(profile);
             break;
         }
-
         case AccountActionType.UpdateAvatar:
         {
             if (action.Value is not string avatarUrl) goto default;
@@ -411,20 +405,60 @@ httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpCon
 		        _ => entry.Data.Vetoes
 		    };
 
+            database.SaveChanges();
 		    await database.UpdateRecord(entry);
             break;
         }
         // TODO: Implement purgatory drafts here
         default:
         {
-            var stream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(stream, action);
-            return Results.Problem("Specified account action failed, had an invalid value type, or did not exist." + Encoding.UTF8.GetString(stream.ToArray()));
+            return Results.Problem("Specified account action failed, had an invalid value type, or did not exist." +
+                JsonSerializer.Serialize(action));
         }
     }
     
     return Results.Ok();
 });
+authRequiredEndpoints.Add("/ExecuteAccountAction");
+rateLimitEndpoints.Add("/ExecuteAccountAction", (1, TimeSpan.FromMilliseconds(100)));
+sizeLimitEndpoints.Add("/Signin", PayloadSize.FromMegabytes(10)); // TODO: Separate out account actions so each can have their own
 
+// Endpoints that enforce Account/IP rate limiting
+foreach (var endpointArgsPair in rateLimitEndpoints)
+{
+    httpServer.MapWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<RateLimitMiddleware>(endpointArgsPair.Value.RequestLimit, endpointArgsPair.Value.TimeInterval);
+        }
+    );
+}
+
+foreach (var endpointArgsPair in sizeLimitEndpoints)
+{
+    httpServer.MapWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<RequestSizeLimitMiddleware>(endpointArgsPair.Value);
+        }
+    );
+}
+
+// Endpoints that require an account to access
+foreach (var endpoint in authRequiredEndpoints)
+{
+    httpServer.MapWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpoint),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<EnsureAuthorizationMiddleware>();
+        }
+    );
+}
 
 await httpServer.RunAsync();

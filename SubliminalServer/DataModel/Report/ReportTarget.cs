@@ -1,6 +1,6 @@
 namespace SubliminalServer.DataModel.Report;
 
-public enum ReportTarget
+public enum ReportTargetType
 {
     Purgatory,
     Account,

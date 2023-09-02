@@ -2,11 +2,11 @@ namespace SubliminalServer.DataModel.Account;
 
 public class AccountBadge
 {
-    public int Id { get; set; }
-    public string BadgeName { get; set; }
+    public BadgeType BadgeType { get; set; }
+    public DateTime DateAwarded { get; set; }
 
-    // Foreign key property
-    public string AccountProfileAccountKey { get; set; }
+    // Foreign key AccountData
+    public string AccountKey { get; set; }
     
     // Navigation property to the parent AccountProfile
     public AccountProfile AccountProfile { get; set; }

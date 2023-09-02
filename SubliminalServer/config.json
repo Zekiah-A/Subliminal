@@ -1,1 +1,6 @@
-{"Certificate":"","Key":"","Port":1234,"UseHttps":false}
+{
+    "Certificate": "",
+    "Key": "",
+    "Port": 1234,
+    "UseHttps": false
+}

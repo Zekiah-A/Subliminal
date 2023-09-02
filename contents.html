@@ -274,9 +274,9 @@
             <div>Liked</div>
             <tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
         </div>
-        <div onclick="addPurgatoryEntries('all')">
-            <div>All</div>
-            <tooltip class="button-tooltip">Every poem in the purgatory! Be warned: The list may be quite long...</tooltip>
+        <div onclick="addPurgatoryEntries('recommended')">
+            <div>For me</div>
+            <tooltip class="button-tooltip">Poems recommended for you based on your past activity.</tooltip>
         </div>
     </div>
     <div id="purgatoryFlex">
@@ -671,6 +671,13 @@
             button.style.background =
                 "radial-gradient(at left " + (event.screenX - button.offsetLeft) +
                 "px top " + (event.screenY - button.offsetTop) + "px, darkgray, var(--background-opaque)"
+        }
+    })
+
+    filtersBar.addEventListener("mouseleave", event => {
+        for (let button of filtersBar.children) {
+            if (button.className == "separator") continue
+            button.style.background = 'none'
         }
     })
 </script>
