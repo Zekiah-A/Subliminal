@@ -1,14 +1,22 @@
 using System.Globalization;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.AccountActions;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Purgatory;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
+
+// EFCore database setup:
+// dotnet tool install --global dotnet-ef
+// dotnet add package Microsoft.EntityFrameworkCore.Design
+// dotnet ef migrations add InitialCreate
+// dotnet ef database update
 
 //Webserver configuration
 const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
@@ -24,8 +32,9 @@ var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
 var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
+var dbPath = Path.Join(dataDir.FullName, "subliminal.db");
 
-var database = new DatabaseContext(Path.Join(dataDir.FullName, "subliminal.db"));
+//var database = new DatabaseContext(dbPath);
 ServerConfig? config = null;
 
 if (File.Exists(configFile.Name))
@@ -87,6 +96,11 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlite($"Data Source={dbPath}");
+});
+
 // Configure middlewares and runtime services, including global authorization middleware that will
 // validate accounts for all site endpoints
 var httpServer = builder.Build();
@@ -102,7 +116,9 @@ httpServer.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProfileImage"
 });
 
-httpServer.UseMiddleware<AuthorizationMiddleware>(database);
+httpServer.UseMiddleware<AuthorizationMiddleware>();
+
+var database = httpServer.Services.GetRequiredService<DatabaseContext>();
 
 var authRequiredEndpoints = new List<string>();
 var rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
@@ -149,12 +165,12 @@ httpServer.MapGet("/PurgatoryRecommended", () =>
 );
 authRequiredEndpoints.Add("/PurgatoryRecommended");
 rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
-
+/*
 httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, HttpContext context) =>
 {
     entry.Approves = 0;
     entry.Vetoes = 0;
-    entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+    entry.DateCreated = DateTime.Now;
     entry.Pick = false;
 
     var account = (AccountData) context.Items["Account"]!;
@@ -422,6 +438,7 @@ httpServer.MapPost("/ExecuteAccountAction", (AccountAction action, HttpContext c
 authRequiredEndpoints.Add("/ExecuteAccountAction");
 rateLimitEndpoints.Add("/ExecuteAccountAction", (1, TimeSpan.FromMilliseconds(100)));
 sizeLimitEndpoints.Add("/Signin", PayloadSize.FromMegabytes(10)); // TODO: Separate out account actions so each can have their own
+*/
 
 // Endpoints that enforce Account/IP rate limiting
 foreach (var endpointArgsPair in rateLimitEndpoints)

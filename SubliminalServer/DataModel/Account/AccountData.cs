@@ -1,29 +1,27 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using SubliminalServer.DataModel.Purgatory;
+
 namespace SubliminalServer.DataModel.Account;
 
 /// <summary>
 /// Constructor for account data, contains the private info for an account, and inherits from account profile
 /// </summary>
+[PrimaryKey(nameof(AccountKey), nameof(Username))]
 public class AccountData : AccountProfile
 {
     // Unique
     public string Token { get; set; }
     // Unique
+    [Required]
     public string Email { get; set; }
 
     // Navigation property
     public List<string> KnownIPs { get; set; }
     // Navigation property
-    public List<string> Drafts { get; set; }
+    public List<PurgatoryEntry> Drafts { get; set; }
     // Navigation property
-    public List<string> Blocked { get; set; }
+    public List<AccountData> Blocked { get; set; }
     // Navigation property
-    public List<string> LikedPoems { get; set; }
-
-    public AccountData()
-    {
-        KnownIPs = new List<string>();
-        Drafts = new List<string>();
-        Blocked = new List<string>();
-        LikedPoems = new List<string>();
-    }
-};
+    public List<PurgatoryEntry> LikedPoems { get; set; }
+}

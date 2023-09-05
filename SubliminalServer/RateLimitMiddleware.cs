@@ -49,7 +49,7 @@ public class RateLimitMiddleware
         await nextReqRequest(context);
     }
 
-    private string? GetRateLimitKey(HttpContext context)
+    private static string? GetRateLimitKey(HttpContext context)
     {
         // We rate limit by account if account middleware has passed us a valid account, otherwise IP
         var account = context.Items["Account"];
