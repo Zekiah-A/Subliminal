@@ -1,26 +1,26 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
 
 namespace SubliminalServer.DataModel.Purgatory;
 
-[PrimaryKey(nameof(EntryKey))]
-public class PurgatoryEntry : IPoem
+[PrimaryKey(nameof(DraftKey))]
+public class PurgatoryDraft : IPoem
 {
     // Unique, Primary key
     [Required]
-    public string EntryKey { get; set; }
+    public string DraftKey { get; set; }
 
     // Client submitted
-    [MaxLength(300)]
-    public string? Summary { get; set; }
-    public bool ContentWarning { get; set; }
+    //[MaxLength(300)]
+    //public string? Summary { get; set; }
+    //public bool ContentWarning { get; set; }
     public string? PageStyle { get; set; }
     public string? PageBackground { get; set; }
     // Navigation property to PurgatoryTag
-    public List<PurgatoryTag> Tags { get; set; }
+    //public List<PurgatoryTag> Tags { get; set; }
+    
     [Required]
     [MaxLength(32)]
     public string PoemName { get; set; }
@@ -41,10 +41,4 @@ public class PurgatoryEntry : IPoem
     [ForeignKey(nameof(Edits))]
     public string? EditsKey { get; set; }
     public PurgatoryEntry Edits { get; set; }
-    
-    // Server managed
-    public int Approves { get; set; }
-    public int Vetoes { get; set; }
-    public DateTime DateCreated { get; set; }
-    public bool Pick { get; set; }
 }

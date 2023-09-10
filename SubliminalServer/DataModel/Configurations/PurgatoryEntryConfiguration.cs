@@ -11,13 +11,23 @@ public class PurgatoryEntryConfiguration : IEntityTypeConfiguration<PurgatoryEnt
         // Define the primary key
         builder.HasKey(entry => entry.EntryKey);
         
-        // One author to many
         builder.HasOne(entry => entry.Author)
-            .WithMany()
+            .WithMany(account => account.Poems) // Use the correct navigation property
             .HasForeignKey(entry => entry.AuthorKey);
         
-        // Define the one to many relationship between PurgatoryEntry (Amends) and PurgatoryEntry (AmendedBy)
-        builder.HasOne(p => p.Amends)
-            .WithMany();
+        // One to many PurgatoryEntry (Amends), PurgatoryEntry (AmendedBy)
+        builder.HasOne(entry => entry.Amends)
+            .WithMany()
+            .HasForeignKey(entry => entry.AmendsKey);
+
+        // One to many PurgatoryEntry (Edits), PurgatoryEntry (AmendedBy)
+        builder.HasOne(entry => entry.Edits)
+            .WithMany()
+            .HasForeignKey(entry => entry.EditsKey);
+        
+        // Many to one (PoemTags)
+        builder.HasMany(entry => entry.Tags)
+            .WithOne(tag => tag.PurgatoryEntry)
+            .HasForeignKey(tag => tag.EntryKey);
     }
 }

@@ -8,9 +8,14 @@ namespace SubliminalServer;
 public class DatabaseContext : DbContext
 {
     public DbSet<AccountData> Accounts { get; set; }
-    public DbSet<PurgatoryEntry> PurgatoryEntries { get; set; }
-    public DbSet<PurgatoryAnnotation> PurgatoryAnnotations { get; set; }
+    public DbSet<AccountBadge> AccountBadges { get; set; }
+    public DbSet<AccountIp> AccountIps { get; set; }
 
+    public DbSet<PurgatoryDraft> PurgatoryDrafts { get; set; }
+    public DbSet<PurgatoryEntry> PurgatoryEntries { get; set; }
+    public DbSet<PurgatoryTag> PurgatoryTags { get; set; }
+    public DbSet<PurgatoryAnnotation> PurgatoryAnnotations { get; set; }
+    
     private string DatabasePath { get; }
     
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
@@ -27,6 +32,7 @@ public class DatabaseContext : DbContext
         modelBuilder.ApplyConfiguration(new AccountDataConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryEntryConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryTagConfiguration());
+        modelBuilder.ApplyConfiguration(new PurgatoryDraftConfiguration());
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder options)

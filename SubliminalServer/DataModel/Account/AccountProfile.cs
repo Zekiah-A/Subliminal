@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using SubliminalServer.DataModel.Purgatory;
 
 namespace SubliminalServer.DataModel.Account;
 
@@ -33,12 +34,12 @@ public class AccountProfile
     public string? AvatarUrl { get; set; }
     
     // Navigation property
-    public List<BadgeType> Badges { get; set; }
+    public List<AccountBadge> Badges { get; set; }
     // Navigation property
-    public List<string> PinnedPoems { get; set; }
+    public List<PurgatoryEntry> PinnedPoems { get; set; }
     // Navigation property
-    public List<string> Poems { get; set; }
+    public List<PurgatoryEntry> Poems { get; set; }
     // Navigation property
-    public List<string> Following { get; set; }
+    public List<AccountData> Following { get; set; }
     public DateTime JoinDate { get; set; }
 }

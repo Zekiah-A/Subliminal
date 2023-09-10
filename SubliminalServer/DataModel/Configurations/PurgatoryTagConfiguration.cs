@@ -8,6 +8,10 @@ public class PurgatoryTagConfiguration : IEntityTypeConfiguration<PurgatoryTag>
 {
     public void Configure(EntityTypeBuilder<PurgatoryTag> builder)
     {
-        builder.HasNoKey();
+        // One to many (PurgatoryEntry)
+        builder.HasOne(tag => tag.PurgatoryEntry)
+            .WithMany(entry => entry.Tags)
+            .HasForeignKey(tag => tag.EntryKey);
+
     }
 }

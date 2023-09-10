@@ -7,7 +7,7 @@ namespace SubliminalServer.DataModel.Account;
 /// <summary>
 /// Constructor for account data, contains the private info for an account, and inherits from account profile
 /// </summary>
-[PrimaryKey(nameof(AccountKey), nameof(Username))]
+[PrimaryKey(nameof(AccountKey))]
 public class AccountData : AccountProfile
 {
     // Unique
@@ -17,9 +17,9 @@ public class AccountData : AccountProfile
     public string Email { get; set; }
 
     // Navigation property
-    public List<string> KnownIPs { get; set; }
+    public List<AccountIp> KnownIPs { get; set; }
     // Navigation property
-    public List<PurgatoryEntry> Drafts { get; set; }
+    public List<PurgatoryDraft> Drafts { get; set; }
     // Navigation property
     public List<AccountData> Blocked { get; set; }
     // Navigation property
