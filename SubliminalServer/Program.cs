@@ -96,9 +96,12 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
+builder.Services.AddScoped<DatabaseContext>(options =>
 {
-    options.UseSqlite($"Data Source={dbPath}");
+    var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
+    optionsBuilder.UseSqlite($"Data Source={dbPath}");
+    
+    return new DatabaseContext(optionsBuilder.Options);
 });
 
 // Configure middlewares and runtime services, including global authorization middleware that will
@@ -118,8 +121,6 @@ httpServer.UseStaticFiles(new StaticFileOptions
 
 httpServer.UseMiddleware<AuthorizationMiddleware>();
 
-var database = httpServer.Services.GetRequiredService<DatabaseContext>();
-
 var authRequiredEndpoints = new List<string>();
 var rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
 var sizeLimitEndpoints = new Dictionary<string, PayloadSize>(); // Should only really be needed on POST endpoints
@@ -135,8 +136,12 @@ authRequiredEndpoints.Add("/PurgatoryReport");
 rateLimitEndpoints.Add("/PurgatoryReport", (1, TimeSpan.FromSeconds(5)));
 sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
-httpServer.MapGet("/PurgatoryPicks", () =>
+httpServer.MapGet("/PurgatoryPicks", (HttpContext context) =>
 {
+    using var scope = httpServer.Services.CreateScope();
+    var serviceProvider = scope.ServiceProvider;
+    var database = serviceProvider.GetRequiredService<DatabaseContext>();
+        
     var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
     return Results.Json(records);
 });
@@ -460,7 +465,7 @@ foreach (var endpointArgsPair in sizeLimitEndpoints)
         context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
         appBuilder =>
         {
-            appBuilder.UseMiddleware<RequestSizeLimitMiddleware>(endpointArgsPair.Value);
+            appBuilder.UseMiddleware<RequestSizeLimitMiddleware>(endpointArgsPair.Value.AsLong());
         }
     );
 }

@@ -26,6 +26,11 @@ public class PayloadSize
     {
         return new PayloadSize(count * 1000);
     }
+
+    public long AsLong()
+    {
+        return sizeBytes;
+    }
     
     public static implicit operator long(PayloadSize payload) => payload.sizeBytes;
 }
