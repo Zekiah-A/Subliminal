@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
@@ -133,21 +134,21 @@ authRequiredEndpoints.Add("/PurgatoryReport");
 rateLimitEndpoints.Add("/PurgatoryReport", (1, TimeSpan.FromSeconds(5)));
 sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
-httpServer.MapGet("/PurgatoryPicks", (DatabaseContext database) =>
+httpServer.MapGet("/PurgatoryPicks", ([FromServices] DatabaseContext database) =>
 {
     var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
     return Results.Json(records);
 });
 rateLimitEndpoints.Add("/PurgatoryPicks", (1, TimeSpan.FromSeconds(2)));
 
-httpServer.MapGet("/PurgatoryAfter", (PurgatoryBeforeAfter since) =>
+httpServer.MapGet("/PurgatoryAfter", ([FromBody] PurgatoryBeforeAfter since) =>
 {
     
 });
 rateLimitEndpoints.Add("/PurgatoryAfter", (1, TimeSpan.FromSeconds(2)));
 
 
-httpServer.MapGet("/PurgatoryBefore", (PurgatoryBeforeAfter before) =>
+httpServer.MapGet("/PurgatoryBefore", ([FromBody] PurgatoryBeforeAfter before) =>
 {
     
 });
@@ -441,7 +442,7 @@ sizeLimitEndpoints.Add("/Signin", PayloadSize.FromMegabytes(10)); // TODO: Separ
 // Endpoints that enforce Account/IP rate limiting
 foreach (var endpointArgsPair in rateLimitEndpoints)
 {
-    httpServer.MapWhen
+    httpServer.UseWhen
     (
         context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
         appBuilder =>
@@ -453,7 +454,7 @@ foreach (var endpointArgsPair in rateLimitEndpoints)
 
 foreach (var endpointArgsPair in sizeLimitEndpoints)
 {
-    httpServer.MapWhen
+    httpServer.UseWhen
     (
         context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
         appBuilder =>
@@ -466,7 +467,7 @@ foreach (var endpointArgsPair in sizeLimitEndpoints)
 // Endpoints that require an account to access
 foreach (var endpoint in authRequiredEndpoints)
 {
-    httpServer.MapWhen
+    httpServer.UseWhen
     (
         context => context.Request.Path.StartsWithSegments(endpoint),
         appBuilder =>
