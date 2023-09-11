@@ -7,10 +7,10 @@ public class AuthorizationMiddleware
     private readonly RequestDelegate nextRequest;
     private readonly DatabaseContext databaseContext;
 
-    public AuthorizationMiddleware(RequestDelegate nextReq, DatabaseContext dbContext)
+    public AuthorizationMiddleware(RequestDelegate nextReq, DatabaseContext db)
     {
         nextRequest = nextReq;
-        databaseContext = dbContext;
+        databaseContext = db;
     }
 
     public async Task Invoke(HttpContext context)

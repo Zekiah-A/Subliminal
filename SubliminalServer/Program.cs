@@ -1,14 +1,9 @@
-using System.Globalization;
-using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
-using SubliminalServer.AccountActions;
-using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Purgatory;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -17,6 +12,7 @@ using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 // dotnet add package Microsoft.EntityFrameworkCore.Design
 // dotnet ef migrations add InitialCreate
 // dotnet ef database update
+// .net 8 may require "dotnet tool update --global dotnet-ef --prerelease"
 
 //Webserver configuration
 const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
@@ -34,18 +30,18 @@ var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
 var dbPath = Path.Join(dataDir.FullName, "subliminal.db");
 
-//var database = new DatabaseContext(dbPath);
 ServerConfig? config = null;
 
 if (File.Exists(configFile.Name))
 {
-    config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+    var configText = File.ReadAllText(configFile.Name);
+    config = JsonSerializer.Deserialize<ServerConfig>(configText);
 }
 
 if (config is null)
 {
     await using var stream = File.OpenWrite(configFile.Name);
-    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false), new JsonSerializerOptions()
+    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false), new JsonSerializerOptions
     {
         WriteIndented = true,
     });
@@ -96,13 +92,11 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddScoped<DatabaseContext>(options =>
+builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-    optionsBuilder.UseSqlite($"Data Source={dbPath}");
-    
-    return new DatabaseContext(optionsBuilder.Options);
+    options.UseSqlite($"Data Source={dbPath}");
 });
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Configure middlewares and runtime services, including global authorization middleware that will
 // validate accounts for all site endpoints
@@ -119,7 +113,10 @@ httpServer.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProfileImage"
 });
 
-httpServer.UseMiddleware<AuthorizationMiddleware>();
+// This is some straightup weirdness to force inject the DB, it seems to work for out current use though
+var scope = httpServer.Services.CreateScope();
+var serviceProvider = scope.ServiceProvider;
+httpServer.UseMiddleware<AuthorizationMiddleware>(serviceProvider.GetRequiredService<DatabaseContext>());
 
 var authRequiredEndpoints = new List<string>();
 var rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
@@ -136,12 +133,8 @@ authRequiredEndpoints.Add("/PurgatoryReport");
 rateLimitEndpoints.Add("/PurgatoryReport", (1, TimeSpan.FromSeconds(5)));
 sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
-httpServer.MapGet("/PurgatoryPicks", (HttpContext context) =>
+httpServer.MapGet("/PurgatoryPicks", (DatabaseContext database) =>
 {
-    using var scope = httpServer.Services.CreateScope();
-    var serviceProvider = scope.ServiceProvider;
-    var database = serviceProvider.GetRequiredService<DatabaseContext>();
-        
     var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
     return Results.Json(records);
 });
