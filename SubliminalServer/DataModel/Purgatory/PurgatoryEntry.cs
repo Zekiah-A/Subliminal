@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
+using SubliminalServer.DataModel.Api;
 
 namespace SubliminalServer.DataModel.Purgatory;
 
 [PrimaryKey(nameof(EntryKey))]
-public class PurgatoryEntry : IDatabasePoem, IUploadablePoem
+public class PurgatoryEntry : UploadableEntry, IDatabasePoem
 {
     // Unique, Primary key
     [Required]
@@ -21,15 +22,15 @@ public class PurgatoryEntry : IDatabasePoem, IUploadablePoem
 
     // Path to locally hosted page background submission
     public string? PageBackgroundUrl { get; set; }
+    
     // Navigation property to PurgatoryTag
-    public List<PurgatoryTag> Tags { get; set; } // TODO: JSONIgnore, make a separate version that is ignored
-                                                 // by DB and used for upload (ReadonlyList<string>)
+    public List<PurgatoryTag> Tags { get; set; }
     [Required]
     [MaxLength(32)]
     public string PoemName { get; set; }
     [Required]
     public string PoemContent { get; set; }
-
+    
     // Foreign key AccountData
     [ForeignKey(nameof(Author))]
     public string? AuthorKey { get; set; }

@@ -1,11 +1,13 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
 using SubliminalServer.DataModel.Account;
+using SubliminalServer.DataModel.Api;
 using SubliminalServer.DataModel.Purgatory;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -25,6 +27,11 @@ var defaultJsonOptions = new JsonSerializerOptions
     WriteIndented = true,
     IncludeFields = true
 };
+var invalidTagSupplied = new[]
+{
+    "Invalid poem tag supplied"
+};
+
 
 var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
@@ -166,14 +173,32 @@ httpServer.MapGet("/PurgatoryRecommended", () =>
 authRequiredEndpoints.Add("/PurgatoryRecommended");
 rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
 
-httpServer.MapPost("/PurgatoryUpload", ([FromBody] PurgatoryEntry entry, [FromServices] DatabaseContext database, HttpContext context) =>
+httpServer.MapPost("/PurgatoryUpload", ([FromBody] UploadableEntry entryUpload, [FromServices] DatabaseContext database, HttpContext context) =>
 {
+    var entry = (PurgatoryEntry) entryUpload;
     entry.Approves = 0;
     entry.Vetoes = 0;
     entry.DateCreated = DateTime.Now;
     entry.Pick = false;
 
+    for (var i = 0; i < Math.Min(5, entryUpload.UploadTags.Count); i++)
+    {
+        var tag = entryUpload.UploadTags[i];
+
+        if (!PermissibleTagRegex().IsMatch(tag))
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>()
+                { { nameof(UploadableEntry.UploadTags), new[] { "Invalid tag supplied", i.ToString() } }});
+        }
+        
+        entry.Tags.Add(new PurgatoryTag()
+        {
+            TagName = tag
+        });
+    }
+
     var account = (AccountData) context.Items["Account"]!;
+    entry.Author = account;
     
     database.PurgatoryEntries.Add(entry);
     database.SaveChanges();
@@ -474,3 +499,9 @@ foreach (var endpoint in authRequiredEndpoints)
 }
 
 await httpServer.RunAsync();
+
+internal partial class Program
+{
+    [GeneratedRegex("^[a-z][a-z0-9_-]{0,23}$")]
+    private static partial Regex PermissibleTagRegex();
+}

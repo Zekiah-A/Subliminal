@@ -40,4 +40,8 @@
         <ProjectReference Include="DataProto\DataProto\DataProto.csproj" />
         <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
 </Project>
