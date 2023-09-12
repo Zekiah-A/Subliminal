@@ -68,7 +68,7 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
         builder.HasMany(account => account.PinnedPoems)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
-                "PinnedPoem",
+                "PinnedPoems",
                 right => right.HasOne<PurgatoryEntry>().WithMany().HasForeignKey("PinnedPoem"),
                 left =>  left.HasOne<AccountData>().WithMany().HasForeignKey("PinnerAccount"),
                 joinEntity => joinEntity.HasKey("PinnedPoem", "PinnerAccount"));

@@ -2,11 +2,11 @@ using SubliminalServer.DataModel.Account;
 
 namespace SubliminalServer.DataModel.Purgatory;
 
-public interface IPoem
+public interface IDatabasePoem
 {
     // Client submitted
-    public string? PageStyle { get; set; }
-    public string? PageBackground { get; set; }
+    public PageStyle PageStyle { get; set; }
+    public string? PageBackgroundUrl { get; set; }
 
     public string PoemName { get; set; }
     public string PoemContent { get; set; }

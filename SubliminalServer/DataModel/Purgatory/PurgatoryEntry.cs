@@ -7,7 +7,7 @@ using SubliminalServer.DataModel.Account;
 namespace SubliminalServer.DataModel.Purgatory;
 
 [PrimaryKey(nameof(EntryKey))]
-public class PurgatoryEntry : IPoem
+public class PurgatoryEntry : IDatabasePoem, IUploadablePoem
 {
     // Unique, Primary key
     [Required]
@@ -17,10 +17,13 @@ public class PurgatoryEntry : IPoem
     [MaxLength(300)]
     public string? Summary { get; set; }
     public bool ContentWarning { get; set; }
-    public string? PageStyle { get; set; }
-    public string? PageBackground { get; set; }
+    public PageStyle PageStyle { get; set; }
+
+    // Path to locally hosted page background submission
+    public string? PageBackgroundUrl { get; set; }
     // Navigation property to PurgatoryTag
-    public List<PurgatoryTag> Tags { get; set; }
+    public List<PurgatoryTag> Tags { get; set; } // TODO: JSONIgnore, make a separate version that is ignored
+                                                 // by DB and used for upload (ReadonlyList<string>)
     [Required]
     [MaxLength(32)]
     public string PoemName { get; set; }

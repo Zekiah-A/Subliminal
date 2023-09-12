@@ -6,7 +6,7 @@ using SubliminalServer.DataModel.Account;
 namespace SubliminalServer.DataModel.Purgatory;
 
 [PrimaryKey(nameof(DraftKey))]
-public class PurgatoryDraft : IPoem
+public class PurgatoryDraft : IDatabasePoem
 {
     // Unique, Primary key
     [Required]

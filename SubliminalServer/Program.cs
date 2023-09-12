@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
+using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Purgatory;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 // EFCore database setup:
 // dotnet tool install --global dotnet-ef
-// dotnet add package Microsoft.EntityFrameworkCore.Design
 // dotnet ef migrations add InitialCreate
 // dotnet ef database update
-// .net 8 may require "dotnet tool update --global dotnet-ef --prerelease"
+// Prerelease .NET 8 may require "dotnet tool install --global dotnet-ef --prerelease"
+// to update from a non-prerelease, do "dotnet tool update --global dotnet-ef --prerelease"
 
 //Webserver configuration
 const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
@@ -164,8 +165,8 @@ httpServer.MapGet("/PurgatoryRecommended", () =>
 );
 authRequiredEndpoints.Add("/PurgatoryRecommended");
 rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
-/*
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, HttpContext context) =>
+
+httpServer.MapPost("/PurgatoryUpload", ([FromBody] PurgatoryEntry entry, [FromServices] DatabaseContext database, HttpContext context) =>
 {
     entry.Approves = 0;
     entry.Vetoes = 0;
@@ -174,20 +175,15 @@ httpServer.MapPost("/PurgatoryUpload", async (PurgatoryEntry entry, HttpContext 
 
     var account = (AccountData) context.Items["Account"]!;
     
-    
     database.PurgatoryEntries.Add(entry);
-    
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
-    profile.Data.Poems.Add(poem);
-    
-    await database.UpdateRecord(profile);
+    database.SaveChanges();
 
-    return Results.Ok();
+    return Results.Ok(entry.EntryKey);
 });
 authRequiredEndpoints.Add("/PurgatoryUpload");
 rateLimitEndpoints.Add("/PurgatoryUpload", (1, TimeSpan.FromSeconds(60)));
-sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromMegabytes(1));
-
+sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromMegabytes(5));
+/*
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
 httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
 {
