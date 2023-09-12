@@ -11,6 +11,7 @@ namespace SubliminalServer.DataModel.Account;
 public class AccountData : AccountProfile
 {
     // Unique
+    // Tokens expire after 1 month, formed up of {~32 byte random string};{unix time offset seconds when token will expire}. 
     public string Token { get; set; }
     // Unique
     [Required]

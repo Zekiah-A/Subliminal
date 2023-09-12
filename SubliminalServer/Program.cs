@@ -27,11 +27,6 @@ var defaultJsonOptions = new JsonSerializerOptions
     WriteIndented = true,
     IncludeFields = true
 };
-var invalidTagSupplied = new[]
-{
-    "Invalid poem tag supplied"
-};
-
 
 var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
@@ -208,28 +203,59 @@ httpServer.MapPost("/PurgatoryUpload", ([FromBody] UploadableEntry entryUpload, 
 authRequiredEndpoints.Add("/PurgatoryUpload");
 rateLimitEndpoints.Add("/PurgatoryUpload", (1, TimeSpan.FromSeconds(60)));
 sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromMegabytes(5));
-/*
+
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
-httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
+httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] DatabaseContext database, HttpContext context) =>
 {
-    // Generate secret account code (password)
-    var code = "";
-    for (var i = 0; i < 10; i++)
+    if (!PermissibleUsernameRegex().IsMatch(details.Username))
     {
-        code += base64Alphabet[random.Next(0, 63)];
+        return Results.ValidationProblem(new Dictionary<string, string[]>()
+            { { nameof(LoginDetails.Username), new[] { "Invalid username supplied", details.Username } } });
     }
     
-    var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-    await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
+    // TODO: Email validation, this will all be moved elsewhere
+    var account = new AccountData();
+    var tokenBytes = RandomNumberGenerator.GetBytes(32);
+    var tokenString = Convert.ToBase64String(tokenBytes)
+        + ";" + DateTimeOffset.Now.AddMonths(1).ToUnixTimeSeconds();
+    
+    account.Token = tokenString;
+    account.Username = details.Username;
+    account.Email = details.Email;
 
-    var credentials = new { Code = code, Guid = profileKey };
-    return Results.Json(credentials);
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    if (context.Connection.RemoteIpAddress is null)
+    {
+        return Results.Forbid();
+    }
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress.ToString();
+    account.KnownIPs.Add(new AccountIp()
+    {
+        Address = requestIp
+    });
+    //var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+    //await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
+
+    database.Accounts.Add(account);
+
+    //var credentials = new { Code = code, Guid = profileKey };
+    // We force an account cookie onto them that will be used to account verification. Tokens by default persist for one
+    // month.
+    context.Response.Cookies.Append("Token", tokenString, new CookieOptions()
+    {
+        HttpOnly = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.Now.AddMonths(1)
+    });
+    // If for some reason they can not persist the cookie, we also send them the token so that they may save it somwehere
+    // secure on certain platforms, such as a third party non-web client.
+    return Results.Text(account.Token);
 });
 rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(60)));
 sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromKilobytes(100));
 
 // Allows a user to signin and receive account data
-httpServer.MapPost("/Signin/{token}", async ([FromBody] string signinCode, HttpContext context) =>
+/*httpServer.MapPost("/Signin/{token}", async ([FromBody] string signinCode, HttpContext context) =>
 {
     
 });
@@ -504,4 +530,8 @@ internal partial class Program
 {
     [GeneratedRegex("^[a-z][a-z0-9_-]{0,23}$")]
     private static partial Regex PermissibleTagRegex();
+    
+    [GeneratedRegex("^[a-z][a-z0-9_]{0,16}$")]
+    private static partial Regex PermissibleUsernameRegex();
+    
 }

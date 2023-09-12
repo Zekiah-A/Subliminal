@@ -22,7 +22,7 @@ public class UploadableEntry
     
     // Database ignored upload property
     [NotMapped]
-    [JsonPropertyName("Tags")]
+    [JsonPropertyName("PoemTags")]
     public IReadOnlyList<string> UploadTags { get; set; }
     
     public string PoemName { get; set; }

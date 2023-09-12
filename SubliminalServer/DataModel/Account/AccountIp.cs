@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Account;
 
-[PrimaryKey(nameof(IPAddressKey))]
+[PrimaryKey(nameof(AccountIpKey))]
 public class AccountIp
 {
-    public string IPAddressKey { get; set; }
+    public string AccountIpKey { get; set; }
     public string Address { get; set; }
 
     // Foreign key AccountData

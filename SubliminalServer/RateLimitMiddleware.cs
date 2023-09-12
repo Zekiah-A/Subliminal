@@ -51,6 +51,14 @@ public class RateLimitMiddleware
 
     private static string? GetRateLimitKey(HttpContext context)
     {
+        if (!TrySanitiseIpAddress(context.Connection.RemoteIpAddress, out var sanitisedAddress))
+        {
+            return null;
+        }
+        
+        // Append this to the context
+        context.Items["RealIp"] = sanitisedAddress;
+
         // We rate limit by account if account middleware has passed us a valid account, otherwise IP
         var account = context.Items["Account"];
         if (account is AccountData accountData)
@@ -58,12 +66,7 @@ public class RateLimitMiddleware
             return accountData.Token;
         }
 
-        if (TrySanitiseIpAddress(context.Connection.RemoteIpAddress, out var sanitisedAddress))
-        {
-            return sanitisedAddress;
-        }
-
-        return null;
+        return sanitisedAddress;
     }
 
     private static bool TrySanitiseIpAddress(IPAddress? address, out string? sanitised)
