@@ -340,7 +340,7 @@ httpServer.MapPost("/Signin", ([FromBody] LoginDetails details, [FromServices] D
         Expires = DateTimeOffset.Now.AddMonths(1)
     });
 
-    return account;
+    return Results.Json(account);
 });
 rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
 sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(5));
