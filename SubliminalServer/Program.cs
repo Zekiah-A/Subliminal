@@ -117,6 +117,14 @@ httpServer.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProfileImage"
 });
 
+static string GenerateToken()
+{
+    var tokenBytes = RandomNumberGenerator.GetBytes(32);
+    var tokenString = Convert.ToBase64String(tokenBytes)
+        + ";" + DateTimeOffset.Now.AddMonths(1).ToUnixTimeSeconds();
+    return tokenString;
+}
+
 // This is some straightup weirdness to force inject the DB, it seems to work for out current use though
 var scope = httpServer.Services.CreateScope();
 var serviceProvider = scope.ServiceProvider;
@@ -144,27 +152,24 @@ httpServer.MapGet("/PurgatoryPicks", ([FromServices] DatabaseContext database) =
 });
 rateLimitEndpoints.Add("/PurgatoryPicks", (1, TimeSpan.FromSeconds(2)));
 
-httpServer.MapGet("/PurgatoryAfter", ([FromBody] PurgatoryBeforeAfter since) =>
+httpServer.MapGet("/PurgatoryAfter", ([FromBody] PurgatoryBeforeAfter since, [FromServices] DatabaseContext database) =>
 {
-    
+    return Results.Problem();
 });
 rateLimitEndpoints.Add("/PurgatoryAfter", (1, TimeSpan.FromSeconds(2)));
 
 
-httpServer.MapGet("/PurgatoryBefore", ([FromBody] PurgatoryBeforeAfter before) =>
+httpServer.MapGet("/PurgatoryBefore", ([FromBody] PurgatoryBeforeAfter before, [FromServices] DatabaseContext database) =>
 {
-    
+    return Results.Problem();
 });
 rateLimitEndpoints.Add("/PurgatoryBefore", (1, TimeSpan.FromSeconds(2)));
 
 
 httpServer.MapGet("/PurgatoryRecommended", () =>
-    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
-        .Select(file => new FileInfo(file))
-        .Reverse()
-        .Select(file => file.Name)
-        .ToArray()
-);
+{
+    return Results.Problem();
+});
 authRequiredEndpoints.Add("/PurgatoryRecommended");
 rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
 
@@ -215,32 +220,24 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     
     // TODO: Email validation, this will all be moved elsewhere
     var account = new AccountData();
-    var tokenBytes = RandomNumberGenerator.GetBytes(32);
-    var tokenString = Convert.ToBase64String(tokenBytes)
-        + ";" + DateTimeOffset.Now.AddMonths(1).ToUnixTimeSeconds();
-    
+    var tokenString = GenerateToken();
     account.Token = tokenString;
     account.Username = details.Username;
     account.Email = details.Email;
 
     // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
-    if (context.Connection.RemoteIpAddress is null)
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
     {
         return Results.Forbid();
     }
-    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress.ToString();
     account.KnownIPs.Add(new AccountIp()
     {
         Address = requestIp
     });
-    //var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-    //await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
 
     database.Accounts.Add(account);
 
-    //var credentials = new { Code = code, Guid = profileKey };
-    // We force an account cookie onto them that will be used to account verification. Tokens by default persist for one
-    // month.
     context.Response.Cookies.Append("Token", tokenString, new CookieOptions()
     {
         HttpOnly = true,
@@ -252,30 +249,116 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     return Results.Text(account.Token);
 });
 rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(60)));
-sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromKilobytes(100));
+sizeLimitEndpoints.Add("/Signup", PayloadSize.FromKilobytes(5));
 
 // Allows a user to signin and receive account data
-/*httpServer.MapPost("/Signin/{token}", async ([FromBody] string signinCode, HttpContext context) =>
+httpServer.MapPost("/SigninToken", ([FromBody] string? token, [FromServices] DatabaseContext database, HttpContext context) =>
 {
+    if (string.IsNullOrEmpty(token))
+    {
+        var cookieToken = context.Request.Cookies["Token"];
+        if (string.IsNullOrEmpty(cookieToken))
+        {
+            return Results.Unauthorized();
+        }
+
+        token = cookieToken;
+    }
+
+    // Completely invalid token - Reject
+    var expiryString = token.Split(";").Last();
+    if (!long.TryParse(expiryString, out var expiry))
+    {
+        return Results.Unauthorized();
+    }
+
+    // Expired token - Reject
+    if (expiry < DateTimeOffset.Now.ToUnixTimeSeconds())
+    {
+        return Results.Unauthorized();
+    }
+
+    // No account associated with token - Reject
+    var account = database.Accounts.SingleOrDefault(data => data.Token == token);
+    if (account is null)
+    {
+        return Results.NotFound();
+    }
+
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
+    {
+        return Results.Forbid();
+    }
+    account.KnownIPs.Add(new AccountIp()
+    {
+        Address = requestIp
+    });
+    database.SaveChanges();
+
+    return Results.Json(account);
+});
+rateLimitEndpoints.Add("/SigninToken", (1, TimeSpan.FromSeconds(1)));
+sizeLimitEndpoints.Add("/SigninToken", PayloadSize.FromKilobytes(5));
+
+httpServer.MapPost("/Signin", ([FromBody] LoginDetails details, [FromServices] DatabaseContext database, HttpContext context) =>
+{
+    var account = database.Accounts.SingleOrDefault(account =>
+        account.Username == details.Username && account.Email == details.Email);
+    if (account is null)
+    {
+        return Results.NotFound();
+    }
+
+    // If the current account token is expired, we will generate a new one,
+    // we will also give them the token cookie regardless
+    var expiryString = account.Token.Split(";").Last();
+    if (long.Parse(expiryString) < DateTimeOffset.Now.ToUnixTimeSeconds())
+    {
+        var tokenString = GenerateToken();
+        account.Token = tokenString;
+        database.SaveChanges();
+    }
+
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
+    {
+        return Results.Forbid();
+    }
+    account.KnownIPs.Add(new AccountIp()
+    {
+        Address = requestIp
+    });
+    database.SaveChanges();
+
+    context.Response.Cookies.Append("Token", account.Token, new CookieOptions()
+    {
+        HttpOnly = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.Now.AddMonths(1)
+    });
+
+    return account;
+});
+rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
+sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(5));
+
+//Get public facing data for an account, will accept either a username or an account key
+httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [FromServices] DatabaseContext database) =>
+{
+    var account = database.Accounts.SingleOrDefault(account =>
+        account.AccountKey == profileIdentifier || account.Username == profileIdentifier);
     
-});
-httpServer.MapPost("/Signin/{name}:{email}", async (string name, string email, HttpContext context) =>
-{
-    var account = database.Accounts.First(account => account.Username == name && account.Email == email);
-    var account = (await database.FindRecords<AccountData, string>("Code", signinCode)).FirstOrDefault();
-    return account is null ? Results.Unauthorized() : Results.Json(account.Data);
-});
-rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
-sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(100));
-
-//Get public facing data for an account
-httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
-{
-    var profile = await database.GetRecord<AccountProfile>(profileKey);
-    return profile is null ? Results.NotFound() : Results.Json(profile);
+    // Downcast so they we only expose the account profile
+    return account is AccountProfile profile
+        ? Results.Json(profile)
+        : Results.NotFound();
 });
 rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
 
+/*
 httpServer.MapPost("/ExecuteAccountAction", (AccountAction action, HttpContext context) =>
 {
      switch (action.ActionType)
@@ -531,7 +614,7 @@ internal partial class Program
     [GeneratedRegex("^[a-z][a-z0-9_-]{0,23}$")]
     private static partial Regex PermissibleTagRegex();
     
-    [GeneratedRegex("^[a-z][a-z0-9_]{0,16}$")]
+    [GeneratedRegex("^[a-z][a-z0-9_.]{0,16}$")]
     private static partial Regex PermissibleUsernameRegex();
     
 }
