@@ -80,7 +80,9 @@ namespace SubliminalServer.Migrations
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
                 {
                     b.Property<string>("BadgeKey")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("AccountKey")
                         .IsRequired()
@@ -102,7 +104,9 @@ namespace SubliminalServer.Migrations
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountData", b =>
                 {
                     b.Property<string>("AccountKey")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("TEXT");
@@ -153,8 +157,10 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountIp", b =>
                 {
-                    b.Property<string>("IPAddressKey")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("AddressKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("AccountKey")
                         .IsRequired()
@@ -164,9 +170,7 @@ namespace SubliminalServer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IPAddressKey");
-
-                    b.HasIndex("AccountKey");
+                    b.HasKey("AddressKey");
 
                     b.ToTable("AccountIps");
                 });
@@ -404,24 +408,24 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
                 {
-                    b.HasOne("SubliminalServer.DataModel.Account.AccountData", "AccountData")
+                    b.HasOne("SubliminalServer.DataModel.Account.AccountData", "Account")
                         .WithMany("Badges")
                         .HasForeignKey("AccountKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AccountData");
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountIp", b =>
                 {
-                    b.HasOne("SubliminalServer.DataModel.Account.AccountData", "AccountData")
+                    b.HasOne("SubliminalServer.DataModel.Account.AccountData", "Account")
                         .WithMany("KnownIPs")
-                        .HasForeignKey("AccountKey")
+                        .HasForeignKey("AddressKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AccountData");
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("SubliminalServer.DataModel.Purgatory.PurgatoryAnnotation", b =>

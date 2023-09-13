@@ -26,6 +26,8 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new AccountDataConfiguration());
+        modelBuilder.ApplyConfiguration(new AccountIpConfiguration());
+        modelBuilder.ApplyConfiguration(new AccountBadgeConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryEntryConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryTagConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryDraftConfiguration());

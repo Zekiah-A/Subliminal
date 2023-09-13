@@ -14,7 +14,7 @@ public class AccountBadge
     public string AccountKey { get; set; }
     
     // Navigation property to the parent AccounData
-    public AccountData AccountData { get; set; }
+    public AccountData Account { get; set; }
 }
 
 public enum BadgeType

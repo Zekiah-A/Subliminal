@@ -62,6 +62,11 @@ you read this to aid contributing or developing for this site.
    pain, makes it much harder to skim read logic without having to read infinitely long lines,
    and isn't worth the negligible "space" saving.
 
+**Additional:**
+ - During development, the best way to modify change the DB schema without having to create tons of
+ new migrations is to utilise `ef migrations remove` along with `ef migrations add [migration name]`
+ to quickly change and prototype new schemas.
+ 
 ### EFCore database setup:
 The following steps need to be taken to prepare the site database for use:
  - dotnet tool install --global dotnet-ef

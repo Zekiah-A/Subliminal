@@ -10,7 +10,8 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
     public void Configure(EntityTypeBuilder<AccountData> builder)
     {
         // Define the primary key
-        builder.HasKey(account => new { account.AccountKey });
+        builder.HasKey(account => account.AccountKey);
+        builder.Property(account => account.AccountKey).HasDefaultValueSql("NEWID()");
 
         // Unique email
         builder.HasIndex(account => account.Username).IsUnique();
@@ -28,13 +29,12 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
 
         // One to many Badges (AccountBadge)
         builder.HasMany(account => account.Badges)
-            .WithOne(badge => badge.AccountData)
+            .WithOne(badge => badge.Account)
             .HasForeignKey(badge => badge.AccountKey);
         
         // One to many IPs (AccountBadge)
-        builder
-            .HasMany(mainEntity => mainEntity.KnownIPs)
-            .WithOne(address => address.AccountData)
+        builder.HasMany(mainEntity => mainEntity.KnownIPs)
+            .WithOne(address => address.Account)
             .HasForeignKey(address => address.AccountKey);
 
         // Many to many AccountData (Blocked), AccountData (BlockedBy)

@@ -57,7 +57,7 @@ if (config is null)
 }
 
 Console.ForegroundColor = ConsoleColor.Yellow;
-foreach (var dirPath in new[] { dataDir, profileImageDir,new DirectoryInfo(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))) })
+foreach (var dirPath in new[] { dataDir, profileImageDir })
 {
     if (!Directory.Exists(dirPath.FullName))
     {
@@ -217,13 +217,22 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
         return Results.ValidationProblem(new Dictionary<string, string[]>()
             { { nameof(LoginDetails.Username), new[] { "Invalid username supplied", details.Username } } });
     }
+
+    var existingAccount = database.Accounts.SingleOrDefault(account =>
+        account.Email == details.Email || account.Username == details.Username);
+    if (existingAccount is not null)
+    {
+        return Results.Conflict();
+    }
     
     // TODO: Email validation, this will all be moved elsewhere
-    var account = new AccountData();
     var tokenString = GenerateToken();
-    account.Token = tokenString;
-    account.Username = details.Username;
-    account.Email = details.Email;
+    var account = new AccountData()
+    {
+        Token = tokenString,
+        Username = details.Username,
+        Email = details.Email
+    };
 
     // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
     var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
@@ -248,7 +257,7 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     // secure on certain platforms, such as a third party non-web client.
     return Results.Text(account.Token);
 });
-rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(60)));
+rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(2)));
 sizeLimitEndpoints.Add("/Signup", PayloadSize.FromKilobytes(5));
 
 // Allows a user to signin and receive account data
@@ -356,7 +365,7 @@ httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [F
         ? Results.Json(profile)
         : Results.NotFound();
 });
-rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
+rateLimitEndpoints.Add("/Profiles", (1, TimeSpan.FromMilliseconds(500)));
 
 /*
 httpServer.MapPost("/ExecuteAccountAction", (AccountAction action, HttpContext context) =>

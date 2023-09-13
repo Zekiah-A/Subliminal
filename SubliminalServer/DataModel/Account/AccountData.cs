@@ -25,4 +25,12 @@ public class AccountData : AccountProfile
     public List<AccountData> Blocked { get; set; }
     // Navigation property
     public List<PurgatoryEntry> LikedPoems { get; set; }
+
+    public AccountData()
+    {
+        KnownIPs = new List<AccountIp>();
+        Drafts = new List<PurgatoryDraft>();
+        Blocked = new List<AccountData>();
+        LikedPoems = new List<PurgatoryEntry>();
+    }
 }
