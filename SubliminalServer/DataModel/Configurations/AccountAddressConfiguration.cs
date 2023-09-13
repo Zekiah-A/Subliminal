@@ -9,6 +9,8 @@ public class AccountAddressConfiguration : IEntityTypeConfiguration<AccountAddre
     public void Configure(EntityTypeBuilder<AccountAddress> builder)
     {
         builder.HasKey(address => address.AddressKey);
+        builder.Property(a => a.AddressKey)
+            .ValueGeneratedOnAdd();
 
         // One to many (AccountData)
         builder.HasOne(address => address.Account)

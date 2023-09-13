@@ -10,6 +10,7 @@ public class PurgatoryAnnotation
 {
     // Unique, Primary key
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int AnnotationKey { get; set; }
     
     // Foreign key PurgatoryEntry

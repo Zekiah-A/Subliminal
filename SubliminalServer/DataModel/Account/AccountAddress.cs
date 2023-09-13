@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Account;
@@ -8,8 +9,9 @@ public class AccountAddress
 {
     // Unique, Primary key
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int AddressKey { get; set; }
-    public string Address { get; set; }
+    public string IpAddress { get; set; }
 
     // Foreign key AccountData
     public int AccountKey { get; set; }

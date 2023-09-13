@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
@@ -8,6 +9,8 @@ namespace SubliminalServer.DataModel.Report;
 public class Report
 {
     // Unique, Primary key
+    [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string ReportKey { get; set; }
     
     // Foreign key Account Data

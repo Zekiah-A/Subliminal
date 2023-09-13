@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Purgatory;
@@ -8,6 +9,7 @@ public class PurgatoryTag
 {
     // Unique, Primary key
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int TagKey { get; set; }
     public string TagName { get; set; }
 

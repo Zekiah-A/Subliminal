@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Purgatory;
 
@@ -18,16 +19,22 @@ public class AccountData : AccountProfile
     public string Email { get; set; }
 
     // Navigation property
+    [JsonIgnore]
     public List<AccountAddress> KnownIPs { get; set; }
     // Navigation property
+    [JsonIgnore]
     public List<PurgatoryDraft> Drafts { get; set; }
     // Navigation property
+    [JsonIgnore]
     public List<AccountData> Blocked { get; set; }
     // Navigation property
+    [JsonIgnore]
     public List<PurgatoryEntry> LikedPoems { get; set; }
 
-    public AccountData()
+    public AccountData(string username, string email, DateTime joinDate, string token) : base(username, joinDate)
     {
+        Token = token;
+        Email = email;
         KnownIPs = new List<AccountAddress>();
         Drafts = new List<PurgatoryDraft>();
         Blocked = new List<AccountData>();

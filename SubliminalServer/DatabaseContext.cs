@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Configurations;
 using SubliminalServer.DataModel.Purgatory;
+using SubliminalServer.DataModel.Report;
 
 namespace SubliminalServer;
 

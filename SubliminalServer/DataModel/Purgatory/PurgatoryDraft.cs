@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Api;
@@ -11,6 +12,7 @@ public class PurgatoryDraft : UploadableEntry, IDatabasePoem
 {
     // Unique, Primary key
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int DraftKey { get; set; }
 
     // Client submitted
@@ -31,15 +33,21 @@ public class PurgatoryDraft : UploadableEntry, IDatabasePoem
     // Foreign key AccountData
     [ForeignKey(nameof(Author))]
     public int? AuthorKey { get; set; }
+    [JsonIgnore]
+    [JsonPropertyName("Author")]
     public AccountData? Author { get; set; }
     
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Amends))]
     public int? AmendsKey { get; set; }
+    [JsonIgnore]
+    [JsonPropertyName("Amends")]
     public PurgatoryEntry? Amends { get; set;  }
 
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Edits))]
+    [JsonPropertyName("Edits")]
     public int? EditsKey { get; set; }
+    [JsonIgnore]
     public PurgatoryEntry Edits { get; set; }
 }

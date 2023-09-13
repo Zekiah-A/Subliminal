@@ -36,8 +36,9 @@ namespace SubliminalServer.Migrations
                 name: "AccountAddresses",
                 columns: table => new
                 {
-                    AddressKey = table.Column<int>(type: "INTEGER", nullable: false),
-                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    AddressKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IpAddress = table.Column<string>(type: "TEXT", nullable: false),
                     AccountKey = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -57,7 +58,7 @@ namespace SubliminalServer.Migrations
                 {
                     BadgeKey = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BadgeType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Badge = table.Column<int>(type: "INTEGER", nullable: false),
                     DateAwarded = table.Column<DateTime>(type: "TEXT", nullable: false),
                     AccountKey = table.Column<int>(type: "INTEGER", nullable: false)
                 },

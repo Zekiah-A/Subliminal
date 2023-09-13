@@ -11,7 +11,7 @@ using SubliminalServer;
 namespace SubliminalServer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230913181228_InitialCreate")]
+    [Migration("20230913224555_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -83,12 +83,13 @@ namespace SubliminalServer.Migrations
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountAddress", b =>
                 {
                     b.Property<int>("AddressKey")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AccountKey")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -106,7 +107,7 @@ namespace SubliminalServer.Migrations
                     b.Property<int>("AccountKey")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BadgeType")
+                    b.Property<int>("Badge")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateAwarded")

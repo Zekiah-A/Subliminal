@@ -12,6 +12,7 @@ public class PurgatoryEntry : UploadableEntry, IDatabasePoem
 {
     // Unique, Primary key
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int EntryKey { get; set; }
 
     // Client submitted
@@ -33,17 +34,23 @@ public class PurgatoryEntry : UploadableEntry, IDatabasePoem
     
     // Foreign key AccountData
     [ForeignKey(nameof(Author))]
+    [JsonPropertyName("Author")]
     public int? AuthorKey { get; set; }
+    [JsonIgnore]
     public AccountData? Author { get; set; }
     
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Amends))]
+    [JsonPropertyName("Amends")]
     public int? AmendsKey { get; set; }
+    [JsonIgnore]
     public PurgatoryEntry? Amends { get; set;  }
 
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Edits))]
+    [JsonPropertyName("Edits")]
     public int? EditsKey { get; set; }
+    [JsonIgnore]
     public PurgatoryEntry Edits { get; set; }
     
     // Server managed

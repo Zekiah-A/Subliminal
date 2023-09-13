@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -35,7 +36,7 @@ var configFile = new FileInfo("config.json");
 var dbPath = Path.Join(dataDir.FullName, "subliminal.db");
 
 ServerConfig? config = null;
-
+ 
 if (File.Exists(configFile.Name))
 {
     var configText = File.ReadAllText(configFile.Name);
@@ -63,7 +64,6 @@ foreach (var dirPath in new[] { dataDir, profileImageDir })
     {
         Directory.CreateDirectory(dirPath.FullName);
         Console.WriteLine($"[WARN] Could not find {dirPath.Name} directory, creating.");
-
     }
 }
 Console.ResetColor();
@@ -227,12 +227,7 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     
     // TODO: Email validation, this will all be moved elsewhere
     var tokenString = GenerateToken();
-    var account = new AccountData()
-    {
-        Token = tokenString,
-        Username = details.Username,
-        Email = details.Email
-    };
+    var account = new AccountData(details.Username, details.Email, DateTime.Now, tokenString);
 
     // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
     var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
@@ -242,7 +237,7 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     }
     account.KnownIPs.Add(new AccountAddress()
     {
-        Address = requestIp
+        IpAddress = requestIp
     });
     database.Accounts.Add(account);
     database.SaveChanges();
@@ -302,7 +297,7 @@ httpServer.MapPost("/SigninToken", ([FromBody] string? token, [FromServices] Dat
     }
     account.KnownIPs.Add(new AccountAddress()
     {
-        Address = requestIp
+        IpAddress = requestIp
     });
     database.SaveChanges();
 
@@ -338,7 +333,7 @@ httpServer.MapPost("/Signin", ([FromBody] LoginDetails details, [FromServices] D
     }
     account.KnownIPs.Add(new AccountAddress()
     {
-        Address = requestIp
+        IpAddress = requestIp
     });
     database.SaveChanges();
 
@@ -360,11 +355,13 @@ httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [F
     var account = int.TryParse(profileIdentifier, out var profileKey)
         ? database.Accounts.SingleOrDefault(account => account.AccountKey == profileKey)
         : database.Accounts.SingleOrDefault(account => account.Username == profileIdentifier);
-    
-    // Downcast so they we only expose the account profile
-    return account is AccountProfile profile
-        ? Results.Json(profile)
-        : Results.NotFound();
+    if (account is null)
+    {
+        return Results.NotFound();
+    }
+
+    var profile = new UploadableProfile(account);
+    return Results.Json(profile);
 });
 rateLimitEndpoints.Add("/Profiles", (1, TimeSpan.FromMilliseconds(500)));
 
