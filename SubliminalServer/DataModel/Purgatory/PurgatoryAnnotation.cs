@@ -10,18 +10,18 @@ public class PurgatoryAnnotation
 {
     // Unique, Primary key
     [Required]
-    public string AnnotationKey { get; set; }
+    public int AnnotationKey { get; set; }
     
     // Foreign key PurgatoryEntry
     [Required]
     [ForeignKey(nameof(Poem))]
-    public string PoemKey { get; set; }
+    public int PoemKey { get; set; }
     public PurgatoryEntry Poem { get; set; }
     
     // Foreign key AccountData
     [Required]
     [ForeignKey(nameof(Account))]
-    public string AccountKey { get; set; }
+    public int AccountKey { get; set; }
     public AccountData Account { get; set; }
     
     public int Start { get; set; }

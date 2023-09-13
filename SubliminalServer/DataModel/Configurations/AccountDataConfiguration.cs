@@ -11,7 +11,6 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
     {
         // Define the primary key
         builder.HasKey(account => account.AccountKey);
-        builder.Property(account => account.AccountKey).HasDefaultValueSql("NEWID()");
 
         // Unique email
         builder.HasIndex(account => account.Username).IsUnique();

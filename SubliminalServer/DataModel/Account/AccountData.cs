@@ -18,7 +18,7 @@ public class AccountData : AccountProfile
     public string Email { get; set; }
 
     // Navigation property
-    public List<AccountIp> KnownIPs { get; set; }
+    public List<AccountAddress> KnownIPs { get; set; }
     // Navigation property
     public List<PurgatoryDraft> Drafts { get; set; }
     // Navigation property
@@ -28,7 +28,7 @@ public class AccountData : AccountProfile
 
     public AccountData()
     {
-        KnownIPs = new List<AccountIp>();
+        KnownIPs = new List<AccountAddress>();
         Drafts = new List<PurgatoryDraft>();
         Blocked = new List<AccountData>();
         LikedPoems = new List<PurgatoryEntry>();

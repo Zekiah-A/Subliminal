@@ -19,14 +19,8 @@ public class AuthorizationMiddleware
 
         if (accountToken != null)
         {
-            var account = await databaseContext.Accounts.SingleOrDefaultAsync(account => account.Token == accountToken);
-            if (account is null)
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Invalid account token.");
-                return;
-            }
-
+            var account = await databaseContext.Accounts
+                .SingleOrDefaultAsync(account => account.Token == accountToken);
             context.Items["Account"] = account;
         }
 

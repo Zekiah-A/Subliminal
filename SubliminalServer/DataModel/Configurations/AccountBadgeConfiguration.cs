@@ -9,7 +9,6 @@ public class AccountBadgeConfiguration : IEntityTypeConfiguration<AccountBadge>
     public void Configure(EntityTypeBuilder<AccountBadge> builder)
     {
         builder.HasKey(badge => badge.BadgeKey);
-        builder.Property(badge => badge.BadgeKey).HasDefaultValueSql("NEWID()");
 
         // One to many (AccountData)
         builder.HasOne(badge => badge.Account)

@@ -12,15 +12,15 @@ public interface IDatabasePoem
     public string PoemContent { get; set; }
 
     // Foreign key AccountData
-    public string? AuthorKey { get; set; }
+    public int? AuthorKey { get; set; }
     public AccountData? Author { get; set; }
     
     // Foreign key PurgatoryEntry
-    public string? AmendsKey { get; set; }
+    public int? AmendsKey { get; set; }
     public PurgatoryEntry? Amends { get; set;  }
 
     // Foreign key PurgatoryEntry
-    public string? EditsKey { get; set; }
+    public int? EditsKey { get; set; }
     public PurgatoryEntry Edits { get; set; }
 
 }

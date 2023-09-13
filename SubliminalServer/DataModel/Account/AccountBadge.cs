@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Account;
@@ -5,13 +6,15 @@ namespace SubliminalServer.DataModel.Account;
 [PrimaryKey(nameof(BadgeKey))]
 public class AccountBadge
 {
-    public string BadgeKey { get; set; }
+    // Unique, Primary key
+    [Required]
+    public int BadgeKey { get; set; }
 
     public BadgeType BadgeType { get; set; }
     public DateTime DateAwarded { get; set; }
 
     // Foreign key AccountData
-    public string AccountKey { get; set; }
+    public int AccountKey { get; set; }
     
     // Navigation property to the parent AccounData
     public AccountData Account { get; set; }

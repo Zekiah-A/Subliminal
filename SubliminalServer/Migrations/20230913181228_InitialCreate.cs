@@ -15,11 +15,12 @@ namespace SubliminalServer.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    AccountKey = table.Column<string>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
+                    AccountKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Token = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Username = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
-                    PenName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    PenName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
                     Biography = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
                     Location = table.Column<string>(type: "TEXT", maxLength: 32, nullable: true),
                     Role = table.Column<string>(type: "TEXT", maxLength: 12, nullable: true),
@@ -32,13 +33,33 @@ namespace SubliminalServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccountAddresses",
+                columns: table => new
+                {
+                    AddressKey = table.Column<int>(type: "INTEGER", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    AccountKey = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountAddresses", x => x.AddressKey);
+                    table.ForeignKey(
+                        name: "FK_AccountAddresses_Accounts_AddressKey",
+                        column: x => x.AddressKey,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountKey",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AccountBadges",
                 columns: table => new
                 {
-                    BadgeKey = table.Column<string>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
+                    BadgeKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     BadgeType = table.Column<int>(type: "INTEGER", nullable: false),
                     DateAwarded = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AccountKey = table.Column<string>(type: "TEXT", nullable: false)
+                    AccountKey = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,30 +73,11 @@ namespace SubliminalServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccountIps",
-                columns: table => new
-                {
-                    AddressKey = table.Column<string>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
-                    Address = table.Column<string>(type: "TEXT", nullable: false),
-                    AccountKey = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccountIps", x => x.AddressKey);
-                    table.ForeignKey(
-                        name: "FK_AccountIps_Accounts_AddressKey",
-                        column: x => x.AddressKey,
-                        principalTable: "Accounts",
-                        principalColumn: "AccountKey",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BlockedAccounts",
                 columns: table => new
                 {
-                    Blocked = table.Column<string>(type: "TEXT", nullable: false),
-                    BlockedBy = table.Column<string>(type: "TEXT", nullable: false)
+                    Blocked = table.Column<int>(type: "INTEGER", nullable: false),
+                    BlockedBy = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,8 +100,8 @@ namespace SubliminalServer.Migrations
                 name: "FollowingAccounts",
                 columns: table => new
                 {
-                    Followed = table.Column<string>(type: "TEXT", nullable: false),
-                    FollowedBy = table.Column<string>(type: "TEXT", nullable: false)
+                    Followed = table.Column<int>(type: "INTEGER", nullable: false),
+                    FollowedBy = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,16 +124,17 @@ namespace SubliminalServer.Migrations
                 name: "PurgatoryEntries",
                 columns: table => new
                 {
-                    EntryKey = table.Column<string>(type: "TEXT", nullable: false),
+                    EntryKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Summary = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
                     ContentWarning = table.Column<bool>(type: "INTEGER", nullable: false),
                     PageStyle = table.Column<int>(type: "INTEGER", nullable: false),
                     PageBackgroundUrl = table.Column<string>(type: "TEXT", nullable: true),
                     PoemName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
                     PoemContent = table.Column<string>(type: "TEXT", nullable: false),
-                    AuthorKey = table.Column<string>(type: "TEXT", nullable: true),
-                    AmendsKey = table.Column<string>(type: "TEXT", nullable: true),
-                    EditsKey = table.Column<string>(type: "TEXT", nullable: false),
+                    AuthorKey = table.Column<int>(type: "INTEGER", nullable: true),
+                    AmendsKey = table.Column<int>(type: "INTEGER", nullable: true),
+                    EditsKey = table.Column<int>(type: "INTEGER", nullable: false),
                     Approves = table.Column<int>(type: "INTEGER", nullable: false),
                     Vetoes = table.Column<int>(type: "INTEGER", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -162,8 +165,8 @@ namespace SubliminalServer.Migrations
                 name: "LikedPoems",
                 columns: table => new
                 {
-                    LikedPoem = table.Column<string>(type: "TEXT", nullable: false),
-                    LikerAccount = table.Column<string>(type: "TEXT", nullable: false)
+                    LikedPoem = table.Column<int>(type: "INTEGER", nullable: false),
+                    LikerAccount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -186,8 +189,8 @@ namespace SubliminalServer.Migrations
                 name: "PinnedPoems",
                 columns: table => new
                 {
-                    PinnedPoem = table.Column<string>(type: "TEXT", nullable: false),
-                    PinnerAccount = table.Column<string>(type: "TEXT", nullable: false)
+                    PinnedPoem = table.Column<int>(type: "INTEGER", nullable: false),
+                    PinnerAccount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,9 +213,10 @@ namespace SubliminalServer.Migrations
                 name: "PurgatoryAnnotations",
                 columns: table => new
                 {
-                    AnnotationKey = table.Column<string>(type: "TEXT", nullable: false),
-                    PoemKey = table.Column<string>(type: "TEXT", nullable: false),
-                    AccountKey = table.Column<string>(type: "TEXT", nullable: false),
+                    AnnotationKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PoemKey = table.Column<int>(type: "INTEGER", nullable: false),
+                    AccountKey = table.Column<int>(type: "INTEGER", nullable: false),
                     Start = table.Column<int>(type: "INTEGER", nullable: false),
                     End = table.Column<int>(type: "INTEGER", nullable: false),
                     Approves = table.Column<int>(type: "INTEGER", nullable: false),
@@ -240,16 +244,17 @@ namespace SubliminalServer.Migrations
                 name: "PurgatoryDrafts",
                 columns: table => new
                 {
-                    DraftKey = table.Column<string>(type: "TEXT", nullable: false),
+                    DraftKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Summary = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
                     ContentWarning = table.Column<bool>(type: "INTEGER", nullable: false),
                     PageStyle = table.Column<int>(type: "INTEGER", nullable: false),
                     PageBackgroundUrl = table.Column<string>(type: "TEXT", nullable: true),
                     PoemName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
                     PoemContent = table.Column<string>(type: "TEXT", nullable: false),
-                    AuthorKey = table.Column<string>(type: "TEXT", nullable: true),
-                    AmendsKey = table.Column<string>(type: "TEXT", nullable: true),
-                    EditsKey = table.Column<string>(type: "TEXT", nullable: false)
+                    AuthorKey = table.Column<int>(type: "INTEGER", nullable: true),
+                    AmendsKey = table.Column<int>(type: "INTEGER", nullable: true),
+                    EditsKey = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,10 +281,11 @@ namespace SubliminalServer.Migrations
                 name: "PurgatoryTags",
                 columns: table => new
                 {
-                    TagKey = table.Column<string>(type: "TEXT", nullable: false),
+                    TagKey = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     TagName = table.Column<string>(type: "TEXT", nullable: false),
-                    EntryKey = table.Column<string>(type: "TEXT", nullable: false),
-                    PurgatoryDraftDraftKey = table.Column<string>(type: "TEXT", nullable: true)
+                    EntryKey = table.Column<int>(type: "INTEGER", nullable: false),
+                    PurgatoryDraftDraftKey = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -389,10 +395,10 @@ namespace SubliminalServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccountBadges");
+                name: "AccountAddresses");
 
             migrationBuilder.DropTable(
-                name: "AccountIps");
+                name: "AccountBadges");
 
             migrationBuilder.DropTable(
                 name: "BlockedAccounts");

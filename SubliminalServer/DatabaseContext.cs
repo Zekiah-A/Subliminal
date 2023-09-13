@@ -9,7 +9,7 @@ public class DatabaseContext : DbContext
 {
     public DbSet<AccountData> Accounts { get; set; }
     public DbSet<AccountBadge> AccountBadges { get; set; }
-    public DbSet<AccountIp> AccountIps { get; set; }
+    public DbSet<AccountAddress> AccountAddresses { get; set; }
 
     public DbSet<PurgatoryDraft> PurgatoryDrafts { get; set; }
     public DbSet<PurgatoryEntry> PurgatoryEntries { get; set; }
@@ -26,7 +26,7 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new AccountDataConfiguration());
-        modelBuilder.ApplyConfiguration(new AccountIpConfiguration());
+        modelBuilder.ApplyConfiguration(new AccountAddressConfiguration());
         modelBuilder.ApplyConfiguration(new AccountBadgeConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryEntryConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryTagConfiguration());

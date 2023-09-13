@@ -13,16 +13,15 @@ public class AccountProfile
 {
     // Unique, Primary key
     [Required]
-    public string AccountKey { get; set; }
+    public int AccountKey { get; set; }
     
     // Unique
     [Required]
     [MaxLength(32)]
     public string Username { get; set; }
     
-    [Required]
     [MaxLength(32)]
-    public string PenName { get; set; }
+    public string? PenName { get; set; }
     [MaxLength(300)]
     public string? Biography { get; set; }
     [MaxLength(32)]

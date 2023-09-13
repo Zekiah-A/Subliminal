@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Purgatory;
@@ -5,11 +6,13 @@ namespace SubliminalServer.DataModel.Purgatory;
 [PrimaryKey(nameof(TagKey))]
 public class PurgatoryTag
 {
-    public string TagKey { get; set; }
+    // Unique, Primary key
+    [Required]
+    public int TagKey { get; set; }
     public string TagName { get; set; }
 
     // Foreign key
-    public string EntryKey { get; set; }
+    public int EntryKey { get; set; }
     
     // Navigation property to the parent PurgatoryEntry
     public PurgatoryEntry PurgatoryEntry { get; set; }

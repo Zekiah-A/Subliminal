@@ -4,12 +4,11 @@ using SubliminalServer.DataModel.Account;
 
 namespace SubliminalServer.DataModel.Configurations;
 
-public class AccountIpConfiguration : IEntityTypeConfiguration<AccountIp>
+public class AccountAddressConfiguration : IEntityTypeConfiguration<AccountAddress>
 {
-    public void Configure(EntityTypeBuilder<AccountIp> builder)
+    public void Configure(EntityTypeBuilder<AccountAddress> builder)
     {
         builder.HasKey(address => address.AddressKey);
-        builder.Property(address => address.AddressKey).HasDefaultValueSql("NEWID()");
 
         // One to many (AccountData)
         builder.HasOne(address => address.Account)

@@ -147,8 +147,8 @@ sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
 httpServer.MapGet("/PurgatoryPicks", ([FromServices] DatabaseContext database) =>
 {
-    var records = database.PurgatoryEntries.Where(entry => entry.Pick == true);
-    return Results.Json(records);
+    var entries = database.PurgatoryEntries.Where(entry => entry.Pick == true).Select(entry => entry.EntryKey);
+    return Results.Json(entries);
 });
 rateLimitEndpoints.Add("/PurgatoryPicks", (1, TimeSpan.FromSeconds(2)));
 
@@ -240,12 +240,12 @@ httpServer.MapPost("/Signup", ([FromBody] LoginDetails details, [FromServices] D
     {
         return Results.Forbid();
     }
-    account.KnownIPs.Add(new AccountIp()
+    account.KnownIPs.Add(new AccountAddress()
     {
         Address = requestIp
     });
-
     database.Accounts.Add(account);
+    database.SaveChanges();
 
     context.Response.Cookies.Append("Token", tokenString, new CookieOptions()
     {
@@ -300,7 +300,7 @@ httpServer.MapPost("/SigninToken", ([FromBody] string? token, [FromServices] Dat
     {
         return Results.Forbid();
     }
-    account.KnownIPs.Add(new AccountIp()
+    account.KnownIPs.Add(new AccountAddress()
     {
         Address = requestIp
     });
@@ -336,7 +336,7 @@ httpServer.MapPost("/Signin", ([FromBody] LoginDetails details, [FromServices] D
     {
         return Results.Forbid();
     }
-    account.KnownIPs.Add(new AccountIp()
+    account.KnownIPs.Add(new AccountAddress()
     {
         Address = requestIp
     });
@@ -357,8 +357,9 @@ sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(5));
 //Get public facing data for an account, will accept either a username or an account key
 httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [FromServices] DatabaseContext database) =>
 {
-    var account = database.Accounts.SingleOrDefault(account =>
-        account.AccountKey == profileIdentifier || account.Username == profileIdentifier);
+    var account = int.TryParse(profileIdentifier, out var profileKey)
+        ? database.Accounts.SingleOrDefault(account => account.AccountKey == profileKey)
+        : database.Accounts.SingleOrDefault(account => account.Username == profileIdentifier);
     
     // Downcast so they we only expose the account profile
     return account is AccountProfile profile

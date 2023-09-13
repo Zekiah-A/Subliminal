@@ -12,7 +12,7 @@ public class PurgatoryEntry : UploadableEntry, IDatabasePoem
 {
     // Unique, Primary key
     [Required]
-    public string EntryKey { get; set; }
+    public int EntryKey { get; set; }
 
     // Client submitted
     [MaxLength(300)]
@@ -33,17 +33,17 @@ public class PurgatoryEntry : UploadableEntry, IDatabasePoem
     
     // Foreign key AccountData
     [ForeignKey(nameof(Author))]
-    public string? AuthorKey { get; set; }
+    public int? AuthorKey { get; set; }
     public AccountData? Author { get; set; }
     
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Amends))]
-    public string? AmendsKey { get; set; }
+    public int? AmendsKey { get; set; }
     public PurgatoryEntry? Amends { get; set;  }
 
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Edits))]
-    public string? EditsKey { get; set; }
+    public int? EditsKey { get; set; }
     public PurgatoryEntry Edits { get; set; }
     
     // Server managed

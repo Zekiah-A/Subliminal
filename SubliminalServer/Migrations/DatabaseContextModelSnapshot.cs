@@ -19,11 +19,11 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("BlockedAccounts", b =>
                 {
-                    b.Property<string>("Blocked")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Blocked")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("BlockedBy")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("BlockedBy")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Blocked", "BlockedBy");
 
@@ -34,11 +34,11 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("FollowingAccounts", b =>
                 {
-                    b.Property<string>("Followed")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Followed")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("FollowedBy")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("FollowedBy")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Followed", "FollowedBy");
 
@@ -49,11 +49,11 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("LikedPoems", b =>
                 {
-                    b.Property<string>("LikedPoem")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("LikedPoem")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("LikerAccount")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("LikerAccount")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("LikedPoem", "LikerAccount");
 
@@ -64,11 +64,11 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("PinnedPoems", b =>
                 {
-                    b.Property<string>("PinnedPoem")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PinnedPoem")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("PinnerAccount")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PinnerAccount")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("PinnedPoem", "PinnerAccount");
 
@@ -77,16 +77,31 @@ namespace SubliminalServer.Migrations
                     b.ToTable("PinnedPoems");
                 });
 
-            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
+            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountAddress", b =>
                 {
-                    b.Property<string>("BadgeKey")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("NEWID()");
+                    b.Property<int>("AddressKey")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AccountKey")
+                    b.Property<int>("AccountKey")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.HasKey("AddressKey");
+
+                    b.ToTable("AccountAddresses");
+                });
+
+            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
+                {
+                    b.Property<int>("BadgeKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AccountKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("BadgeType")
                         .HasColumnType("INTEGER");
@@ -103,10 +118,9 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountData", b =>
                 {
-                    b.Property<string>("AccountKey")
+                    b.Property<int>("AccountKey")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("TEXT");
@@ -127,7 +141,6 @@ namespace SubliminalServer.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PenName")
-                        .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("TEXT");
 
@@ -155,34 +168,14 @@ namespace SubliminalServer.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountIp", b =>
-                {
-                    b.Property<string>("AddressKey")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("AccountKey")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("AddressKey");
-
-                    b.ToTable("AccountIps");
-                });
-
             modelBuilder.Entity("SubliminalServer.DataModel.Purgatory.PurgatoryAnnotation", b =>
                 {
-                    b.Property<string>("AnnotationKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AnnotationKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AccountKey")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AccountKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Approves")
                         .HasColumnType("INTEGER");
@@ -194,9 +187,8 @@ namespace SubliminalServer.Migrations
                     b.Property<int>("End")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PoemKey")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PoemKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Start")
                         .HasColumnType("INTEGER");
@@ -215,21 +207,22 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Purgatory.PurgatoryDraft", b =>
                 {
-                    b.Property<string>("DraftKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("DraftKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AmendsKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("AmendsKey")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("AuthorKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ContentWarning")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("EditsKey")
+                    b.Property<int?>("EditsKey")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PageBackgroundUrl")
                         .HasColumnType("TEXT");
@@ -263,17 +256,18 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Purgatory.PurgatoryEntry", b =>
                 {
-                    b.Property<string>("EntryKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("EntryKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AmendsKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("AmendsKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Approves")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AuthorKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("AuthorKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ContentWarning")
                         .HasColumnType("INTEGER");
@@ -281,9 +275,9 @@ namespace SubliminalServer.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EditsKey")
+                    b.Property<int?>("EditsKey")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PageBackgroundUrl")
                         .HasColumnType("TEXT");
@@ -323,15 +317,15 @@ namespace SubliminalServer.Migrations
 
             modelBuilder.Entity("SubliminalServer.DataModel.Purgatory.PurgatoryTag", b =>
                 {
-                    b.Property<string>("TagKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TagKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("EntryKey")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("EntryKey")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("PurgatoryDraftDraftKey")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("PurgatoryDraftDraftKey")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("TagName")
                         .IsRequired()
@@ -406,22 +400,22 @@ namespace SubliminalServer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
+            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountAddress", b =>
                 {
                     b.HasOne("SubliminalServer.DataModel.Account.AccountData", "Account")
-                        .WithMany("Badges")
-                        .HasForeignKey("AccountKey")
+                        .WithMany("KnownIPs")
+                        .HasForeignKey("AddressKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountIp", b =>
+            modelBuilder.Entity("SubliminalServer.DataModel.Account.AccountBadge", b =>
                 {
                     b.HasOne("SubliminalServer.DataModel.Account.AccountData", "Account")
-                        .WithMany("KnownIPs")
-                        .HasForeignKey("AddressKey")
+                        .WithMany("Badges")
+                        .HasForeignKey("AccountKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
