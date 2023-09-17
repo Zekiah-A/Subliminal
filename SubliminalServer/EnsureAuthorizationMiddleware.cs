@@ -14,12 +14,12 @@ public class EnsureAuthorizationMiddleware
     public async Task Invoke(HttpContext context)
     {
         var account = context.Items["Account"];
-        if (account is AccountData)
+        if (account is not AccountData)
         {
-            await nextRequest(context);
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("This endpoint requires account authorisation.");
         }
-        
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.Response.WriteAsync("This endpoint requires account authorisation.");
+
+        await nextRequest(context);
     }
 }

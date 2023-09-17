@@ -49,7 +49,7 @@ public class AccountProfile
     // Navigation property
     [JsonIgnore]
     public List<AccountData> Following { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTime JoinDate { get; set; } // Must be unix
 
     public AccountProfile(string username, DateTime joinDate)
     {

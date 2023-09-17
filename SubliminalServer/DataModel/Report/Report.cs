@@ -14,17 +14,21 @@ public class Report
     public string ReportKey { get; set; }
     
     // Foreign key Account Data
+    [Required]
     [ForeignKey(nameof(Reporter))]
-    public string ReporterKey { get; set; }
+    public int ReporterKey { get; set; }
     public AccountData Reporter { get; set;  }
 
     // Foreign key PurgatoryEntry | PurgatoryAnnotation | AccountData
+    [Required]
     [ForeignKey(nameof(Target))]
-    public string? TargetKey { get; set; }
+    public int TargetKey { get; set; }
+    // Navigation property PurgatoryEntry | PurgatoryAnnotation | AccountData
     public object Target { get; set; }
     
+    [MaxLength(300)]
     public string Reason { get; set; }
     public ReportType ReportType { get; set; }
     public ReportTargetType ReportTargetType { get; set; }
-    public DateTime ReportDate { get; set; }
+    public DateTime DateCreated { get; set; }
 }

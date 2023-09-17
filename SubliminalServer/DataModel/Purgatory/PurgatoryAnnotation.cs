@@ -31,5 +31,7 @@ public class PurgatoryAnnotation
     public int Approves { get; set; }
     public int Vetoes { get; set; }
     
+    [Required]
+    [MaxLength(300)]
     public string Content { get; set; }
 }

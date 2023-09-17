@@ -139,6 +139,9 @@ class SubliminalHeader extends HTMLElement {
                 #right {
                     padding: 2px;
                 }
+                #right * {
+                    font-size: 10px;
+                }
             }
 
             @media(prefers-color-scheme: dark) {

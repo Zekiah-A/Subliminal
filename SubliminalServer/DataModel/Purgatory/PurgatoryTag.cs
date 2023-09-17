@@ -14,6 +14,7 @@ public class PurgatoryTag
     public string TagName { get; set; }
 
     // Foreign key
+    [ForeignKey(nameof(PurgatoryEntry))]
     public int EntryKey { get; set; }
     
     // Navigation property to the parent PurgatoryEntry

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Configurations;
 using SubliminalServer.DataModel.Purgatory;
+using SubliminalServer.DataModel.Rating;
 using SubliminalServer.DataModel.Report;
 
 namespace SubliminalServer;
@@ -15,7 +16,9 @@ public class DatabaseContext : DbContext
     public DbSet<PurgatoryDraft> PurgatoryDrafts { get; set; }
     public DbSet<PurgatoryEntry> PurgatoryEntries { get; set; }
     public DbSet<PurgatoryTag> PurgatoryTags { get; set; }
+    public DbSet<PurgatoryRating> PurgatoryRatings { get; set; }
     public DbSet<PurgatoryAnnotation> PurgatoryAnnotations { get; set; }
+    public DbSet<Report> Reports { get; set; }
 
     public DatabaseContext()
     {
@@ -31,6 +34,7 @@ public class DatabaseContext : DbContext
         modelBuilder.ApplyConfiguration(new AccountBadgeConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryEntryConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryTagConfiguration());
+        modelBuilder.ApplyConfiguration(new PurgatoryRatingConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryDraftConfiguration());
     }
 }

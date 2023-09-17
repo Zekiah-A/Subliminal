@@ -8,7 +8,7 @@ using SubliminalServer.DataModel.Api;
 namespace SubliminalServer.DataModel.Purgatory;
 
 [PrimaryKey(nameof(EntryKey))]
-public class PurgatoryEntry : UploadableEntry, IDatabasePoem
+public class PurgatoryEntry : IDatabasePoem
 {
     // Unique, Primary key
     [Required]
@@ -51,7 +51,7 @@ public class PurgatoryEntry : UploadableEntry, IDatabasePoem
     [JsonPropertyName("Edits")]
     public int? EditsKey { get; set; }
     [JsonIgnore]
-    public PurgatoryEntry Edits { get; set; }
+    public PurgatoryEntry? Edits { get; set; }
     
     // Server managed
     public int Approves { get; set; }

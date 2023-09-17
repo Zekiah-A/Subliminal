@@ -184,16 +184,41 @@
             overflow-x: scroll;
             user-select: none;
             overflow-y: hidden;
+
+            height: 80vh;
+            box-sizing: border-box;
         }
 
         #purgatoryGrid {
             display: grid;
             grid-template-columns: auto auto auto auto auto;
             grid-gap: 16px;
-            max-height: 600px;
             overflow: hidden;
             overflow-y: scroll;
             position: relative;
+
+            height: 80vh;
+            box-sizing: border-box;
+        }
+        
+        .purgatory-warning {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .purgatory-warning > span {
+            align-self: center;
+            background: var(--button-transparent);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid lightgray;
+        }
+        
+        .purgatory-actions-bottom {
+            display: flex;
         }
 
         /*#purgatoryGrid::after {
@@ -285,6 +310,10 @@
             #purgatoryGrid {
                 grid-template-columns: auto auto;  
             }
+            
+            .purgatory-actions-bottom {
+                justify-content: end;
+            }
 
             .seminars-parent-mobile {
                 display: flex;
@@ -335,7 +364,9 @@
     </div>
     <div id="purgatoryGrid" style="display: none;">
     </div>
-    <a href="poem-editor">+Add a Poem</a>
+    <div class="purgatory-actions-bottom">
+        <a href="poem-editor">+Add a Poem</a>
+    </div>
     <!--
     <div class="popup" style="width: 60%; position: fixed; height: 80%; display: none;flex-direction: column;">
         <h2 style="text-align: center;">Poem name - By User</h2>
@@ -655,76 +686,85 @@
     }
 
     async function addPurgatoryEntries(filter) {
-        let entryTemplate = stringToHtml(await (await fetch("./Other/purgatory-entry-template")).text())
-
         while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
         while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
 
         purgatoryGrid.style.display = "none"
         purgatoryFlex.style.display = "flex"
 
-        let entries = null
+        let entries = []
         let element = purgatoryFlex
 
-        if (filter == "all") {
+        if (filter === "all") {
             purgatoryFlex.style.display = "none"
             purgatoryGrid.style.display = "grid"
             element = purgatoryGrid
-
-            entries = await (await fetch(serverBaseAddress + "/PurgatoryAll")).json()
+            
+            try { entries = await (await fetch(serverBaseAddress + "/PurgatoryAll")).json() }
+            catch(error) { console.warn("Error loading purgatory all: ", error) }
         }
-        else if (filter == "liked") {
-            entries = await isLoggedIn() ? (await getAccountData()).likedPoems : JSON.parse(localStorage.liked)
-
-            if (entries == null || entries.length == 0) {
-                purgatoryFlex.innerHTML = "<p style=\"text-align: center; width: 100%;\">😢 You haven't liked any poems...<br>Press the star icon on a poem to add one to your liked list!</p>"
+        else if (filter === "liked") {
+            if (!await isLoggedIn()) {
+                purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+                        <span>😢 You haven't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
+                    </div>`
+                return
+            }
+            
+            entries = (await getAccountData()).likedPoems
+            if (entries == null || entries.length === 0) {
+                purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+                        <span>😢 You haven't liked any poems...<br>Press the star icon on a poem to add one to your liked list!</span>
+                    </div>`
+                return
             }
         }
-        else if (filter == "new") {
+        else if (filter === "new") {
             //Picks appear first on new, and have a different template
-            let picks = await (await fetch(serverBaseAddress + "/PurgatoryPicks")).json()
-            let pickTemplate = entryTemplate.cloneNode(true)
-            pickTemplate.querySelector("#_specialNotification").textContent = "Subliminal pick"
-            pickTemplate.querySelector("#_specialTooltip").textContent = "The best of the best - this poem has been selected by the subliminal team to be something that you SHOULD see now!"
+            let picks = []
+            try { picks = await (await fetch(serverBaseAddress + "/PurgatoryPicks")).json() }
+            catch(error) { console.warn("Error loading purgatory new: ", error) }
             
+            let extraData = {
+                notification: "Subliminal pick",
+                tooltip: "The best of the best - this poem has been selected by the subliminal team to be something that you should see now!"
+            }
            
-            for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, pickTemplate) }
-            
+            for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, extraData) }
             entries = await (await fetch(serverBaseAddress + "/PurgatoryNew")).json()
         }
 
         for (let entry of entries) { await appendEntry(entry, element, entryTemplate) }
+        if (!params.get("purgatorynew") || filter !== "new" || !purgatoryFlex.children[0]) {
+            return
+        }
 
-        if (!params.get("purgatorynew") || filter != "new" || !purgatoryFlex.children[0]) return
-
-        let newTemplate = entryTemplate.cloneNode(true)
-        newTemplate.querySelector("#_specialNotification").textContent = "New submission!"
-        newTemplate.querySelector("#_specialTooltip").textContent = "Well done, but only the purgatory can decide the fate of this poem now..."
-        let newElement = await appendEntry(params.get("purgatorynew"), purgatoryFlex, newTemplate)
+        let extraData = {
+            notification: "New submission!",
+            tooltip: "Well done, but only the purgatory can decide the fate of this poem now..."
+        }
+        let newElement = await appendEntry(params.get("purgatorynew"), purgatoryFlex, extraData)
         
         window.scrollTo(0, 0)
-        purgatoryFlex.scrollTo(1e4, 0) //TEMP 
+        purgatoryFlex.scrollTo(1e4, 0) 
         newElement.classList.add("entry-new")
         setTimeout(() => newElement.classList.remove("entry-new"), 800)
         params.delete("purgatorynew")
     }
 
-    async function appendEntry(entry, element, template) {
+    async function appendEntry(entry, element, extraData) {
         let entryData = await (await fetch(serverBaseAddress + "/Purgatory/" + entry)).json()
-        let newE = template.cloneNode(true)
-        newE.setAttribute("guid", entryData?.guid)
-        newE.querySelector("#_poemPreview").textContent = (
-            entryData.poemContent?.substring(0, 56)
-            .replace(/<[^>]*>?/gm, " ")
-            .replace(/\s+/g, " ")
-            .trim()
-        )
-        newE.querySelector("#_poemName").textContent = entryData.poemName?.substring(0, 32).replace(/<[^>]*>?/gm, " ")
-        newE.querySelector("#_poemAuthor").textContent = "By " + entryData.poemAuthor?.substring(0, 6).replace(/<[^>]*>?/gm, "") + "..."
-        newE.querySelector("#_approves").textContent = entryData.approves || 0
-        newE.querySelector("#_vetoes").textContent = entryData.vetoes || 0
+        if (entryData == null) return null
+        let entryElement = createFromData("purgatory-entry", {
+            name: entryData.poemName?.substring(0, 32),
+            author: entryData.poemAuthor?.substring(0, 12),
+            approves: entryData.approves || 0,
+            vetoes: entryData.vetoes || 0,
+            preview: entryData.poemContent,
+            ...extraData 
+        })
 
-        element.appendChild(newE)
+        element.appendChild(entryElement)
         return newE
     }
 
@@ -748,7 +788,7 @@
 
     filtersBar.addEventListener("mouseleave", event => {
         for (let button of filtersBar.children) {
-            if (button.className == "separator") continue
+            if (button.className === "separator") continue
             button.style.background = 'none'
         }
     })

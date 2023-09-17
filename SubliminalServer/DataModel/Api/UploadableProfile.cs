@@ -23,7 +23,7 @@ public class UploadableProfile
     public List<int> Poems { get; set; }
     // List of account keys
     public List<int> Following { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTime JoinDate { get; set; } // Unix time
 
     public UploadableProfile(AccountData account)
     {

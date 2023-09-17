@@ -1,3 +1,6 @@
 namespace SubliminalServer;
 
-public record PurgatoryBeforeAfter(long date, int count);
+/// <summary>
+/// Date should ideally be a UTC (Universal Time Zone) date
+/// </summary>
+public record PurgatoryBeforeAfter(DateTime Date, int Count);
