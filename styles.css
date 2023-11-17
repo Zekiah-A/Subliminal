@@ -26,13 +26,16 @@ body {
     background-size: cover !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
+    box-sizing: border-box;
+    padding: 10px;
+    padding-top: 72px;
 }
 
 hr {
     margin: 8px;
 }
 
-button, input[type="button"], .options-parent {
+button, input[type="button"] {
     background-color: var(--button-opaque);
     color: var(--text-colour);
     border: 1px solid #8f8f9d;
@@ -40,7 +43,7 @@ button, input[type="button"], .options-parent {
     cursor: default;
 }
 
-button:hover, input[type="button"]:hover, .options-parent:hover {
+button:hover, input[type="button"]:hover {
     background-color: #85859269;
 }
 
@@ -101,7 +104,6 @@ h2 {
     background: transparent;
 }
 
-
 .centre {
     text-align: center;
     overflow-wrap: break-word;
@@ -109,8 +111,8 @@ h2 {
 
 .contents-div-centre {
     margin: auto;
-    width: min(1112px, calc(100% - 20px));
-    padding: 10px;
+    width: 100%;
+    width: min(1112px, 100%);
 }
 
 .back {
@@ -342,46 +344,6 @@ h2 {
     max-height: 32px;
 }
 
-.options-parent {
-    padding-left: 4px;
-    padding-right: 4px;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    position: relative;
-    user-select: none;
-}
-
-.options {
-    background-color: var(--button-transparent);
-    border-radius: 4px;
-    margin-top: 8px;
-    border: 1px solid darkgray;
-    pointer-events: all !important;
-    display: none;
-    user-select: none;
-    position: absolute;
-    width: max-content;
-    top: 100%;
-}
-
-.options > div {
-    padding-left: 4px;
-    padding-right: 4px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.options > div[selected] {
-    background-color: darkgray;
-}
-
-.options > div:hover {
-    background-color: darkgray;
-}
-
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) {
     body {
@@ -403,7 +365,10 @@ h2 {
 }
 
 /*Mobile and thin screen optimisations*/
-@media screen and (orientation:portrait) {
+@media screen and (orientation: portrait) {
+    body {
+        padding-top: 56px;
+    }
     .poem-centre {
         margin-left: 0px;
         margin-right: 0px;
@@ -421,8 +386,7 @@ h2 {
     }
 
     .contents-div-centre {
-        margin: 0px;
-        width: calc(100% - 20px);
+        width: 100%;
     }
 
     .comment {
@@ -447,14 +411,6 @@ h2 {
 
     .profile-container {
         flex-direction: column-reverse;
-    }
-
-    .options {
-        position: absolute;
-        z-index: 2;
-        top: calc(100% + 48px);
-        left: 50%;
-        transform: translateX(-50%) scale(2);
     }
 }
 

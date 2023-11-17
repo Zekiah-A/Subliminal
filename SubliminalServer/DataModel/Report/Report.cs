@@ -18,13 +18,6 @@ public class Report
     [ForeignKey(nameof(Reporter))]
     public int ReporterKey { get; set; }
     public AccountData Reporter { get; set;  }
-
-    // Foreign key PurgatoryEntry | PurgatoryAnnotation | AccountData
-    [Required]
-    [ForeignKey(nameof(Target))]
-    public int TargetKey { get; set; }
-    // Navigation property PurgatoryEntry | PurgatoryAnnotation | AccountData
-    public object Target { get; set; }
     
     [MaxLength(300)]
     public string Reason { get; set; }

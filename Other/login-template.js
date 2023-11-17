@@ -145,7 +145,7 @@ class LoginSignup extends HTMLElement {
             const response = await fetch(serverBaseAddress + "/Signup", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: { Username: JSON.stringify(username), Email: JSON.stringify(email) } // Convert to JSON format
+                body: JSON.stringify({ Username: username, Email: email }) // Convert to JSON format
             })
 
             if (!response.ok) {

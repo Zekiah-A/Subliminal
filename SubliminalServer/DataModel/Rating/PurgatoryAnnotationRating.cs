@@ -7,7 +7,7 @@ using SubliminalServer.DataModel.Purgatory;
 namespace SubliminalServer.DataModel.Rating;
 
 [PrimaryKey(nameof(RatingKey))]
-public class PurgatoryRating
+public class PurgatoryAnnotationRating
 {
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,9 +17,9 @@ public class PurgatoryRating
     
     // Foreign key PurgatoryEntry
     [Required]
-    [ForeignKey(nameof(PurgatoryEntry))]
-    public int EntryKey { get; set; }
-    public PurgatoryEntry Entry { get; set; }
+    [ForeignKey(nameof(PurgatoryAnnotation))]
+    public int AnnotationKey { get; set; }
+    public PurgatoryAnnotation Annotation { get; set; }
     
     // Foreign Key PurgatoryEntry | PurgatoryAnnotation
     [Required]

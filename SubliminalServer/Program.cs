@@ -440,7 +440,7 @@ httpServer.MapPost("/Report", ([FromBody] UploadableReport reportUpload, [FromSe
     }
 
     var account = (AccountData) context.Items["Account"]!;
-    var report = new Report()
+    /*var report = new Report()
     {
         ReporterKey = account.AccountKey,
         TargetKey = reportUpload.TargetKey,
@@ -450,7 +450,7 @@ httpServer.MapPost("/Report", ([FromBody] UploadableReport reportUpload, [FromSe
         DateCreated = DateTime.UtcNow
     };
     database.Reports.Add(report);
-    database.SaveChanges();
+    database.SaveChanges();*/
 
     return Results.Ok();
 });

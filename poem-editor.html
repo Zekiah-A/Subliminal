@@ -372,11 +372,14 @@
 
         .online-editors > div {
             position: relative;
+            display: flex;
+            column-gap: 8px;
             margin-bottom: -16px;
             display: flex;
             cursor: pointer;
-            padding-left: 8px;
-            padding-right: 8px;
+            padding: 4px;
+            padding-left: 16px;
+            padding-right: 16px;
             transition: .2s margin-bottom, .2s margin-top, .2s background-color;
         }
 
@@ -636,7 +639,7 @@
     <div class="online-editors">
         Online editors:
         <div>
-            <img src="https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg" style="border-radius: 100%;" width="64" height="64">
+            <img src="Resources/DefaultAvatar.png" style="border-radius: 100%;background-color: white;" width="48" height="48">
             <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
         </div>
         <button style="margin-top: 24px;" onclick="">Invite editor</button>

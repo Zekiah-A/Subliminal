@@ -12,6 +12,7 @@
     <script src="./Other/purgatory-entry-template.js"></script>
     <script src="./Other/header-template.js"></script>
     <script src="./Other/login-template.js"></script>
+    <script src="./Other/select-template.js"></script>
     <script src="./Other/server.js"></script>
     <style>
         .section-span {
@@ -337,319 +338,331 @@
     <script src="./qrious-min.js"></script>
 </head>
 
-<body class="contents-div-centre" onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
+<body onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
     <subliminal-header></subliminal-header>
-    <br><br><br>
-    <div class="poem-preview">
-        <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance">
+    <div class="contents-div-centre">
+        <div class="poem-preview">
+            <iframe src="/Volume-1/Really-Stupid-Stuff/bibbilance">
 
-        </iframe>
-    </div>
-    <h3 style="margin-bottom: 0px;">Poem Purgatory:</h3>
-    <div id="filtersBar">
-        <div onclick="addPurgatoryEntries('new')">
-            <div>New</div>
-            <tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
+            </iframe>
         </div>
-        <div onclick="addPurgatoryEntries('liked')">
-            <div>Liked</div>
-            <tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
-        </div>
-        <div onclick="addPurgatoryEntries('recommended')">
-            <div>For me</div>
-            <tooltip class="button-tooltip">Poems recommended for you based on your past activity.</tooltip>
-        </div>
-    </div>
-    <div id="purgatoryFlex">
-    </div>
-    <div id="purgatoryGrid" style="display: none;">
-    </div>
-    <div class="purgatory-actions-bottom">
-        <a href="poem-editor">+Add a Poem</a>
-    </div>
-    <!--
-    <div class="popup" style="width: 60%; position: fixed; height: 80%; display: none;flex-direction: column;">
-        <h2 style="text-align: center;">Poem name - By User</h2>
-        <div class="poem-centre" style="flex-grow: 1;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
-        <div style="display: flex; position: sticky; column-gap: 8px; width: 100%; bottom: 16px; ">
-            <div class="popup-button">
-                <svg width="16" height="16" viewBox="0 -256 1850 1850">
-                    <g transform="matrix(1 0 0 -1 30.373 1426.9)">
-                        <path d="m1408 608v-320q0-119-84.5-203.5t-203.5-84.5h-832q-119 0-203.5 84.5t-84.5 203.5v832q0 119 84.5 203.5t203.5 84.5h704q14 0 23-9t9-23v-64q0-14-9-23t-23-9h-704q-66 0-113-47t-47-113v-832q0-66 47-113t113-47h832q66 0 113 47t47 113v320q0 14 9 23t23 9h64q14 0 23-9t9-23zm384 864v-512q0-26-19-45t-45-19-45 19l-176 176-652-652q-10-10-23-10t-23 10l-114 114q-10 10-10 23t10 23l652 652-176 176q-19 19-19 45t19 45 45 19h512q26 0 45-19t19-45z" fill="currentColor"></path>
-                    </g>
-                </svg>
-              Visit poem
+        <h3 style="margin-bottom: 0px;">Poem Purgatory:</h3>
+        <div id="filtersBar">
+            <div onclick="addPurgatoryEntries('new')">
+                <div>New</div>
+                <tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
             </div>
-           <div class="popup-button">Close</div>
+            <div onclick="addPurgatoryEntries('liked')">
+                <div>Liked</div>
+                <tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
+            </div>
+            <div onclick="addPurgatoryEntries('recommended')">
+                <div>For me</div>
+                <tooltip class="button-tooltip">Poems recommended for you based on your past activity.</tooltip>
+            </div>
         </div>
-    </div>
-    -->
-    <h3 style="margin-bottom: 0px;">Seminars:</h3>
-    <div class="seminars-parent">
-        <div class="seminars-side">
-            <div style="flex-grow: 1;"></div>
-            <p style="margin: 0px;font-size: 24px;">Writing a poem people will actually want to read</p>
+        <div id="purgatoryFlex">
+        </div>
+        <div id="purgatoryGrid" style="display: none;">
+        </div>
+        <div class="purgatory-actions-bottom">
+            <a href="poem-editor">+Add a Poem</a>
+        </div>
+        <!--
+        <div class="popup" style="width: 60%; position: fixed; height: 80%; display: none;flex-direction: column;">
+            <h2 style="text-align: center;">Poem name - By User</h2>
+            <div class="poem-centre" style="flex-grow: 1;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
+            <div style="display: flex; position: sticky; column-gap: 8px; width: 100%; bottom: 16px; ">
+                <div class="popup-button">
+                    <svg width="16" height="16" viewBox="0 -256 1850 1850">
+                        <g transform="matrix(1 0 0 -1 30.373 1426.9)">
+                            <path d="m1408 608v-320q0-119-84.5-203.5t-203.5-84.5h-832q-119 0-203.5 84.5t-84.5 203.5v832q0 119 84.5 203.5t203.5 84.5h704q14 0 23-9t9-23v-64q0-14-9-23t-23-9h-704q-66 0-113-47t-47-113v-832q0-66 47-113t113-47h832q66 0 113 47t47 113v320q0 14 9 23t23 9h64q14 0 23-9t9-23zm384 864v-512q0-26-19-45t-45-19-45 19l-176 176-652-652q-10-10-23-10t-23 10l-114 114q-10 10-10 23t10 23l652 652-176 176q-19 19-19 45t19 45 45 19h512q26 0 45-19t19-45z" fill="currentColor"></path>
+                        </g>
+                    </svg>
+                Visit poem
+                </div>
+            <div class="popup-button">Close</div>
+            </div>
+        </div>
+        -->
+        <h3 style="margin-bottom: 0px;">Seminars:</h3>
+        <div class="seminars-parent">
+            <div class="seminars-side">
+                <div style="flex-grow: 1;"></div>
+                <p style="margin: 0px;font-size: 24px;">Writing a poem people will actually want to read</p>
+                <p style="margin: 0px;">By Zekiah</p>
+            </div>
+            <div class="seminars-centre">
+                <p style="color: white;text-align: center;font-size: 32px;">Check out what's new, right now!</p>
+                <video style="flex-grow: 1;border-radius: 8px;margin-left: 32px;margin-right: 32px;" controls>
+                    <source src="movie.mp4" type="video/mp4">
+                </video>
+                <p style="color: white;text-align: center;font-size: 24px;">Learn more with subliminal seminars</p>
+                <a href="" style="text-align: center;">poemanthology.org/seminars</a>
+            </div>
+            <div class="seminars-side">
+                <div style="flex-grow: 1;"></div>
+            <p style="margin: 0px;font-size: 24px;">Analysing a poetic work</p>
             <p style="margin: 0px;">By Zekiah</p>
-        </div>
-        <div class="seminars-centre">
-            <p style="color: white;text-align: center;font-size: 32px;">Check out what's new, right now!</p>
-            <video style="flex-grow: 1;border-radius: 8px;margin-left: 32px;margin-right: 32px;" controls>
-                <source src="movie.mp4" type="video/mp4">
-            </video>
-            <p style="color: white;text-align: center;font-size: 24px;">Learn more with subliminal seminars</p>
-            <a href="" style="text-align: center;">poemanthology.org/seminars</a>
-        </div>
-        <div class="seminars-side">
-            <div style="flex-grow: 1;"></div>
-           <p style="margin: 0px;font-size: 24px;">Analysing a poetic work</p>
-           <p style="margin: 0px;">By Zekiah</p>
-        </div>
-    </div>
-    <div class="seminars-parent-mobile">
-        <div class="seminars-centre">
-            <p style="color: white;text-align: center;font-size: 32px;margin: 8px;">Check out what's new, right now!</p>
-            <video style="flex-grow: 1;border-radius: 8px;/*! margin-left: 32px; *//*! margin-right: 32px; */" controls="">
-                <source src="movie.mp4" type="video/mp4">
-            </video>
-            <p style="color: white;text-align: center;font-size: 24px;margin: 8px;">Learn more with subliminal seminars</p>
-            <a href="" style="text-align: center;">poemanthology.org/seminars</a>
-        </div>
-        <div class="seminars-side-parent-mobile">
-            <div class="seminars-side-mobile">
-                <div style="flex-grow: 1;"></div>
-                <p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Writing a poem people will actually want to read</p>
-                <p style="margin: 0px;">By Zekiah</p>
-            </div>
-            <div class="seminars-side-mobile">
-                <div style="flex-grow: 1;"></div>
-                <p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Analysing a poetic work</p>
-                <p style="margin: 0px;">By Zekiah</p>
             </div>
         </div>
-    </div>
-    <h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
-    <div class="classics-header">
-        <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-        <div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-            <div>Volume ⯆</div>
-            <div class="options" style="display: none;">
-                <div>All</div>
+        <div class="seminars-parent-mobile">
+            <div class="seminars-centre">
+                <p style="color: white;text-align: center;font-size: 32px;margin: 8px;">Check out what's new, right now!</p>
+                <video style="flex-grow: 1;border-radius: 8px;/*! margin-left: 32px; *//*! margin-right: 32px; */" controls="">
+                    <source src="movie.mp4" type="video/mp4">
+                </video>
+                <p style="color: white;text-align: center;font-size: 24px;margin: 8px;">Learn more with subliminal seminars</p>
+                <a href="" style="text-align: center;">poemanthology.org/seminars</a>
+            </div>
+            <div class="seminars-side-parent-mobile">
+                <div class="seminars-side-mobile">
+                    <div style="flex-grow: 1;"></div>
+                    <p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Writing a poem people will actually want to read</p>
+                    <p style="margin: 0px;">By Zekiah</p>
+                </div>
+                <div class="seminars-side-mobile">
+                    <div style="flex-grow: 1;"></div>
+                    <p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Analysing a poetic work</p>
+                    <p style="margin: 0px;">By Zekiah</p>
+                </div>
+            </div>
+        </div>
+        <h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
+        <div class="classics-header">
+            <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
+            <!--<div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                <div>Volume ⯆</div>
+                <div class="options" style="display: none;">
+                    <div>All</div>
+                    <hr>
+                    <div>War and Phrenics</div>
+                    <div>Really Stupid Stuff</div>
+                    <div>Parodies and Adaptations</div>
+                    <hr>
+                    <div>Idiots</div>
+                    <div>Sublime and Revelation</div>
+                    <div>Tales and Tomes</div>
+                    <hr>
+                    <div>Copypastas</div>
+                </div>
+            </div>-->
+            <subliminal-select placeholder="Volume">
+                <option>War and Phrenics</option>
+                <option>Really Stupid Stuff</option>
+                <option>Parodies and Adaptations</option>
                 <hr>
-                <div>War and Phrenics</div>
-                <div>Really Stupid Stuff</div>
-                <div>Parodies and Adaptations</div>
+                <option>Idiots</option>
+                <option>Sublime and Revelation</option>
+                <option>Tales and Tomes</option>
                 <hr>
-                <div>Idiots</div>
-                <div>Sublime and Revelation</div>
-                <div>Tales and Tomes</div>
-                <hr>
-                <div>Copypastas</div>
-            </div>
+                <option>Copypastas</option>
+            </subliminal-select>
         </div>
-    </div>
-    <div class="grid-container">
-        <div>
-            <h3>Volume 1: (Phrenes and Memes)</h3>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">War and Phrenics:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/the-sitting-down-of-the-opacity-brigade">2. The sitting down of the opacity brigade - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/venger">3. Venger - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/stomped">4. Stomped - By Junaid</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/bamitz">5. Bamitz - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/seppaku">6. Seppaku - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/blood-oath">7. Blood Oath - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/viiiiibraaanium">8. Viiiiibraaanium! - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/happy-old-man">9. Happy Old Man - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/tenacity">10. Tenacity - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/who-art-in-heaven">11. Who art in heaven? - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/the-ride">12. The Ride - By Axel</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/War-And-Phrenics/blitzkrieg">13. BLITZKRIEG - By Zekiah</a>
-                    <br>
+        <div class="grid-container">
+            <div>
+                <h3>Volume 1: (Phrenes and Memes)</h3>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">War and Phrenics:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/besusk">1. Besusk - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/the-sitting-down-of-the-opacity-brigade">2. The sitting down of the opacity brigade - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/venger">3. Venger - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/stomped">4. Stomped - By Junaid</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/bamitz">5. Bamitz - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/seppaku">6. Seppaku - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/blood-oath">7. Blood Oath - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/viiiiibraaanium">8. Viiiiibraaanium! - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/happy-old-man">9. Happy Old Man - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/tenacity">10. Tenacity - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/who-art-in-heaven">11. Who art in heaven? - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/the-ride">12. The Ride - By Axel</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/War-And-Phrenics/blitzkrieg">13. BLITZKRIEG - By Zekiah</a>
+                        <br>
+                    </div>
+                </div>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Really Stupid Stuff:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/sylable-of-obamama">2. Sylable Of Obamama - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/hän-vaan-istu">3. Hän vaan istu - By Noah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/organs">4. Organs - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/shifty-will">5. Shifty Will - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/i-don't-write-poems">6. I don't write POEMS - By Noah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/i-saw-you-at-503-on-persely-road">7. I saw you at 5:03 on Persely Road - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/badges-ft-cardi-b">8. Badges (Ft Cardi B) - By Lucky</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/statude-des-amongus">9. Statude des Amongus - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/81959">10. 8:19:59 - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/once-in-princess-selva's-classroom">11. Once in Princess Selva's classroom - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/effavescence">12. Effavescence - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/creativity">13. Creativity - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/this-is-(not)-the-art-of-war">14. This is (not) "the art of war" - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/trolling-my-pen">15. Trolling my Pen - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/squib-games">16. Squib Games - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/mr-fisher">17. Mr Fisher - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/skyfall">18. Skyfall - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/carbo-hydron-of-death">19. Carbo-Hydron of death - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/soyware">20. Soyware - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/jet-black">21. Jet Black - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/ten">22. TEN - By Zekiah</a>
+                        <br>
+                    </div>
+                </div>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Parodies and Adaptations:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/stuff-on-the-iso">2. Stuff On The Iso - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ink">3. Ink - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/tree-stumps">4. Tree Stumps - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ozyandyas">5. Ozyandyas - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/public-toilet">6. Public Toilet - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ketones">7. Ketones - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/my-first-among-us-game">8. My first Among Us game - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/composed-upon-mount-isso">9. Composed upon Mount Isso, March 22, 2022 - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-charge-of-the-bike-brigade">10. The Charge Of The Bike Brigade - By Angelos</a><sup id="addition">new</sup>
+                        <br>
+                    </div>
                 </div>
             </div>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Really Stupid Stuff:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/bibbilance">1. Bibbilance - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/sylable-of-obamama">2. Sylable Of Obamama - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/hän-vaan-istu">3. Hän vaan istu - By Noah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/organs">4. Organs - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/shifty-will">5. Shifty Will - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/i-don't-write-poems">6. I don't write POEMS - By Noah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/i-saw-you-at-503-on-persely-road">7. I saw you at 5:03 on Persely Road - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/badges-ft-cardi-b">8. Badges (Ft Cardi B) - By Lucky</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/statude-des-amongus">9. Statude des Amongus - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/81959">10. 8:19:59 - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/once-in-princess-selva's-classroom">11. Once in Princess Selva's classroom - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/effavescence">12. Effavescence - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/creativity">13. Creativity - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/this-is-(not)-the-art-of-war">14. This is (not) "the art of war" - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/trolling-my-pen">15. Trolling my Pen - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/squib-games">16. Squib Games - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/mr-fisher">17. Mr Fisher - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/skyfall">18. Skyfall - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/carbo-hydron-of-death">19. Carbo-Hydron of death - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/soyware">20. Soyware - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/jet-black">21. Jet Black - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Really-Stupid-Stuff/ten">22. TEN - By Zekiah</a>
-                    <br>
+            <div>
+                <h3>Volume 2: (Idiots and Revelations)</h3>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Idiots:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/industrial-society">2. Industrial Society - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/a-conclusive-thesis-on-modern-day-consumerism">3. A conclusive thesis on modern day consumerism - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/reality">4. Reality - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/a-long-road-to-al'mogus">5. A long road to Al'mogus - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/dear-liberals">6. Dear, liberals - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/old-man-consequences">7. Old Man Consequences - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/i-am-sorrounded-by-idiots">8. I am sorrounded by Idiots - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/an-unfortunate-event">9. An Unfortunate Event - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/modern-day-brockelhurst">10. Modern Day Brockelhurst - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/the-epilogue">11. The Epilogue - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/erfolgreich-wenn">12. Erfolgreich Wenn? - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/asylum">13. Asylum - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/a-doctor-of-schizophrenia">14. A doctor of Schizophrenia - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/five-a-side-footie">15. Five-a-side Footie - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/a-gay-encounter">16. A gay encounter - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/we-live-in-a-dictatorship">17. We live in a dictatorship - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/the-police-cause-all-the-chaos">18. The police cause all the chaos - By Angelos</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/suspended-in-h">19. Suspended in H - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/mifism">20. MIFISM - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/litigations">21. Litigations - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/almost-as-stone-as-a-rock">22. Almost as stone as a rock - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Idiots/cupcake-bomb">23. Cupcake Bomb - By Zekiah</a>
+                        <br>
+                    </div>
                 </div>
-            </div>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Parodies and Adaptations:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-interlude">1. The Interlude - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/stuff-on-the-iso">2. Stuff On The Iso - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ink">3. Ink - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/tree-stumps">4. Tree Stumps - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ozyandyas">5. Ozyandyas - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/public-toilet">6. Public Toilet - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/ketones">7. Ketones - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/my-first-among-us-game">8. My first Among Us game - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/composed-upon-mount-isso">9. Composed upon Mount Isso, March 22, 2022 - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-1/Parodies-And-Adaptations/the-charge-of-the-bike-brigade">10. The Charge Of The Bike Brigade - By Angelos</a><sup id="addition">new</sup>
-                    <br>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Sublime and Revelation:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Sublime-And-Revelation/chiss">2. Chiss - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Sublime-And-Revelation/delly">3. Delly - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Sublime-And-Revelation/spiders">4. Spiders - By Zekiah</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Sublime-And-Revelation/a-morbin-time">5. A morbin Time - By Bushi</a>
+                        <br>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div>
-            <h3>Volume 2: (Idiots and Revelations)</h3>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Idiots:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-2/Idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/industrial-society">2. Industrial Society - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/a-conclusive-thesis-on-modern-day-consumerism">3. A conclusive thesis on modern day consumerism - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/reality">4. Reality - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/a-long-road-to-al'mogus">5. A long road to Al'mogus - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/dear-liberals">6. Dear, liberals - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/old-man-consequences">7. Old Man Consequences - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/i-am-sorrounded-by-idiots">8. I am sorrounded by Idiots - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/an-unfortunate-event">9. An Unfortunate Event - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/modern-day-brockelhurst">10. Modern Day Brockelhurst - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/the-epilogue">11. The Epilogue - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/erfolgreich-wenn">12. Erfolgreich Wenn? - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/asylum">13. Asylum - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/a-doctor-of-schizophrenia">14. A doctor of Schizophrenia - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/five-a-side-footie">15. Five-a-side Footie - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/a-gay-encounter">16. A gay encounter - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/we-live-in-a-dictatorship">17. We live in a dictatorship - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/the-police-cause-all-the-chaos">18. The police cause all the chaos - By Angelos</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/suspended-in-h">19. Suspended in H - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/mifism">20. MIFISM - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/litigations">21. Litigations - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/almost-as-stone-as-a-rock">22. Almost as stone as a rock - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Idiots/cupcake-bomb">23. Cupcake Bomb - By Zekiah</a>
-                    <br>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Tales and Tomes:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-burial-of-herr-fischer-vi">2. The Burial of Herr Fischer VI - By Bushi</a>
+                        <br>
+                        <a href="./poem?path=/Volume-2/Tales-And-Tomes/bull-and-bush">3. Bull and Bush - By Angelos</a>
+                        <br>
+                    </div>
                 </div>
-            </div>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Sublime and Revelation:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-2/Sublime-And-Revelation/babarian">1. Babarian - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Sublime-And-Revelation/chiss">2. Chiss - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Sublime-And-Revelation/delly">3. Delly - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Sublime-And-Revelation/spiders">4. Spiders - By Zekiah</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Sublime-And-Revelation/a-morbin-time">5. A morbin Time - By Bushi</a>
-                    <br>
-                </div>
-            </div>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Tales and Tomes:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Tales-And-Tomes/the-burial-of-herr-fischer-vi">2. The Burial of Herr Fischer VI - By Bushi</a>
-                    <br>
-                    <a href="./poem?path=/Volume-2/Tales-And-Tomes/bull-and-bush">3. Bull and Bush - By Angelos</a>
-                    <br>
-                </div>
-            </div>
-            <h3>Other stuff:</h3>
-            <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
-                <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Copypastas:</p>
-                <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
-                <div class="section-body">
-                    <a href="Other/a-joke">1. A joke - By Zekiah</a>
-                    <br>
-                    <a href="Other/the-redditor">2. The Redditor - By Bushi</a>
-                    <br>
+                <h3>Other stuff:</h3>
+                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                    <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Copypastas:</p>
+                    <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+                    <div class="section-body">
+                        <a href="Other/a-joke">1. A joke - By Zekiah</a>
+                        <br>
+                        <a href="Other/the-redditor">2. The Redditor - By Bushi</a>
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
@@ -789,9 +802,9 @@
     filtersBar.addEventListener("mouseleave", event => {
         for (let button of filtersBar.children) {
             if (button.className === "separator") continue
-            button.style.background = 'none'
+            button.st
+            yle.background = 'none'
         }
     })
 </script>
-
 </html>

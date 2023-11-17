@@ -18,7 +18,9 @@ public class DatabaseContext : DbContext
     public DbSet<PurgatoryTag> PurgatoryTags { get; set; }
     public DbSet<PurgatoryRating> PurgatoryRatings { get; set; }
     public DbSet<PurgatoryAnnotation> PurgatoryAnnotations { get; set; }
-    public DbSet<Report> Reports { get; set; }
+    public DbSet<AccountReport> AccountReports { get; set; }
+    public DbSet<PurgatoryReport> PurgatoryReports { get; set; }
+    public DbSet<PurgatoryAnnotationReport> PurgatoryAnnotationReports { get; set; }
 
     public DatabaseContext()
     {
@@ -35,6 +37,7 @@ public class DatabaseContext : DbContext
         modelBuilder.ApplyConfiguration(new PurgatoryEntryConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryTagConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryRatingConfiguration());
+        modelBuilder.ApplyConfiguration(new PurgatoryAnnotationRatingConfiguration());
         modelBuilder.ApplyConfiguration(new PurgatoryDraftConfiguration());
     }
 }

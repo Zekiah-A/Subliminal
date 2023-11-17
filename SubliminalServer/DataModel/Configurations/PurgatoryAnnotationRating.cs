@@ -4,7 +4,7 @@ using SubliminalServer.DataModel.Rating;
 
 namespace SubliminalServer.DataModel.Configurations;
 
-public class PurgatoryRatingConfiguration : IEntityTypeConfiguration<PurgatoryRating>
+public class PurgatoryAnnotationRatingConfiguration : IEntityTypeConfiguration<PurgatoryRating>
 {
     public void Configure(EntityTypeBuilder<PurgatoryRating> builder)
     {
