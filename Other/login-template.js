@@ -211,10 +211,12 @@ class LoginSignup extends HTMLElement {
     }
 
     validateLoginSignup() {
+        const validUsernamePattern = /^[a-z][a-z0-9_.]{0,15}$/;
         const validEmailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
         if (!this.loginPromise.checked || this.loginUsername.value.length == 0
-            || !this.loginEmail.value.match(validEmailPattern)) {
+            || !this.loginEmail.value.match(validEmailPattern)
+            || !this.loginUsername.value.match(validUsernamePattern)) {
             this.signupButton.setAttribute("disabled", "true")
         }
         else {

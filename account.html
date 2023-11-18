@@ -34,8 +34,20 @@
 		#profileName {
 			--contentWidth: 198px;
 			display: inline-block;
-			min-width: 198px;
 			width: 198px;
+		}
+
+		#profileUsername {
+			opacity: 0.8;
+			font-weight: bold;
+		}
+
+		#profileBiography {
+			width: min(442px, 100%);
+			line-break: anywhere;
+			resize: none;
+			margin-top: 8px;
+			min-height: 72px;
 		}
 
 		#recentWorks {
@@ -50,6 +62,19 @@
 			grid-template-columns: 50%;
 			grid-gap: 8px;
 			margin-bottom: 16px;
+		}
+
+		.profile-details {
+			display:flex;
+			column-gap:16px;
+			flex-direction:column;
+			margin-top:8px
+		}
+
+		.profile-aside {
+			flex-direction:column;
+			display: flex;
+			flex-wrap: wrap;
 		}
 
 		.editable {
@@ -87,7 +112,7 @@
    </style>
 </head>
 
-<body>
+<body class="headered-body">
 	<subliminal-header></subliminal-header>
 	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
 		<h2>Your profile role:</h2>
@@ -134,24 +159,32 @@
 		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); executeAccountAction(actionType.UpdateAvatar, avatarUrl)">Done</div>
 	</div>
 	<div class="div-centre">
-		<br><br><br>
 		<div class="profile-container">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
-			<div style="flex-direction:column;display: flex;flex-wrap: wrap;">
+			<div class="profile-aside">
 				<div class="profile-title-container">
 					<p class="profile-title">I'm </p>
 					<input id="profileName" type="text" class="profile-title editable"  placeholder="username"
-						maxlength="16" oninput="this.style.width = 0; this.style.setProperty('--contentWidth', this.scrollWidth + 'px'); this.style.width = 'var(--contentWidth)';"
+						maxlength="16" oninput="
+						    //min-width: 198px;
+							if (this.value) {
+								this.style.width = 0;
+								this.style.setProperty('--contentWidth', this.scrollWidth + 'px');
+								this.style.width = 'var(--contentWidth)';
+							}
+							else {
+								this.style.minWidth = '198px'
+							}"
 						onblur="executeAccountAction(actionType.UpdatePenName, profileName.value)" value="Nameless">
 					<p class="profile-title">, </p>
 					<p class="profile-title" id="profileRoleText" style="cursor: pointer;"
 						onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';"
 						onclick="profileRole.style.display = 'block';">a writer</p>
 				</div>
-				<textarea id="profileBiography" style="width: min(442px, 100%); line-break: anywhere; resize: none; margin-top: 16px; min-height: 72px;"
-					class="editable" placeholder="Click here to start writing your bio!" maxlength="360"
-					onblur="executeAccountAction(actionType.UpdateBiography, profileBiography.value)"></textarea>
-				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
+				<span id="profileUsername">@username</span>
+				<textarea id="profileBiography" class="editable" placeholder="Click here to start writing your bio!"
+					maxlength="360" onblur="executeAccountAction(actionType.UpdateBiography, profileBiography.value)"></textarea>
+				<div class="profile-details">
 					<div>🌍&nbsp;<input id="profileLocation" type="text" class="editable"
 						onblur="executeAccountAction(actionType.UpdateLocation, profileLocation.value)"
 						placeholder="Planet of Earth, Milky Way" maxlength="36"></div>
@@ -374,7 +407,8 @@
 
 	async function initialise() {
 		if (!await isLoggedIn()) {
-			alert("You don't seem to have an account here, or are not logged in.\n\nHead over to the contents page to create one or sign in.")
+			if (confirm("You don't seem to have an account here, or are not logged in. Log in now?"))
+				window.location.pathname = "/login"
 			return
 		}
 

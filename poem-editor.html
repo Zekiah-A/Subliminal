@@ -315,7 +315,7 @@
 
         .background-grid > div {
             position: relative;
-            overflow: hidden;
+            overflow: clip;
         }
 
         .background-grid > div:hover > div {
@@ -329,9 +329,12 @@
             height: 50%;
             overflow: hidden;
             transition: .2s top;
-            background-color: var(--button-opaque);
+            background-color: var(--button-transparent);
             user-select: none;
             pointer-events: none;
+            backdrop-filter: blur(4px);
+            padding: 8px;
+            overflow-y: auto;
         }
 
         .suggestions {
@@ -452,7 +455,7 @@
         }
     </style>
 </head>
-<body style="max-width: 100%; overflow-x: hidden; overflow-y: scroll;">
+<body style="max-width: 100%; overflow-x: hidden; overflow-y: auto;">
     <div id="licenseAgreePopup" class="popup" style="display: none; width: max(30%, 500px);">
         <h2>You're almost there!</h2>
         <img src="Resources/Celebration.png" style="width: 100%;">

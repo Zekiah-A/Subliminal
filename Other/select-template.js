@@ -6,7 +6,8 @@ class SubliminalSelect extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.innerHTML = html`
-            <div id="selected"></div>
+            <span id="selected" class="selected"></span>
+            <span id="arrow" class="arrow">⯆</span>
             <div id="options" class="options" style="display: none;"></div>`
         const style = document.createElement("style")
         style.innerHTML = css`
@@ -25,9 +26,11 @@ class SubliminalSelect extends HTMLElement {
                 position: relative;
                 user-select: none;
             }
-
-            :host:hover {
+            :host(:hover) {
                 background-color: #85859269;
+            }
+            :host(:active) {
+                background-color: #B1B1BB;
             }
             
             .options {
@@ -59,35 +62,51 @@ class SubliminalSelect extends HTMLElement {
             .options > option:hover {
                 background-color: darkgray;
             }
+
+            .selected {
+                margin-right: 4px;
+            }
+
+            .arrow {
+                transition: transform 0.1s ease 0s;
+            }
             
             @media screen and (orientation: portrait) {
                 .options {
                     position: fixed;
                     z-index: 2;
-                    left: 50%;
+                    left: 50% !important;
                     transform: translateX(-50%) scale(2);
                     top: 270px;
                 }            
             }`
         this.shadowRoot.append(style)
         defineAndInject(this, this.shadowRoot)
-
-        const optionsElement = this.shadowRoot.getElementById("options")
-        this.onclick = function() {
-            optionsElement.style.display = optionsElement.style.display == 'block' ? 'none' : 'block'
-        }
-        this.onblur = function() {
-            optionsElement.style.display = 'none'
-        }
+        const thisElement = this
 
         const selectedElement = this.shadowRoot.getElementById("selected")
-        selectedElement.textContent = this.getAttribute("placeholder") + " ⯆"
-        
+        const optionsElement = this.shadowRoot.getElementById("options")
+        const arrowElement = this.shadowRoot.getElementById("arrow")
+        this.onclick = function() {
+            const open = optionsElement.style.display == "block"
+            optionsElement.style.display = open ? "none" : "block"
+            arrowElement.style.transform = open ? "none" : "scaleY(-1)"
+            recalcOptionsPosition()
+        }
+        this.onblur = function() {
+            optionsElement.style.display = "none"
+        }
+        selectedElement.textContent = this.getAttribute("placeholder") + " "
+
+        function recalcOptionsPosition() {
+
+            const overflowLeft = (thisElement.getBoundingClientRect().left + optionsElement.offsetWidth) - window.innerWidth
+            optionsElement.style.left = Math.min(0, -overflowLeft - 8) + "px"
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
-            console.log(this.children)
             for (let i = 0; i < this.children.length; i++) {
                 const node = this.children[i]
-                console.log(node)
 
                 if (node instanceof HTMLOptionElement || node instanceof HTMLHRElement) {
                     optionsElement.appendChild(node.cloneNode(true))
@@ -98,6 +117,7 @@ class SubliminalSelect extends HTMLElement {
                 }
             }
         })
+        window.addEventListener("resize", recalcOptionsPosition)
     }
 }
 

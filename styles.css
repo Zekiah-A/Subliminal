@@ -21,14 +21,19 @@
     }
 }
 
+* { box-sizing: border-box; }
+
+.headered-body {
+    padding: 10px;
+    padding-top: 72px;
+}
+
 body {
     margin: 0px;
     background-size: cover !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
     box-sizing: border-box;
-    padding: 10px;
-    padding-top: 72px;
 }
 
 hr {
@@ -197,7 +202,6 @@ h2 {
 }
 
 .popup-input {
-    width: calc(100% - 8px);
     display: block;
     line-height: 1.5;
     height: 2.1em;
@@ -206,7 +210,7 @@ h2 {
     background-color: #fff;
     border-radius: 2px;
     transition: all 0.3s;
-    width: calc(100% - 16px);
+    width: 100%;
 }
 
 .popup-input:focus {
@@ -366,9 +370,10 @@ h2 {
 
 /*Mobile and thin screen optimisations*/
 @media screen and (orientation: portrait) {
-    body {
+    .headered-body {
         padding-top: 56px;
     }
+
     .poem-centre {
         margin-left: 0px;
         margin-right: 0px;
