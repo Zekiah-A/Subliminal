@@ -10,6 +10,7 @@
     <script src="./editor-document.js"></script>
     <script src="./Other/component-registrar.js"></script>
     <script src="./Other/notification-template.js"></script>
+    <script src="./Other/select-template.js"></script>
     <script src="./Other/server.js"></script>
     <style>
         #main {
@@ -109,7 +110,7 @@
 
         #side {
             position: fixed;
-            top: 130px;
+            top: 126px;
             right: 0px;
             width: max(16%, 250px);
             padding: 8px;
@@ -117,7 +118,7 @@
             backdrop-filter: blur(5px);
             box-shadow: 0px 0px 8px grey;
             z-index: 2;
-            height: calc(100% - 146px);
+            height: calc(100% - 126px);
             overflow-y: scroll;
             transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height;
         }
@@ -392,6 +393,24 @@
             background-color: var(--button-opaque);
             border-radius: 8px;
         }
+
+        .options {
+            background-color: var(--button-opaque);
+            border-radius: 4px;
+            margin-top: 4px;
+            border: 1px solid darkgray;
+            pointer-events: all !important;
+            display: none;
+            user-select: none;
+        }
+
+        .options div[selected] {
+            background-color: darkgray;
+        }
+
+        .options div:hover {
+            background-color: darkgray;
+        }
     
         @media screen and (orientation:portrait) {
             #main {
@@ -451,6 +470,14 @@
                 right: 8px;
                 left: unset;
                 z-index: 2;
+            }
+
+            .options {
+                position: absolute;
+                z-index: 2;
+                top: calc(100% + 48px);
+                left: 50%;
+                transform: translateX(-50%) scale(2);
             }
         }
     </style>
@@ -739,48 +766,29 @@
             <p>Poem Rhyme finder:</p>
             <input id="rhymeFinderInput" style="font-size: 16px; " type="text" class="popup-input" placeholder="Enter word">
             <p style="opacity: 0.6; font-size: 10px;">Use * to match any word ending, or ?? to match anything within a word, for example pai* (paint, pain), p???t (paint, print)</p>
-            <div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-                <div>Word search type ⯆</div>
-                <div class="options" style="display: none;" onclick="
-                    this.querySelector('[selected]')?.removeAttribute('selected')
-                    if (event.target == this || !rhymeFinderInput.value)
-                        return
-                    event.target.setAttribute('selected', true)
-                    rhymeFinderFind(rhymeFinderInput.value, event.target.dataset.api)
-                ">
-                    <div data-api="ml">Similar meaning</div>
-                    <div data-api="sl">Sound like</div>
-                    <div data-api="sp">Spelled similarly</div>
-                    <div data-api="rel_jjb">Adjectives used to describe</div>
-                    <div data-api="rel_jja">Nouns described by</div>
-                    <div data-api="rel_rhy">Perfect rhymes</div>
-                    <div data-api="rel_nry">Half rhymes</div>
-                    <div data-api="rel_nry">Homophones</div>
-                    <div data-api="rel_ant">Antonyms</div>
-                    <div data-api="rel_nry">Matching consonant</div>
-                </div>
-            </div>
+            <!--TODO: Call rhymeFinderFind(rhymeFinderInput.value, event.target.dataset.api)-->
+            <subliminal-select placeholder="Word search type">
+                <option value="ml">Similar meaning</option>
+                <option value="sl">Sound like</option>
+                <option value="sp">Spelled similarly</option>
+                <option value="rel_jjb">Adjectives used to describe</option>
+                <option value="rel_jja">Nouns described by</option>
+                <option value="rel_rhy">Perfect rhymes</option>
+                <option value="rel_nry">Half rhymes</option>
+                <option value="rel_nry">Homophones</option>
+                <option value="rel_ant">Antonyms</option>
+                <option value="rel_nry">Matching consonant</option>
+            </subliminal-select>
             <div id="sideRhymeMatches"><!--Container for side rhyme match elements--></div>
             <p style="opacity: 0.6; font-size: 10px;">Credits to datamuse for their fantastic API. https://www.datamuse.com/</p>
         </div>
         <div class="side-content" coauthor>
             <p>Poem AI coauthor:</p>
             <span style="opacity: 0.6;">Use the subliminal poem writing AI to help cowrite your work!</span>
-            <div>
-                Base the AI's results off of:
-                <div id="sideAiBasisOptions" class="options-parent" style="display: inline;" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-                    <div>... ⯆</div>
-                    <div class="options" style="display: none;" onclick="
-                        if (event.target == this)
-                            return
-                        this.parentElement.children[0].innerText = event.target.innerText + ' ⯆'
-                        this.parentElement.setAttribute('basis', event.target.dataset.basis)
-                    ">
-                        <div data-basis="my">My work so far</div>
-                        <div data-basis="subliminal">Subliminal poems</div>
-                    </div>
-                </div>
-            </div>
+            <subliminal-select placeholder="Base the AI's results off of:">
+                <option>My work so far</option>
+                <option>Subliminal poems</option>
+            </subliminal-select>
             <div class="popup-button" style="flex-grow: inherit;" onclick="alert('An error occurred - please try again later')">Start coauthor</div>
         </div>
         <div class="side-content" close>

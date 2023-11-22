@@ -44,6 +44,7 @@ class SubliminalSelect extends HTMLElement {
                 position: absolute;
                 width: max-content;
                 top: 100%;
+                backdrop-filter: blur(8px);
             }
             
             .options > option {
