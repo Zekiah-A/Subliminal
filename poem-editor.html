@@ -28,6 +28,17 @@
         #editorCanvas:focus {
             outline: none;
         }
+        #editorContext {
+            display: none;
+            position: fixed;
+            width: 200px;
+            height: 128px;
+            background-color: var(--button-transparent);
+            backdrop-filter: blur(5px);
+            border-radius: 4px;
+            box-shadow: 0px 0px 10px #656565;
+            border: 1px solid darkgray;
+        }
         .tool {
             margin: 1px;
             height: 24px;
@@ -112,7 +123,7 @@
             position: fixed;
             top: 126px;
             right: 0px;
-            width: max(16%, 250px);
+            width: max(16%, 320px);
             padding: 8px;
             background-color: var(--button-transparent);
             backdrop-filter: blur(5px);
@@ -120,7 +131,7 @@
             z-index: 2;
             height: calc(100% - 126px);
             overflow-y: scroll;
-            transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height;
+            transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height, .2s background-color;
         }
 
         #side[collapsed] {
@@ -223,7 +234,7 @@
 
         .tool-header {
             background-color: var(--button-opaque);
-            width: calc(100% - 16px);
+            width: 100%;
             display: block;
             padding: 8px;
             border-radius: 4px;
@@ -242,7 +253,7 @@
 
         #summaryArea {
             min-height: 50px;
-            width: calc(100% - 16px);
+            width: 100%;
             height: 254px;
             resize: none;
             background: var(--button-opaque);
@@ -264,35 +275,48 @@
             grid-gap: 2px;
         }
 
-        #tagContainer > div {
+        #tagContainer > button {
             border-radius: 4px;
             height:64px;
             background: lightgrey;
             padding: 4px;
             text-align: center;
+            position: relative;
+            overflow: clip;
             transition: .2s color;
         }
 
-        #tagContainer > div:hover {
+        #tagContainer > button:hover {
             color: white;
         }
 
-        #tagContainer > div[add]:hover {
-            color: white;
-        }
-
-        #tagContainer > div::after {
+        #tagContainer > button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(45deg, #b92a2a, #e914149c);
             opacity: 0;
             transition: .2s opacity;
         }
 
-        #tagContainer > div[add]::after  {
+        #tagContainer > button > span {
+            z-index: 1;
+            position: relative;
+        }
+
+        #tagContainer > button[add]::before  {
             background: linear-gradient(45deg, #2ab936, #26e9149c);
         }
 
-        #tagContainer > div:hover::after {
+        #tagContainer > button:hover::before {
             opacity: 1;
+        }
+
+        #tagContainer > button:active::before {
+            opacity: 0;
         }
 
         #tagContainer, #cWarningContainer, #summaryArea {
@@ -423,7 +447,7 @@
             }
 
             #side {
-                width: calc(100% - 12px);
+                width: 100%;
                 height: 60%;
                 bottom: 0px;
                 top: inherit;
@@ -670,58 +694,73 @@
         Online editors:
         <div>
             <img src="Resources/DefaultAvatar.png" style="border-radius: 100%;background-color: white;" width="48" height="48">
-            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 16px;position: relative;align-self: center;">You</div>
+            <div style="padding: 4px;border-radius: 8px;background: linear-gradient(lightblue, blue);color: white;height: 24px;position: relative;align-self: center;">You</div>
         </div>
         <button style="margin-top: 24px;" onclick="">Invite editor</button>
     </div>
 
     <div id="main" class="poem-centre">
         <div id="suggestions" class="suggestions" style="display: none;"><!--Rhyme suggestions--></div>
-        <textarea id="editorInputCatcher" style="position: absolute; left: -10000px; top: -10000px; z-index: -1; opacity: 0; pointer-events: none;" hidden>
-            <!--I am a hack to allow for mobile virtual keyboard and input because the virtual
+        <!--I am a hack to allow for mobile virtual keyboard and input because the virtual
             keyboard API has stupid restrictions on where you can use .show(). I LoVe BROWSERS!!!!! 🥲🔫🔫🔫:)))-->
-        </textarea>
-        <canvas id="editorCanvas" tabindex="-1" virtualkeyboardpolicy="manual" onmousedown="
-            this['pressed'] = true
-            editor.clearSelection()
-            editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
-            editor.renderCanvasData(this)
-            editorInputCatcher.focus()
-            // TODO: handle virtkeyboard geometry in scrolldown
-            //navigator.virtualKeyboard?.overlaysContent = true
-            navigator.virtualKeyboard?.show()
-        " onmousemove="
-            if (this['pressed']) {
-                let endPosition = editor.realToTextPosition(event.offsetX, event.offsetY, this)
-                editor.selection.position = editor.position > endPosition ? endPosition : editor.position
-                editor.selection.end = editor.position > endPosition ? editor.position : endPosition
+        <input type="text" id="editorInputCatcher" virtualkeyboardpolicy="manual" style="position: absolute; opacity: 0; pointer-events: none;"
+            onkeydown="
+                event.preventDefault()
+                editorCanvas.dispatchEvent(new event.constructor(event.type, event))
+            ">
+        <canvas id="editorCanvas" tabindex="-1"
+            ondblclick="
+                // TODO: Select word on mobile handles
+            "
+            oncontextmenu="
+                editorContext.style.left = (event.clientX) + 'px'
+                editorContext.style.top = (event.clientY) + 'px'
+                editorContext.style.display = 'flex'
+                return event.preventDefault()
+            " onmousedown="
+                event.preventDefault()
+                // TODO: handle virtkeyboard geometry in scrolldown
+                //navigator.virtualKeyboard?.overlaysContent = true
+                editorInputCatcher.focus()
+                navigator.virtualKeyboard.show()
+                navigator.virtualKeyboard?.show()
+                this['pressed'] = true
+                editor.clearSelection()
+                editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
                 editor.renderCanvasData(this)
-            }
-        " onmouseup="this['pressed'] = false" onkeydown="
-            if (event.key == 'Backspace') {
-                editor.deleteText()
-            }
-            else if (event.key == 'Delete') {
-                editor.deleteText(-1)
-            }
-            else if (event.key == 'Enter') {
-                editor.addNewLine()
-                // TODO: only scroll down if cursor becomes off the screen
-                setTimeout(() => window.scrollTo(0, 1e5), 10)
-            }
-            else if (event.key == 'Shift' || event.key.length > 1) {
-                return
-            }
-            else if (event.ctrlKey && event.key.toLowerCase() == 'a') {
-                editor.selectAll()
-            }
-            else {
-                editor.addText(event.key)
-            }
-
-            editor.renderCanvasData(this)
-            event.preventDefault()
-        " onblur="editor.renderCanvasData(this, false)" onfocus="editor.renderCanvasData(this)"></canvas>
+                editorContext.style.display = 'none'
+            " onmousemove="
+                if (this['pressed']) {
+                    let endPosition = editor.realToTextPosition(event.offsetX, event.offsetY, this)
+                    editor.selection.position = editor.position > endPosition ? endPosition : editor.position
+                    editor.selection.end = editor.position > endPosition ? editor.position : endPosition
+                    editor.renderCanvasData(this)
+                }
+            " onmouseup="this['pressed'] = false" onkeydown="
+                if (event.key == 'Backspace') {
+                    editor.deleteText()
+                }
+                else if (event.key == 'Delete') {
+                    editor.deleteText(-1)
+                }
+                else if (event.key == 'Enter') {
+                    editor.addNewLine()
+                    // TODO: only scroll down if cursor becomes off the screen
+                    setTimeout(() => window.scrollTo(0, 1e5), 10)
+                }
+                else if (event.key == 'Shift' || event.key.length > 1) {
+                    return
+                }
+                else if (event.ctrlKey && event.key.toLowerCase() == 'a') {
+                    editor.selectAll()
+                }
+                else {
+                    editor.addText(event.key)
+                }
+                editor.renderCanvasData(this)
+                event.preventDefault()
+            " onblur="editor.renderCanvasData(this, false)" onfocus="editor.renderCanvasData(this)"></canvas>
+            <div id="editorContext"></div>
     </div>
 
     <div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
@@ -740,9 +779,10 @@
                 <div style="display: flex;flex-direction: row;height: 48px;">
                     <p style="margin: 0px; align-self: center;">Poem tags:</p>
                 </div>
-
                 <div id="tagContainer">
-                    <div add="true" style="line-height: 64px;" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">+</div>
+                    <button add="true" style="line-height: 64px;" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">
+                        <span>+ Add tag</span>
+                    </button>
                 </div>
             </div>
 
@@ -750,11 +790,10 @@
                 <div style="display: flex;flex-direction: row;height: 48px;">
                     <p style="margin: 0px; align-self: center;">Content Warning:</p>
                 </div>
-
                 <div id="cWarningContainer" style="background: var(--button-opaque);border-radius: 8px; padding: 8px;">
-                    <input type="checkbox" id="cWarningCheckbox" onclick="cWarningNotesInput.disabled = this.checked ? false : true">
+                    <input type="checkbox" id="cWarningCheckbox" onchange="cWarningNotesInput.disabled = this.checked ? false : true">
                     <label for="cWarningCheckbox"> Enabled</label>
-                    <input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: calc(100% - 16px); height: 24px;" disabled="">
+                    <input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px;" disabled="">
                 </div>
             </div>
 
@@ -1023,10 +1062,12 @@
 
     function addPoemTag(tagName) {
         if (!tagName || poemTags.includes(tagName) || poemTags.length >= 5) return
-        tagname = tagName.toLowerCase().trim()
+        tagName = tagName.replace(/\W+/g, "").slice(0, 12)
         poemTags.push(tagName)
-        let newTag = document.createElement("div")
-        newTag.innerText = tagName
+        let newTag = document.createElement("button")
+        let newLabel = document.createElement("span")
+        newLabel.textContent = tagName
+        newTag.appendChild(newLabel)
         newTag.onclick = () => { removePoemTag(tagName) }
         tagContainer.appendChild(newTag)
     }

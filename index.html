@@ -122,6 +122,7 @@
             border-radius: 4px;
             overflow: hidden;
             user-select: none;
+            flex-grow: 1;
         }
 
         .presenter img {
@@ -152,17 +153,23 @@
         #poemProcessSubInfo {
             display: flex;
             column-gap: 64px;
-            overflow: hidden;
             transition: .5s column-gap, .2s background-color;
-            user-select: none;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            transition: .5s column-gap, .2s background-color;
+        }
+
+        #poemProcessSubInfo::-webkit-scrollbar {
+            display: none;
         }
 
         #poemProcessSubInfo > div {
             background-color: var(--panel-transparent);
             padding: 8px;
             border-radius: 8px;
-            height: 120px;
-            min-width: 112px;
+            min-width: 156px;
+            user-select: none;
         }
 
         #poemProcessSubInfo > div > p {

@@ -23,6 +23,12 @@ const positionMovements = {
     none: 4
 }
 
+const textPositioning = {
+    left: 0,
+    right: 1,
+    center: 2
+}
+
 class EditorDocument {
     // Data, text data that canvas will be initialised with, Scale, oversample factor of canvas
     constructor(data = null, scale = 1, fontSize = 18) {
@@ -33,6 +39,7 @@ class EditorDocument {
         this.encoder = new TextEncoder()
         this.scale = scale
         this.fontSize = fontSize * scale
+        this.textPositioning = textPositioning.left
     }
 
     formatToHtml() {
@@ -49,7 +56,6 @@ class EditorDocument {
         for (let i = 0; i < this.data.length; i++) {
             if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
-                continue
             }
             else if (this.data[i] == '\uE001') {
                 html.push("<br>")
