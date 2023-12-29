@@ -718,7 +718,7 @@
         else if (filter === "liked") {
             if (!await isLoggedIn()) {
                 purgatoryFlex.innerHTML = `<div class="purgatory-warning">
-                        <span>😢 You haven't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
+                        <span>😢 You aren't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
                     </div>`
                 return
             }
@@ -731,7 +731,7 @@
                 return
             }
         }
-        else if (filter === "new") {
+        else if (filter === "recommended") {
             //Picks appear first on new, and have a different template
             let picks = []
             try { picks = await (await fetch(serverBaseAddress + "/PurgatoryPicks")).json() }
@@ -739,8 +739,11 @@
             
             let extraData = {
                 notification: "Subliminal pick",
-                tooltip: "The best of the best - this poem has been selected by the subliminal team to be something that you should see now!"
+                tooltip: "This poem has been reccomended to you based on your previous activity"
             }
+            purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+                    <span>😢 You aren't logged in...<br>Log in or create an account to see your reccomendations!</span>
+                </div>`
            
             for (let pickEntry of picks) { await appendEntry(pickEntry, purgatoryFlex, extraData) }
             entries = await (await fetch(serverBaseAddress + "/PurgatoryNew")).json()
@@ -801,8 +804,7 @@
     filtersBar.addEventListener("mouseleave", event => {
         for (let button of filtersBar.children) {
             if (button.className === "separator") continue
-            button.st
-            yle.background = 'none'
+            button.style.background = 'none'
         }
     })
 </script>

@@ -485,6 +485,10 @@ class EditorDocument {
         }
     }
 
+    getSelectionText() {
+        return this.data.slice(this.selection.position, this.selection.end)
+    }
+
     setSelection(start, end = null) {
         if (end == null) {
             this.position = this.toRawPosition(start, this.data)

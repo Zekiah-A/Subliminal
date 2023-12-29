@@ -102,6 +102,12 @@ class SubliminalHeader extends HTMLElement {
                 padding: 8px;
             }
 
+            hr {
+                border: none;
+                border-top: 1px solid gray;
+                margin: 0px;
+            }
+
             @media screen and (orientation:portrait) {
                 p {
                     display: none;
