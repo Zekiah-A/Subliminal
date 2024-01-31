@@ -106,7 +106,7 @@ class EditorDocument {
         }
         const view = new DataView(buffer)
 
-        let existingSelection = this.existingSelection()
+        let hasSelection = this.hasSelection()
         let defaultTextColour = getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
         let inStyle = false
         let stylesStack = [] // Every style on this stack gets applied to a char
@@ -157,7 +157,7 @@ class EditorDocument {
                 let measure = context.measureText(currentLine)
 
                 // Draw selection char by char to make life easier
-                if (existingSelection && i >= this.selection.position && i < this.selection.end) {
+                if (hasSelection && i >= this.selection.position && i < this.selection.end) {
                     context.save()
                     let thisCharMeasure = context.measureText(this.data[i])
                     context.fillStyle = "#c1e8fb63"
@@ -182,7 +182,7 @@ class EditorDocument {
         lines.push(currentLine)
         currentLine = ""
 
-        if (!cursor || this.existingSelection()) {
+        if (!cursor || this.hasSelection()) {
             return
         }
 
@@ -309,7 +309,7 @@ class EditorDocument {
 
     movePosition(movement, shiftPressed) {
         if (shiftPressed && !this.selection.shiftKeyPivot) {
-            this.selection.shiftKeyPivot = editor.position
+            this.selection.shiftKeyPivot = this.position
         }
 
         if (movement == positionMovements.left) {
@@ -334,8 +334,8 @@ class EditorDocument {
         }
 
         if (shiftPressed && this.selection.shiftKeyPivot) {
-            editor.selection.position = Math.min(this.selection.shiftKeyPivot, editor.position)
-            editor.selection.end = Math.max(this.selection.shiftKeyPivot, editor.position)
+            this.selection.position = Math.min(this.selection.shiftKeyPivot, this.position)
+            this.selection.end = Math.max(this.selection.shiftKeyPivot, this.position)
         }
     }
 
@@ -396,7 +396,7 @@ class EditorDocument {
     }
 
     addStyle(code, value = null) {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
             buffer[1] = code.charCodeAt(0)
@@ -446,7 +446,7 @@ class EditorDocument {
     }
 
     addText(value) {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
 
@@ -455,7 +455,7 @@ class EditorDocument {
     }
 
     addNewLine() {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
 
@@ -471,7 +471,7 @@ class EditorDocument {
     }
 
     deleteText(count = 1) {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
         else {
@@ -511,7 +511,7 @@ class EditorDocument {
         this.selection.end = this.data.length
     }
 
-    existingSelection() {
+    hasSelection() {
         return !((this.selection.position == 0 && this.selection.end == 0)
             || this.selection.end - this.selection.position == 0)
     }
