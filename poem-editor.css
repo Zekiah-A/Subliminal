@@ -36,6 +36,7 @@
     align-items: center;
     column-gap: 8px;
     transition: .05 transform;
+    user-select: none;
 }
 #editorContext > button:hover {
     background-color: var(--button-opaque-hover);
@@ -45,6 +46,7 @@
 }
 #editorContext > button > svg {
     opacity: 0.6;
+    fill: var(--text-colour);
 }
 #editorContext > button > span {
     font-weight: bold;
