@@ -11,7 +11,8 @@ class LoginSignup extends HTMLElement {
         this.value = true
 
         this.shadowRoot.innerHTML = html`
-            <link rel="stylesheet" href="styles.css"> <!-- TODO: Find a more efficient way if possible, perhaps a separate popup CSS which styles imports, but just this component could import -->
+            <!-- TODO: Find a more efficient style application if possible (perhaps remove shadowroot nesting if singleton) -->
+            <link rel="stylesheet" href="styles.css">
             <div id="login" class="popup" currentpage="signin">
                 <div style="display: flex;flex-grow: 1;">
                     <div id="back" onclick="this.shadowThis.login.setAttribute('currentpage', 'signin')">
@@ -20,7 +21,8 @@ class LoginSignup extends HTMLElement {
                     <h2>Login to Subliminal:</h2>
                 </div>
                 <div id="loginSignin" class="page">
-                    <input id="loginSigninUsername" type="text" class="popup-input" placeholder="Username">
+                    <input id="loginSigninUsername" maxlength="16" type="text" class="popup-input" placeholder="Username" oninput="
+                        this.shadowThis.validateUsername(this)">
                     <input id="loginSigninEmail" type="text" class="popup-input" placeholder="Email">
                     <input id="loginQRInput" type="file" accept="image/*" capture="environment" style="display: none;">
                     <div class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value); this.shadowThis.login.style.display = 'none';"
@@ -33,44 +35,47 @@ class LoginSignup extends HTMLElement {
                     </div>
                 </div>
                 <div id="loginSignup" class="page">
-                    <input id="loginUsername" type="text" class="popup-input" oninput="this.shadowThis.validateLoginSignup()"
-                        placeholder="Username*">
-                    <input id="loginEmail" type="text" oninput="this.shadowThis.validateLoginSignup()" class="popup-input" placeholder="Email*">
+                    <input id="signupUsername" type="text" class="popup-input" maxlength="16" oninput="
+                            this.shadowThis.validateUsername(this)        
+                            this.shadowThis.validateLoginSignup()"
+                        placeholder="Username*"
+                        onblur="this.reportValidity()"
+                        onchange="this.reportValidity()">
+                    <input id="signupEmail" type="text"
+                        oninput="this.shadowThis.validateLoginSignup()"
+                        onblur="this.reportValidity()"
+                        onchange="this.reportValidity()" class="popup-input" placeholder="Email*">
                     <div>
-                        <label for="loginPromise">I promise to be a cool member of subliminal*</label>
-                        <input id="loginPromise" type="checkbox" oninput="this.shadowThis.validateLoginSignup()">
+                        <label for="signupPromise">I promise to be a cool member of subliminal*</label>
+                        <input id="signupPromise" type="checkbox"
+                            oninput="this.shadowThis.validateLoginSignup()"
+                            onblur="this.reportValidity()"
+                            onchange="this.reportValidity()">
                     </div>
                     <div style="display:flex;column-gap:8px;margin-top:8px">
                         <div id="signupButton" class="popup-button"
                             onclick="
-                                this.shadowThis.signup(this.shadowThis.loginUsername.value, this.shadowThis.loginEmail.value)
-                                    .then(() => {
-                                        this.shadowThis.login.setAttribute('currentpage', 'code');
-                                        setTimeout(() => this.shadowThis.loginClose.removeAttribute('disabled'), 4000);
+                                this.shadowThis.signup(this.shadowThis.signupUsername.value, this.shadowThis.signupEmail.value)
+                                    .then(() => { this.shadowThis.login.setAttribute('currentpage', 'code') });
                                 })
                             " disabled>Create account
                         </div>
                     </div>
                 </div>
                 <div id="loginCode" class="page">
-                    <p>Your account code is the key for acessing your account, keep it private!</p>
-                    <p id="loginCodeText" class="signup-code-hidden"
-                        onmouseenter="this.style.background = 'transparent'; this.style.color = 'black';"
-                        style="background: transparent; color: black;font-size: 64px;font-weight: bold;text-align: center;margin: 0px;">00000000</p>
-                    <div style="position: relative;">
-                        <img id="loginCodeQR" style="filter: blur(16px); aspect-ratio: 1/1; width: 100%;"
-                            onmouseenter="this.style.filter = 'blur(0px)';">
-                        <img src="./Resources/SmallLogo.png"
-                            style="width:64px;height:64px;position:absolute;left:50%;top:50%;opacity:0.4;transform: translate(-50%, -50%);"
-                            width="64" height="64">
+                    <div class="login-code-banner">
+                        <img src="./Resources/SmallLogo.png" width="32" height="32">
+                        <h3>It's time to confirm your account!</h3>
                     </div>
+                    <p>If you're lucky we have sent you an email to verify your account, enter the code we sent you below to continue!</p>
+                    <input id="signupCode" type="text" class="popup-input" placeholder="email-code">
                     <br>
                     <div id="loginClose" class="popup-button" onclick="
                             this.shadowThis.login.setAttribute('currentpage', 'signin')
                             this.shadowThis.login.style.display = 'none'
                             const finishEvent = new CustomEvent('finished', { type: 'signup' })
                             this.dispatchEvent(finishEvent)
-                        " disabled="">Close
+                        " disabled="">Finish
                     </div>
                 </div>
                 <div id="loginError" class="page">
@@ -97,7 +102,7 @@ class LoginSignup extends HTMLElement {
             }
 
             #login[currentpage="code"] {
-                height: 680px;
+                height: 316px;
             }
 
             #back {
@@ -132,6 +137,23 @@ class LoginSignup extends HTMLElement {
                 #login[currentpage="loginerror"] > #loginError, #login[currentpage="code"] > #loginCode {
                 display: flex !important;
             }
+
+            .login-code-banner {
+                display: flex;
+                column-gap: 16px;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .login-code-banner > h3 {
+                margin: 0;
+            }
+
+            #signupCode {
+                height: 64px;
+                font-size: 48px;
+                text-align: center;
+            }
         `
         this.shadowRoot.append(style)
      
@@ -149,26 +171,12 @@ class LoginSignup extends HTMLElement {
             })
 
             if (!response.ok) {
-                confirmFail("Signup response was denied.")
+                this.confirmFail("Signup response was denied.")
                 return
             }
 
             const dataObject = await response.json()
-            localStorage.accountCode = dataObject.code
-            localStorage.accountGuid = dataObject.guid
-            loginCodeText.textContent = dataObject.code
-
-            const qr = new QRious({
-                element: loginCodeQR,
-                background: "white",
-                foreground: "#007bd3",
-                level: "L",
-                size: 512,
-                value: window.location + "?accountCode=" + dataObject.code
-            })
-            loginCodeQR.src = qr.toDataURL()
-
-            showMyAccount()
+            console.log(dataObject)
         }
         catch (error) {
             this.confirmFail(error)
@@ -205,6 +213,10 @@ class LoginSignup extends HTMLElement {
         this.dispatchEvent(finishEvent)
     }
 
+    validateUsername(input) {
+        input.value = input.value.replace(/\W+/g, '').toLowerCase()
+    }
+
     confirmFail(err) {
         this.errorMessage.textContent = err
         this.login.setAttribute("currentPage", "loginerror")
@@ -213,10 +225,30 @@ class LoginSignup extends HTMLElement {
     validateLoginSignup() {
         const validUsernamePattern = /^[a-z][a-z0-9_.]{0,15}$/;
         const validEmailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        let valid = true
+        if (this.signupUsername.value.length == 0 || !this.signupUsername.value.match(validUsernamePattern)) {
+            this.signupUsername.setCustomValidity("Invalid username, usernames should be lowercase with only digit, _ and . special characters")
+            valid = false
+        }
+        else {
+            this.signupUsername.setCustomValidity("")
+        }
+        if (!this.signupPromise.checked) {
+            this.signupPromise.setCustomValidity("You have to agree to this!")
+            valid = false
+        }
+        else {
+            this.signupPromise.setCustomValidity("")
+        }
+        if (!this.signupEmail.value.match(validEmailPattern)) {
+            this.signupEmail.setCustomValidity("Invalid email!")
+            valid = false
+        }
+        else {
+            this.signupEmail.setCustomValidity("")
+        }
 
-        if (!this.loginPromise.checked || this.loginUsername.value.length == 0
-            || !this.loginEmail.value.match(validEmailPattern)
-            || !this.loginUsername.value.match(validUsernamePattern)) {
+        if (!valid) {
             this.signupButton.setAttribute("disabled", "true")
         }
         else {

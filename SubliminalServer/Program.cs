@@ -12,10 +12,9 @@ using SubliminalServer.DataModel.Report;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 // EFCore database setup:
-// dotnet tool install --global dotnet-ef
 // dotnet ef migrations add InitialCreate
 // dotnet ef database update
-// Prerelease .NET 8 may require "dotnet tool install --global dotnet-ef --prerelease"
+// Prerelease .NET 9 may require "dotnet tool install --global dotnet-ef --prerelease"
 // to update from a non-prerelease, do "dotnet tool update --global dotnet-ef --prerelease"
 
 var dataDir = new DirectoryInfo("Data");
@@ -84,6 +83,10 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Configure middlewares and runtime services, including global authorization middleware that will
 // validate accounts for all site endpoints
 var httpServer = builder.Build();
@@ -98,6 +101,12 @@ httpServer.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(profileImageDir.FullName),
     RequestPath = "/ProfileImage"
 });
+
+if (httpServer.Environment.IsDevelopment())
+{
+    httpServer.UseSwagger();
+    httpServer.UseSwaggerUI();
+}
 
 static string GenerateToken()
 {

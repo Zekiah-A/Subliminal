@@ -9,7 +9,7 @@ public class AccountAddressConfiguration : IEntityTypeConfiguration<AccountAddre
     public void Configure(EntityTypeBuilder<AccountAddress> builder)
     {
         builder.HasKey(address => address.AddressKey);
-        builder.Property(a => a.AddressKey)
+        builder.Property(address => address.AddressKey)
             .ValueGeneratedOnAdd();
 
         // One to many (AccountData)
