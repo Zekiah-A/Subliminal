@@ -4,7 +4,6 @@
 //  = 57344 = \uE000 = start style
 //  = 57345 = \uE001 = new line (break)
 //  = 57346 = \uE002 = end style
-
 "use strict";
 const styleCodes = {
     colour: '\uE003', // code,  uint32
@@ -23,23 +22,39 @@ const positionMovements = {
     none: 4
 }
 
-const textPositioning = {
-    left: 0,
-    right: 1,
-    center: 2
+class TextFragment {
+    constructor(text = "") {
+        this.styles = []
+        this.chilldren = []
+        this.type = "text"
+        this.content = text
+    }
+}
+
+class NewLineFragment {
+    constructor() {
+        this.type = "newline"
+    }
 }
 
 class EditorDocument {
     // Data, text data that canvas will be initialised with, Scale, oversample factor of canvas
     constructor(data = null, scale = 1, fontSize = 18) {
-        this.data = data || ""
+        if (typeof data === "string") {
+            this.data = new TextFragment(data)
+        }
+        else if (data) {
+            this.data = data
+        }
+        else {
+            throw new Error("Could not create editor document, supplied data was invalid")
+        }
         this.position = this.data.length // Raw position
         this.selection = { position: 0, end: 0, shiftKeyPivot: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
         this.scale = scale
         this.fontSize = fontSize * scale
-        this.textPositioning = textPositioning.left
     }
 
     formatToHtml() {
@@ -173,7 +188,7 @@ class EditorDocument {
                 }
 
                 // Finally draw character with all correct formatting and such
-                // + this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
+                // + this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough
                 context.fillText(this.data[i], measure.width, (lines.length + 1) * this.fontSize)
                 currentLine += this.data[i]
             }
@@ -200,7 +215,7 @@ class EditorDocument {
         for (let before = 0; before < positionLineIndex; before++) {
             beforePositionLine += lines[before].length
         }
-        beforePositionLine = EditorDocument.toRawPosition(beforePositionLine, this.data)
+        beforePositionLine = this.toRawPosition(beforePositionLine)
 
         let positionLine = lines[positionLineIndex]
         // TODO: We are measuring text here as if the cursor position line is made up of all default chars, we need to
@@ -250,7 +265,7 @@ class EditorDocument {
             let measure = context.measureText(lines[line].slice(0, i))
             let distance = Math.abs(offsetX - measure.width)
             if (distance < closestValue) {
-                closestIndex = EditorDocument.toRawPosition(i + beforeLength, this.data)
+                closestIndex = this.toRawPosition(i + beforeLength)
                 closestValue = distance
             }
             else {
@@ -284,20 +299,20 @@ class EditorDocument {
         return textI
     }
 
-    static toRawPosition(textPosition, data) {
+    toRawPosition(textPosition) {
         let rawI = 0
         let textI = 0
-        let inStyle = EditorDocument.inStyle(textPosition, data)
+        let inStyle = EditorDocument.inStyle(textPosition, this.data)
 
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < this.data.length; i++) {
             if (textI >= textPosition) {
                 break
             }
 
-            if (data[textI] == '\uE000') {
+            if (this.data[textI] == '\uE000') {
                 inStyle = !inStyle
             }
-            else if (!inStyle && data[rawI] != '\uE001' && data[rawI] != '\uE002') {
+            else if (!inStyle && this.data[rawI] != '\uE001' && this.data[rawI] != '\uE002') {
                 textI++
             }
 
@@ -491,11 +506,11 @@ class EditorDocument {
 
     setSelection(start, end = null) {
         if (end == null) {
-            this.position = this.toRawPosition(start, this.data)
+            this.position = this.toRawPosition(start)
         }
         else {
-            this.selection.position = this.toRawPosition(start < end ? start : end, this.data)
-            this.selection.end = this.toRawPosition(start < end ? end : start, this.data)
+            this.selection.position = this.toRawPosition(start < end ? start : end)
+            this.selection.end = this.toRawPosition(start < end ? end : start)
         }
     }
 
