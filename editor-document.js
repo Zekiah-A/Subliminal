@@ -25,9 +25,9 @@ const positionMovements = {
 class TextFragment {
     constructor(text = "") {
         this.styles = []
-        this.chilldren = []
-        this.type = "text"
         this.content = text
+        this.children = []
+        this.type = "text"
     }
 }
 

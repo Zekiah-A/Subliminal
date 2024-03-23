@@ -1,57 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Subliminal Sounds</title>
     <meta charset="UTF-8">
+    <title>Subliminal Sounds</title>
     <link rel="icon" type="image/x-icon" href="Resources/SoundsLogo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sounds at subliminal!">
     <meta name="keywords" content="Spotify, Music, Sounds, Subliminal, Lyrics">
     <link rel="stylesheet" href="sounds-styles.css">
-    <style>
-        /*
-        .encore-dark-theme, .encore-dark-theme .encore-base-set {
-            --background-base: #121212;
-            --background-highlight: #1a1a1a;
-            --background-press: #000;
-            --background-elevated-base: #242424;
-            --background-elevated-highlight: #2a2a2a;
-            --background-elevated-press: #000;
-            --background-tinted-base: hsla(0,0%,100%,.07);
-            --background-tinted-highlight: hsla(0,0%,100%,.1);
-            --background-tinted-press: hsla(0,0%,100%,.04);
-            --background-unsafe-for-small-text-base: #121212;
-            --background-unsafe-for-small-text-highlight: #121212;
-            --background-unsafe-for-small-text-press: #121212;
-            --text-base: #fff;
-            --text-subdued: #a7a7a7;
-            --text-bright-accent: #1ed760;
-            --text-negative: #f15e6c;
-            --text-warning: #ffa42b;
-            --text-positive: #1ed760;
-            --text-announcement: #3d91f4;
-            --essential-base: #fff;
-            --essential-subdued: #727272;
-            --essential-bright-accent: #1ed760;
-            --essential-negative: #e91429;
-            --essential-warning: #ffa42b;
-            --essential-positive: #1ed760;
-            --essential-announcement: #0d72ea;
-            --decorative-base: #fff;
-            --decorative-subdued: #292929;
-        }
-
-        inner-card: background-color: var(--card-color,#333)
-        card-box-shadow: box-shadow: 0 8px 24px rgba(0,0,0,.5);
-        */
-    </style>
 </head>
-
-<body>
+<body onmousemove="
+    if (sideDragArea.dataset.dragging === 'true') {
+        side.style.width = event.pageX + 'px'
+    }" onmouseup="sideDragArea.dataset.dragging = 'false'">
     <div id="main">
         <div id="side">
             <div class="side-header-container">
-                <img class="side-logo" src="Resources/SoundsLogo.png">
+                <img class="side-logo" src="Resources/SoundsLogo.png" alt="Logo">
                 <a href="#home" style="text-decoration: none;">
                     <div style="align-self: center;">
                         <h1 class="side-title">Subliminal sounds</h1>
@@ -83,28 +48,28 @@
                 <span>Liked songs</span>
             </a>
         </div>
-        <div style="width: 8px; background-color: black; border-right: 1px solid #242424; cursor: ew-resize;" onmousedown="this.setAttribute('dragging', true)" onmouseup="this.removeAttribute('dragging')" onmousemove="if (this.hasAttribute('dragging')) side.style.width = (side.offsetWidth + event.movementX) + 'px'"></div>
+        <div id="sideDragArea" onmousedown="this.dataset.dragging = 'true'"></div>
         <div id="mainContent">
             <!--Home page, only visible when current anchor is #home-->
             <div id="home" class="main-content-page" style="background: linear-gradient(#ffffff47 2%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
+               <h1 style="color: white;margin: 16px;">Good day, let's see what's new...</h1>
                 <div style="height: 100vh;display: flex;align-content: center;position: relative;flex-direction: column;">
-                    <h1 style="color: white;margin: 16px;">Good day, let's see what's new...</h1>
                     <div class="home-genres-grid">
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>Nasm's things</span></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>SussZ audios</span></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>Unintelligable earrape</span></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>Old time classics</span></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>Master pieces</span></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><span>RSS productions</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>Nasm's things</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>SussZ audios</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>Unintelligable earrape</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>Old time classics</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>Master pieces</span></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><span>RSS productions</span></div>
                      </div>                     
                      <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;position: relative;">Recent listens<span style="position: absolute;right: 32px;top: 50%;transform: translateY(-50%);opacity: 0.6;">SEE MORE</span></a>
                     <div id="homeRecentCards" class="home-cards-grid">
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><p>Keskiiviko</p></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><p>Vittu mikko</p></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><p>The long master piece</p></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><p>Cool adaptation no copyright</p></div>
-                        <div><img src="https://comnplayscience.eu/app/images/notfound.png"><p>Ode to BOY</p></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><p>Keskiiviko</p></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><p>Vittu mikko</p></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><p>The long master piece</p></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><p>Cool adaptation no copyright</p></div>
+                        <div><img src="https://comnplayscience.eu/app/images/notfound.png" alt="Album cover"><p>Ode to BOY</p></div>
                      </div>                     
                     <a style="color: white;margin: 16px;font-size: 20;font-weight: bold;">Sound purgatory</a>
                 </div>
@@ -112,13 +77,17 @@
             <!--Search page, only visible when current anchor is #search-->
             <div id="search" class="main-content-page">
                 <div class="main-content-page-topsection" style="padding: 8px;">
-                    <svg role="img" height="36" width="24" class="Svg-ytk21e-0 jAKAlG mOLTJ2mxkzHJj6Y9_na_" aria-hidden="true" viewBox="0 0 24 24" style="position: absolute;transform: translateY(-50%);opacity: 0.6;top: 50%;left: 12px;"><path d="M10.533 1.279c-5.18 0-9.407 4.14-9.407 9.279s4.226 9.279 9.407 9.279c2.234 0 4.29-.77 5.907-2.058l4.353 4.353a1 1 0 101.414-1.414l-4.344-4.344a9.157 9.157 0 002.077-5.816c0-5.14-4.226-9.28-9.407-9.28zm-7.407 9.279c0-4.006 3.302-7.28 7.407-7.28s7.407 3.274 7.407 7.28-3.302 7.279-7.407 7.279-7.407-3.273-7.407-7.28z"></path></svg>
-                    <input type="text" placeholder="Search" style="align-self: center;">
+                    <svg role="img" class="search-icon" height="24" width="24" viewBox="0 0 24 24">
+                        <path d="M10.533 1.279c-5.18 0-9.407 4.14-9.407 9.279s4.226 9.279 9.407 9.279c2.234 0 4.29-.77 5.907-2.058l4.353 4.353a1 1 0 101.414-1.414l-4.344-4.344a9.157 9.157 0 002.077-5.816c0-5.14-4.226-9.28-9.407-9.28zm-7.407 9.279c0-4.006 3.302-7.28 7.407-7.28s7.407 3.274 7.407 7.28-3.302 7.279-7.407 7.279-7.407-3.273-7.407-7.28z"></path>
+                    </svg>
+                    <input type="text" class="searchbar" placeholder="Search" style="align-self: center;">
                     <div style="flex-grow: 1;"></div>
+                    <!--
                     <div style="background-color: #000;width: 128px;border-radius: 16px;right: 8px;top: 8px;display: flex;column-gap: 8px;opacity: 0.8;padding: 4px; max-height: 28px;align-self: center;">
                         <img src="https://comnplayscience.eu/app/images/notfound.png" style="border-radius: 32px;" height="24px">
                         <span style="color: white;align-self: center;">Account</span>
                     </div>
+                    -->
                 </div>
             </div> 
             <!--Lyrics page-->
@@ -127,22 +96,23 @@
                     <!--Container for lyricscanvases-->
                 </div>
                 <div class="main-content-page-topsection" style="flex-direction: row;backdrop-filter: blur(16px) contrast(1.05) saturate(1.2);padding: 8px;margin-bottom: 32px;">
-                   <h2 style=" color: white; margin: 8px;align-self: center;" id="lyricSongName">{LyricSongName}</h2>
+                   <h2 style=" color: white; margin: 8px;align-self: center;" id="lyricSongName">Song Name</h2>
                    <div style="width: 1px;background-color: gray;opacity: 0.6;"></div>
-                   <h2 style=" color: white; margin: 8px;align-self: center;" id="lyricArtist">{LyricArtist}</h2>
+                   <h2 style=" color: white; margin: 8px;align-self: center;" id="lyricArtist">Song Artist</h2>
                 </div>
                 <div id="lyricsLines">
                     <!--Nothing is playing yet, head to your library to find a tune!-->
                 </div>
                 <div style="width: 20%;position: fixed;left: 80%;opacity: 0.6;">
-                   <img src="Resources/SoundsLogo.png"><img>
+                   <img src="Resources/SoundsLogo.png" alt="Subliminal sounds">
                 </div>
             </div>                         
             <!--Liked page, only visible when current anchor is #liked-->
             <div id="liked" class="main-content-page" style="background: linear-gradient(#5038a0 4%, #fff0 30%);">
                <div class="main-content-page-topsection"></div>
-               <div style="height: 30vh;display: flex;align-content: center;position: relative; overflow: hidden;">
-                  <img aria-hidden="false" draggable="false" loading="eager" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs" srcset="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 150w, https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png 300w" style="margin: 16px;"> <span style="font-size: 96px; color: white;line-height: 30vh;font-weight: bold;user-select: none;">Liked Songs</span>
+               <div class="liked-songs-header">
+                    <img draggable="false" src="https://t.scdn.co/images/3099b3803ad9496896c43f22fe9be8c4.png" alt="Liked Songs">
+                    <span>Liked Songs</span>
                </div>
                <div style="backdrop-filter: blur(15px) contrast(1.05) saturate(1.6);height: 800px;border-radius: 16px;padding: 24px;color: white;">
                     <div style="display: flex;width: 100%;flex-direction: row;">
@@ -180,7 +150,7 @@
         </div>
         <div style="flex: 1;display: flex;flex-direction: row;column-gap: 16px; flex-basis: 0;">
             <div style="flex-grow: 1;"><!--Spacer--></div>
-            <a role="button" tabindex="0" onclick="syncPanel.style.display = 'flex'" style="align-self: center; cursor: pointer;"> <!--keroke button-->
+            <a role="button" tabindex="0" onclick="syncPanel.showModal()" style="align-self: center; cursor: pointer;"> <!--keroke button-->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="16" width="16" style="align-self: center; fill: white; opacity: 0.6;">
                     <path d="m17 45-4-2-3-3-2 2H6l-4-1-2-4q0-3 2-4 1-2 3-2l-1-2v-3l1-3 2-3 1 2 1 1-2 1v3q0 3 2 3l5 1v1l-1 3v2l1 3q1 2 3 2t3-2l3-4 1-5 1-4 3 1-2 5-1 5-3 5q-2 2-5 2ZM6 39h1l1-2-1-2-1-1-2 1-1 2 1 2h2Zm15-9-5-4-3-3-2-4v-3q0-3 2-5t5-2h1V6l1-4q1-2 4-1l4 1q2 1 1 4v3h1q3 0 5 2t2 4h-3l-1-2-3-1-3 1-2 3h-2l-2-3-3-1-3 1-2 3 1 2 2 3 3 3 4 4Zm3-21 2-1V5l-2-1-2 1v3l2 1Zm7 36-2-1-2-1v-1l1-1h2l1 1q2 0 3-2t1-3v-2l-1-3v-1l5-1q3 0 3-3t-2-4l-4-1-5 1-6 2-1-3 7-2 5-1q4 0 6 2 3 2 3 6l-1 2-1 2q2 0 3 2 2 1 2 4l-2 4q-2 2-3 1h-3l-2-2-3 3-4 2Zm12-6h1l1-2-1-2-1-1-2 1-1 2 1 2h2ZM6 37ZM24 6Zm19 31Z"/>
                 </svg>    
@@ -197,17 +167,24 @@
             </div>
         </div>
     </div>
-    <div id="syncPanel" style="display: none;">
-        <h2 style="margin: 0px;">Song share</h2>
-        <p>Sync the same song on devices around the world, or get into a listening party with all your friends with 0 latency...</p>
-        <img src="https://comnplayscience.eu/app/images/notfound.png" style="border-radius: 8px;">
-        <div style="display: flex;column-gap: 8px;">
-           <div class="action-button">COPY LINK</div>
-           <p>or</p>
-           <p class="discrete-button">SCAN JOIN CODE</p>
+    <dialog id="syncPanel" class="modal">
+        <button type="button" class="modal-close" autofocus onclick="syncPanel.close()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 -960 960 960">
+                <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"></path>
+            </svg>
+        </button>
+        <div class="modal-content">
+            <h2 style="margin: 0px;">Song share</h2>
+            <p>Sync the same song on devices around the world, or get into a listening party with all your friends with 0 latency...</p>
+            <img src="https://comnplayscience.eu/app/images/notfound.png" style="border-radius: 8px;">
+            <div style="display: flex;column-gap: 8px;">
+               <div class="action-button">COPY LINK</div>
+               <p>or</p>
+               <p class="discrete-button">SCAN JOIN CODE</p>
+            </div>    
         </div>
-     </div>
-    </body>
+    </dialog>
+</body>
 <script>
     const clientPackets = {
         SyncHost: 0,
@@ -234,8 +211,8 @@
         Lyrics: 6
     }
 
-    //Card grids, such as those inheriting home-cards-grid css class
-    const socket = new WebSocket("wss://server.poemanthology.org:80")
+    // Card grids, such as those inheriting home-cards-grid css class
+    const socket = new WebSocket(localStorage.soundsServer || "wss://server.poemanthology.org:80")
     let lyricCanvasCount = 0
 
     //This gives us the seconds from a subliminal (max hour mins seconds) lyric time 
@@ -291,7 +268,6 @@
 
         return elements
     }
-
     
 
     function renderDiscoBall(sphere = null) {
@@ -430,7 +406,5 @@
 
     //Site scripts
     initialise()
-    renderTilesEffect()
-    renderDiscoBall()
 </script>
 </html>

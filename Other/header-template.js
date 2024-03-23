@@ -10,7 +10,7 @@ class SubliminalHeader extends HTMLElement {
                 <img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.origin">
                 <h1 style="margin: 0px; align-self: center;">Subliminal</h1>
                 <a href="contents">-&gt; Poems</a>
-                <a href="disclaimer">-&gt; Disclaimer</a>
+                <a href="account">-&gt; Profile</a>
                 <a href="sounds">-&gt; Sounds</a>
                 <div class="hilight" id="hilight"></div>
                 <div id="right">
@@ -18,8 +18,8 @@ class SubliminalHeader extends HTMLElement {
                         onclick="
                             let loginSignup = createOrUpdateFromData('login-signup');
                             if (loginSignup) this.parentDocument.body.appendChild(loginSignup)">
-                    <input id="accountButton" type="button" value="My subliminal account"
-                        onclick="window.location.href = window.location.origin + '/account'">
+                    <input id="logoutButton" type="button" value="Logout"
+                        onclick="window.location.reload(true)"> <!-- TODO: This -->
                 </div>
             </div>
             <hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
@@ -172,11 +172,11 @@ class SubliminalHeader extends HTMLElement {
         ;(async function(_this){
             if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
                 _this.right.style.display = 'none'
-                console.warn("WARN: Page has not imported account.js or is requesting nologin. Login UI disabled")
+                console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
                 return
             }
-
-            _this.shadowRoot.getElementById(await isLoggedIn() ? "loginButton" : "accountButton").style.display = 'none'
+            _this.shadowRoot.getElementById(
+                await isLoggedIn() ? "loginButton" : "logoutButton").style.display = 'none'
         })(this)
     }
 }

@@ -17,11 +17,11 @@
 </body>
 <script>
     const params = new URLSearchParams(window.location.search);
-    const referer = params.get("referer")
+    const referrer = params.get("referrer")
 
     loginSignup.addEventListener("finished", (e) => {
-        if (referer) {
-            window.location.href = window.location.origin + referer
+        if (referrer) {
+            window.location.href = window.location.origin + referrer
             return
         }
 

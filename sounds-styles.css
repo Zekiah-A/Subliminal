@@ -1,3 +1,38 @@
+/*
+.encore-dark-theme, .encore-dark-theme .encore-base-set {
+    --background-base: #121212;
+    --background-highlight: #1a1a1a;
+    --background-press: #000;
+    --background-elevated-base: #242424;
+    --background-elevated-highlight: #2a2a2a;
+    --background-elevated-press: #000;
+    --background-tinted-base: hsla(0,0%,100%,.07);
+    --background-tinted-highlight: hsla(0,0%,100%,.1);
+    --background-tinted-press: hsla(0,0%,100%,.04);
+    --background-unsafe-for-small-text-base: #121212;
+    --background-unsafe-for-small-text-highlight: #121212;
+    --background-unsafe-for-small-text-press: #121212;
+    --text-base: #fff;
+    --text-subdued: #a7a7a7;
+    --text-bright-accent: #1ed760;
+    --text-negative: #f15e6c;
+    --text-warning: #ffa42b;
+    --text-positive: #1ed760;
+    --text-announcement: #3d91f4;
+    --essential-base: #fff;
+    --essential-subdued: #727272;
+    --essential-bright-accent: #1ed760;
+    --essential-negative: #e91429;
+    --essential-warning: #ffa42b;
+    --essential-positive: #1ed760;
+    --essential-announcement: #0d72ea;
+    --decorative-base: #fff;
+    --decorative-subdued: #292929;
+}
+
+inner-card: background-color: var(--card-color,#333)
+card-box-shadow: box-shadow: 0 8px 24px rgba(0,0,0,.5);
+*/
 /* Properties */
 :root {
     --cards-grid-columns-count: 5;
@@ -83,17 +118,6 @@ input[type="range"]::-moz-range-thumb {
     box-shadow: -1005px 0px 0px 1000px #096bb1;
     border: none;
     border-radius: 0px 10px 10px 0px;
-}
-
-input[type="text"] {
-    height: 100%;
-    border-radius: 96px;
-    border: 1px solid black;
-    background-color: white;
-    width: 300px;
-    padding-left: 32px;
-    padding-right: 32px;
-    outline: none;
 }
 
 /* side and main buttons, controls, etc */
@@ -185,6 +209,47 @@ input[type="text"] {
   position: relative;
 }
 
+.liked-songs-header {
+    display: flex;
+    align-content: center;
+    height: 30vh;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+}
+
+.liked-songs-header > span {
+    font-size: 96px;
+    color: white;
+    font-weight: bold;
+    user-select: none;
+}
+
+.liked-songs-header > img {
+    margin: 16px;
+    width: 256px;
+    height: 256px;
+}
+
+.searchbar {
+    height: 100%;
+    border-radius: 96px;
+    border: 1px solid black;
+    background-color: white;
+    width: 300px;
+    padding-left: 36px;
+    padding-right: 32px;
+    outline: none;    
+}
+
+.search-icon {
+    position: absolute;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    left: 16px;
+    top: 50%;
+}
+
 .home-genres-grid {
     display: grid;
     margin: 32px;
@@ -196,7 +261,7 @@ input[type="text"] {
 }
 
 .home-genres-grid > div { 
-    background: #181818;
+    background: #181818af;
     border-radius: 4px;
     box-shadow: 0px 8px 16px #00000038;
     width: 100%;
@@ -208,7 +273,7 @@ input[type="text"] {
     column-gap: 16px;
     max-width: 100%;
     overflow: hidden;
-    backdrop-filter: contrast(0.8);
+    backdrop-filter: contrast(0.8) blur(4px);
     cursor: pointer;
     transition: background-color .3s ease;
 }
@@ -286,6 +351,13 @@ input[type="text"] {
     flex-direction: row;
 }
 
+#sideDragArea {
+    width: 8px;
+    background-color: black;
+    border-right: 1px solid #242424;
+    cursor: ew-resize;
+}
+
 #side {
     width: 256px;
     background-color: black;
@@ -306,18 +378,36 @@ input[type="text"] {
     position: relative;
 }
 
-#syncPanel {
+.modal {
     width: min(80%, 360px);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: #282828;
-    box-shadow: 0 16px 24px rgba(0,0,0,.3),0 6px 8px rgba(0,0,0,.2);
-    padding: 8px;
+    box-shadow:
+        0 16px 24px rgba(0, 0, 0, .3),
+        0 6px 8px rgba(0, 0, 0, 0.2);
     border: 1px solid #393939;
     border-radius: 4px;
-    z-index: 99;
+    padding: 8px;
+}
+
+.modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-close > svg {
+    fill: white;
+}
+
+.modal-content {
     display: flex;
     flex-direction: column;
     row-gap: 8px;
@@ -400,9 +490,23 @@ input[type="text"] {
         fill: white; opacity: 0.6;
     }
 
-    #mainContent:target-within { /*may not be necessary, but for good measure*/
+    /* May not be necessary, but for good measure */
+    #mainContent:target-within {
         width: 100%;
         flex-grow: 1;
+    }
+
+    .liked-songs-header {
+        height: 196px;
+    }
+
+    .liked-songs-header > img {
+        width: 96px;
+        height: 96px;
+    }
+
+    .liked-songs-header > span {
+        font-size: 60px;
     }
 }
 
