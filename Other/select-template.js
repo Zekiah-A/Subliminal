@@ -17,7 +17,6 @@ class SubliminalSelect extends HTMLElement {
                 border: 1px solid #8f8f9d;
                 border-radius: 4px;
                 cursor: default;
-
                 padding-left: 4px;
                 padding-right: 4px;
                 line-height: normal;
@@ -30,9 +29,9 @@ class SubliminalSelect extends HTMLElement {
                 background-color: #85859269;
             }
             :host(:active) {
-                background-color: #B1B1BB;
+                background-color: #b1b1bb;
             }
-            
+
             .options {
                 background-color: var(--button-transparent);
                 border-radius: 4px;
@@ -45,8 +44,9 @@ class SubliminalSelect extends HTMLElement {
                 width: max-content;
                 top: 100%;
                 backdrop-filter: blur(8px);
+                z-index: 1;
             }
-            
+
             .options > option {
                 padding-left: 4px;
                 padding-right: 4px;
@@ -55,11 +55,11 @@ class SubliminalSelect extends HTMLElement {
                 align-items: center;
                 justify-content: center;
             }
-            
+
             .options > option[selected] {
                 background-color: darkgray;
             }
-            
+
             .options > option:hover {
                 background-color: darkgray;
             }
@@ -71,7 +71,7 @@ class SubliminalSelect extends HTMLElement {
             .arrow {
                 transition: transform 0.1s ease 0s;
             }
-            
+
             @media screen and (orientation: portrait) {
                 .options {
                     position: fixed;
@@ -79,8 +79,9 @@ class SubliminalSelect extends HTMLElement {
                     left: 50% !important;
                     transform: translateX(-50%) scale(2);
                     top: 270px;
-                }            
-            }`
+                }
+            }
+        `;
         this.shadowRoot.append(style)
         defineAndInject(this, this.shadowRoot)
         const thisElement = this
@@ -88,20 +89,22 @@ class SubliminalSelect extends HTMLElement {
         const selectedElement = this.shadowRoot.getElementById("selected")
         const optionsElement = this.shadowRoot.getElementById("options")
         const arrowElement = this.shadowRoot.getElementById("arrow")
-        this.onclick = function() {
+        this.onclick = function () {
             const open = optionsElement.style.display == "block"
             optionsElement.style.display = open ? "none" : "block"
             arrowElement.style.transform = open ? "none" : "scaleY(-1)"
             recalcOptionsPosition()
         }
-        this.onblur = function() {
-            optionsElement.style.display = "none"
+        this.onblur = function () {
+            optionsElement.style.display = "none";
         }
         selectedElement.textContent = this.getAttribute("placeholder") + " "
 
         function recalcOptionsPosition() {
-
-            const overflowLeft = (thisElement.getBoundingClientRect().left + optionsElement.offsetWidth) - window.innerWidth
+            const overflowLeft =
+                thisElement.getBoundingClientRect().left +
+                optionsElement.offsetWidth -
+                window.innerWidth
             optionsElement.style.left = Math.min(0, -overflowLeft - 8) + "px"
         }
 
@@ -114,7 +117,7 @@ class SubliminalSelect extends HTMLElement {
                 }
                 else {
                     throw new Error(
-                        "Can not create options. Subliminal options child elements must be of either type 'option' or 'hr'")
+                        "Can not create options. Subliminal options child elements must be of either type 'option' or 'hr'",)
                 }
             }
         })

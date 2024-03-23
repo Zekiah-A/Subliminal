@@ -175,7 +175,7 @@ class EditorDocument {
                 if (hasSelection && i >= this.selection.position && i < this.selection.end) {
                     context.save()
                     let thisCharMeasure = context.measureText(this.data[i])
-                    context.fillStyle = "#c1e8fb63"
+                    context.fillStyle = "#4791FF63"// "#c1e8fb63"
                     context.beginPath()
                     context.roundRect(
                         measure.width,
