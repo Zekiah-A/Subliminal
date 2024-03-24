@@ -405,21 +405,21 @@ httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [F
 rateLimitEndpoints.Add("/Profiles", (1, TimeSpan.FromMilliseconds(500)));
 
 // Account action endpoints
-httpServer.MapPost("/Block", ([FromBody] string blockedKey, [FromServices] DatabaseContext database, HttpContext context) =>
+httpServer.MapPost("/Block", ([FromBody] int userKey, [FromServices] DatabaseContext database, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 rateLimitEndpoints.Add("/Block", (1, TimeSpan.FromSeconds(2)));
 authRequiredEndpoints.Add("/Block");
 
-httpServer.MapPost("/Unblock", ([FromBody] string userGuid, HttpContext context) =>
+httpServer.MapPost("/Unblock", ([FromBody] int userKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
-httpServer.MapPost("/Follow", ([FromBody] string userGuid, HttpContext context) =>
+httpServer.MapPost("/Follow", ([FromBody] int userKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/Report", ([FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
@@ -468,64 +468,64 @@ authRequiredEndpoints.Add("/Report");
 
 httpServer.MapPost("/UnfollowUser", ([FromBody] string userKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
-httpServer.MapPost("/LikePoem", ([FromBody] string poemGuid, HttpContext context) =>
+httpServer.MapPost("/LikePoem", ([FromBody] int poemKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
-httpServer.MapPost("/UnlikePoem", ([FromBody] string poemKey, HttpContext context) =>
+httpServer.MapPost("/UnlikePoem", ([FromBody] int poemKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
-httpServer.MapPost("/PinPoem", ([FromBody] string poemKey, HttpContext context) =>
+httpServer.MapPost("/PinPoem", ([FromBody] int poemKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
-httpServer.MapPost("/UnpinPoem", ([FromBody] string poemKey, HttpContext context) =>
+httpServer.MapPost("/UnpinPoem", ([FromBody] int poemKey, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdateEmail", ([FromBody] string email, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdatePenName", ([FromBody] string penName, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdateBiography", ([FromBody] string biography, HttpContext context) =>
 {
     
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdateLocation", ([FromBody] string location, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdateRole", ([FromBody] string role, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/UpdateAvatar", ([FromBody] string avatarUrl, HttpContext context) =>
 {
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 httpServer.MapPost("/RatePoem", ([FromBody] UploadableRating ratingUpload, HttpContext context) =>
 {
     
-    return Results.Ok(); // TODO: Implement
+    return Results.Problem(); // TODO: Implement
 });
 
 // Endpoints that enforce Account/IP rate limiting

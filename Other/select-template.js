@@ -8,7 +8,7 @@ class SubliminalSelect extends HTMLElement {
         this.shadowRoot.innerHTML = html`
             <span id="selected" class="selected"></span>
             <span id="arrow" class="arrow">⯆</span>
-            <div id="options" class="options" style="display: none;"></div>`
+            <div id="options" class="options" tabIndex="1" style="display: none;"></div>`
         const style = document.createElement("style")
         style.innerHTML = css`
             :host {
@@ -26,7 +26,7 @@ class SubliminalSelect extends HTMLElement {
                 user-select: none;
             }
             :host(:hover) {
-                background-color: #85859269;
+                background-color: #85859269;x
             }
             :host(:active) {
                 background-color: #b1b1bb;
@@ -84,25 +84,34 @@ class SubliminalSelect extends HTMLElement {
         `;
         this.shadowRoot.append(style)
         defineAndInject(this, this.shadowRoot)
-        const thisElement = this
+        this.tabIndex = "0"
 
-        const selectedElement = this.shadowRoot.getElementById("selected")
-        const optionsElement = this.shadowRoot.getElementById("options")
-        const arrowElement = this.shadowRoot.getElementById("arrow")
-        this.onclick = function () {
+        function toggleOpen() {
             const open = optionsElement.style.display == "block"
             optionsElement.style.display = open ? "none" : "block"
             arrowElement.style.transform = open ? "none" : "scaleY(-1)"
             recalcOptionsPosition()
         }
-        this.onblur = function () {
-            optionsElement.style.display = "none";
-        }
+
+        const selectedElement = this.shadowRoot.getElementById("selected")
+        const optionsElement = this.shadowRoot.getElementById("options")
+        const arrowElement = this.shadowRoot.getElementById("arrow")
+        this.addEventListener("click", toggleOpen)
+        this.addEventListener("keypress", event => {
+            if (event.key == "Enter") {
+                toggleOpen()
+            }
+        })
+        this.addEventListener("blur", function() {
+            optionsElement.style.display = "none"
+            arrowElement.style.transform = "none"
+        })
         selectedElement.textContent = this.getAttribute("placeholder") + " "
 
+        const _this = this
         function recalcOptionsPosition() {
             const overflowLeft =
-                thisElement.getBoundingClientRect().left +
+                _this.getBoundingClientRect().left +
                 optionsElement.offsetWidth -
                 window.innerWidth
             optionsElement.style.left = Math.min(0, -overflowLeft - 8) + "px"

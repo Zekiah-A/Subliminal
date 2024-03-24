@@ -19,7 +19,7 @@ class SubliminalHeader extends HTMLElement {
                             let loginSignup = createOrUpdateFromData('login-signup');
                             if (loginSignup) this.parentDocument.body.appendChild(loginSignup)">
                     <input id="logoutButton" type="button" value="Logout"
-                        onclick="window.location.reload(true)"> <!-- TODO: This -->
+                        onclick="window.location.reload(true)" style="display: none;"> <!-- TODO: This -->
                 </div>
             </div>
             <hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
@@ -175,8 +175,11 @@ class SubliminalHeader extends HTMLElement {
                 console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
                 return
             }
-            _this.shadowRoot.getElementById(
-                await isLoggedIn() ? "loginButton" : "logoutButton").style.display = 'none'
+
+            if (await isLoggedIn()) {
+                _this.loginButton.style.display = "none"
+                _this.logoutButton.style.display = "block"
+            }
         })(this)
     }
 }

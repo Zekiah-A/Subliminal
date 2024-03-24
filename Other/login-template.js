@@ -31,7 +31,7 @@ class LoginSignup extends HTMLElement {
                     <div style="display:flex;column-gap:8px;margin-top:8px">
                         <div class="popup-button" onclick="this.shadowThis.login.setAttribute('currentpage', 'signup');">I don't have an account
                         </div>
-                        <div class="popup-button" onclick="this.shadowThis.loginQRInput.click()">Scan QR</div>
+                        <div class="popup-button" disabled>Account recovery</div>
                     </div>
                 </div>
                 <div id="loginSignup" class="page">

@@ -338,7 +338,7 @@
     <script src="./qrious-min.js"></script>
 </head>
 
-<body class="headered-body" onkeydown="if ('value' in document.activeElement) return; searchbar.focus()">
+<body class="headered-body">
     <subliminal-header></subliminal-header>
     <div class="contents-div-centre">
         <!--<div class="poem-preview">
@@ -461,7 +461,7 @@
         <div class="grid-container">
             <div>
                 <h3>Volume 1: (Phrenes and Memes)</h3>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">War and Phrenics:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -493,7 +493,7 @@
                         <br>
                     </div>
                 </div>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Really Stupid Stuff:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -543,7 +543,7 @@
                         <br>
                     </div>
                 </div>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Parodies and Adaptations:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -572,7 +572,7 @@
             </div>
             <div>
                 <h3>Volume 2: (Idiots and Revelations)</h3>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Idiots:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -624,7 +624,7 @@
                         <br>
                     </div>
                 </div>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Sublime and Revelation:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -640,7 +640,7 @@
                         <br>
                     </div>
                 </div>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Tales and Tomes:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -653,7 +653,7 @@
                     </div>
                 </div>
                 <h3>Other stuff:</h3>
-                <div class="grid-sub-container" onclick="this.removeAttribute('collapsed')">
+                <div class="grid-sub-container" tabindex="0" onclick="this.removeAttribute('collapsed')">
                     <p class="section-span" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }">Copypastas:</p>
                     <span class="section-collapsed" onclick="if (!this.parentElement.getAttribute('collapsed')) { this.parentElement.setAttribute('collapsed', 'true'); event.stopPropagation() }"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
                     <div class="section-body">
@@ -791,10 +791,21 @@
             .forEach(elem => elem.setAttribute("collapsed", true))
     }
 
-
     //Site scripts
     initialise()
     addPurgatoryEntries("new")
+
+    document.querySelectorAll(".grid-sub-container").forEach(entry => {
+        entry.addEventListener("focus", event => {
+            event.target.removeAttribute("collapsed")
+        })
+
+        entry.addEventListener("keypress", event => {
+            if (event.key == "Enter") {
+                event.target.toggleAttribute("collapsed")
+            }
+        })
+    })
 
     filtersBar.addEventListener("mousemove", event => {
         for (let button of filtersBar.children) {

@@ -31,6 +31,45 @@
 			display: flex;
 		}
 
+		.profile-picture {
+			position: relative;
+			height: 200px;
+			width: 200px;
+			display: flex;
+			overflow: clip;
+			border-radius: 4px;
+		}
+
+		.profile-picture::before {
+			position: absolute;
+			content: "";
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			transition: .2s opacity;
+			background-color: rgba(0, 0, 0, 0.2);
+		}
+
+		.profile-picture:focus-within > button,
+			.profile-picture:hover > button,
+			.profile-picture:focus-within::before,
+			.profile-picture:hover::before {
+			opacity: 1;
+		}
+
+		.profile-picture > button {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			width: max-content;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			transition: .2s opacity;
+			opacity: 0;
+		}
+
 		#profileName {
 			--contentWidth: 198px;
 			display: inline-block;
@@ -142,18 +181,9 @@
 		<br>
 		<div class="popup-button" onclick="accountEmail.style.display = 'none'; executeAccountAction(actionType.UpdateEmail, email)">Done</div>
 	</div>
-	<div id="accountNumber" style="height: fit-content; width: 30%; display: none;" class="popup">
-		<h2>Enter your phone number:</h2>
-		<div style="display: flex; column-gap: 4px">
-			<input id="accountCCodeInput" type="text" class="popup-input" style="width: 64px; display: inline;" placeholder="+44" value="+" maxlength="4" oninput="if (value.length < 1) value = '+';">
-			<input id="accountNumberInput" type="text" class="popup-input" style="flex-grow: 1; display: inline;" placeholder="0123456789">
-		</div>
-		<br>
-		<div class="popup-button" onclick="accountNumber.style.display = 'none'; setProfileNumber(accountCCodeInput.value + accountNumberInput.value); executeAccountAction(actionType.UpdateNumber, number)">Done</div>
-	</div>
 	<div class="div-centre">
 		<div class="profile-container">
-		<div>
+		<div class="profile-picture">
 			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200"
 				ondragenter="
 					event.stopPropagation()
@@ -171,18 +201,17 @@
 					if (file && file.type.startsWith('image/')) updateProfilePicture(file)
 				" ondragleave="
 					event.stopPropagation()
-					event.preventDefault()
+					event.preventDefault() 
 					this.style.outline = 'initial'
 				">
-				<button type="button" id="profilePictureButton">
+				<button type="button" id="profilePictureButton" onclick="profilePictureInput.click()">
 					<img src="./Resources/EditPhoto.svg" alt="Edit">
 					Click to change
 				</button>
-			<input type="file" id="profilePictureInput" accept="image/*" onchange="
-			if (this.files[0]) {
-				updateProfilePicture(this.files[0])
-			}
-		" style="display: none;">
+				<input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="
+					if (this.files[0]) {
+						updateProfilePicture(this.files[0])
+					}">
 		</div>
 			<div class="profile-aside">
 				<div class="profile-title-container">
@@ -227,14 +256,9 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
-		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountEmail.style.display = 'block';">
-			Edit Email
-			<div class="button-tooltip">Allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or just spam your inbox with random stuff</div>
-		</button>
-
-		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountNumber.style.display = 'block';">
-			Edit Phone Number
-			<div class="button-tooltip">Use 2FA with your account, and allow us to send you messages about account activity, or just send random sms funnnies</div>
+		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.style.display = 'block';">
+			Change Email
+			<div class="button-tooltip">Change the primary email used for login, and allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or other important updates</div>
 		</button>
 
 		<br><br>
@@ -312,18 +336,6 @@
 
 		email = newEmail
 	}
-
-	function setProfileNumber(newNumber) {
-		if (newNumber == null) return
-
-		if (!number) {
-			accountCCodeInput.value = newNumber.substring(0, 2)
-			accountNumberInput.value = newNumber.slice(3) 
-		}
-
-		number = newNumber
-	}
-
 
 	// This method should produce:
 	// <div class="following-card">

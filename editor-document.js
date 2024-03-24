@@ -5,15 +5,6 @@
 //  = 57345 = \uE001 = new line (break)
 //  = 57346 = \uE002 = end style
 "use strict";
-const styleCodes = {
-    colour: '\uE003', // code,  uint32
-    bold: '\uE004',
-    italic: '\uE005',
-    monospace: '\uE006',
-    superscript: '\uE007',
-    subscript: '\uE008',
-}
-
 const positionMovements = {
     up: 0,
     down: 1,
@@ -22,26 +13,57 @@ const positionMovements = {
     none: 4
 }
 
-class TextFragment {
-    constructor(text = "") {
+// Document objects
+class DocumentFragment {
+    constructor() {
         this.styles = []
-        this.content = text
         this.children = []
+        this.type = "fragment"
+    }
+}
+
+class Text {
+    constructor(text="") {
+        this.content = text
         this.type = "text"
     }
 }
 
-class NewLineFragment {
-    constructor() {
+class NewLine {
+    constructor(count=1) {
+        this.count = count
         this.type = "newline"
+    }
+}
+
+// Document fragment styles
+class Bold {
+    constructor() {
+        this.type = "bold"
+    }
+}
+
+class Font {
+    constructor(name="Arial, Helvetica, sans-serif", size=18) {
+        this.name = name
+        this.size = size
+        this.type = "font"
+    }
+}
+
+class Colour {
+    constructor(hex="#000") {
+        this.hex = hex
+        this.type = "colour"
     }
 }
 
 class EditorDocument {
     // Data, text data that canvas will be initialised with, Scale, oversample factor of canvas
-    constructor(data = null, scale = 1, fontSize = 18) {
+    constructor(data=null, scale=1, fontSize=18, colourHex=getComputedStyle(document.documentElement).getPropertyValue("--text-colour")) {
         if (typeof data === "string") {
-            this.data = new TextFragment(data)
+            this.data = new DocumentFragment(data)
+            this.data.children.push(new Text(data))
         }
         else if (data) {
             this.data = data
@@ -54,7 +76,9 @@ class EditorDocument {
         this.workingStyles = []
         this.encoder = new TextEncoder()
         this.scale = scale
+        // These will be used at the root level or when no styles are specified by a document fragment 
         this.fontSize = fontSize * scale
+        this.colourHex = colourHex
     }
 
     formatToHtml() {
@@ -114,18 +138,10 @@ class EditorDocument {
 
     renderCanvasData(canvas, cursor = true) {
         const context = canvas.getContext("2d")
-        const encoded = this.encoder.encode(this.data)
-        const buffer = new ArrayBuffer(encoded.length)
-        for (let i = 0; i < encoded.length; i++) {
-            buffer[i] = encoded[i]
-        }
-        const view = new DataView(buffer)
 
         let hasSelection = this.hasSelection()
-        let defaultTextColour = getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
         let inStyle = false
         let stylesStack = [] // Every style on this stack gets applied to a char
-        let colourStack = [] // Only the top style on this stack should be applied
         let lines = []
         let currentLine = ""
 
@@ -135,7 +151,69 @@ class EditorDocument {
         canvas.height = preCalcHeight * this.scale
         context.clearRect(0, 0, canvas.width, canvas.height)
 
-        for (let i = 0; i < this.data.length; i++) {
+        let line = 1
+        function renderFragment(data, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    stylesStack.push(data.styles)
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        renderFragment(child, _this)
+                    }
+                    stylesStack.pop()
+                    break
+                }
+                case "text": {
+                    const font = []
+                    let colour = _this.colourHex
+                    for (let fragmentStyleI = 0; fragmentStyleI < stylesStack.length; fragmentStyleI++) {
+                        const fragmentStyle = stylesStack[fragmentStyleI]
+                        for (let styleI = 0; styleI < fragmentStyle.length; styleI++) {
+                            const style = fragmentStyle[styleI]
+                            switch (style.type) {
+                                case "bold":
+                                    font.push("bold")
+                                    break
+                                case "italic":
+                                    font.push("italic")
+                                    break
+                                case "colour":
+                                    colour = style.hex
+                                    break
+                            }
+                        }
+                    }
+                    let hasFont = false
+                    for (let fragmentStyleI = 0; fragmentStyleI < stylesStack.length; fragmentStyleI++) {
+                        const fragmentStyle = stylesStack[fragmentStyleI]
+                        for (let styleI = 0; styleI < fragmentStyle.length; styleI++) {
+                            const style = fragmentStyle[styleI]
+                            if (style.type == "font") {
+                                font.push(`${style.size * _this.scale}px ${style.name}`)
+                                hasFont = true
+                                break
+                            }
+                        }
+                    }
+                    if (!hasFont) {
+                        font.push(_this.fontSize + "px " + "Arial, Helvetica, sans-serif")
+                    }
+            
+                    context.font = font.join(" ")
+                    context.fillStyle = colour
+                    context.fillText(data.content, 0, line * _this.fontSize)
+                    break
+                }
+                case "newline": {
+                    line += data.count
+                    break
+                }
+            }
+        }
+        renderFragment(this.data, this)
+
+
+        /*for (let i = 0; i < this.data.length; i++) {
             if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
@@ -224,7 +302,7 @@ class EditorDocument {
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
         context.fillStyle = defaultTextColour
-        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1.5, this.fontSize + 4)
+        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1.5, this.fontSize + 4)*/
     }
 
     optimiseData(data) {
