@@ -71,15 +71,7 @@
             },
             {
                 "type": "newline",
-                "count": 1
-            },
-            {
-                "type": "newline",
-                "count": 1
-            },
-            {
-                "type": "newline",
-                "count": 1
+                "count": 3
             }
         ]
     },

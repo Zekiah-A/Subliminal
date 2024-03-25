@@ -159,11 +159,7 @@
             },
             {
                 "type": "newline",
-                "count": 1
-            },
-            {
-                "type": "newline",
-                "count": 1
+                "count": 2
             },
             {
                 "type": "fragment",
@@ -187,7 +183,7 @@
                     {
                         "type": "text",
                         "content": "Ozymandias`"
-                    }      
+                    }
                 ]
             },
             {

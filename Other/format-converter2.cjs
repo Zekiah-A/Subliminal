@@ -8,7 +8,8 @@ const poemPaths = [
     "../Volume-1/War-And-Phrenics",
     "../Volume-2/Idiots",
     "../Volume-2/Sublime-And-Revelation",
-    "../Volume-2/Tales-And-Tomes"
+    "../Volume-2/Tales-And-Tomes",
+    "./"
 ]
 
 function escapeString(str) {
@@ -37,19 +38,23 @@ for (let poemPath of poemPaths) {
 
     let file = null
     while ((file = directory.readSync()) !== null) {
+        if (!file.name.endsWith(".json")) {
+            continue
+        }
         let poemData = JSON.parse(fs.readFileSync(path.join(poemPath, file.name)))
         if (typeof poemData.poemContent === "object") {
-            const contentString = JSON.stringify(poemData.poemContent)
+            let contentString = JSON.stringify(poemData.poemContent)
             // Dumb optimisations, should catch most cases
-            contentString.replaceAll(
+            contentString = contentString.replaceAll(
                 `{"type":"newline","count":1},{"type":"newline","count":1}`,
                 `{"type":"newline","count":2}`)
-            contentString.replaceAll(
+            contentString = contentString.replaceAll(
                 `{"type":"newline","count":2},{"type":"newline","count":1}`,
                 `{"type":"newline","count":3}`)
-                contentString.replaceAll(
+            contentString = contentString.replaceAll(
                     `{"type":"newline","count":2},{"type":"newline","count":2}`,
                     `{"type":"newline","count":4}`)
+            poemData.poemContent = JSON.parse(contentString)
 
             console.log("🟨 Poem", file.name, "already converted, now prettified and optimised")
             fs.writeFileSync(path.join(poemPath, file.name), JSON.stringify(poemData, null, 4))
