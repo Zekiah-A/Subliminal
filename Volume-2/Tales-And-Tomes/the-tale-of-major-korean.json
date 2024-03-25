@@ -1,1 +1,632 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"The Tale of Major Korean","poemAuthor":"Bushi","poemContent":"I once knew a man, a sellsword , traveller, wanderer,His name was Major Korean, and now is recounted his tale of woe; It was summer of 1923, or whenever it was auf der große streets, I recognised a shadow, that lurked in the corner, Stacks of money, all but useless But the person I saw, said his name was, A \"Major Korean\".I heard nothing more, until the second great war;A rogue soldier, not a nazi in the war,Travelled to a land unknown, fought to save many livesGrasped only a sword, an iron carved sword,Stained with valour, heart of woe.The warrior who fought for no country, only to save the othersNamed Major \"Korean\"Then I saw, at the door of the gates by the court,Tried for crimes, against the law, sat Major Korean,Crimes that were not crimes, such as speaking against a dictatorship.One of the few people I knew, was Major Korean, who was anAnti-racist. But where is he now, what land does he lie, A slayer, what became of the man, known as Major Korean?This fellow, who was not even Korean, went under that alibi,For what, to protect which truths? Hide a life of honour?That person who defeated die Leute, tried end racism,His fate unknown, Major Korean, the Anti-Racist.T'was a dark day, when I realised, he had vanished,Off the face of the Earth.Die Geselschaft, a great enemy, back-stabbed that warriorWhat cave, creek or crevice did he hide, branded as aThreat to society? I grasped a sword and trained, under the waterfall in the Dead of the night, stealing my heart to be full of resolve, To act out justice, restore that myth's honour. The Mythical Major Korean.In those old days, when Stresemann reigned,How we'd all think,I have Weimar, my republic,How I'd want the Kaiser to be King!But now, it seems, we were wrong...The old days, age of slayers are now far gone.Hoonter, Reece, Noct, Major Korean, Speedwagon, Zekiahepic, BarirThose times, am besten ZeitDie Zukunft war nicht zu toll...But the tale does not end, no- not the take of Major Korean,Borne in 1066, borne of blood, brother in battle to the slayers,The un-racist könig.War is coming,a great plight, so, he took up th' mantleOne last time.A final clash of steel, iron against iron,Last march of the catgirl slayers, before stepping into new dawn...Major Korean fought valiantly, but comrade after comrade fell,Bloodshed blood lets more mo'r bloodAnd the ground bleeds red,It was then when he said, as the dawn of the next day set;Tears in his eyes, tired, could not fight anymore,I am sorry, Bushi, Noct, Martin Ligations, Swexys, Gundalf,Barir, Zekiahepic, Speedwagon, Samurai of the Spear, Dark Juice,Juloo, Delta. Solaire, Solar System Man, Reece and all fellowOther Slayer; In order, to defeat this foe, and restore this honour... I must become racism... It must be done, thank you everyone... This truly was an adventure, wasn't it?Then with one final attack, a desperate last resort, a desperate last stand.Major Korean unleashed his last attack, his final strike...All the enemies were slain, at the cost of Major Korean's sacrifice,With a final smile, he faded away, finally at peace, at his end. This was the tale of Major Korean.","pageStyle":"poem-centre-wide","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "The Tale of Major Korean",
+    "poemAuthor": "Bushi",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "I once knew a man, a sellsword , traveller, wanderer,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "His name was Major Korean, and now is recounted his tale of woe;"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " It was summer of 1923, or whenever it was auf der große streets,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " I recognised a shadow, that lurked in the corner,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Stacks of money, all but useless"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " But the person I saw, said his name was,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " A \"Major Korean\"."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "I heard nothing more, until the second great war;"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "A rogue soldier, not a nazi in the war,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Travelled to a land unknown, fought to save many lives"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Grasped only a sword, an iron carved sword,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Stained with valour, heart of woe."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The warrior who fought for no country, only to save the others"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Named Major \"Korean\""
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Then I saw, at the door of the gates by the court,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Tried for crimes, against the law, sat Major Korean,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Crimes that were not crimes, such as speaking against a dictatorship."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "One of the few people I knew, was Major Korean, who was an"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Anti-racist."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " But where is he now, what land does he lie,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " A slayer, what became of the man, known as"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Major Korean?"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "This fellow, who was not even Korean, went under that alibi,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "For what, to protect which truths? Hide a life of honour?"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "That person who defeated die Leute, tried end racism,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "His fate unknown, Major Korean, the Anti-Racist."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "T'was a dark day, when I realised, he had vanished,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Off the face of the Earth."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Die Geselschaft, a great enemy, back-stabbed that warrior"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "What cave, creek or crevice did he hide, branded as a"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Threat to society?"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " I grasped a sword and trained, under the waterfall in the"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Dead of the night, stealing my heart to be full of resolve,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " To act out justice, restore that myth's honour."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " The Mythical Major Korean."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "In those old days, when Stresemann reigned,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "How we'd all think,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "I have Weimar, my republic,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "How I'd want the Kaiser to be King!"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But now, it seems, we were wrong..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The old days, age of slayers are now far gone."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Hoonter, Reece, Noct, Major Korean, Speedwagon, Zekiahepic, Barir"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Those times, am besten Zeit"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Die Zukunft war nicht zu toll..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But the tale does not end, no- not the take of Major Korean,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Borne in 1066, borne of blood, brother in battle to the slayers,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The un-racist könig."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "War is coming,a great plight, so, he took up th' mantle"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "One last time."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "A final clash of steel, iron against iron,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Last march of the catgirl slayers, before stepping into new dawn..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Major Korean fought valiantly, but comrade after comrade fell,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Bloodshed blood lets more mo'r blood"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And the ground bleeds red,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "It was then when he said, as the dawn of the next day set;"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Tears in his eyes, tired, could not fight anymore,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "I am sorry, Bushi, Noct, Martin Ligations, Swexys, Gundalf,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Barir, Zekiahepic, Speedwagon, Samurai of the Spear, Dark Juice,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Juloo, Delta. Solaire, Solar System Man, Reece and all fellow"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Other Slayer;"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " In order, to defeat this foe, and restore this honour..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " I must become racism..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " It must be done, thank you everyone..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " This truly was an adventure, wasn't it?"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Then with one final attack, a desperate last resort, a desperate last stand."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Major Korean unleashed his last attack, his final strike..."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "All the enemies were slain, at the cost of Major Korean's sacrifice,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "With a final smile, he faded away, finally at peace, at his end."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " This was the tale of Major Korean."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "poem-centre-wide",
+    "pageBackground": ""
+}

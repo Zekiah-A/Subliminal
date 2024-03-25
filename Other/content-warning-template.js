@@ -44,7 +44,7 @@ ___________________________________________________________
                 content: center;
                 visibility: visible;
             }
-            
+
             .warning-centre {
                 position: absolute;
                 top: 50%;

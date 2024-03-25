@@ -1,1 +1,284 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Once in Princess Selva’s classroom","poemAuthor":"Angelos","poemContent":"Oh Christmas eve, Oh Christmas day, From Santa’s beard I’m running away. It’s period 1 and form time’s done, I charge up the stairs and torch that fat. I coil in the lockers under tall guys and girls But the reindeer’s shadow Casts through the door We’re summoned inside Last Christmas is sung Oh holy night, the stars chose to hide. Time for math, were squared and cubed, But where are the tables? They are circles instead. A hundred agonies in icing and jam, From which most kids will pick one or two. But I wander as I wonder right under the desks and remember, remember my insulin levels. Oh come all ye Faithful! Joyful and triumphant This christmas I WON’T give my heart! BECAUSE I’M GLUCOSE INTOLERANT Hark the Herald crisps explode! Glory to, the storm of crumbs! For plastic gifts have been traversed afar The floor is now plastered in chewing gum... So I tell you, my dear friend: On Christmas eve, On Christmas day Forget the sugar, forget the presents, From Santa’s beard should you run away. ","pageStyle":"centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Once in Princess Selva’s classroom",
+    "poemAuthor": "Angelos",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Oh Christmas eve, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Oh Christmas day, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "From Santa’s beard I’m running away. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "It’s period 1 and form time’s done, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "I charge up the stairs and torch that fat. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "I coil in the lockers under tall guys and girls "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But the reindeer’s shadow "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Casts through the door "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "We’re summoned inside "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Last Christmas is sung "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Oh holy night, the stars chose to hide. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Time for math, were squared and cubed, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But where are the tables? They are circles instead. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "A hundred agonies in icing and jam, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "From which most kids will pick one or two. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But I wander as I wonder "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "right under the desks "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "and remember, remember my insulin levels. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Oh come all ye Faithful! Joyful and triumphant "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "This christmas I WON’T give my heart! "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "BECAUSE I’M GLUCOSE INTOLERANT "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Hark the Herald crisps explode! "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Glory to, the storm of crumbs! "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "For plastic gifts have been traversed afar "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The floor is now plastered in chewing gum... "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "So I tell you, my dear friend: "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "On Christmas eve, On Christmas day "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Forget the sugar, forget the presents, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "From Santa’s beard should you run away. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "centre",
+    "pageBackground": ""
+}

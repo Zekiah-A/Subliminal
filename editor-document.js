@@ -88,22 +88,29 @@ class EditorDocument {
 
     formatToHtml(baseElement=document.createElement("div")) {
         const root = baseElement
-        root.style.overflow = "hidden"
         const cssFontSize = this.fontSize / this.scale
+        root.style.overflow = "hidden"
+        root.style.fontFamily = "Arial, Helvetica, sans-serif"
+        root.style.fontSize = `${cssFontSize}px`
+        root.style.whiteSpace = "nowrap"
 
         function renderFragment(data, html, _this) {
             switch (data.type) {
                 case "fragment": {
                     const fragment = document.createElement("span")
-                    fragment.style.lineHeight = `${cssFontSize}px`
-                    fragment.style.fontSize = `${cssFontSize}px`
-                    fragment.style.fontFamily = "Arial, Helvetica, sans-serif"
-                    fragment.style.display = "inline-block"
-                    fragment.style.whiteSpace = "nowrap"
 
                     for (let i = 0; i < data.styles.length; i++) {
                         const style = data.styles[i]
                         switch (style.type) {
+                            case "subscript":
+                                fragment.style.verticalAlign = "sub"
+                                fragment.style.fontSize = "smaller"
+                                break
+                            case "lineheight":
+                                const scaledHeight = data.height * _this.scale
+                                fragment.style.display = "inline-block"
+                                fragment.style.lineHeight = `${scaledHeight}px`
+                                break
                             case "bold":
                                 fragment.style.fontWeight = "bold"
                                 break
@@ -129,8 +136,7 @@ class EditorDocument {
                     break
                 }
                 case "text": {
-                    const text = document.createElement("span")
-                    text.textContent = data.content
+                    const text = document.createTextNode(data.content)
                     html.appendChild(text)
                     break
                 }

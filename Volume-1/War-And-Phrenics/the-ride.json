@@ -1,1 +1,144 @@
-{"summary":"","tags":"Abstract, Poem, Unknown, Fear, Peace","cWarning":false,"cWarningAdditions":"","poemName":"The Ride","poemAuthor":"Axel","poemContent":"Rising, rising  Slowly  filled to the brim with fear  screaming   falling, falling  Zooming  welled up with regret  Shouting   defying gravity  Speedily  filled with worry  screeching, screeching   Slowly ending  slowly, slowly calming down regret. ","pageStyle":"poem-centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "Abstract, Poem, Unknown, Fear, Peace",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "The Ride",
+    "poemAuthor": "Axel",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Rising, rising "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Slowly "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " filled to the brim with fear "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " screaming "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " falling, falling "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Zooming "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " welled up with regret "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Shouting "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " defying gravity "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Speedily "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " filled with worry "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " screeching, screeching "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " Slowly ending "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " slowly, slowly calming down regret. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "poem-centre",
+    "pageBackground": ""
+}

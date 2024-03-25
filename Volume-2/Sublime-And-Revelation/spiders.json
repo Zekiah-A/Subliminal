@@ -1,1 +1,552 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Spiders","poemAuthor":"Zekiah","poemContent":"Sometimes I just wish I were a spider, legs sprawled, against a wall, or a small crevice, a calm place that I could tuck into, when it is cold. Consumerism would lay dead for me. Hand crafting a piece of art, so easily blown away by the wind, like some kind of monk, carefully laying out each grain, only for one hand to destroy the other's creation. But I'd have no skill. It would all come naturally, instinctively, like  the mind of an artist, or the adventurism of a calligrapher, who spends days weaving, turning and linking the islands of this oh-so lost world. Yet i have none of these, now. Imagine a world without time; no clocks, no calendars, no dials. Yet this is how the spiders live, their only clock; night and day, their only calendar; the seasons, and their only dials, being the ageing, as the years pass on, bringing new spiders onto this earth. Spiders are never late, spiders are never early. They live in the moment, waiting for the next one, yet satisfied with what they have right now. And it's amazing, how humans innovate, create. Yet spiders have no drive to push further, no need to go to the extends of space, or venture the depths of the ocean. But for spiders? Nothing. Ever. Changes. And is it better that way? As spiders don't need qualifications, certifications, or legislations just to be classed as functioning. They have no need to fit into the jigsaw; of office or labour work, led to make decisions in days, weeks, seconds,  that could change the rest of a life. And it's like that beauty of time, the grace of each gold-crusted cog on a clock that turns so intricately, the heavens and our stars, and the round moon that comes full every so often, is our greatest antagoniser. As we decide on things so crucial so fast, a wrong one causing so much suffering in the end, and a right one causing the same; except just for someone else. Since the world was never truly free, it's all binary. And would one feel any better, knowing that he was free, and the reason that he did nothing to change the world in life, lest the  grass that he stepped on, or the webs that he unknowingly destroyed, was not the fault of the world, but was entirely his naïve decisions? Or would false hope be greater under a regime without choice; at least knowing that while not contributing alone to humanity, he was  part of a grand clockwork, pushing his country further for future generations? It seems like the world decided that we should all be alone, when pursuing our dreams, or just trying to make it better for our descendants. And while the 'unfree', democratically enact their power to disagree, and break away from the crowd. Spiders disagree too. As while millions all descend from the same womb. Spiders live alone, apart, and make a difference alone, coating the walls in fresh sets of silk, and invisibly clearing the pests of our lives. Yet somehow they have no human nature; no feelings of failure when their webs are destroyed, and their legacy blown full. And still, the primitive humans can't shake the feeling that they have failed, unless they cure world hunger, war or some other stupid thing they made. And maybe that's why so many people fear them? And now I wonder; do the spiders even know of the millennia of ancestors that came before them? Or the magic of their web. Or the wonders of the sublime things that brought them in existence? Or are they just living? In the moment.","pageStyle":"poem-centre-wide","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Spiders",
+    "poemAuthor": "Zekiah",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Sometimes I just wish I were a spider, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "legs sprawled, against a wall, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "or a small crevice, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "a calm place that I could tuck into, when it is cold. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Consumerism would lay dead for me. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Hand crafting a piece of art, so easily blown away by the wind, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "like some kind of monk, carefully laying out each grain, only for one hand to destroy the other's creation. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But I'd have no skill. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "It would all come naturally, instinctively, like  the mind of an artist, or the adventurism of a calligrapher, who spends days weaving, turning and linking the islands of this oh-so lost world. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Yet i have none of these, now. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Imagine a world without time; "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "no clocks, no calendars, no dials. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Yet this is how the spiders live, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "their only clock; night and day, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "their only calendar; the seasons, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "and their only dials, being the ageing, as the years pass on, bringing new spiders onto this earth. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Spiders are never late, spiders are never early. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "They live in the moment, waiting for the next one, yet satisfied with what they have right now. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And it's amazing, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "how humans innovate, create. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Yet spiders have no drive to push further, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "no need to go to the extends of space, or venture the depths of the ocean. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "But for spiders? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Nothing. Ever. Changes. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And is it better that way? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "As spiders don't need qualifications, certifications, or legislations just to be classed as functioning. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "They have no need to fit into the jigsaw; of office or labour work, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "led to make decisions in days, weeks, seconds,  "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "that could change the rest of a life. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And it's like that beauty of time, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "the grace of each gold-crusted cog on a clock that turns so intricately, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "the heavens and our stars, and the round moon that comes full every so often, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "is our greatest antagoniser. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "As we decide on things so crucial so fast, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "a wrong one causing so much suffering in the end, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "and a right one causing the same; except just for someone else. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Since the world was never truly free, it's all binary. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And would one feel any better, knowing that he was free, and the "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "reason that he did nothing to change the world in life, lest the  "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "grass that he stepped on, or the webs that he unknowingly "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "destroyed, was not the fault of the world, but was entirely his naïve decisions? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Or would false hope be greater under a regime without choice; at "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "least knowing that while not contributing alone to humanity, he was "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": " part of a grand clockwork, pushing his country further for future generations? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "It seems like the world decided that we should all be alone, when "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "pursuing our dreams, or just trying to make it better for our descendants. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And while the 'unfree', democratically enact their power to "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "disagree, and break away from the crowd. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Spiders disagree too. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "As while millions all descend from the same womb. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Spiders live alone, apart, and make a difference alone, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "coating the walls in fresh sets of silk, and invisibly clearing the pests of our lives. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Yet somehow they have no human nature; no feelings of failure when their webs are destroyed, and their legacy blown full. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And still, the primitive humans can't shake the feeling that they have failed, unless they cure world hunger, war or some other stupid thing they made. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And maybe that's why so many people fear them? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "And now I wonder; "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "do the spiders even know of the millennia of ancestors that came before them? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Or the magic of their web. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Or the wonders of the sublime things that brought them in existence? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Or are they just living? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "In the moment."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "poem-centre-wide",
+    "pageBackground": ""
+}

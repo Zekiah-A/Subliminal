@@ -1,1 +1,248 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Soyware","poemAuthor":"Zekiah","poemContent":"Javascript, coding,Shit, made a mistake,\"Stop spamming the comments,you're making it break\"Slow bloated node sorta electron10TB ram 200% CPU spywaretaking 5 years to load inconsistentlaggy UI sorta turning out of the young hippiedrinking latte and tea.Watch the soydev as he uses his bloat IDE,on his latest apple macbook, justemptied the coffee machine, in costa coffee,hoping to work for big FAANG, stickers all over hislaptop's back,white as a cracker,thin lanky ginger beard,\"black lives matter\" soywojak npc, this hippieis weird,zamn I hate damn web dev,damn these soydevs weird.Proprietary, never heard of github, let alone gitlab,using open source libraries in a proprietary project.A sham,programming is what I fear.Zamn, this website is weird.","pageStyle":"centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Soyware",
+    "poemAuthor": "Zekiah",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Javascript, coding,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Shit, made a mistake,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "\"Stop spamming the comments,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "you're making it break\""
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Slow bloated node sorta electron"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "10TB ram 200% CPU spyware"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "taking 5 years to load inconsistent"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "laggy UI sorta turning out of the young hippie"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "drinking latte and tea."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Watch the soydev as he uses his bloat IDE,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "on his latest apple macbook, just"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "emptied the coffee machine, in costa coffee,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "hoping to work for big FAANG, stickers all over his"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "laptop's back,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "white as a cracker,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "thin lanky ginger beard,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "\"black lives matter\" soy"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "wojak npc, this hippie"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "is weird,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "zamn I hate damn web dev,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "damn these soydevs weird."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Proprietary, never heard of github, let alone gitlab,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "using open source libraries in a proprietary project."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "A sham,"
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "programming is what I fear."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Zamn, this website is weird."
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "centre",
+    "pageBackground": ""
+}

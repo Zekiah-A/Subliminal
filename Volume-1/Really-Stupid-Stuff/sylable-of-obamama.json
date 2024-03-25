@@ -1,1 +1,414 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Sylable of Obamama","poemAuthor":"Bushi","poemContent":"- Mongomeryshire In a land of a river was a weir  the river was not on the land, but the land was the river.  - SKREETCH  Run for green Run from Obama, for he is coming, coming for your blood, drink the grass, consume the G L U E, Obama is coming, Coming for you Arrowed spines of mind- forg'd mannacles penetrate the brighten'd lunch, a feast of minds The fear'd beast we celebrate.  `I SACRIFICE`  Vortex of river Obama is here retch out blood, hands encrusted in urea Blood, new dawn Obama Obama The veinous tree shrinks in the putri'd dawn, but night fear the dawn, fear the dark await for fury's yawn Obama is here how fruitious was death furtive glance. Bas Blick, und es war Uusikaupunki enhanced. ","pageStyle":"centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Sylable of Obamama",
+    "poemAuthor": "Bushi",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "italic"
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "- Mongomeryshire"
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 2
+            },
+            {
+                "type": "text",
+                "content": "In a land of a river "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "was a weir  the "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "river was not on the land, but "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "the land was the river. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "- SKREETCH"
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Run for green "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Run from Obama, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "for he is coming, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "coming for your blood, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "drink the grass, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "consume the G L U E, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Obama is coming, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Coming for you "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Arrowed spines of mind- "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "forg'd mannacles penetrate "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "the brighten'd lunch, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "a feast of minds "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The fear'd beast we celebrate. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "`I SACRIFICE`"
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Vortex of river "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Obama is here "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "retch out blood, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "hands encrusted in urea "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Blood, new dawn "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "Obama"
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "Obama"
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "The veinous tree "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "shrinks in the putri'd "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "dawn, but night "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "fear the dawn, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "fear the dark "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "await for fury's yawn "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Obama is here "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "how fruitious was death "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "furtive glance. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Bas Blick, und es war "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Uusikaupunki "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "enhanced. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "centre",
+    "pageBackground": ""
+}

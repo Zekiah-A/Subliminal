@@ -10,15 +10,20 @@
   <script src="./editor-document.js"></script>
   <script src="./Other/component-registrar.js"></script>
   <script src="./Other/content-warning-template.js"></script>
+  <script src="./Other/poem-ghost-template.js"></script>
+  <script src="./Other/poem-load-cover-template.js"></script>
 </head>
  
 <body style="background: initial;">
     <div class="title-blur">
-        <h2 class="centre content" id="poemTitle"></h2>
+        <h2 class="centre content" id="poemTitle">Poem - By Author</h2>
         <hr>
     </div>
     <div id="poemMain" class="poem-centre">
-        <p id="poemContent"></p>
+        <p id="poemContent">
+            <subliminal-poem-ghost length="30"></subliminal-poem-ghost>
+            <subliminal-poem-load-cover></subliminal-poem-load-cover>
+        </p>
     </div>
     <div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
         <h2>Poem Editor:</h2>
@@ -43,36 +48,43 @@
     </div>
 </body>
 <script>
-    let stringToHtml = text => {
-      let htmlObject = document.createElement('temp')
-      htmlObject.innerHTML = text
-      return htmlObject.firstElementChild
-    }
-
     async function initialise() {
         const params = new URLSearchParams(document.location.search)
         const path = params.get("path")
-        const poemData = await (await fetch(window.location.origin + path + ".json")).json()
-        
-        //Set up title and url bar for vanity
-        window.history.replaceState(null, "Title", path)
-        document.title = "Subliminal - " + poemData.poemName
-
-        //Display content warning with additions if needed
-        if (poemData.cWarning === true) {
-            document.body.insertBefore(
-                createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
+        const response = await fetch(window.location.origin + path + ".json")
+        if (!response.ok) {
+            alert("Unexpected network error - Failed to load poem")
+            console.error("Poem load failed:", response.status, response.statusText)
+            return
         }
+        try {
+            const poemData = await response.json()
+            //Set up title and url bar for vanity
+            window.history.replaceState(null, "Title", path)
+            document.title = "Subliminal - " + poemData.poemName
 
-        //Place poem data into the DOM
-        poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
-        poemContent.innerHTML = new EditorDocument(poemData.poemContent).formatToHtml()
-        poemMain.setAttribute("class", poemData.pageStyle) 
-        document.body.style.background = poemData.pageBackground
+            //Display content warning with additions if needed
+            if (poemData.cWarning === true) {
+                document.body.insertBefore(
+                    createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
+            }
 
-        //Probably useless since pages are procedurally generated...
-        document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
-        document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
+            //Place poem data into the DOM
+            poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
+            const poemDocument = new EditorDocument(poemData.poemContent)
+            poemDocument.renderHtmlData(poemContent)
+            poemMain.setAttribute("class", poemData.pageStyle) 
+            document.body.style.background = poemData.pageBackground
+
+            //Probably useless since pages are procedurally generated...
+            document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
+            document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
+        }
+        catch (e) {
+            alert("Unexpected format error - Failed to load poem. Invalid poem URL?")
+            console.error("Poem parse failed:", e)
+            return
+        }
     }
     
     initialise()

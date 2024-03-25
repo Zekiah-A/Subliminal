@@ -1,1 +1,108 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Old Man Consequences","poemAuthor":"Zekiah","poemContent":"Billious green, grillious bile, happy to sad, sad to smile, knife to skin, wrinkled to cut, Smile to pain, pain to blood. Sawing the knife blade, back again, he pains, but smiles, happy he bled, Happy in hell, you won't remember his name, growing seeds with his blood, as he let it rain. ","pageStyle":"centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Old Man Consequences",
+    "poemAuthor": "Zekiah",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Billious green, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "grillious bile, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "happy to sad, sad to smile, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "knife to skin, wrinkled to cut, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Smile to pain, pain to blood. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Sawing the knife blade, back again, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "he pains, but smiles, happy he bled, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Happy in hell, you won't remember his name, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "growing seeds with his blood, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "as he let it rain. "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "centre",
+    "pageBackground": ""
+}

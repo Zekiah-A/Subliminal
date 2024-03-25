@@ -1,1 +1,152 @@
-{"summary":"","tags":"","cWarning":false,"cWarningAdditions":"","poemName":"Bibbilance","poemAuthor":"Zekiah","poemContent":"Ermm, excuuuse me Frau briee Herr Fischer Buzzards in the sea Serum Goo and Slime, locker 253 Now i'm in line, trousers clean, `Stop making that stuuupid voice`! erm, what are you doing boys? Promoting this, promoting that on shiny targets a lokki shat Screaming out, he made a fuss Stomp'd a bee infront of a bus! ei ei ei bzzzzzz nah, that's g- ","pageStyle":"centre","pageBackground":""}
+{
+    "summary": "",
+    "tags": "",
+    "cWarning": false,
+    "cWarningAdditions": "",
+    "poemName": "Bibbilance",
+    "poemAuthor": "Zekiah",
+    "poemContent": {
+        "type": "fragment",
+        "styles": [],
+        "children": [
+            {
+                "type": "text",
+                "content": "Ermm, excuuuse me "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Frau briee "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Herr Fischer "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Buzzards in the sea "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Serum Goo and Slime, locker 253 "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Now i'm in line, trousers clean, "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "`Stop making that stuuupid voice`! "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "erm, what are you doing boys? "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Promoting this, promoting that "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "on shiny targets a lokki shat "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Screaming out, he made a fuss "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Stomp'd a bee infront of a bus! "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "ei ei ei "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "bzzzzzz "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "nah, that's g- "
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "newline",
+                "count": 1
+            }
+        ]
+    },
+    "pageStyle": "centre",
+    "pageBackground": ""
+}
