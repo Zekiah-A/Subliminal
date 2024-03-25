@@ -272,6 +272,7 @@
             backdrop-filter: blur(10px);
             z-index: 1;
             border: 1px solid gray;
+            padding-left: 8px;
         }
 
         .classics-header {
@@ -281,9 +282,23 @@
             position: sticky;
             line-height: 40px;
             z-index: 3;
-            margin-top: 16px;
+            margin: 0px;
+            padding: 0px;
+            transition: .2s background-color, .2s margin, .2s padding, .2s border;
         }
 
+        .classics-header.stuck {
+            background-color; #ffffff85;
+            border: 1px solid gray;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .classics-header.stuck > .searchbar {
+            border-radius: 8px 0px 0px 8px;
+        }
 
         @media screen and (orientation:portrait) {
             .grid-container {
@@ -428,25 +443,11 @@
             </div>
         </div>-->
         <h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
-        <div class="classics-header">
+        <div id="classicsHeader" class="classics-header">
             <input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
-            <!--<div class="options-parent" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-                <div>Volume ⯆</div>
-                <div class="options" style="display: none;">
-                    <div>All</div>
-                    <hr>
-                    <div>War and Phrenics</div>
-                    <div>Really Stupid Stuff</div>
-                    <div>Parodies and Adaptations</div>
-                    <hr>
-                    <div>Idiots</div>
-                    <div>Sublime and Revelation</div>
-                    <div>Tales and Tomes</div>
-                    <hr>
-                    <div>Copypastas</div>
-                </div>
-            </div>-->
             <subliminal-select placeholder="Volume">
+                <option>All</option>
+                <hr>
                 <option>War and Phrenics</option>
                 <option>Really Stupid Stuff</option>
                 <option>Parodies and Adaptations</option>
@@ -669,27 +670,38 @@
     </div>
     <a href="./" class="back">&lt;- Back</a>
 </body>
-<script></script>
 <script>
     const params = new URLSearchParams(document.location.search)
 
-    let stringToHtml = text => {
-        let htmlObject = document.createElement('temp')
-        htmlObject.innerHTML = text
-        return htmlObject.firstElementChild
-    }
+    // Classics searchbar and header
+    let requestedFrame = null
+    window.addEventListener("scroll", (event) => {
+        if (requestedFrame !== null) {
+            return
+        }
+        requestedFrame = requestAnimationFrame(() => {
+            const headerStuck = classicsHeader.getBoundingClientRect().y < 80
+            if (headerStuck) {
+                classicsHeader.classList.add("stuck")
+            }
+            else {
+                classicsHeader.classList.remove("stuck")
+            }
+            requestedFrame = null
+        })
+    })
 
     function searchContents(value) {
         //search through poem, authors, etc
-        document.querySelectorAll(".section-body a").forEach((elem) => {
-            elem.style.display = 'inline-block'
+        document.querySelectorAll(".section-body a").forEach((link) => {
+            link.style.display = 'inline-block'
             if (!value.toLowerCase().trim()) return
-            if (!elem.textContent.toLowerCase().includes(value.toLowerCase().trim())) {
-                elem.style.display = 'none'
+            if (!link.textContent.toLowerCase().includes(value.toLowerCase().trim())) {
+                link.style.display = 'none'
                 return
             }
 
-            openClassicSection(elem.parentElement.parentElement)
+            openClassicSection(link.parentElement.parentElement)
         })
         document.querySelectorAll(".section-body br").forEach((lnb) => {
             lnb.style.display = 'inline-block'
