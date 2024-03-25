@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor rendering lab</title>
+    <script src="../editor-document.js"></script>
+    <style>
+        :root {
+            --text-color: #000;
+            --background-opaque: #ffffff;
+        }
+        :root.dark {
+            --text-color: #DADADA;
+            --background-opaque: #1e1e1e;
+        }
+
+        html {
+            color: var(--text-color);
+            background-color: var(--background-opaque);
+        }
+
+        #testOption {
+            margin-bottom: 8px;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            row-gap: 16px;
+            width: min-content;
+        }
+
+        .tests-container {
+            display: flex;
+            column-gap: 16px;
+        }
+
+        .test {
+            border: 1px solid var(--text-color);
+            width: min-content;
+            padding: 8px;
+            width: 680px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editor Rendering lab</h1>
+    <p style="max-width: 1024px;">
+        This page attempts to be a lab for the rendering capabilities of the poem editor, intended to test that
+        rendering is both valid, displaying the correct content according to the document data provided, and
+        also a location to debug and implement new editor features.
+    </p>
+    <select id="testOption" onchange="setTest(this.value)">
+        <option value="styledText">Styled text test</option>
+    </select>
+    <select onchange="
+        if (this.value == 'light') {
+            editor.colourHex = '#000000'
+            document.documentElement.className = 'light'
+        }
+        else if (this.value == 'dark') {
+            editor.colourHex = '#DADADA'
+            document.documentElement.className = 'dark'
+        }
+        editor.renderCanvasData(editorCanvas)
+    ">
+        <option value="light">Light mode</option>
+        <option value="dark">Dark mode</option>
+    </select>
+    <button type="button" onclick="
+        editor.renderCanvasData(editorCanvas)
+        editor.renderHtmlData(editorHtml)
+    ">Re-render outputs</button>
+    <label>Editor views ABAB:</label>
+    <input type="range" min="0" max="1" value="1" oninput="
+        editorHtmlContainer.style.marginLeft = -((1 - this.value) / 1 * (editorHtmlContainer.offsetWidth + 16)) + 'px'
+    ">
+    <div class="main">
+        <div class="tests-container">
+            <div class="test">
+                <h4 style="margin: 0px;">Canvas Output:</h4>
+                <hr>
+                <canvas id="editorCanvas" width="1024"></canvas>
+            </div>
+            <div id="editorHtmlContainer" class="test">
+                <h4 style="margin: 0px;">Html Output:</h4>
+                <hr>
+                <div id="editorHtml" style="width: 680px;"></div>
+            </div>
+        </div>
+        <div class="test">
+            <h4 style="margin: 0px;">Live JSON data editor:</h4>
+            <hr>
+            <textarea id="editorJsonEdit" style="width: 680px; height: 360px;" placeholder="No test data available"></textarea>
+        </div>
+    </div>
+</body>
+<script>
+    const styledTextDocument = {
+        type: "fragment",
+        styles: [],
+        children: [
+            {
+                type: "text",
+                content: "Styled text test:",
+            },
+            {
+                type: "newline",
+                count: 2,
+            },
+            {
+                type: "text",
+                content: "This is a text node, separated by a newline.",
+            },
+            {
+                type: "newline",
+                count: 3,
+            },
+            {
+                type: "text",
+                content: "This node is separated by a triple multi-newline."
+            },
+            {
+                type: "newline",
+                count: 2,
+            },
+            {
+                type: "fragment",
+                styles: [
+                    {
+                        type: "bold"
+                    }
+                ],
+                children: [
+                    {
+                        type: "text",
+                        content: "Text node within bold style fragment.",
+                    },
+                    {
+                        type: "newline",
+                        count: 1,
+                    },
+                    {
+                        type: "fragment",
+                        styles: [
+                            { type: "italic" }
+                        ],
+                        children: [
+                            {
+                                type: "text",
+                                content: "->Nested text node within italic style fragment within outer bold style fragment."
+                            }
+                        ]
+                    },
+                    {
+                        type: "newline",
+                        count: 1,
+                    },
+                    {
+                        type: "text",
+                        content: "Text node after within bold style fragment.",
+                    },
+                    {
+                        type: "newline",
+                        count: 1,
+                    },
+                    {
+                        type: "fragment",
+                        styles: [
+                            {
+                                type: "font",
+                                size: 18,
+                                name: "monospace"
+                            },
+                            {
+                                type: "colour",
+                                hex: "#d90000"
+                            }
+                        ],
+                        children: [
+                            {
+                                type: "text",
+                                content: "->Text node within font & colour styles fragment.",
+                            }
+                        ],
+                    }
+                ],
+            },
+            {
+                type: "newline",
+                count: 2,
+            },
+            {
+                type: "text",
+                content: "Text node after outer bold tag, no trailing newline",
+            },
+        ],
+    }
+
+    function setTest(name) {
+        if (name == "styledText") {
+            editor.data = styledTextDocument
+        }
+        editorJsonEdit.innerHTML = JSON.stringify(editor.data, null, 4)
+        editor.renderCanvasData(editorCanvas)
+        editor.renderHtmlData(editorHtml)
+    }
+
+    const editorScale = 1.5
+    const editor = new EditorDocument("", editorScale, 18)
+    setTest("styledText")
+</script>
+</html>
