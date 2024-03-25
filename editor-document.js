@@ -81,59 +81,67 @@ class EditorDocument {
         this.colourHex = colourHex
     }
 
-    formatToHtml() {
-        let encoded = this.encoder.encode(this.data)
-        let buffer = new ArrayBuffer(encoded.length)
-        for (let i = 0; i < encoded.length; i++) {
-            buffer[i] = encoded[i]
-        }
-        let view = new DataView(buffer)
+    renderHtmlData(root) {
+        root.innerHTML = ""
+        this.formatToHtml(root)
+    }
 
-        let inStyle = false
-        let html = []
+    formatToHtml(baseElement=document.createElement("div")) {
+        const root = baseElement
+        const cssFontSize = this.fontSize / this.scale
 
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] == '\uE000') {
-                inStyle = !inStyle
-            }
-            else if (this.data[i] == '\uE001') {
-                html.push("<br>")
-                continue
-            }
-            else if (this.data[i] == '\uE002') {
-                html.push("</span>")
-                continue
-            }
+        function renderFragment(data, html, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    const fragment = document.createElement("span")
+                    fragment.style.lineHeight = 1
+                    fragment.style.fontSize = `${cssFontSize}px`
+                    fragment.style.fontFamily = "Arial, Helvetica, sans-serif"
 
-            if (inStyle) {
-                switch (this.data[i]) {
-                    case styleCodes.colour:
-                        html.push(`<span style="colour: #${view.getUint32(this.data[i + 1])}";>`)
-                        i += 4
-                        break
-                    case styleCodes.bold:
-                        html.push(`<span style="font-weight: bold;">`)
-                        break
-                    case styleCodes.italic:
-                        html.push(`<span style="font-style: italic;">`)
-                        break
-                    case styleCodes.monospace:
-                        html.push(`<span style="font-family: font-family: monospace;">"`)
-                        break
-                    case styleCodes.superscript:
-                        html.push(`<span style="vertical-align: sup; font-size: smaller;">`)
-                        break
-                    case styleCodes.subscript:
-                        html.push(`<span style="vertical-align: sub; font-size: smaller;">`)
-                        break
+                    for (let i = 0; i < data.styles.length; i++) {
+                        const style = data.styles[i]
+                        switch (style.type) {
+                            case "bold":
+                                fragment.style.fontWeight = "bold"
+                                break
+                            case "italic":
+                                fragment.style.fontStyle = "italic"
+                                break
+                            case "colour":
+                                fragment.style.color = style.hex
+                                break
+                            case "font":
+                                fragment.style.fontFamily = style.name
+                                fragment.style.fontSize = style.size
+                                break
+                        }
+                        html.appendChild(fragment)
+                    }
+
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        renderFragment(child, fragment, _this)
+                    }
+                    html.appendChild(fragment)
+                    break
+                }
+                case "text": {
+                    const text = document.createElement("span")
+                    text.textContent = data.content
+                    html.appendChild(text)
+                    break
+                }
+                case "newline": {
+                    for (let i = 0; i < data.count; i++) {
+                        const newLine = document.createElement("br")
+                        html.appendChild(newLine)
+                    }
+                    break
                 }
             }
-            else {
-                html.push(this.data[i])
-            }
         }
-
-        return html.join("")
+        renderFragment(this.data, root, this)
+        return root
     }
 
     renderCanvasData(canvas, cursor = true) {
