@@ -78,7 +78,7 @@ class EditorDocument {
         this.scale = scale
         // These will be used at the root level or when no styles are specified by a document fragment 
         this.fontSize = fontSize * scale
-        this.colourHex = colourHex
+        this.colourHex = colourHex || "#000"
     }
 
     renderHtmlData(root) {
@@ -88,15 +88,18 @@ class EditorDocument {
 
     formatToHtml(baseElement=document.createElement("div")) {
         const root = baseElement
+        root.style.overflow = "hidden"
         const cssFontSize = this.fontSize / this.scale
 
         function renderFragment(data, html, _this) {
             switch (data.type) {
                 case "fragment": {
                     const fragment = document.createElement("span")
-                    fragment.style.lineHeight = 1
+                    fragment.style.lineHeight = `${cssFontSize}px`
                     fragment.style.fontSize = `${cssFontSize}px`
                     fragment.style.fontFamily = "Arial, Helvetica, sans-serif"
+                    fragment.style.display = "inline-block"
+                    fragment.style.whiteSpace = "nowrap"
 
                     for (let i = 0; i < data.styles.length; i++) {
                         const style = data.styles[i]
@@ -146,17 +149,13 @@ class EditorDocument {
 
     renderCanvasData(canvas, cursor = true) {
         const context = canvas.getContext("2d")
-
         let hasSelection = this.hasSelection()
-        let inStyle = false
         let stylesStack = [] // Every style on this stack gets applied to a char
-        let lines = []
-        let currentLine = ""
 
-        // We precalculate how many lines the canvas will be 
-        let preCalcHeight = Math.max(360, EditorDocument.getLines(this.data).length * (this.fontSize / this.scale) + this.fontSize)
-        canvas.style.height = preCalcHeight + "px"
-        canvas.height = preCalcHeight * this.scale
+        // We precalculate how many lines the canvas will be
+        let preCalcHeightCss = Math.max(360, this.getLines().length * (this.fontSize / this.scale) + this.fontSize)
+        canvas.style.height = preCalcHeightCss + "px"
+        canvas.height = preCalcHeightCss * this.scale
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         let line = 1
@@ -332,7 +331,7 @@ class EditorDocument {
         offsetY *= this.scale
 
         const context = canvas.getContext("2d")
-        let lines = EditorDocument.getLines(this.data)
+        let lines = this.getLines()
         let line = Math.floor(Math.min(lines.length - 1, offsetY / this.fontSize))
         
         // TODO: currently we are assuming there are 0 styles, that is wrong
@@ -421,11 +420,11 @@ class EditorDocument {
         }
         else if (movement == positionMovements.up || movement == positionMovements.down) {
             let textPosition = EditorDocument.toTextPosition(this.position, this.data)
-            let lines = EditorDocument.getLines(this.data);
+            let lines = this.getLines();
             let linePosition = this.positionInLine(textPosition, lines)
 
             // Current line is the line count up to this line
-            let currentLine = EditorDocument.getLines(this.data.slice(0, this.position)).length - 1
+            let currentLine = this.getLines().length - 1
 
             let offset = movement == positionMovements.up ?
                 Math.max(0, lines[currentLine].slice(0, linePosition).length + lines[currentLine].slice(linePosition).length) :
@@ -470,17 +469,44 @@ class EditorDocument {
     }
 
     // Returns only text lines
-    static getLines(data) {
+    getLines() {
         let lines = []
+        let currentLine = ""
+
+        function visitFragment(data, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        visitFragment(child, _this)
+                    }
+                    break
+                }
+                case "text": {
+                    currentLine += data.content
+                    break
+                }
+                case "newline": {
+                    lines.push(currentLine)
+                    currentLine = ""
+                    for (let i = 1; i < data.count; i++) {
+                        lines.push(currentLine)
+                    }
+                    break
+                }
+            }
+        }
+        visitFragment(this.data, this)
+
         let current = ""
         let inStyle = false
 
-        for (let i = 0; i < data.length; i++) {
-            if (data[i] == '\uE000') {
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
-            if (data[i] == '\uE001') {
+            if (this.data[i] == '\uE001') {
                 lines.push(current)
                 current = ""
                 continue

@@ -69,8 +69,12 @@
         <option value="dark">Dark mode</option>
     </select>
     <button type="button" onclick="
+        const canvasStart = performance.now()
         editor.renderCanvasData(editorCanvas)
+        console.log('Canvas render took:', performance.now() - canvasStart + 'ms')
+        const htmlStart = performance.now()
         editor.renderHtmlData(editorHtml)
+        console.log('HTML render took:', performance.now() - htmlStart + 'ms')
     ">Re-render outputs</button>
     <label>Editor views ABAB:</label>
     <input type="range" min="0" max="1" value="1" oninput="
@@ -81,7 +85,7 @@
             <div class="test">
                 <h4 style="margin: 0px;">Canvas Output:</h4>
                 <hr>
-                <canvas id="editorCanvas" width="1024"></canvas>
+                <canvas id="editorCanvas" height="360" width="1020"></canvas>
             </div>
             <div id="editorHtmlContainer" class="test">
                 <h4 style="margin: 0px;">Html Output:</h4>
@@ -92,7 +96,19 @@
         <div class="test">
             <h4 style="margin: 0px;">Live JSON data editor:</h4>
             <hr>
-            <textarea id="editorJsonEdit" style="width: 680px; height: 360px;" placeholder="No test data available"></textarea>
+            <textarea id="editorJsonEdit" oninput="
+                try {
+                    const newData = JSON.parse(this.value)
+                    editor.data = newData
+                    editor.renderCanvasData(editorCanvas)
+                    editor.renderHtmlData(editorHtml)
+                    editorJsonEdit.style.border = '1px solid green'
+                }
+                catch (e) {
+                    console.log(e)
+                    editorJsonEdit.style.border = '1px solid red'
+                }
+            " style="width: 680px; height: 360px;" placeholder="No test data available"></textarea>
         </div>
     </div>
 </body>
