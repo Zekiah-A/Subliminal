@@ -56,8 +56,8 @@ for (let poemPath of poemPaths) {
                     `{"type":"newline","count":4}`)
             poemData.poemContent = JSON.parse(contentString)
 
-            console.log("🟨 Poem", file.name, "already converted, now prettified and optimised")
-            fs.writeFileSync(path.join(poemPath, file.name), JSON.stringify(poemData, null, 4))
+            console.log("🟨 Poem", file.name, "already converted, now compressed and optimised")
+            fs.writeFileSync(path.join(poemPath, file.name), JSON.stringify(poemData))
             continue
         }
         poemData.poemContent = convertPoemContent(poemData.poemContent)
