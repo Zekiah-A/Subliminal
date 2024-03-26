@@ -71,7 +71,7 @@ class EditorDocument {
         else {
             throw new Error("Could not create editor document, supplied data was invalid")
         }
-        this.position = this.data.length // Raw position
+        this.position = this.getText().length // Raw position at end of text
         this.selection = { position: 0, end: 0, shiftKeyPivot: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
@@ -580,12 +580,91 @@ class EditorDocument {
         }
     }
 
+    getText() {
+        let text = ""
+        function visitNode(data) {
+            switch (data.type) {
+                case "fragment":
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        visitNode(child)
+                    }
+                    break
+                case "text":
+                    text += data.content
+                    break
+            }
+        }
+        visitNode(this.data)
+        return text
+    }
+
+    // Finds the node which contains the cursor currently
+    getPositionContainer() {
+        let currentlyAt = 0
+        function visitNode(data, _this) {
+            switch (data.type) {
+                case "fragment":
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        const found = visitNode(child, _this)
+                        if (found) {
+                            return found
+                        }
+                    }
+                    return data
+                case "text":
+                    currentlyAt += data.content.length
+                    if (currentlyAt >= _this.position) {
+                        return data
+                    }
+                    break
+            }
+
+            return null
+        }
+        return visitNode(this.data, this)
+    }
+
+    // Creates a new text node at cursor position containing given text
     addText(value) {
         if (this.hasSelection()) {
             this.deleteSelection()
         }
 
-        this.data = this.data.slice(0, this.position) + value + this.data.slice(this.position)
+        const container = this.getPositionContainer()
+        if (container === null) {
+            return new Error("Couldn't add text, cursor position outside of document nodes range")
+        }
+        // Empty fragment, create new text node
+        if (container.type === "fragment") {
+            const textContainer = new Text(value)
+            container.children.push(textContainer)
+        }
+        else {
+            // TODO: Split current text in half? Put new text node inbetween?
+        }
+        this.position += value.length
+    }
+
+    // Attempts to create or append to text node at cursor position containing given text
+    appendText(value) {
+        if (this.hasSelection()) {
+            this.deleteSelection()
+        }
+
+        const container = this.getPositionContainer()
+        if (container === null) {
+            return new Error("Couldn't add text, cursor position outside of document nodes range")
+        }
+        // Empty fragment, create new text node
+        if (container.type === "fragment") {
+            const textContainer = new Text(value)
+            container.children.push(textContainer)
+        }
+        else {
+            container.content += value
+        }
         this.position += value.length
     }
 
@@ -610,6 +689,7 @@ class EditorDocument {
             this.deleteSelection()
         }
         else {
+            // TODO: This will be painful to handle across node boundaries     
             if (count > 0) {
                 this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
                 this.position = Math.max(0, this.position - count)
