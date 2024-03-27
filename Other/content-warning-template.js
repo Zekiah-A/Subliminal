@@ -1,36 +1,35 @@
 class ContentWarning extends HTMLElement {
     constructor() {
         super()
-        this.attachShadow({ mode: "open" })
+    }
+
+    hide() {
+        this.querySelector("#contentWarning").style.opacity = "0"
+        setTimeout(() => this.remove(), 200)
     }
 
     connectedCallback() {
-        this.shadowRoot.innerHTML = html`
+        
+        this.innerHTML = html`
             <div id="contentWarning">
-                <span class="warning-centre">
-                    <pre>
-___________________________________________________________
-| Disclaimer: All content of the following work is        |
-| fictional, and should not be taken as moral, religious, |
-| or political advice. Nor does it represent the views    |
-| or the beliefs of any author in any way.                |
-|                                                         |</pre><pre id="addition"></pre><pre>
-|                                                         |
-| <a class="continue" href="#" onclick="event.preventDefault(); this.shadowThis.contentWarning.style.visibility = 'hidden';">Continue -></a>                                             |
-| <a href="../../disclaimer">See Disclaimer -></a>                                       |
-|                                                         |
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-                    </pre>
-                <span>
+                <div class="warning-centre">
+                    <div style="display: flex;align-items: center;column-gap: 8px;">
+                        <img src="/Resources/AbbstraktDog.svg" width="32" height="32">
+                        <h2 style="margin: 0px;">Disclaimer:</h2>
+                    </div>
+                    <p>
+                        All content of the following work is fictional, and should not be taken as moral, religious,
+                        or political advice. Nor does it represent the views or the beliefs of any author in any way.
+                    </p>
+                    <p id="addition"></p>
+                    <button class="popup-button" onclick="event.preventDefault(); document.querySelector('content-warning').hide()">Continue -></button>
+                    <a href="/disclaimer">See Disclaimer -></a>
+                <div>
             </div>
         `
 
         const style = document.createElement("style")
         style.innerHTML = css`
-            pre {
-                margin: 0;
-            }
-
             #contentWarning {
                 position: fixed;
                 padding: 0;
@@ -41,24 +40,36 @@ ___________________________________________________________
                 height: 100%;
                 background: #ffffff33;
                 backdrop-filter: blur(15px);
-                content: center;
-                visibility: visible;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: .2s opacity;
             }
 
             .warning-centre {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: x-large;
-                font-family: monospace;
+                display: flex;
+                width: min(40%, 512px);
+                row-gap: 12px;
+                padding: 16px;
+                border: 1px solid gray;
+                border-radius: 8px;
+                flex-direction: column;
+                background: var(--background-transparent);
             }
-            
-            .warning-centre a {
-                font-size: x-large;
-                font-family: monospace !important;
+
+            .warning-centre button {
+                border: none;
             }
-            
+
+            .warning-centre hr {
+                border: 1px solid lightgray;
+            }
+
+            .warning-centre a, p {
+                display: block;
+                margin: 0;
+            }
+
             @media(prefers-color-scheme: dark) {
                 #contentWarning {
                     background: #1e1e1e33;
@@ -67,28 +78,19 @@ ___________________________________________________________
 
             @media screen and (orientation:portrait) {
                 .warning-centre {
-                    font-size: 2.8vw !important;
+                    width: calc(100% - 32px);
                 }
             
                 .warning-centre a {
-                    font-size: 1em;
+                    font-size: 1.2em;
                 }            
             }
         `
-        this.shadowRoot.append(style)
-        defineAndInject(this, this.shadowRoot)
-
-        let cwInsert = ""
-        let addition = this.getAttribute("addition")
-        if (!addition) return
-        let chunks = addition.match(/.{1,55}/g)
-        for (let chunk of chunks) {
-            chunk = chunk.padEnd(55) //if not taking up a whole line (is 55 chars long), pad spaces to line up
-            chunk = "| ".concat(chunk) //add pipe start
-            chunk = chunk.concat(" |") //add pipe end
-            cwInsert = cwInsert.concat(chunk, "\n") //Add \n followed by chunk to end of cwinsert
-        }
-        this.addition.textContent = cwInsert
+        this.appendChild(style)
+        const addition = this.querySelector("#addition")
+        addition.insertAdjacentElement("afterend", document.createElement("hr"))
+        addition.textContent = this.getAttribute("addition")
+        addition.insertAdjacentElement("beforebegin", document.createElement("hr"))
     }
 }
 

@@ -71,6 +71,11 @@ class PoemLoadCover extends HTMLElement {
                 font-size: 8px;
                 opacity: 0.6;
             }
+            @media screen and (orientation:portrait) {
+                .load-content {
+                    width: calc(100% - 32px);
+                }    
+            }
         `
         this.appendChild(style)
     }
