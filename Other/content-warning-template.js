@@ -88,9 +88,11 @@ class ContentWarning extends HTMLElement {
         `
         this.appendChild(style)
         const addition = this.querySelector("#addition")
-        addition.insertAdjacentElement("afterend", document.createElement("hr"))
-        addition.textContent = this.getAttribute("addition")
-        addition.insertAdjacentElement("beforebegin", document.createElement("hr"))
+        if (addition) {
+            addition.insertAdjacentElement("afterend", document.createElement("hr"))
+            addition.textContent = this.getAttribute("addition")
+            addition.insertAdjacentElement("beforebegin", document.createElement("hr"))    
+        }
     }
 }
 

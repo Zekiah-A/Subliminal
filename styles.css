@@ -397,6 +397,46 @@ h2 {
         overflow-wrap: break-word;
     }
 
+    /* Credit to: https://css-tricks.com/books/greatest-css-tricks/scroll-shadows */
+    .poem-centre, .poem-centre-wide/*, .centre*/ {
+        margin: auto;
+        overflow-x: auto;
+        background:
+            /* Top and bottom shadow fadings */
+            linear-gradient(
+                to bottom,
+                var(--background-opaque),
+                transparent 10%,
+                transparent 90%,
+                var(--background-opaque)
+            ),
+            /* Right and left shadow hiders (cover over shadows) */
+            linear-gradient(
+                to right,
+                var(--background-opaque) 30%,
+                transparent
+            ) left center,
+            linear-gradient(
+                to left,
+                var(--background-opaque) 70%, 
+                transparent
+            ) right center,
+            /* Right and left shadows */
+            linear-gradient(
+                to right,
+                rgba(128, 128, 128, 0.4),
+                transparent
+            ) left center,
+            linear-gradient(
+                to left,
+                rgba(128, 128, 128, 0.4),
+                transparent
+            ) right center;
+        background-repeat: no-repeat;
+        background-size: 100% 100%, 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, local, scroll, scroll;
+    }
+
     .contents-div-centre {
         width: 100%;
     }
