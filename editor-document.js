@@ -167,6 +167,8 @@ class EditorDocument {
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         let line = 1
+        const positionContainer = this.getPositionContainer()
+        const containerNode = positionContainer.node
         function renderFragment(data, _this) {
             switch (data.type) {
                 case "fragment": {
@@ -217,6 +219,18 @@ class EditorDocument {
                     context.font = font.join(" ")
                     context.fillStyle = colour
                     context.fillText(data.content, 0, line * _this.fontSize)
+
+                    if (data === containerNode) {
+                        // Draw cursor (x, y, width, height)
+                        const thisLeft = context.measureText(data.content.slice(0, positionContainer.relativePosition))
+                        // TODO: Maintain measure width for currently line
+                        context.fillStyle = _this.colourHex
+                        context.fillRect(
+                            thisLeft.width,
+                            (line - 1) * _this.fontSize + 2,
+                            1.5 * _this.scale,
+                            _this.fontSize + 4)
+                    }
                     break
                 }
                 case "newline": {
@@ -601,6 +615,7 @@ class EditorDocument {
 
     // Finds the node which contains the cursor currently
     getPositionContainer() {
+        let nodeStart = 0
         let currentlyAt = 0
         function visitNode(data, _this) {
             switch (data.type) {
@@ -614,6 +629,7 @@ class EditorDocument {
                     }
                     return data
                 case "text":
+                    nodeStart = currentlyAt
                     currentlyAt += data.content.length
                     if (currentlyAt >= _this.position) {
                         return data
@@ -623,47 +639,49 @@ class EditorDocument {
 
             return null
         }
-        return visitNode(this.data, this)
+        return {
+            node: visitNode(this.data, this),
+            relativePosition: this.position - nodeStart
+        }
     }
 
-    // Creates a new text node at cursor position containing given text
-    addText(value) {
-        if (this.hasSelection()) {
-            this.deleteSelection()
+    getParentNode(targetNode) {
+        function visitNode(data, _this) {
+            if (data.type === "fragment") {
+                for (const child of data.children) {
+                    if (child === targetNode) {
+                        return child
+                    }
+                    return visitNode(child, _this)
+                }
+            }
+
+            return null
         }
 
-        const container = this.getPositionContainer()
-        if (container === null) {
-            return new Error("Couldn't add text, cursor position outside of document nodes range")
-        }
-        // Empty fragment, create new text node
-        if (container.type === "fragment") {
-            const textContainer = new Text(value)
-            container.children.push(textContainer)
-        }
-        else {
-            // TODO: Split current text in half? Put new text node inbetween?
-        }
-        this.position += value.length
+        return visitNode(this.data, _this)
     }
 
     // Attempts to create or append to text node at cursor position containing given text
-    appendText(value) {
+    insertText(value) {
         if (this.hasSelection()) {
             this.deleteSelection()
         }
 
         const container = this.getPositionContainer()
-        if (container === null) {
+        if (container.node === null) {
             return new Error("Couldn't add text, cursor position outside of document nodes range")
         }
         // Empty fragment, create new text node
-        if (container.type === "fragment") {
+        if (container.node.type === "fragment") {
             const textContainer = new Text(value)
-            container.children.push(textContainer)
+            container.node.children.push(textContainer)
+        }
+        else if (container.node.type === "text") {
+            container.node.content += value
         }
         else {
-            container.content += value
+            throw new Error("Not implemented")
         }
         this.position += value.length
     }
@@ -689,14 +707,15 @@ class EditorDocument {
             this.deleteSelection()
         }
         else {
-            // TODO: This will be painful to handle across node boundaries     
-            if (count > 0) {
-                this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
-                this.position = Math.max(0, this.position - count)
+            // TODO: This will be painful to handle across node boundaries
+            const container = this.getPositionContainer()
+            const node = container.node
+            if (node === null) {
+                return new Error("Couldn't delete text, cursor position outside of document nodes range")
             }
-            else {
-                this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)
-            }
+
+            node.content = node.content.slice(0, this.position - count) + node.content.slice(this.position)
+            this.position = Math.max(0, this.position - count)    
         }
     }
 

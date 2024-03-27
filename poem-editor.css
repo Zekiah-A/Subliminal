@@ -98,7 +98,7 @@
     max-width: 100%;
     overflow-x: visible;
 }
-#formattingToolbar > div {
+.toolbar-item {
     height: 32px;
     width: 32px;
     min-width: 32px;
@@ -107,15 +107,18 @@
     border-radius: 4px;
     user-select: none;
     padding: 1px;
+    border: none;
     transition: .05 transform;
 }
-#formattingToolbar > div:active {
+.toolbar-item:active {
     transform: scale(0.98);
 }
-#formattingToolbar > div > div {
+.toolbar-item > div {
     background-color: var(--button-transparent);
     border-radius: 4px;
     pointer-events: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px; 
 }
 .separator {
     background: transparent;
@@ -126,6 +129,13 @@
     margin-left: 8px;
     margin-right: 8px;
     flex-grow: 1;
+}
+#formattingColourRect {
+    background-color: black;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    margin: 1px;
+    border-radius: 4px;
 }
 #poem-tags button {
     border-radius: 4px;

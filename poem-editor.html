@@ -14,7 +14,7 @@
         <script src="./Other/server.js"></script>
         <link rel="stylesheet" href="./poem-editor.css">
     </head>
-    <body style="max-width: 100%; overflow-x: hidden; overflow-y: auto">
+    <body style="max-width: 100%; overflow-x: hidden; overflow-y: auto" onclick="editorContext.style.visibility = 'hidden'">
         <div id="licenseAgreePopup" class="popup" style="display: none; width: max(30%, 500px)">
             <h2>You're almost there!</h2>
             <img src="Resources/Celebration.png" style="width: 100%" />
@@ -221,7 +221,7 @@
             </div>
             <hr />
             <div id="formattingToolbar">
-                <div style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                <button class="toolbar-item" style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                     <div>File ⯆</div>
                     <div class="options" style="width: 140px">
                         <div onclick=" params.delete('edit')
@@ -255,60 +255,48 @@
                             Upload to site
                         </div>
                     </div>
-                </div>
-                <div onclick="format('undo', null)" style="width: 72px; min-width: 72px">
+                </button>
+                <button class="toolbar-item" onclick="format('undo', null)" style="width: 72px; min-width: 72px">
                     <div>↩ undo</div>
-                </div>
-                <div onclick="format('redo', null)" style="width: 72px; min-width: 72px">
+                </button>
+                <button class="toolbar-item" onclick="format('redo', null)" style="width: 72px; min-width: 72px">
                     <div>redo ↪</div>
-                </div>
-                <div onclick="editor.addStyle(styleCodes.bold)">
+                </button>
+                <button class="toolbar-item" onclick="editor.addStyle(styleCodes.bold)">
                     <div style="font-weight: bold">B</div>
-                </div>
-                <div onclick="editor.addStyle(styleCodes.italic)">
+                </button>
+                <button class="toolbar-item" onclick="editor.addStyle(styleCodes.italic)">
                     <div style="font-style: italic">I</div>
-                </div>
-                <div onclick="editor.addStyle(styleCodes.monospace)">
+                </button>
+                <button class="toolbar-item" onclick="editor.addStyle(styleCodes.monospace)">
                     <div style="font-family: monospace">C</div>
-                </div>
-                <div onclick="editor.addStyle(styleCodes.superscript)">
+                </button>
+                <button class="toolbar-item" onclick="editor.addStyle(styleCodes.superscript)">
                     <div>Sup</div>
-                </div>
-                <div onclick="editor.addStyle(styleCodes.subscript)">
+                </button>
+                <button class="toolbar-item" onclick="editor.addStyle(styleCodes.subscript)">
                     <div>Sub</div>
-                </div>
-                <div style="position: relative">
-                    <input class="tool" oninput=" editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
-                        formattingColourRect.style.background = this.value" value="#000000" style=" opacity: 0;
-                        position: absolute;
-                        left: 0px;
-                        top: 0px;
-                        width: 100%;
-                        height: 100%;
-                        box-sizing: border-box;
-                        padding: 0px;
-                        margin: 0px;
-                        " type="color" />
-                    <div id="formattingColourRect" style=" background-color: black;
-                        width: calc(100% - 2px);
-                        height: calc(100% - 2px);
-                        margin: 1px;
-                        border-radius: 4px;
-                        "></div>
-                </div>
-                <div>
+                </button>
+                <button class="toolbar-item" style="position: relative" onclick="formatColourInput.click()">
+                    <input id="formatColourInput" type="color" class="tool colour-tool-item" value="#000" oninput="
+                        editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
+                        formattingColourRect.style.background = this.value
+                    " style="display: none;">
+                    <div id="formattingColourRect"></div>
+                </button>
+                <button class="toolbar-item">
                     <div>🖼️</div>
-                </div>
-                <div class="separator"></div>
-                <div style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                </button>
+                <div class="toolbar-item separator"></div>
+                <button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                     <div>Page layout ⯆</div>
                     <div class="options">
                         <div onclick="changePageStyle('poem-centre')">Poem centre</div>
                         <div onclick="changePageStyle('poem-centre-wide')">Poem wide</div>
                         <div onclick="changePageStyle('centre')">Centre</div>
                     </div>
-                </div>
-                <div style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+                </button>
+                <button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
                     <div>Background ⯆</div>
                     <div class="options">
                         <div onclick="document.body.style.background = ''">None</div>
@@ -320,19 +308,19 @@
                             Built-in free
                         </div>
                     </div>
-                </div>
-                <div onclick=" side.removeAttribute('collapsed')
+                </button>
+                <button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
                     side.setAttribute('mode', 'rhyme')
                     " style="width: 132px; min-width: 132px">
                     <div>Rhyme finder ➕</div>
-                </div>
-                <div onclick=" side.removeAttribute('collapsed')
+                </button>
+                <button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
                     side.setAttribute('mode', 'coauthor')
                     " style="width: 132px; min-width: 132px">
                     <div>AI coauthor ➕</div>
-                </div>
+                </button>
             </div>
-            <hr />
+            <hr>
         </div>
         <div id="editorsPopup" class="popup" style="display: none">
             <h2>Find someone to invite</h2>
@@ -364,14 +352,14 @@
             <input type="text" id="editorInputCatcher" virtualkeyboardpolicy="manual" style="position: absolute; opacity: 0; pointer-events: none"
                 onkeydown="
                     if (!(event.ctrlKey && event.key.toLowerCase() === 'v')) {
-                    editorCanvas.dispatchEvent(new event.constructor(event.type, event))
+                        editorCanvas.dispatchEvent(new event.constructor(event.type, event))
                         event.preventDefault()
                     }
                     // Uses clipboard API if possible
                     else if (navigator.clipboard.readText) {
                         navigator.clipboard.readText()
                             .then((paste) => {
-                                editor.addText(paste)
+                                editor.insertText(paste)
                                 editor.renderCanvasData(editorCanvas)
                             })
                             .catch((error) => {
@@ -384,11 +372,11 @@
                     // HACK: into the input
                     if (navigator.clipboard.readText) return
                     const paste = (event.clipboardData || window.clipboardData).getData('text')
-                    editor.addText(paste)
+                    editor.insertText(paste)
                     editor.renderCanvasData(editorCanvas)
                     event.preventDefault()
                 " />
-            <canvas id="editorCanvas" tabindex="-1" ondblclick=" // TODO: Select word on mobile handles
+            <canvas id="editorCanvas" tabindex="0" ondblclick=" // TODO: Select word on mobile handles
                 " oncontextmenu="
                     editorContext.style.left = (event.clientX) + 'px'
                     editorContext.style.top = (event.clientY) + 'px'
@@ -455,18 +443,18 @@
                             }
                             case 'v': {
                                 if (navigator.clipboard.readText) { // HACK: See handler in input catcher
-                                    navigator.clipboard.readText().then((clipText) => editor.addText(clipText))
+                                    navigator.clipboard.readText().then((clipText) => editor.insertText(clipText))
                                 }
                                 break
                             }
                         }
                     }
                     else {
-                        editor.addText(event.key)
+                        editor.insertText(event.key)
                     }
                     editor.renderCanvasData(this)
                 " onblur="editor.renderCanvasData(this, false)" onfocus="editor.renderCanvasData(this)"></canvas>
-            <div id="editorContext" onclick="editorContext.style.visibility = 'hidden'">
+            <div id="editorContext">
                 <button type="button" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                         <path d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z" />
@@ -515,7 +503,7 @@
                 <button type="button" onclick="
                     if (navigator.clipboard.readText) { // HACK: See handler in input catcher
                         navigator.clipboard.readText().then((clipText) => {
-                            editor.addText(clipText)
+                            editor.insertText(clipText)
                             editor.renderCanvasData(editorCanvas)
                         })
                     }
