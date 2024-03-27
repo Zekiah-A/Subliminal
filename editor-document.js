@@ -91,10 +91,10 @@ class EditorDocument {
         const cssFontSize = this.fontSize / this.scale
         // Wrapping poems should generally be discouraged, as formatting changes may affect how it is paced
         // and read, however we do not want to cut off content either so such compromise must be made...
-        root.style.overflow = "auto"
         root.style.fontFamily = "Arial, Helvetica, sans-serif"
         root.style.fontSize = `${cssFontSize}px`
         root.style.whiteSpace = "nowrap"
+        root.style.width = "max-content"
 
         function renderFragment(data, html, _this) {
             switch (data.type) {
