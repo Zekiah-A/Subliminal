@@ -21,11 +21,19 @@
     }
 }
 
+* { box-sizing: border-box; }
+
+.headered-body {
+    padding: 10px;
+    padding-top: 72px;
+}
+
 body {
     margin: 0px;
     background-size: cover !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
+    box-sizing: border-box;
 }
 
 hr {
@@ -37,6 +45,7 @@ button, input[type="button"] {
     color: var(--text-colour);
     border: 1px solid #8f8f9d;
     border-radius: 4px;
+    cursor: default;
 }
 
 button:hover, input[type="button"]:hover {
@@ -100,16 +109,18 @@ h2 {
     background: transparent;
 }
 
-
 .centre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     overflow-wrap: break-word;
 }
 
 .contents-div-centre {
     margin: auto;
-    width: min(1112px, calc(100% - 20px));
-    padding: 10px;
+    width: 100%;
+    width: min(1112px, 100%);
 }
 
 .back {
@@ -174,12 +185,14 @@ h2 {
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 4px;
     padding: 8px;
-    text-align: center;
     cursor: pointer;
     background-color: var(--button-opaque);
     flex-grow: 1;
     transition: .2s background-color;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .popup-button[disabled] {
@@ -192,16 +205,19 @@ h2 {
 }
 
 .popup-input {
-    width: calc(100% - 8px);
     display: block;
     line-height: 1.5;
-    height: 2.1em;
+    height: 32px;
     padding: 4px 8px;
     border: 1px solid #aaa;
     background-color: #fff;
     border-radius: 2px;
     transition: all 0.3s;
-    width: calc(100% - 16px);
+    width: 100%;
+}
+
+.popup-input:invalid {
+    border: 1px solid red;
 }
 
 .popup-input:focus {
@@ -339,24 +355,6 @@ h2 {
     max-height: 32px;
 }
 
-.options {
-    background-color: var(--button-opaque);
-    border-radius: 4px;
-    margin-top: 4px;
-    border: 1px solid darkgray;
-    pointer-events: all !important;
-    display: none;
-    user-select: none;
-}
-
-.options div[selected] {
-    background-color: darkgray;
-}
-
-.options div:hover {
-    background-color: darkgray;
-}
-
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) {
     body {
@@ -375,28 +373,12 @@ h2 {
     a:visited {
         color: #bbb8b8;
     }
-
-    .searchbar {
-        color: var(--text-colour);
-        background-color: #ffffff33;
-        backdrop-filter: blur(10px);
-        z-index: 1;
-        border: 1px solid gray;
-    }
 }
 
 /*Mobile and thin screen optimisations*/
-@media screen and (orientation:portrait) {
-    .searchbar {
-        position: fixed;
-        width: calc(100% - 40px);
-        padding-left: 10px;
-        padding-right: 10px;
-        line-height: 40px;
-        top: 64px;
-        z-index: 2;
-        left: 50%;
-        transform: translateX(-50%);
+@media screen and (orientation: portrait) {
+    .headered-body {
+        padding-top: 56px;
     }
 
     .poem-centre {
@@ -415,9 +397,48 @@ h2 {
         overflow-wrap: break-word;
     }
 
+    /* Credit to: https://css-tricks.com/books/greatest-css-tricks/scroll-shadows */
+    .poem-centre, .poem-centre-wide/*, .centre*/ {
+        margin: auto;
+        overflow-x: auto;
+        background:
+            /* Top and bottom shadow fadings */
+            linear-gradient(
+                to bottom,
+                var(--background-opaque),
+                transparent 10%,
+                transparent 90%,
+                var(--background-opaque)
+            ),
+            /* Right and left shadow hiders (cover over shadows) */
+            linear-gradient(
+                to right,
+                var(--background-opaque) 30%,
+                transparent
+            ) left center,
+            linear-gradient(
+                to left,
+                var(--background-opaque) 70%, 
+                transparent
+            ) right center,
+            /* Right and left shadows */
+            linear-gradient(
+                to right,
+                rgba(128, 128, 128, 0.4),
+                transparent
+            ) left center,
+            linear-gradient(
+                to left,
+                rgba(128, 128, 128, 0.4),
+                transparent
+            ) right center;
+        background-repeat: no-repeat;
+        background-size: 100% 100%, 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, local, scroll, scroll;
+    }
+
     .contents-div-centre {
-        margin: 0px;
-        width: calc(100% - 20px);
+        width: 100%;
     }
 
     .comment {
@@ -443,21 +464,13 @@ h2 {
     .profile-container {
         flex-direction: column-reverse;
     }
-
-    .options {
-        position: absolute;
-        z-index: 2;
-        top: calc(100% + 48px);
-        left: 50%;
-        transform: translateX(-50%) scale(2);
-    }
 }
 
 @media screen and (orientation:landscape) {
     .poem-centre {
         margin-left: auto;
         margin-right: auto;
-        width: max(30%, 360px);
+        width: max(30%, 512px);
         padding: 10px;
     }
 
@@ -465,14 +478,6 @@ h2 {
         margin-left: 30%;
         width: 60%;
         padding: 10px;
-    }
-
-    .searchbar {
-        width: 50%;
-        line-height: 300%;
-        top: 2px;
-        z-index: 1;
-        flex-grow: 1;
     }
 
     .comment {

@@ -10,12 +10,17 @@ class SubliminalHeader extends HTMLElement {
                 <img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.origin">
                 <h1 style="margin: 0px; align-self: center;">Subliminal</h1>
                 <a href="contents">-&gt; Poems</a>
-                <a href="disclaimer">-&gt; Disclaimer</a>
+                <a href="account">-&gt; Profile</a>
                 <a href="sounds">-&gt; Sounds</a>
                 <div class="hilight" id="hilight"></div>
-                <custom>
-                    ${this.innerHTML || html`<p>The coolest crowdsourced anthology on the web</p>`}
-                </custom>
+                <div id="right">
+                    <input id="loginButton" type="button" value="Login to Subliminal"
+                        onclick="
+                            let loginSignup = createOrUpdateFromData('login-signup');
+                            if (loginSignup) this.parentDocument.body.appendChild(loginSignup)">
+                    <input id="logoutButton" type="button" value="Logout"
+                        onclick="window.location.reload(true)" style="display: none;"> <!-- TODO: This -->
+                </div>
             </div>
             <hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
 
@@ -41,6 +46,7 @@ class SubliminalHeader extends HTMLElement {
                 margin-left: 16px;
                 margin-right: 16px;
                 height: 64px;
+                position: relative;
             }
             
             p {
@@ -88,8 +94,18 @@ class SubliminalHeader extends HTMLElement {
                 transform: rotate(8deg) scale(1.1);
             }
             
-            custom {
+            #right {
                 flex-grow: 1;
+                display: flex;
+                justify-content: right;
+                column-gap: 8px;
+                padding: 8px;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid gray;
+                margin: 0px;
             }
 
             @media screen and (orientation:portrait) {
@@ -107,13 +123,16 @@ class SubliminalHeader extends HTMLElement {
                 }
             
                 a {
-                    font-size: 4vw;
+                    font-size: 3.4vw;
                     flex: 1 1 auto;
                     white-space: nowrap;
                     overflow: hidden;
-                    /*Click hitboxes*/
-                    padding-top: 16px;
-                    padding-bottom: 16px;
+                    height: 100%;
+                    box-sizing: border-box;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             
                 :host > div {
@@ -121,6 +140,13 @@ class SubliminalHeader extends HTMLElement {
                     margin-right: 8px;
                     height: 48px;
                     column-gap: 4px;
+                }
+
+                #right {
+                    padding: 2px;
+                }
+                #right * {
+                    font-size: 10px;
                 }
             }
 
@@ -135,12 +161,26 @@ class SubliminalHeader extends HTMLElement {
             }
         `
         this.shadowRoot.append(style)
+        defineAndInject(this, this.shadowRoot)
 
         for (let child of this.shadowRoot.children[0].childNodes) {
             if (child.href == location.toString().replace(".html", "")) {
                 child.setAttribute("current", true)
             }
         }
+
+        ;(async function(_this){
+            if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
+                _this.right.style.display = 'none'
+                console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
+                return
+            }
+
+            if (await isLoggedIn()) {
+                _this.loginButton.style.display = "none"
+                _this.logoutButton.style.display = "block"
+            }
+        })(this)
     }
 }
 

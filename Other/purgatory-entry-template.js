@@ -6,26 +6,26 @@ class PurgatoryEntry extends HTMLElement {
 
     connectedCallback() {
         this.shadowRoot.innerHTML = html`
-            <div class="preview">${this.getAttribute('poem-preview')}</div>
-            ${this.getAttribute('special-notification')
+            <div class="preview" id="poemPreview"></div>
+            ${this.getAttribute('notification')
                 ? html`
                     <p class="special-notification">
-                        ${this.getAttribute('special-notification')}
+                        ${this.getAttribute('notification')}
                     </p>`
                 : ''}
-            ${this.getAttribute('special-tooltip')
-                ? html`<div class="button-tooltip">${this.getAttribute('special-tooltip')}</div></p>`
+            ${this.getAttribute('tooltip')
+                ? html`<div class="button-tooltip" id="tooltip"></div></p>`
                 : ''}
-            <h4>${this.getAttribute('poem-name')}</h4>
+            <h4 id="poemName"></h4>
             <div class="info">
-                <span style="flex: 2;">By ${this.getAttribute('poem-author')}</span>
+                <span style="flex: 2;">By ${this.getAttribute('author')}</span>
                 <div style="flex: 1;">
                     <svg viewBox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg" height="16"><path clip-rule="evenodd" d="m8 .200001c.17143 0 .33468.073332.44854.201491l7.19996 8.103998c.157.17662.1956.42887.0988.64437-.0968.21551-.3111.35414-.5473.35414h-3.4v5.496c0 .3314-.2686.6-.6.6h-6.4c-.33137 0-.6-.2686-.6-.6v-5.496h-3.4c-.236249 0-.450507-.13863-.547314-.35414-.096807-.2155-.058141-.46775.09877-.64437l7.200004-8.103998c.11386-.128159.27711-.201491.44854-.201491zm-5.86433 8.103999h2.66433c.33137 0 .6.26863.6.6v5.496h5.2v-5.496c0-.33137.2686-.6.6-.6h2.6643l-5.8643-6.60063" fill-rule="evenodd"></path></svg>
-                    <span>${this.getAttribute('approves')}</span>
+                    <span id="approves"></span>
                 </div>
                 <div style="flex: 1;">
                     <svg viewBox="0 0 16 16" width="24" xmlns="http://www.w3.org/2000/svg" height="16" style="rotate: 180deg;"><path clip-rule="evenodd" d="m8 .200001c.17143 0 .33468.073332.44854.201491l7.19996 8.103998c.157.17662.1956.42887.0988.64437-.0968.21551-.3111.35414-.5473.35414h-3.4v5.496c0 .3314-.2686.6-.6.6h-6.4c-.33137 0-.6-.2686-.6-.6v-5.496h-3.4c-.236249 0-.450507-.13863-.547314-.35414-.096807-.2155-.058141-.46775.09877-.64437l7.200004-8.103998c.11386-.128159.27711-.201491.44854-.201491zm-5.86433 8.103999h2.66433c.33137 0 .6.26863.6.6v5.496h5.2v-5.496c0-.33137.2686-.6.6-.6h2.6643l-5.8643-6.60063" fill-rule="evenodd"></path></svg>
-                    <span>${this.getAttribute('vetoes')}</span>
+                    <span id="vetoes"></span>
                 </div>
             </div>
         `
@@ -113,6 +113,16 @@ class PurgatoryEntry extends HTMLElement {
             }    
         `
         this.shadowRoot.append(style)
+        defineAndInject(this, this.shadowRoot)
+
+        if (this.getAttribute("tooltip")) {
+            
+        }
+        
+        this.poemPreview.textContent = this.getAttribute("preview") 
+        this.poemName.textContent = this.getAttribute("name")
+        this.approves.textContent = this.getAttribute("approves")
+        this.vetoes.textContent = this.getAttribute("vetoes")
         
         if (this.getAttribute('new')) {
             setTimeout(() => {

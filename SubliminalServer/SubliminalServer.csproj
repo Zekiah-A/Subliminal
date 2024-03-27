@@ -8,14 +8,37 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
-        <ProjectReference Include="UnbloatDB\UnbloatDB\UnbloatDB.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0-preview.7.23375.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.7.23375.4">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.7.23375.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
     
     <ItemGroup>
-        <Compile Remove="UnbloatDB\UnbloatDB.Tests\**" />
-        <EmbeddedResource Remove="UnbloatDB\UnbloatDB.Tests\**" />
-        <None Remove="UnbloatDB\UnbloatDB.Tests\**" />
-        <Content Remove="UnbloatDB\UnbloatDB.Tests\**" />
+        <Compile Remove="DataProto\**" />
+        <Compile Remove="WatsonWebsocketPlus\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Remove="DataProto\**" />
+      <EmbeddedResource Remove="WatsonWebsocketPlus\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Content Remove="DataProto\**" />
+    <Content Remove="WatsonWebsocketPlus\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Remove="DataProto\**" />
+        <None Remove="WatsonWebsocketPlus\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="DataProto\DataProto\DataProto.csproj" />
+        <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
     </ItemGroup>
 </Project>

@@ -1,36 +1,43 @@
-using System.Globalization;
-using SubliminalServer.Account;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using SubliminalServer;
-using SubliminalServer.AccountActions;
-using UnbloatDB;
-using UnbloatDB.Serialisers;
+using SubliminalServer.DataModel.Account;
+using SubliminalServer.DataModel.Api;
+using SubliminalServer.DataModel.Purgatory;
+using SubliminalServer.DataModel.Report;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
-//Webserver configuration
-const string base64Alphabet = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+// EFCore database setup:
+// dotnet ef migrations add InitialCreate
+// dotnet ef database update
+// Prerelease .NET 9 may require "dotnet tool install --global dotnet-ef --prerelease"
+// to update from a non-prerelease, do "dotnet tool update --global dotnet-ef --prerelease"
 
 var dataDir = new DirectoryInfo("Data");
 var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
+var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
 var configFile = new FileInfo("config.json");
+var dbPath = Path.Join(dataDir.FullName, "subliminal.db");
 
-var random = new Random();
-var database = new Database(new Configuration(dataDir.Name, new JsonSerialiser()));
 ServerConfig? config = null;
-
+ 
 if (File.Exists(configFile.Name))
 {
-    config = await JsonSerializer.DeserializeAsync<ServerConfig>(File.OpenRead(configFile.Name));
+    var configText = File.ReadAllText(configFile.Name);
+    config = JsonSerializer.Deserialize<ServerConfig>(configText);
 }
 
 if (config is null)
 {
     await using var stream = File.OpenWrite(configFile.Name);
-    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false));
+    await JsonSerializer.SerializeAsync(stream, new ServerConfig("", "", 1234, false), new JsonSerializerOptions
+    {
+        WriteIndented = true,
+    });
     await stream.FlushAsync();
 	Console.ForegroundColor = ConsoleColor.Green;
 	Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
@@ -39,17 +46,17 @@ if (config is null)
 }
 
 Console.ForegroundColor = ConsoleColor.Yellow;
-foreach (var dirPath in new[] { dataDir, profileImageDir, new DirectoryInfo(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))) })
+foreach (var dirPath in new[] { dataDir, profileImageDir })
 {
     if (!Directory.Exists(dirPath.FullName))
     {
         Directory.CreateDirectory(dirPath.FullName);
         Console.WriteLine($"[WARN] Could not find {dirPath.Name} directory, creating.");
-
     }
 }
 Console.ResetColor();
 
+// Build web application and configure services
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration["Kestrel:Certificates:Default:Path"] = config.Certificate;
@@ -70,11 +77,20 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-var httpServer = builder.Build();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlite($"Data Source={dbPath}");
+});
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-httpServer.Urls.Add(
-    $"{(config.UseHttps ? "https" : "http")}://*:{config.Port}"
-);
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Configure middlewares and runtime services, including global authorization middleware that will
+// validate accounts for all site endpoints
+var httpServer = builder.Build();
+httpServer.Urls.Add($"{(config.UseHttps ? "https" : "http")}://*:{config.Port}");
 
 httpServer.UseCors(policy =>
     policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(_ => true).AllowCredentials()
@@ -86,17 +102,28 @@ httpServer.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProfileImage"
 });
 
-httpServer.UseStaticFiles(new StaticFileOptions
+if (httpServer.Environment.IsDevelopment())
 {
-    FileProvider = new PhysicalFileProvider(Path.Join(dataDir.FullName, nameof(PurgatoryEntry))),
-    RequestPath = "/Purgatory"
-});
-
-static string HashSha256String(string text)
-{
-    var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(text));
-    return bytes.Aggregate("", (current, b) => current + b.ToString("x2"));
+    httpServer.UseSwagger();
+    httpServer.UseSwaggerUI();
 }
+
+static string GenerateToken()
+{
+    var tokenBytes = RandomNumberGenerator.GetBytes(32);
+    var tokenString = Convert.ToBase64String(tokenBytes)
+        + ";" + DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds();
+    return tokenString;
+}
+
+// This is some straightup weirdness to force inject the DB, it seems to work for out current use though
+var scope = httpServer.Services.CreateScope();
+var serviceProvider = scope.ServiceProvider;
+httpServer.UseMiddleware<AuthorizationMiddleware>(serviceProvider.GetRequiredService<DatabaseContext>());
+
+var authRequiredEndpoints = new List<string>();
+var rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
+var sizeLimitEndpoints = new Dictionary<string, PayloadSize>(); // Should only really be needed on POST endpoints
 
 httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
 {
@@ -105,326 +132,448 @@ httpServer.MapGet("/PurgatoryReport/{poemKey}", (string poemKey) =>
     Console.ResetColor();
     return Results.Ok();
 });
+authRequiredEndpoints.Add("/PurgatoryReport");
+rateLimitEndpoints.Add("/PurgatoryReport", (1, TimeSpan.FromSeconds(5)));
+sizeLimitEndpoints.Add("/PurgatoryReport", PayloadSize.FromKilobytes(100));
 
-httpServer.MapGet("/PurgatoryPicks", async () =>
+httpServer.MapGet("/PurgatoryPicks", ([FromServices] DatabaseContext database) =>
 {
-    var records = await database.FindRecords<PurgatoryEntry, bool>("Pick", true);
-    return Results.Json(records.Select(structure => structure.Data));
+    var entries = database.PurgatoryEntries
+        .Where(entry => entry.Pick == true)
+        .Select(entry => entry.EntryKey);
+    return Results.Json(entries);
 });
+rateLimitEndpoints.Add("/PurgatoryPicks", (1, TimeSpan.FromSeconds(2)));
 
-httpServer.MapGet("/PurgatoryNew", () =>
-    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
-        .Take(10)
-        .Select(file => new FileInfo(file))
-        .OrderBy(file => file.CreationTime)
-        .Reverse()
-        .Select(file => file.Name)
-        .ToArray()
-);
-
-httpServer.MapGet("/PurgatoryAll", () =>
-    Directory.GetFiles(Path.Join(dataDir.FullName, nameof(PurgatoryEntry)))
-        .Select(file => new FileInfo(file))
-        .Reverse()
-        .Select(file => file.Name)
-        .ToArray()
-);
-
-httpServer.MapPost("/PurgatoryUpload", async (PurgatoryAuthenticatedEntry entry) =>
+httpServer.MapGet("/PurgatoryAfter", ([FromBody] PurgatoryBeforeAfter since, [FromServices] DatabaseContext database) =>
 {
-    entry.Approves = 0;
-    entry.Vetoes = 0;
-    entry.AdminApproves = 0;
-    entry.DateCreated = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-    entry.Pick = false;
+    var poemKeys = database.PurgatoryEntries
+        .Where(entry => entry.DateCreated > since.Date)
+        .Take(Math.Clamp(since.Count, 1, 50))
+        .Select(poem => poem.EntryKey);
+    return Results.Json(poemKeys);
+});
+rateLimitEndpoints.Add("/PurgatoryAfter", (1, TimeSpan.FromSeconds(2)));
 
-    var poem = await database.CreateRecord<PurgatoryEntry>(entry);
-    
-    //Account-poem link if uploaded by a user who is signed in
-    if (entry.Code is null)
+
+httpServer.MapGet("/PurgatoryBefore", ([FromBody] PurgatoryBeforeAfter before, [FromServices] DatabaseContext database) =>
+{
+    var poemKeys = database.PurgatoryEntries
+        .Where(entry => entry.DateCreated < before.Date)
+        .Take(Math.Clamp(before.Count, 1, 50))
+        .Select(poem => poem.EntryKey);
+    return Results.Json(poemKeys);
+});
+rateLimitEndpoints.Add("/PurgatoryBefore", (1, TimeSpan.FromSeconds(2)));
+
+// Take into account genres that they have liked, accounts they have blocked, new poems and interactions when reccomending
+httpServer.MapGet("/PurgatoryRecommended", () =>
+{
+    return Results.Problem();
+});
+authRequiredEndpoints.Add("/PurgatoryRecommended");
+rateLimitEndpoints.Add("/PurgatoryRecommended", (1, TimeSpan.FromSeconds(5)));
+
+httpServer.MapPost("/PurgatoryUpload", ([FromBody] UploadableEntry entryUpload, [FromServices] DatabaseContext database, HttpContext context) =>
+{
+    var validationIssues = new Dictionary<string, string[]>();
+    var tags = new List<PurgatoryTag>();
+
+    if (entryUpload.Summary?.Length > 300)
     {
-        return Results.Text(poem);
+        validationIssues.Add(nameof(entryUpload.Summary), ValidationFails.SummaryTooLong);
+    }
+    if (entryUpload.PoemName.Length > 32)
+    {
+        validationIssues.Add(nameof(entryUpload.PoemName), ValidationFails.PoemNameTooLong);
+    }
+    // TODO: For very long poems, loading it all as a string will rail the database and server memory.
+    // TODO: Consider moving long poems such as this to have their content handled as a blob or streamed as a separate file. 
+    if (entryUpload.PoemContent.Length > 100_000)
+    {
+        validationIssues.Add(nameof(entryUpload.PoemContent), ValidationFails.PoemContentTooLong);
+    }
+    for (var i = 0; i < Math.Min(5, entryUpload.PoemTags.Count); i++)
+    {
+        var tag = entryUpload.PoemTags[i];
+
+        if (!PermissibleTagRegex().IsMatch(tag))
+        {
+            validationIssues.Add(nameof(UploadableEntry.PoemTags), ValidationFails.InvalidTagProvided);
+        }
+        
+        tags.Add(new PurgatoryTag()
+        {
+            TagName = tag
+        });
+    }
+    if (validationIssues.Count > 0)
+    {
+        return Results.ValidationProblem(validationIssues);
     }
     
-    var account = (await database.FindRecords<AccountData, string>("Code", entry.Code)).FirstOrDefault();
+    var amendsKey = database.PurgatoryEntries
+        .Where(entry => entry.EntryKey == entryUpload.Amends)
+        .Select(entry => entry.EntryKey)
+        .SingleOrDefault();
+    var editsKey = database.PurgatoryEntries
+        .Where(entry => entry.EntryKey == entryUpload.Edits)
+        .Select(entry => entry.EntryKey)
+        .SingleOrDefault();
 
-    if (account is null)
+    var entry = new PurgatoryEntry
     {
-        return Results.Text(poem);
-    }
+        Summary = entryUpload.Summary,
+        ContentWarning = entryUpload.ContentWarning,
+        PageStyle = entryUpload.PageStyle,
+        PageBackgroundUrl = null, // TODO: Handle later, might need form/multipart
+        Tags = tags,
+        PoemName = entryUpload.PoemName,
+        PoemContent = entryUpload.PoemContent,
+        AuthorKey = ((AccountData) context.Items["Account"]!).AccountKey,
+        AmendsKey = amendsKey,
+        EditsKey = editsKey,
+        Approves = 0,
+        Vetoes = 0,
+        DateCreated = DateTime.UtcNow,
+        Pick = false
+    };
     
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
-    profile.Data.Poems.Add(poem);
-    
-    await database.UpdateRecord(profile);
+    database.PurgatoryEntries.Add(entry);
+    database.SaveChanges();
 
-    return Results.Text(poem);
+    return Results.Ok(entry.EntryKey);
 });
+authRequiredEndpoints.Add("/PurgatoryUpload");
+//rateLimitEndpoints.Add("/PurgatoryUpload", (1, TimeSpan.FromSeconds(60)));
+sizeLimitEndpoints.Add("/PurgatoryUpload", PayloadSize.FromMegabytes(5));
 
 //Creates a new account with a provided pen name, and then gives the client the credentials for their created account
-httpServer.MapPost("/Signup", async ([FromBody] string penName) =>
+httpServer.MapPost("/Signup", static ([FromBody] LoginDetails details, [FromServices] DatabaseContext database, HttpContext context) =>
 {
-    // Generate secret account code (password)
-    var code = "";
-    for (var i = 0; i < 10; i++)
+    if (!PermissibleUsernameRegex().IsMatch(details.Username))
     {
-        code += base64Alphabet[random.Next(0, 63)];
+        return Results.ValidationProblem(new Dictionary<string, string[]>()
+            { { nameof(LoginDetails.Username), ValidationFails.InvalidUsername } });
+    }
+
+    var existingAccount = database.Accounts.SingleOrDefault(account =>
+        account.Email == details.Email || account.Username == details.Username);
+    if (existingAccount is not null)
+    {
+        return Results.Conflict();
     }
     
-    var profileKey = await database.CreateRecord(new AccountProfile(penName, DateTime.Now.ToString(CultureInfo.InvariantCulture)));
-    await database.CreateRecord(new AccountData(HashSha256String(code), profileKey));
+    // TODO: Email validation, this will all be moved elsewhere
+    var tokenString = GenerateToken();
+    var account = new AccountData(details.Username, details.Email, DateTime.UtcNow, tokenString);
 
-    var credentials = new { Code = code, Guid = profileKey };
-    return Results.Json(credentials, Utils.DefaultJsonOptions);
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
+    {
+        return Results.Forbid();
+    }
+    account.KnownIPs.Add(new AccountAddress()
+    {
+        IpAddress = requestIp
+    });
+    database.Accounts.Add(account);
+    database.SaveChanges();
+
+    context.Response.Cookies.Append("Token", tokenString, new CookieOptions()
+    {
+        HttpOnly = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddMonths(1)
+    });
+    // If for some reason they can not persist the cookie, we also send them the token so that they may save it somwehere
+    // secure on certain platforms, such as a third party non-web client.
+    return Results.Ok(account.Token);
 });
+rateLimitEndpoints.Add("/Signup", (1, TimeSpan.FromSeconds(2)));
+sizeLimitEndpoints.Add("/Signup", PayloadSize.FromKilobytes(5));
 
-//Allows a user to retrieve signin account data, and validate clientside credentials are valid. Contains logging for moderation. 
-httpServer.MapPost("/Signin", async ([FromBody] string signinCode, HttpContext context) =>
+// Allows a user to signin and receive account data
+httpServer.MapPost("/SigninToken", ([FromBody] string? token, [FromServices] DatabaseContext database, HttpContext context) =>
 {
-    var account = (await database.FindRecords<AccountData, string>("Code", signinCode)).FirstOrDefault();
-    return account is null ? Results.Unauthorized() : Results.Json(account.Data);
-});
+    if (string.IsNullOrEmpty(token))
+    {
+        var cookieToken = context.Request.Cookies["Token"];
+        if (string.IsNullOrEmpty(cookieToken))
+        {
+            return Results.Unauthorized();
+        }
 
-//Get public facing data for an account
-httpServer.MapGet("/AccountProfile/{profileKey}", async (string profileKey) =>
-{
-    var profile = await database.GetRecord<AccountProfile>(profileKey);
-    return profile is null ? Results.NotFound() : Results.Json(profile);
-});
+        token = cookieToken;
+    }
 
-
-httpServer.MapPost("/ExecuteAccountAction", async (AccountAction action, HttpContext context) =>
-{
-    var account = (await database.FindRecords<AccountData, string>(nameof(AccountData.CodeHash), action.Code)).FirstOrDefault();
-    
-    if (account is null)
+    // Completely invalid token - Reject
+    var expiryString = token.Split(";").Last();
+    if (!long.TryParse(expiryString, out var expiry))
     {
         return Results.Unauthorized();
     }
 
-    var profile = (await database.GetRecord<AccountProfile>(account.Data.ProfileKey))!;
-    
-    switch (action.ActionType)
+    // Expired token - Reject
+    if (expiry < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
     {
-        /*
-        case SingleValueAccountActionType.BlockUser:
-        {
-            if (action.Value is not string userGuid) goto default;
-            if (!Account.GuidIsValid(userGuid)) goto default;
-            var targetUser = await Account.GetAccountData(userGuid);
-            
-            if (account.Blocked.Contains(targetUser.Guid)) goto default;
-            account.Blocked.Add(targetUser.Guid);
-            break;
-        }
-        
-        case SingleValueAccountActionType.UnblockUser:
-        {
-            if (action.Value is not string userGuid) goto default;
-            var targetUser = await Account.GetAccountData(userGuid);
+        return Results.Unauthorized();
+    }
 
-            if (!account.Blocked.Contains(targetUser.Guid)) goto default;
-            account.Blocked.Remove(targetUser.Guid);
-            break;
-        }
-        
-        case SingleValueAccountActionType.FollowUser:
-        {
-            if (action.Value is not string userGuid) goto default;
-            if (!Account.GuidIsValid(userGuid)) goto default;
-            var targetUser = await Account.GetAccountData(userGuid);
+    // No account associated with token - Reject
+    var account = database.Accounts.SingleOrDefault(data => data.Token == token);
+    if (account is null)
+    {
+        return Results.NotFound();
+    }
 
-            account.FollowUser(ref targetUser);
-            await Account.SaveAccountData(targetUser);
-            break;
-        }
-        */
-        case AccountActionType.UnfollowUser:
-        {
-            // TODO: Reimplement
-            await database.UpdateRecord(account);
-            break;
-        }
-        
-        case AccountActionType.LikePoem:
-        {
-            if (action.Value is not string poemGuid) goto default;
-            var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
-            if (poem is not null)
-            {
-                profile.Data.PinnedPoems.Add(poem.MasterKey);
-            }
-            
-            await database.UpdateRecord(account);
-            break;
-        }
-        
-        case AccountActionType.UnlikePoem:
-        {
-            if (action.Value is not string poemKey) goto default;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
+    {
+        return Results.Forbid();
+    }
+    account.KnownIPs.Add(new AccountAddress()
+    {
+        IpAddress = requestIp
+    });
+    database.SaveChanges();
 
-            if (keyReference is not null)
-            {
-                account.Data.LikedPoems.Remove(keyReference);
-            }
-            
-            await database.UpdateRecord(account);
-            break;
-        }
-        
-        case AccountActionType.PinPoem:
-        {
-            if (action.Value is not string poemGuid) goto default;
-            var poem = await database.GetRecord<PurgatoryEntry>(poemGuid);
-            if (poem is not null)
-            {
-                profile.Data.PinnedPoems.Add(poem.MasterKey);
-            }
-            
-            await database.UpdateRecord(profile);
-            break;
-        }
-        
-        case AccountActionType.UnpinPoem:
-        {
-            if (action.Value is not string poemKey) goto default;
-            var keyReference = account.Data.LikedPoems.FirstOrDefault(keyReference => keyReference.Equals(poemKey));
+    return Results.Json(account);
+});
+rateLimitEndpoints.Add("/SigninToken", (1, TimeSpan.FromSeconds(1)));
+sizeLimitEndpoints.Add("/SigninToken", PayloadSize.FromKilobytes(5));
 
-            if (keyReference is not null)
-            {
-                profile.Data.PinnedPoems.Remove(keyReference);
-            }
-            
-            await database.UpdateRecord(profile);
-            break;
-        }
-        
-        case AccountActionType.UpdateEmail:
-        {
-            if (action.Value is not string email) goto default;
-            // TODO: Email verification
-            account.Data.Email = email;
-            await database.UpdateRecord(account);
-            break;
-        }
-        
-        case AccountActionType.UpdateNumber:
-        {
-            if (action.Value is not string number) goto default;
-            // TODO: Number verification
-            account.Data.PhoneNumber = number;
-            await database.UpdateRecord(account);
-            break;
-        }
-        
-        case AccountActionType.UpdatePenName:
-        {
-            if (action.Value is not string penName) goto default;
-            profile.Data.PenName = penName.Length <= 16 ? penName : penName[..16];
-            await database.UpdateRecord(profile);
-            break;
-        }
-        
-        case AccountActionType.UpdateBiography:
-        {
-            if (action.Value is not string biography) goto default;
-            profile.Data.Biography = biography.Length <= 360 ? biography : biography[..360];
-            await database.UpdateRecord(profile);
-            break;
-        }
-
-        case AccountActionType.UpdateLocation:
-        {
-            if (action.Value is not string location) goto default;
-            profile.Data.Location = location.Length <= 16 ? location : location[..16];
-            await database.UpdateRecord(profile);
-            break;
-        }
-
-        case AccountActionType.UpdateRole:
-        {
-            if (action.Value is not string role) goto default;
-            profile.Data.Role = role.Length <= 16 ? role : role[..16];
-            await database.UpdateRecord(profile);
-            break;
-        }
-
-        case AccountActionType.UpdateAvatar:
-        {
-            if (action.Value is not string avatarUrl) goto default;
-
-            var permitted = new[]
-            {
-                "image/gif",
-                "image/png",
-                "image/webp",
-                "image/jpg"
-            };
-
-            // If the data is base64, then we send then we will host their profile image on our CDN to their profile
-            if (permitted.Any(mimeType => avatarUrl.StartsWith("data:" + mimeType)))
-            {
-                if (avatarUrl.Length > 10_000_000)
-                {
-                    break;
-                }
-
-                var imagePath = Path.Join(profileImageDir.Name, profile.MasterKey);
-                await File.WriteAllTextAsync(imagePath, avatarUrl);
-                profile.Data.AvatarUrl = Path.Combine(context.Request.PathBase, imagePath);
-            }
-            else
-            {
-                var simplifiedUrl = avatarUrl
-                    [..(avatarUrl.Length <= 256 ? avatarUrl.Length : 256)] //Trim URL length to a maximum reasonable value
-                    [..(!avatarUrl.Contains('?') ? avatarUrl.Length : avatarUrl.IndexOf("?", StringComparison.Ordinal))] //Remove all URL queries
-                    .Replace("http://", "https://"); //Use HTTPS if url contains a HTTP link
-
-                profile.Data.AvatarUrl = simplifiedUrl;
-            }
-
-            await database.UpdateRecord(profile);
-            break;
-        }
-        case AccountActionType.RatePoem:
-        {
-            if (action.Value is not PurgatoryRating rating) goto default;
-
-            var entry = await database.GetRecord<PurgatoryEntry>(rating.PoemKey);
-		    if (entry is null)
-		    {
-		        return Results.NotFound();
-		    }
-
-		    entry.Data.Approves = rating.Type switch
-		    {
-		        PurgatoryRatingType.Approve => entry.Data.Approves + 1,
-		        PurgatoryRatingType.UndoApprove => entry.Data.Approves - 1,
-		        _ => entry.Data.Approves
-		    };
-
-		    entry.Data.Vetoes = rating.Type switch
-		    {
-		        PurgatoryRatingType.Veto => entry.Data.Vetoes + 1,
-		        PurgatoryRatingType.UndoVeto => entry.Data.Vetoes - 1,
-		        _ => entry.Data.Vetoes
-		    };
-
-		    await database.UpdateRecord(entry);
-            break;
-        }
-        // TODO: Implement purgatory drafts here
-        default:
-        {
-            var stream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(stream, action);
-            return Results.Problem("Specified account action failed, had an invalid value type, or did not exist." + Encoding.UTF8.GetString(stream.ToArray()));
-        }
+httpServer.MapPost("/Signin", ([FromBody] LoginDetails details, [FromServices] DatabaseContext database, HttpContext context) =>
+{
+    var account = database.Accounts.SingleOrDefault(account =>
+        account.Username == details.Username && account.Email == details.Email);
+    if (account is null)
+    {
+        return Results.NotFound();
     }
     
-    return Results.Ok();
+    // If the current account token is expired, we will generate a new one,
+    // we will also give them the token cookie regardless
+    var expiryString = account.Token.Split(";").Last();
+    if (long.Parse(expiryString) < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+    {
+        var tokenString = GenerateToken();
+        account.Token = tokenString;
+        database.SaveChanges();
+    }
+
+    // Rate limit middleware should have passed us a nicely sanitised IP. Otherwise we will just fallback
+    var requestIp = context.Items["RealIp"] as string ?? context.Connection.RemoteIpAddress?.ToString();
+    if (requestIp is null)
+    {
+        return Results.Forbid();
+    }
+    account.KnownIPs.Add(new AccountAddress()
+    {
+        IpAddress = requestIp
+    });
+    database.SaveChanges();
+
+    context.Response.Cookies.Append("Token", account.Token, new CookieOptions()
+    {
+        HttpOnly = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddMonths(1)
+    });
+
+    return Results.Json(account);
+});
+rateLimitEndpoints.Add("/Signin", (1, TimeSpan.FromSeconds(1)));
+sizeLimitEndpoints.Add("/Signin", PayloadSize.FromKilobytes(5));
+
+//Get public facing data for an account, will accept either a username or an account key
+httpServer.MapGet("/Profiles/{profileIdentifier}", (string profileIdentifier, [FromServices] DatabaseContext database) =>
+{
+    var account = int.TryParse(profileIdentifier, out var profileKey)
+        ? database.Accounts.SingleOrDefault(account => account.AccountKey == profileKey)
+        : database.Accounts.SingleOrDefault(account => account.Username == profileIdentifier);
+    if (account is null)
+    {
+        return Results.NotFound();
+    }
+
+    var profile = new UploadableProfile(account);
+    return Results.Json(profile);
+});
+rateLimitEndpoints.Add("/Profiles", (1, TimeSpan.FromMilliseconds(500)));
+
+// Account action endpoints
+httpServer.MapPost("/Block", ([FromBody] int userKey, [FromServices] DatabaseContext database, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+rateLimitEndpoints.Add("/Block", (1, TimeSpan.FromSeconds(2)));
+authRequiredEndpoints.Add("/Block");
+
+httpServer.MapPost("/Unblock", ([FromBody] int userKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
 });
 
+httpServer.MapPost("/Follow", ([FromBody] int userKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/Report", ([FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
+{
+    var validationIssues = new Dictionary<string, string[]>();
+    if (reportUpload.Reason.Length > 300)
+    {
+        validationIssues.Add(nameof(reportUpload.Reason), ValidationFails.ReportReasonTooLong);
+    }
+    var validKey = reportUpload.TargetType switch
+    {
+        ReportTargetType.Entry => database.PurgatoryEntries
+            .Any(entry => entry.EntryKey == reportUpload.TargetKey),
+        ReportTargetType.Account => database.Accounts
+            .Any(account => account.AccountKey == reportUpload.TargetKey),
+        ReportTargetType.Annotation => database.PurgatoryAnnotations
+            .Any(entry => entry.AnnotationKey == reportUpload.TargetKey),
+        _ => throw new ArgumentOutOfRangeException(nameof(reportUpload.TargetType))
+    };
+    if (!validKey)
+    {
+        validationIssues.Add(nameof(reportUpload.TargetType), ValidationFails.ReportTargetDoesntExist);
+    }
+    if (validationIssues.Count > 0)
+    {
+        return Results.ValidationProblem(validationIssues);
+    }
+
+    var account = (AccountData) context.Items["Account"]!;
+    /*var report = new Report()
+    {
+        ReporterKey = account.AccountKey,
+        TargetKey = reportUpload.TargetKey,
+        Reason = reportUpload.Reason,
+        ReportType = reportUpload.ReportType,
+        ReportTargetType = reportUpload.TargetType,
+        DateCreated = DateTime.UtcNow
+    };
+    database.Reports.Add(report);
+    database.SaveChanges();*/
+
+    return Results.Ok();
+});
+rateLimitEndpoints.Add("/Report", (1, TimeSpan.FromSeconds(60)));
+authRequiredEndpoints.Add("/Report");
+
+httpServer.MapPost("/UnfollowUser", ([FromBody] string userKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/LikePoem", ([FromBody] int poemKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UnlikePoem", ([FromBody] int poemKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/PinPoem", ([FromBody] int poemKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UnpinPoem", ([FromBody] int poemKey, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdateEmail", ([FromBody] string email, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdatePenName", ([FromBody] string penName, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdateBiography", ([FromBody] string biography, HttpContext context) =>
+{
+    
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdateLocation", ([FromBody] string location, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdateRole", ([FromBody] string role, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/UpdateAvatar", ([FromBody] string avatarUrl, HttpContext context) =>
+{
+    return Results.Problem(); // TODO: Implement
+});
+
+httpServer.MapPost("/RatePoem", ([FromBody] UploadableRating ratingUpload, HttpContext context) =>
+{
+    
+    return Results.Problem(); // TODO: Implement
+});
+
+// Endpoints that enforce Account/IP rate limiting
+foreach (var endpointArgsPair in rateLimitEndpoints)
+{
+    httpServer.UseWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<RateLimitMiddleware>(endpointArgsPair.Value.RequestLimit, endpointArgsPair.Value.TimeInterval);
+        }
+    );
+}
+
+foreach (var endpointArgsPair in sizeLimitEndpoints)
+{
+    httpServer.UseWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpointArgsPair.Key),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<RequestSizeLimitMiddleware>(endpointArgsPair.Value.AsLong());
+        }
+    );
+}
+
+// Endpoints that require an account to access
+foreach (var endpoint in authRequiredEndpoints)
+{
+    httpServer.UseWhen
+    (
+        context => context.Request.Path.StartsWithSegments(endpoint),
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<EnsureAuthorizationMiddleware>();
+        }
+    );
+}
 
 await httpServer.RunAsync();
+
+internal partial class Program
+{
+    [GeneratedRegex("^[a-z][a-z0-9_-]{0,23}$")]
+    private static partial Regex PermissibleTagRegex();
+
+    [GeneratedRegex("^[a-z][a-z0-9_.]{0,15}$")]
+    private static partial Regex PermissibleUsernameRegex();
+
+}

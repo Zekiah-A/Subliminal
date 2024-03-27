@@ -45,3 +45,7 @@ msbuild.wrn
 
 # Node
 node_modules/
+
+# Server
+SubliminalServer/Data/
+SubliminalServer/Migrations/

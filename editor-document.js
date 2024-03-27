@@ -4,17 +4,7 @@
 //  = 57344 = \uE000 = start style
 //  = 57345 = \uE001 = new line (break)
 //  = 57346 = \uE002 = end style
-
 "use strict";
-const styleCodes = {
-    colour: '\uE003', // code,  uint32
-    bold: '\uE004',
-    italic: '\uE005',
-    monospace: '\uE006',
-    superscript: '\uE007',
-    subscript: '\uE008',
-}
-
 const positionMovements = {
     up: 0,
     down: 1,
@@ -23,98 +13,236 @@ const positionMovements = {
     none: 4
 }
 
+// Document objects
+class DocumentFragment {
+    constructor() {
+        this.styles = []
+        this.children = []
+        this.type = "fragment"
+    }
+}
+
+class Text {
+    constructor(text="") {
+        this.content = text
+        this.type = "text"
+    }
+}
+
+class NewLine {
+    constructor(count=1) {
+        this.count = count
+        this.type = "newline"
+    }
+}
+
+// Document fragment styles
+class Bold {
+    constructor() {
+        this.type = "bold"
+    }
+}
+
+class Font {
+    constructor(name="Arial, Helvetica, sans-serif", size=18) {
+        this.name = name
+        this.size = size
+        this.type = "font"
+    }
+}
+
+class Colour {
+    constructor(hex="#000") {
+        this.hex = hex
+        this.type = "colour"
+    }
+}
+
 class EditorDocument {
     // Data, text data that canvas will be initialised with, Scale, oversample factor of canvas
-    constructor(data = null, scale = 1, fontSize = 18) {
-        this.data = data || ""
-        this.position = this.data.length // Raw position
+    constructor(data=null, scale=1, fontSize=18, colourHex=getComputedStyle(document.documentElement).getPropertyValue("--text-colour")) {
+        if (typeof data === "string") {
+            this.data = new DocumentFragment(data)
+            this.data.children.push(new Text(data))
+        }
+        else if (data) {
+            this.data = data
+        }
+        else {
+            throw new Error("Could not create editor document, supplied data was invalid")
+        }
+        this.position = this.getText().length // Raw position at end of text
         this.selection = { position: 0, end: 0, shiftKeyPivot: 0 } // Raw position
         this.workingStyles = []
         this.encoder = new TextEncoder()
         this.scale = scale
+        // These will be used at the root level or when no styles are specified by a document fragment 
         this.fontSize = fontSize * scale
+        this.colourHex = colourHex || "#000"
     }
 
-    formatToHtml() {
-        let encoded = this.encoder.encode(this.data)
-        let buffer = new ArrayBuffer(encoded.length)
-        for (let i = 0; i < encoded.length; i++) {
-            buffer[i] = encoded[i]
-        }
-        let view = new DataView(buffer)
+    renderHtmlData(root) {
+        root.innerHTML = ""
+        this.formatToHtml(root)
+    }
 
-        let inStyle = false
-        let html = []
+    formatToHtml(baseElement=document.createElement("div")) {
+        const root = baseElement
+        const cssFontSize = this.fontSize / this.scale
+        // Wrapping poems should generally be discouraged, as formatting changes may affect how it is paced
+        // and read, however we do not want to cut off content either so such compromise must be made...
+        root.style.fontFamily = "Arial, Helvetica, sans-serif"
+        root.style.fontSize = `${cssFontSize}px`
+        root.style.whiteSpace = "nowrap"
+        root.style.width = "max-content"
 
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i] == '\uE000') {
-                inStyle = !inStyle
-                continue
-            }
-            else if (this.data[i] == '\uE001') {
-                html.push("<br>")
-                continue
-            }
-            else if (this.data[i] == '\uE002') {
-                html.push("</span>")
-                continue
-            }
+        function renderFragment(data, html, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    const fragment = document.createElement("span")
 
-            if (inStyle) {
-                switch (this.data[i]) {
-                    case styleCodes.colour:
-                        html.push(`<span style="colour: #${view.getUint32(this.data[i + 1])}";>`)
-                        i += 4
-                        break
-                    case styleCodes.bold:
-                        html.push(`<span style="font-weight: bold;">`)
-                        break
-                    case styleCodes.italic:
-                        html.push(`<span style="font-style: italic;">`)
-                        break
-                    case styleCodes.monospace:
-                        html.push(`<span style="font-family: font-family: monospace;">"`)
-                        break
-                    case styleCodes.superscript:
-                        html.push(`<span style="vertical-align: sup; font-size: smaller;">`)
-                        break
-                    case styleCodes.subscript:
-                        html.push(`<span style="vertical-align: sub; font-size: smaller;">`)
-                        break
+                    for (let i = 0; i < data.styles.length; i++) {
+                        const style = data.styles[i]
+                        switch (style.type) {
+                            case "subscript":
+                                fragment.style.verticalAlign = "sub"
+                                fragment.style.fontSize = "smaller"
+                                break
+                            case "lineheight":
+                                const scaledHeight = data.height * _this.scale
+                                fragment.style.display = "inline-block"
+                                fragment.style.lineHeight = `${scaledHeight}px`
+                                break
+                            case "bold":
+                                fragment.style.fontWeight = "bold"
+                                break
+                            case "italic":
+                                fragment.style.fontStyle = "italic"
+                                break
+                            case "colour":
+                                fragment.style.color = style.hex
+                                break
+                            case "font":
+                                fragment.style.fontFamily = style.name
+                                fragment.style.fontSize = style.size
+                                break
+                        }
+                        html.appendChild(fragment)
+                    }
+
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        renderFragment(child, fragment, _this)
+                    }
+                    html.appendChild(fragment)
+                    break
+                }
+                case "text": {
+                    const text = document.createTextNode(data.content)
+                    html.appendChild(text)
+                    break
+                }
+                case "newline": {
+                    for (let i = 0; i < data.count; i++) {
+                        const newLine = document.createElement("br")
+                        html.appendChild(newLine)
+                    }
+                    break
                 }
             }
-            else {
-                html.push(this.data[i])
-            }
         }
-
-        return html.join("")
+        renderFragment(this.data, root, this)
+        return root
     }
 
     renderCanvasData(canvas, cursor = true) {
         const context = canvas.getContext("2d")
-        const encoded = this.encoder.encode(this.data)
-        const buffer = new ArrayBuffer(encoded.length)
-        for (let i = 0; i < encoded.length; i++) {
-            buffer[i] = encoded[i]
-        }
-        const view = new DataView(buffer)
-
-        let existingSelection = this.existingSelection()
-        let defaultTextColour = getComputedStyle(document.documentElement).getPropertyValue("--text-colour")
-        let inStyle = false
+        let hasSelection = this.hasSelection()
         let stylesStack = [] // Every style on this stack gets applied to a char
-        let colourStack = [] // Only the top style on this stack should be applied
-        let lines = []
-        let currentLine = ""
 
-        // We precalculate how many lines the canvas will be 
-        let preCalcHeight = Math.max(360, EditorDocument.getLines(this.data).length * (this.fontSize / this.scale) + this.fontSize)
-        canvas.style.height = preCalcHeight + "px"
-        canvas.height = preCalcHeight * this.scale
+        // We precalculate how many lines the canvas will be
+        let preCalcHeightCss = Math.max(360, this.getLines().length * (this.fontSize / this.scale) + this.fontSize)
+        canvas.style.height = preCalcHeightCss + "px"
+        canvas.height = preCalcHeightCss * this.scale
         context.clearRect(0, 0, canvas.width, canvas.height)
 
-        for (let i = 0; i < this.data.length; i++) {
+        let line = 1
+        const positionContainer = this.getPositionContainer()
+        const containerNode = positionContainer.node
+        function renderFragment(data, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    stylesStack.push(data.styles)
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        renderFragment(child, _this)
+                    }
+                    stylesStack.pop()
+                    break
+                }
+                case "text": {
+                    const font = []
+                    let colour = _this.colourHex
+                    for (let fragmentStyleI = 0; fragmentStyleI < stylesStack.length; fragmentStyleI++) {
+                        const fragmentStyle = stylesStack[fragmentStyleI]
+                        for (let styleI = 0; styleI < fragmentStyle.length; styleI++) {
+                            const style = fragmentStyle[styleI]
+                            switch (style.type) {
+                                case "bold":
+                                    font.push("bold")
+                                    break
+                                case "italic":
+                                    font.push("italic")
+                                    break
+                                case "colour":
+                                    colour = style.hex
+                                    break
+                            }
+                        }
+                    }
+                    let hasFont = false
+                    for (let fragmentStyleI = 0; fragmentStyleI < stylesStack.length; fragmentStyleI++) {
+                        const fragmentStyle = stylesStack[fragmentStyleI]
+                        for (let styleI = 0; styleI < fragmentStyle.length; styleI++) {
+                            const style = fragmentStyle[styleI]
+                            if (style.type == "font") {
+                                font.push(`${style.size * _this.scale}px ${style.name}`)
+                                hasFont = true
+                                break
+                            }
+                        }
+                    }
+                    if (!hasFont) {
+                        font.push(_this.fontSize + "px " + "Arial, Helvetica, sans-serif")
+                    }
+            
+                    context.font = font.join(" ")
+                    context.fillStyle = colour
+                    context.fillText(data.content, 0, line * _this.fontSize)
+
+                    if (data === containerNode) {
+                        // Draw cursor (x, y, width, height)
+                        const thisLeft = context.measureText(data.content.slice(0, positionContainer.relativePosition))
+                        // TODO: Maintain measure width for currently line
+                        context.fillStyle = _this.colourHex
+                        context.fillRect(
+                            thisLeft.width,
+                            (line - 1) * _this.fontSize + 2,
+                            1.5 * _this.scale,
+                            _this.fontSize + 4)
+                    }
+                    break
+                }
+                case "newline": {
+                    line += data.count
+                    break
+                }
+            }
+        }
+        renderFragment(this.data, this)
+
+
+        /*for (let i = 0; i < this.data.length; i++) {
             if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
@@ -151,10 +279,10 @@ class EditorDocument {
                 let measure = context.measureText(currentLine)
 
                 // Draw selection char by char to make life easier
-                if (existingSelection && i >= this.selection.position && i < this.selection.end) {
+                if (hasSelection && i >= this.selection.position && i < this.selection.end) {
                     context.save()
                     let thisCharMeasure = context.measureText(this.data[i])
-                    context.fillStyle = "#c1e8fb63"
+                    context.fillStyle = "#4791FF63"// "#c1e8fb63"
                     context.beginPath()
                     context.roundRect(
                         measure.width,
@@ -167,7 +295,7 @@ class EditorDocument {
                 }
 
                 // Finally draw character with all correct formatting and such
-                // + this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough v
+                // + this.fontSize is slightly incorrect, as it is not exactly the height of this line, but will work well enough
                 context.fillText(this.data[i], measure.width, (lines.length + 1) * this.fontSize)
                 currentLine += this.data[i]
             }
@@ -176,7 +304,7 @@ class EditorDocument {
         lines.push(currentLine)
         currentLine = ""
 
-        if (!cursor || this.existingSelection()) {
+        if (!cursor || this.hasSelection()) {
             return
         }
 
@@ -194,7 +322,7 @@ class EditorDocument {
         for (let before = 0; before < positionLineIndex; before++) {
             beforePositionLine += lines[before].length
         }
-        beforePositionLine = EditorDocument.toRawPosition(beforePositionLine, this.data)
+        beforePositionLine = this.toRawPosition(beforePositionLine)
 
         let positionLine = lines[positionLineIndex]
         // TODO: We are measuring text here as if the cursor position line is made up of all default chars, we need to
@@ -203,7 +331,7 @@ class EditorDocument {
         let positionMeasure = context.measureText(positionLine.slice(0, this.position - beforePositionLine))
 
         context.fillStyle = defaultTextColour
-        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1.5, this.fontSize + 4)
+        context.fillRect(positionMeasure.width, positionLineIndex * this.fontSize + 2, 1.5, this.fontSize + 4)*/
     }
 
     optimiseData(data) {
@@ -225,7 +353,7 @@ class EditorDocument {
         offsetY *= this.scale
 
         const context = canvas.getContext("2d")
-        let lines = EditorDocument.getLines(this.data)
+        let lines = this.getLines()
         let line = Math.floor(Math.min(lines.length - 1, offsetY / this.fontSize))
         
         // TODO: currently we are assuming there are 0 styles, that is wrong
@@ -244,7 +372,7 @@ class EditorDocument {
             let measure = context.measureText(lines[line].slice(0, i))
             let distance = Math.abs(offsetX - measure.width)
             if (distance < closestValue) {
-                closestIndex = EditorDocument.toRawPosition(i + beforeLength, this.data)
+                closestIndex = this.toRawPosition(i + beforeLength)
                 closestValue = distance
             }
             else {
@@ -278,20 +406,20 @@ class EditorDocument {
         return textI
     }
 
-    static toRawPosition(textPosition, data) {
+    toRawPosition(textPosition) {
         let rawI = 0
         let textI = 0
-        let inStyle = EditorDocument.inStyle(textPosition, data)
+        let inStyle = EditorDocument.inStyle(textPosition, this.data)
 
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < this.data.length; i++) {
             if (textI >= textPosition) {
                 break
             }
 
-            if (data[textI] == '\uE000') {
+            if (this.data[textI] == '\uE000') {
                 inStyle = !inStyle
             }
-            else if (!inStyle && data[rawI] != '\uE001' && data[rawI] != '\uE002') {
+            else if (!inStyle && this.data[rawI] != '\uE001' && this.data[rawI] != '\uE002') {
                 textI++
             }
 
@@ -303,7 +431,7 @@ class EditorDocument {
 
     movePosition(movement, shiftPressed) {
         if (shiftPressed && !this.selection.shiftKeyPivot) {
-            this.selection.shiftKeyPivot = editor.position
+            this.selection.shiftKeyPivot = this.position
         }
 
         if (movement == positionMovements.left) {
@@ -314,11 +442,11 @@ class EditorDocument {
         }
         else if (movement == positionMovements.up || movement == positionMovements.down) {
             let textPosition = EditorDocument.toTextPosition(this.position, this.data)
-            let lines = EditorDocument.getLines(this.data);
+            let lines = this.getLines();
             let linePosition = this.positionInLine(textPosition, lines)
 
             // Current line is the line count up to this line
-            let currentLine = EditorDocument.getLines(this.data.slice(0, this.position)).length - 1
+            let currentLine = this.getLines().length - 1
 
             let offset = movement == positionMovements.up ?
                 Math.max(0, lines[currentLine].slice(0, linePosition).length + lines[currentLine].slice(linePosition).length) :
@@ -328,8 +456,8 @@ class EditorDocument {
         }
 
         if (shiftPressed && this.selection.shiftKeyPivot) {
-            editor.selection.position = Math.min(this.selection.shiftKeyPivot, editor.position)
-            editor.selection.end = Math.max(this.selection.shiftKeyPivot, editor.position)
+            this.selection.position = Math.min(this.selection.shiftKeyPivot, this.position)
+            this.selection.end = Math.max(this.selection.shiftKeyPivot, this.position)
         }
     }
 
@@ -363,17 +491,44 @@ class EditorDocument {
     }
 
     // Returns only text lines
-    static getLines(data) {
+    getLines() {
         let lines = []
+        let currentLine = ""
+
+        function visitFragment(data, _this) {
+            switch (data.type) {
+                case "fragment": {
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        visitFragment(child, _this)
+                    }
+                    break
+                }
+                case "text": {
+                    currentLine += data.content
+                    break
+                }
+                case "newline": {
+                    lines.push(currentLine)
+                    currentLine = ""
+                    for (let i = 1; i < data.count; i++) {
+                        lines.push(currentLine)
+                    }
+                    break
+                }
+            }
+        }
+        visitFragment(this.data, this)
+
         let current = ""
         let inStyle = false
 
-        for (let i = 0; i < data.length; i++) {
-            if (data[i] == '\uE000') {
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i] == '\uE000') {
                 inStyle = !inStyle
                 continue
             }
-            if (data[i] == '\uE001') {
+            if (this.data[i] == '\uE001') {
                 lines.push(current)
                 current = ""
                 continue
@@ -390,7 +545,7 @@ class EditorDocument {
     }
 
     addStyle(code, value = null) {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             let buffer = new Uint8Array(code == styleCodes.colour ? 7 : 3)
             buffer[0] = 0
             buffer[1] = code.charCodeAt(0)
@@ -439,17 +594,100 @@ class EditorDocument {
         }
     }
 
-    addText(value) {
-        if (this.existingSelection()) {
+    getText() {
+        let text = ""
+        function visitNode(data) {
+            switch (data.type) {
+                case "fragment":
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        visitNode(child)
+                    }
+                    break
+                case "text":
+                    text += data.content
+                    break
+            }
+        }
+        visitNode(this.data)
+        return text
+    }
+
+    // Finds the node which contains the cursor currently
+    getPositionContainer() {
+        let nodeStart = 0
+        let currentlyAt = 0
+        function visitNode(data, _this) {
+            switch (data.type) {
+                case "fragment":
+                    for (let i = 0; i < data.children.length; i++) {
+                        const child = data.children[i]
+                        const found = visitNode(child, _this)
+                        if (found) {
+                            return found
+                        }
+                    }
+                    return data
+                case "text":
+                    nodeStart = currentlyAt
+                    currentlyAt += data.content.length
+                    if (currentlyAt >= _this.position) {
+                        return data
+                    }
+                    break
+            }
+
+            return null
+        }
+        return {
+            node: visitNode(this.data, this),
+            relativePosition: this.position - nodeStart
+        }
+    }
+
+    getParentNode(targetNode) {
+        function visitNode(data, _this) {
+            if (data.type === "fragment") {
+                for (const child of data.children) {
+                    if (child === targetNode) {
+                        return child
+                    }
+                    return visitNode(child, _this)
+                }
+            }
+
+            return null
+        }
+
+        return visitNode(this.data, _this)
+    }
+
+    // Attempts to create or append to text node at cursor position containing given text
+    insertText(value) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
 
-        this.data = this.data.slice(0, this.position) + value + this.data.slice(this.position)
+        const container = this.getPositionContainer()
+        if (container.node === null) {
+            return new Error("Couldn't add text, cursor position outside of document nodes range")
+        }
+        // Empty fragment, create new text node
+        if (container.node.type === "fragment") {
+            const textContainer = new Text(value)
+            container.node.children.push(textContainer)
+        }
+        else if (container.node.type === "text") {
+            container.node.content += value
+        }
+        else {
+            throw new Error("Not implemented")
+        }
         this.position += value.length
     }
 
     addNewLine() {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
 
@@ -465,27 +703,33 @@ class EditorDocument {
     }
 
     deleteText(count = 1) {
-        if (this.existingSelection()) {
+        if (this.hasSelection()) {
             this.deleteSelection()
         }
         else {
-            if (count > 0) {
-                this.data = this.data.slice(0, this.position - count) + this.data.slice(this.position)
-                this.position = Math.max(0, this.position - count)
+            // TODO: This will be painful to handle across node boundaries
+            const container = this.getPositionContainer()
+            const node = container.node
+            if (node === null) {
+                return new Error("Couldn't delete text, cursor position outside of document nodes range")
             }
-            else {
-                this.data = this.data.slice(0, this.position) + this.data.slice(this.position - count)
-            }
+
+            node.content = node.content.slice(0, this.position - count) + node.content.slice(this.position)
+            this.position = Math.max(0, this.position - count)    
         }
+    }
+
+    getSelectionText() {
+        return this.data.slice(this.selection.position, this.selection.end)
     }
 
     setSelection(start, end = null) {
         if (end == null) {
-            this.position = this.toRawPosition(start, this.data)
+            this.position = this.toRawPosition(start)
         }
         else {
-            this.selection.position = this.toRawPosition(start < end ? start : end, this.data)
-            this.selection.end = this.toRawPosition(start < end ? end : start, this.data)
+            this.selection.position = this.toRawPosition(start < end ? start : end)
+            this.selection.end = this.toRawPosition(start < end ? end : start)
         }
     }
 
@@ -501,7 +745,7 @@ class EditorDocument {
         this.selection.end = this.data.length
     }
 
-    existingSelection() {
+    hasSelection() {
         return !((this.selection.position == 0 && this.selection.end == 0)
             || this.selection.end - this.selection.position == 0)
     }
