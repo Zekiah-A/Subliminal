@@ -95,6 +95,7 @@ class EditorDocument {
         root.style.fontSize = `${cssFontSize}px`
         root.style.whiteSpace = "nowrap"
         root.style.width = "max-content"
+        root.style.lineHeight = `${cssFontSize}px`
 
         function renderFragment(data, html, _this) {
             switch (data.type) {
@@ -124,7 +125,7 @@ class EditorDocument {
                                 break
                             case "font":
                                 fragment.style.fontFamily = style.name
-                                fragment.style.fontSize = style.size
+                                fragment.style.fontSize = style.size + "px"
                                 break
                         }
                         html.appendChild(fragment)
@@ -167,6 +168,7 @@ class EditorDocument {
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         let line = 1
+        let preLineWidth = 0
         const positionContainer = this.getPositionContainer()
         const containerNode = positionContainer.node
         function renderFragment(data, _this) {
@@ -183,19 +185,25 @@ class EditorDocument {
                 case "text": {
                     const font = []
                     let colour = _this.colourHex
-                    for (let fragmentStyleI = 0; fragmentStyleI < stylesStack.length; fragmentStyleI++) {
+                    for (let fragmentStyleI = stylesStack.length - 1; fragmentStyleI >= 0; fragmentStyleI--) {
                         const fragmentStyle = stylesStack[fragmentStyleI]
-                        for (let styleI = 0; styleI < fragmentStyle.length; styleI++) {
+                        for (let styleI = fragmentStyle.length - 1; styleI >= 0; styleI--) {
                             const style = fragmentStyle[styleI]
                             switch (style.type) {
                                 case "bold":
-                                    font.push("bold")
+                                    if (!font.includes("bold")) {
+                                        font.push("bold")
+                                    }
                                     break
                                 case "italic":
-                                    font.push("italic")
+                                    if (!font.includes("italic")) {
+                                        font.push("italic")
+                                    }
                                     break
                                 case "colour":
-                                    colour = style.hex
+                                    if (colour == _this.colourHex) {
+                                        colour = style.hex
+                                    }
                                     break
                             }
                         }
@@ -218,29 +226,41 @@ class EditorDocument {
             
                     context.font = font.join(" ")
                     context.fillStyle = colour
-                    context.fillText(data.content, 0, line * _this.fontSize)
+                    context.fillText(data.content, preLineWidth, line * _this.fontSize)
 
                     if (data === containerNode) {
+                        const prePositionMeasure = context.measureText(data.content.slice(0, positionContainer.relativePosition))
+                        // TODO: Maintain measure width for current line
                         // Draw cursor (x, y, width, height)
-                        const thisLeft = context.measureText(data.content.slice(0, positionContainer.relativePosition))
-                        // TODO: Maintain measure width for currently line
                         context.fillStyle = _this.colourHex
                         context.fillRect(
-                            thisLeft.width,
+                            prePositionMeasure.width + preLineWidth,
+                            (line - 1) * _this.fontSize + 2,
+                            1.5 * _this.scale,
+                            _this.fontSize + 4)
+                    }
+
+                    const nodeMeasure = context.measureText(data.content)
+                    preLineWidth += nodeMeasure.width
+                    break
+                }
+                case "newline": {
+                    line += data.count
+                    preLineWidth = 0
+                    if (data === containerNode) {
+                        // TODO: Maintain measure width for current line
+                        context.fillStyle = _this.colourHex
+                        context.fillRect(
+                            0,
                             (line - 1) * _this.fontSize + 2,
                             1.5 * _this.scale,
                             _this.fontSize + 4)
                     }
                     break
                 }
-                case "newline": {
-                    line += data.count
-                    break
-                }
             }
         }
         renderFragment(this.data, this)
-
 
         /*for (let i = 0; i < this.data.length; i++) {
             if (this.data[i] == '\uE000') {
@@ -434,13 +454,16 @@ class EditorDocument {
             this.selection.shiftKeyPivot = this.position
         }
 
+        const textLength = this.getText().length
+
         if (movement == positionMovements.left) {
             this.position = Math.max(0, this.position - 1)
         }
         else if (movement == positionMovements.right) {
-            this.position = Math.min(this.data.length, this.position + 1)
+            this.position = Math.min(textLength, this.position + 1)
         }
         else if (movement == positionMovements.up || movement == positionMovements.down) {
+            throw new Error("Position movements up/down not implemented!")
             let textPosition = EditorDocument.toTextPosition(this.position, this.data)
             let lines = this.getLines();
             let linePosition = this.positionInLine(textPosition, lines)
@@ -450,7 +473,7 @@ class EditorDocument {
 
             let offset = movement == positionMovements.up ?
                 Math.max(0, lines[currentLine].slice(0, linePosition).length + lines[currentLine].slice(linePosition).length) :
-                Math.min(this.data.length, lines[currentLine].slice(linePosition).length + lines[currentLine].slice(0, linePosition).length)
+                Math.min(textLength, lines[currentLine].slice(linePosition).length + lines[currentLine].slice(0, linePosition).length)
 
             this.position += movement == positionMovements.up ? -offset : offset
         }
@@ -607,6 +630,11 @@ class EditorDocument {
                 case "text":
                     text += data.content
                     break
+                case "newline":
+                    for (let i = 0; i < data.count; i++) {
+                        text += "\n"
+                    }
+                    break
             }
         }
         visitNode(this.data)
@@ -635,6 +663,12 @@ class EditorDocument {
                         return data
                     }
                     break
+                case "newline":
+                    currentlyAt += data.count
+                    if (currentlyAt >= _this.position) {
+                        return data
+                    }
+                    break
             }
 
             return null
@@ -650,16 +684,49 @@ class EditorDocument {
             if (data.type === "fragment") {
                 for (const child of data.children) {
                     if (child === targetNode) {
-                        return child
+                        return data
                     }
-                    return visitNode(child, _this)
+                    const result = visitNode(child, _this)
+                    if (result) {
+                        return result
+                    }
+                }
+            }
+    
+            return null
+        }
+        
+        return visitNode(this.data, this)
+    }
+
+    getNextSibling(targetNode) {
+        function findNextSibling(node, parent) {
+            const siblings = parent.children
+            const index = siblings.indexOf(node)
+            if (index !== -1 && index < siblings.length - 1) {
+                return siblings[index + 1]
+            }
+
+            return null
+        }
+    
+        function visitNode(node, parent) {
+            if (parent.type === "fragment") {
+                for (const child of parent.children) {
+                    if (child === node) {
+                        return findNextSibling(node, parent)
+                    }
+                    const nextSibling = visitNode(node, child)
+                    if (nextSibling !== null) {
+                        return nextSibling
+                    }
                 }
             }
 
             return null
         }
-
-        return visitNode(this.data, _this)
+    
+        return visitNode(targetNode, this.data)
     }
 
     // Attempts to create or append to text node at cursor position containing given text
@@ -669,20 +736,42 @@ class EditorDocument {
         }
 
         const container = this.getPositionContainer()
-        if (container.node === null) {
-            return new Error("Couldn't add text, cursor position outside of document nodes range")
+        const node = container.node
+        if (node === null) {
+            return new Error("Couldn't add insert, cursor position outside of document nodes range")
         }
         // Empty fragment, create new text node
-        if (container.node.type === "fragment") {
+        if (node.type === "fragment") {
             const textContainer = new Text(value)
-            container.node.children.push(textContainer)
+            node.children.push(textContainer)
         }
-        else if (container.node.type === "text") {
-            container.node.content += value
+        else if (node.type === "text") {
+            node.content = node.content.slice(0, container.relativePosition)
+                + value + node.content.slice(container.relativePosition) 
         }
-        else {
-            throw new Error("Not implemented")
+        else if (node.type === "newline") {
+            // Basically an inversion of the code in addNewLine
+            const parent = this.getParentNode(node)
+            if (parent == null) {
+                throw new Error("Could not insert text, parent newline parent was null")
+            }
+
+            const newChildren = []
+            const index = parent.children.indexOf(node)
+            const afterNewLines = node.count - node.relativePosition
+            newChildren.push(...parent.children.slice(0, index+1))
+            newChildren.push(new Text(value))
+            if (afterNewLines) {
+                // Before new lines
+                node.count = node.relativePosition
+                const afterNewLine = new NewLine(afterNewLines)
+                newChildren.push(afterNewLine)
+            }
+            newChildren.push(...parent.children.slice(index+1))
         }
+
+        console.log(this.data)
+
         this.position += value.length
     }
 
@@ -691,11 +780,35 @@ class EditorDocument {
             this.deleteSelection()
         }
 
-        this.data = this.data.slice(0, this.position) + '\uE001' + this.data.slice(this.position)
-        this.position++
+        const container = this.getPositionContainer()
+        const parent = this.getParentNode(container.node)
+        if (parent?.type === "fragment") {
+            if (container?.node.type === "text") {
+                const index = parent.children.indexOf(container.node)
+                const afterText = container.node.content.slice(container.relativePosition)
+                const newChildren = []
+                newChildren.push(...parent.children.slice(0, index+1))
+                newChildren.push(new NewLine(1))
+                if (afterText) {
+                    const beforeText = container.node.content.slice(0, container.relativePosition)
+                    container.node.content = beforeText
+                    newChildren.push(new Text(afterText))
+                }
+                newChildren.push(...parent.children.slice(index+1))
+                parent.children = newChildren
+                this.position++    
+            }
+        }
+        else if (parent?.type == "newline") {
+            console.error("Unhandled error")
+        }
+        else {
+            console.warn("Could not add new line, cursor out of document range?")
+        }
     }
 
     deleteSelection() {
+        throw new Error("Delete selection not implemented")
         this.data = this.data.slice(0, this.selection.position) + this.data.slice(this.selection.end)
         this.position = this.selection.position
         this.position = Math.max(0, this.position)
@@ -708,14 +821,33 @@ class EditorDocument {
         }
         else {
             // TODO: This will be painful to handle across node boundaries
-            const container = this.getPositionContainer()
-            const node = container.node
-            if (node === null) {
-                return new Error("Couldn't delete text, cursor position outside of document nodes range")
-            }
+            if (count > 0) {
+                for (let i = 0; i < count; i++) {
+                    const container = this.getPositionContainer()
+                    const node = container.node
+                    if (node === null) {
+                        return new Error("Couldn't delete text, cursor position outside of document nodes range")
+                    }
 
-            node.content = node.content.slice(0, this.position - count) + node.content.slice(this.position)
-            this.position = Math.max(0, this.position - count)    
+                    if (node.type == "text") {
+                        node.content = node.content.slice(0, this.position - 1) + node.content.slice(this.position)
+                        this.position = Math.max(0, this.position - 1)            
+                    }
+                    else if (node.type == "newline") {
+                        node.count--
+                        if (node.count == 0) {
+                            const parent = this.getParentNode(node)
+                            if (parent?.type !== "fragment") {
+                                throw new Error("Couldn't perform delete, newline parent could not be located")
+                            }
+                            parent.children.splice(parent.children.indexOf(node), 1)
+                        }
+                    }
+                }
+            }
+            else {
+                // Delete key
+            }
         }
     }
 

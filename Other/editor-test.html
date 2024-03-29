@@ -114,104 +114,193 @@
 </body>
 <script>
     const styledTextDocument = {
-        type: "fragment",
-        styles: [],
-        children: [
+        "type": "fragment",
+        "styles": [],
+        "children": [
             {
-                type: "text",
-                content: "Styled text test:",
+                "type": "text",
+                "content": "Styled text test:"
             },
             {
-                type: "newline",
-                count: 2,
+                "type": "newline",
+                "count": 2
             },
             {
-                type: "text",
-                content: "This is a text node, separated by a newline.",
+                "type": "text",
+                "content": "This is a text node, separated by a newline."
             },
             {
-                type: "newline",
-                count: 3,
+                "type": "newline",
+                "count": 3
             },
             {
-                type: "text",
-                content: "This node is separated by a triple multi-newline."
+                "type": "text",
+                "content": "This node is separated by a triple multi-newline."
             },
             {
-                type: "newline",
-                count: 2,
+                "type": "newline",
+                "count": 2
             },
             {
-                type: "fragment",
-                styles: [
+                "type": "fragment",
+                "styles": [
                     {
-                        type: "bold"
+                        "type": "bold"
                     }
                 ],
-                children: [
+                "children": [
                     {
-                        type: "text",
-                        content: "Text node within bold style fragment.",
+                        "type": "text",
+                        "content": "Text node within bold style fragment."
                     },
                     {
-                        type: "newline",
-                        count: 1,
+                        "type": "newline",
+                        "count": 1
                     },
                     {
-                        type: "fragment",
-                        styles: [
-                            { type: "italic" }
-                        ],
-                        children: [
+                        "type": "fragment",
+                        "styles": [
                             {
-                                type: "text",
-                                content: "->Nested text node within italic style fragment within outer bold style fragment."
+                                "type": "italic"
+                            }
+                        ],
+                        "children": [
+                            {
+                                "type": "text",
+                                "content": "->Nested text node within italic style fragment within outer bold style fragment."
                             }
                         ]
                     },
                     {
-                        type: "newline",
-                        count: 1,
+                        "type": "newline",
+                        "count": 1
                     },
                     {
-                        type: "text",
-                        content: "Text node after within bold style fragment.",
+                        "type": "text",
+                        "content": "Text node after within bold style fragment."
                     },
                     {
-                        type: "newline",
-                        count: 1,
+                        "type": "newline",
+                        "count": 1
                     },
                     {
-                        type: "fragment",
-                        styles: [
+                        "type": "fragment",
+                        "styles": [
                             {
-                                type: "font",
-                                size: 18,
-                                name: "monospace"
+                                "type": "font",
+                                "size": 18,
+                                "name": "monospace"
                             },
                             {
-                                type: "colour",
-                                hex: "#d90000"
+                                "type": "colour",
+                                "hex": "#d90000"
                             }
                         ],
-                        children: [
+                        "children": [
                             {
-                                type: "text",
-                                content: "->Text node within font & colour styles fragment.",
+                                "type": "text",
+                                "content": "->Text node within font & colour styles fragment."
                             }
-                        ],
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "newline",
+                "count": 1
+            },
+            {
+                "type": "text",
+                "content": "Text node after outer bold tag"
+            },
+            {
+                "type": "newline",
+                "count": 2
+            },
+            {
+                "type": "text",
+                "content": "Three text nodes"
+            },
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    },
+                    {
+                        "type": "colour",
+                        "hex": "#0000FFAA"
                     }
                 ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": " (nested fragment) "
+                    }
+                ]
             },
             {
-                type: "newline",
-                count: 2,
+                "type": "text",
+                "content": "with no newline separation between them"
             },
             {
-                type: "text",
-                content: "Text node after outer bold tag, no trailing newline",
+                "type": "newline",
+                "count": 1
             },
-        ],
+            {
+                "type": "fragment",
+                "styles": [
+                    {
+                        "type": "bold"
+                    },
+                    {
+                        "type":"colour",
+                        "hex":"#00FF00"
+                    },
+                    {
+                        "type": "font",
+                        "name": "cursive",
+                        "size": 24
+                    }
+                ],
+                "children": [
+                    {
+                        "type": "text",
+                        "content": "Fragment style on "
+                    },
+                    {
+                        "type": "fragment",
+                        "styles": [
+                            {
+                                "type": "bold"
+                            },
+                            {
+                                "type":"colour",
+                                "hex":"#FF6C00"
+                            }
+                        ],
+                        "children": [
+                            {
+                                "type": "text",
+                                "content": "multi-"
+                            },
+                            {
+                                "type": "newline",
+                                "count": 1
+                            },
+                            {
+                                "type": "text",
+                                "content": "line"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "content": " text."
+                    }
+                ]
+            }
+        ]
     }
 
     function setTest(name) {

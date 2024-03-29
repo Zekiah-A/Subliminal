@@ -226,7 +226,7 @@
                     <div class="options" style="width: 140px">
                         <div onclick=" params.delete('edit')
                             params.delete('append')
-                            location.href = location.origin + '/poem-editor/' + params.toString()
+                            location.href = location.origin + '/poem-editor' + (params ? '?' + params.toString() : '')
                             ">
                             Open new
                         </div>
