@@ -366,7 +366,7 @@
                 <tooltip class="button-tooltip">Poems recommended for you based on your past activity.</tooltip>
             </div>
         </div>
-        <div id="purgatoryFlex">
+        <div id="purgatoryFlex" class="horizontal-scroll-shadow">
         </div>
         <div id="purgatoryGrid" class="vertical-scroll-shadow" style="display: none;">
         </div>
@@ -745,6 +745,15 @@
             }
         }
         else if (filter === "liked") {
+            for (let i = 0; i < 6; i++) {
+                purgatoryFlex.appendChild(createFromData("purgatory-entry", {
+                    name: "Loading...",
+                    author: "...",
+                    approves: 0,
+                    vetoes: 0,
+                    preview: ""
+                }))
+            }
             if (!await isLoggedIn()) {
                 purgatoryFlex.innerHTML = `<div class="purgatory-warning">
                         <span>😢 You aren't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
@@ -761,6 +770,15 @@
             }
         }
         else if (filter === "recommended") {
+            for (let i = 0; i < 6; i++) {
+                purgatoryFlex.appendChild(createFromData("purgatory-entry", {
+                    name: "Loading...",
+                    author: "...",
+                    approves: 0,
+                    vetoes: 0,
+                    preview: ""
+                }))
+            }
             //Picks appear first on new, and have a different template
             let picks = []
             try { picks = await (await fetch(serverBaseAddress + "/PurgatoryPicks")).json() }
