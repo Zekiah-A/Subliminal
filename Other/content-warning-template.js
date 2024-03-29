@@ -9,7 +9,6 @@ class ContentWarning extends HTMLElement {
     }
 
     connectedCallback() {
-        
         this.innerHTML = html`
             <div id="contentWarning">
                 <div class="warning-centre">
@@ -22,9 +21,9 @@ class ContentWarning extends HTMLElement {
                         or political advice. Nor does it represent the views or the beliefs of any author in any way.
                     </p>
                     <p id="addition"></p>
+                    <a href="/disclaimer">-> See Disclaimer</a>
                     <button class="popup-button" onclick="event.preventDefault(); document.querySelector('content-warning').hide()">Continue -></button>
-                    <a href="/disclaimer">See Disclaimer -></a>
-                <div>
+                </div>
             </div>
         `
 

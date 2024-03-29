@@ -54,9 +54,9 @@
                     this site.
                 </p>
             </div>
-            <div class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; uploadCurrent();">
+            <button class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; uploadCurrent();">
                 Submit
-            </div>
+            </button>
         </div>
         <div id="builtinFreePopup" class="popup" style="display: none">
             <h2>Built-in backgrounds:</h2>
@@ -154,11 +154,11 @@
                 </div>
             </div>
         </div>
-        <div id="loadPoemPopup" class="popup" style="display: none; /*block;*/">
+        <div id="loadPoemPopup" class="popup" style="display: none;">
             <h2>Load poem:</h2>
-            <input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none" />
-            <div id="loadedContainer"></div>
-            <div class="popup-button" style="margin-bottom: 8px" onclick="
+            <input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none">
+            <div id="loadedContainer" class="vertical-scroll-shadow"></div>
+            <button class="popup-button" onclick="
                 poemImportInput.click() // TODO: Use new filesystem access API
                 for (let file of poemImportInput.files) {
                     let guid = newGuid()
@@ -194,10 +194,10 @@
                 }
                 ">
                 Import from local file
-            </div>
-            <div class="popup-button" style="margin-top: 8px" onclick="loadPoemPopup.style.display = 'none';">
+            </button>
+            <button class="popup-button" onclick="loadPoemPopup.style.display = 'none';">
                 Done
-            </div>
+            </button>
         </div>
         <div class="title-blur" style="z-index: 3">
             <div style="display: flex">
@@ -241,17 +241,18 @@
                             ">
                             Save poem
                         </div>
-                        <div onclick="loadPoemPopup.style.display = 'block'">
+                        <div onclick="loadPoemPopup.style.display = 'flex'">
                             Open another
                         </div>
-                        <div onclick=" if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
-                            licenseAgreePopup.style.display = 'block'
+                        <div onclick="
+                            if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
+                                licenseAgreePopup.style.display = 'block'
                             }
                             else {
-                            side.setAttribute('mode', 'upload')
-                            side.removeAttribute('collapsed')
+                                side.setAttribute('mode', 'upload')
+                                side.removeAttribute('collapsed')
                             }
-                            ">
+                        ">
                             Upload to site
                         </div>
                     </div>
@@ -574,10 +575,10 @@
                         <input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px" disabled="" />
                     </div>
                 </div>
-                <div class="popup-button" style="flex-grow: inherit" onclick=" licenseAgreePopup.style.display = 'block'
+                <button class="popup-button" style="flex-grow: inherit" onclick=" licenseAgreePopup.style.display = 'block'
                     ">
                     Upload to site
-                </div>
+                </button>
             </div>
             <div class="side-content" rhyme>
                 <p>Poem Rhyme finder:</p>
@@ -614,9 +615,9 @@
                     <option>My work so far</option>
                     <option>Subliminal poems</option>
                 </subliminal-select>
-                <div class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
+                <button class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
                     Start coauthor
-                </div>
+                </button>
             </div>
             <div class="side-content" close>
                 <div class="side-close-button" onclick=" side.setAttribute('collapsed', true)
@@ -875,17 +876,17 @@
             }
             
             async function amendMode() {
-                loadPoemPopup.style.display = "none";
-                // TODO: Reimplement
-                //originalContent.style.display = "block" //
-                //originalContent.style.top = content.offsetTop + "px" //
-                //originalContent.style.maxWidth = content.offsetWidth + "px" //
-                
+                throw new Error("Not implemented")
+                loadPoemPopup.style.display = "none"
                 //Load up amendment poem
                 let currentJson = await fetchPathJson(amend);
-                //originalContent.innerHTML = currentJson.poemContent || "" //
-                currentJson.amends = amend;
-                load(currentJson);
+                currentJson.amends = amend
+                /*TODO: Reimplement
+                  originalContent.style.display = "block"
+                  originalContent.style.top = content.offsetTop + "px"
+                  originalContent.style.maxWidth = content.offsetWidth + "px"
+                  originalContent.innerHTML = currentJson.poemContent || ""*/
+                load(currentJson)
             }
             
             async function rhymeFinderFind(word, apiPath) {

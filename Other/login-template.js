@@ -25,13 +25,14 @@ class LoginSignup extends HTMLElement {
                         this.shadowThis.validateUsername(this)">
                     <input id="loginSigninEmail" type="text" class="popup-input" placeholder="Email">
                     <input id="loginQRInput" type="file" accept="image/*" capture="environment" style="display: none;">
-                    <div class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value); this.shadowThis.login.style.display = 'none';"
-                        style="margin-bottom: 8px;">Login</div>
+                    <button class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value); this.shadowThis.login.style.display = 'none';"
+                        style="margin-bottom: 8px;">Login</button>
 
                     <div style="display:flex;column-gap:8px;margin-top:8px">
-                        <div class="popup-button" onclick="this.shadowThis.login.setAttribute('currentpage', 'signup');">I don't have an account
-                        </div>
-                        <div class="popup-button" disabled>Account recovery</div>
+                        <button class="popup-button" onclick="this.shadowThis.login.setAttribute('currentpage', 'signup');">
+                            I don't have an account
+                        </button>
+                        <button class="popup-button" disabled>Account recovery</button>
                     </div>
                 </div>
                 <div id="loginSignup" class="page">
@@ -81,7 +82,7 @@ class LoginSignup extends HTMLElement {
                 <div id="loginError" class="page">
                     <div id="errorMessage"><!--Erorr message text--></div>
                     <div style="display:flex;column-gap:8px;margin-top:8px">
-                        <div class="popup-button" onclick="this.shadowThis.style.display = 'none';">Ok</div>
+                        <button class="popup-button" onclick="this.shadowThis.style.display = 'none';">Ok</button>
                     </div>
                 </div>
             </div>

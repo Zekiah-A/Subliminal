@@ -84,7 +84,7 @@
         <hr>
     </div>
     <div id="poemMain">
-        <p id="poemContent" class="poem-centre">
+        <p id="poemContent">
             <subliminal-poem-ghost length="30"></subliminal-poem-ghost>
             <subliminal-poem-load-cover></subliminal-poem-load-cover>
         </p>
@@ -101,19 +101,19 @@
     <div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
         <h2>Poem editor:</h2>
         <div style="display: flex; column-gap: 8px;">
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + guid;">
+            <button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + guid;">
                 <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
-            </div>
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + guid;">
+            </button>
+            <button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + guid;">
                 <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
-            </div>
+            </button>
         </div>
         <br>
-        <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
+        <button class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</button>
     </div>
     <div id="profileFrame" style="display: none;" class="popup">
         <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
-        <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
+        <button class="popup-button" onclick="profileFrame.style.display = 'none';">Done</button>
 	</div>
 
     <div id="contentWarning" style="display: none;">
@@ -242,7 +242,7 @@ ___________________________________________________________
         //Set up main poem content
         const poemDocument = new EditorDocument(poemData.poemContent)
         poemDocument.renderHtmlData(poemContent)
-        poemMain.setAttribute("class", poemData.pageStyle) 
+        poemMain.classList.add(poemData.pageStyle)
         document.body.style.background = poemData.pageBackground
 
         //If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well

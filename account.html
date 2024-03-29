@@ -156,30 +156,30 @@
 	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
 		<h2>Your profile role:</h2>
 		<div class="role-grid">
-			<div class="popup-button" onclick="setProfileRole('writer');">Writer</div>
-			<div class="popup-button" onclick="setProfileRole('reader');">Reader</div>
-			<div class="popup-button" onclick="setProfileRole('listener');">Listener</div>
-			<div class="popup-button" onclick="setProfileRole('poet');">Poet</div>
-			<div class="popup-button" onclick="setProfileRole('critic');">Critic</div>
-			<div class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</div>
-			<div class="popup-button" onclick="setProfileRole('analyser');">Analyser</div>
-			<div class="popup-button" onclick="setProfileRole('teacher');">Teacher</div>
-			<div class="popup-button" onclick="setProfileRole('student');">Student</div>
-			<div class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</div>
-			<div class="popup-button" onclick="setProfileRole('casual');">Casual</div>
-			<div class="popup-button" onclick="setProfileRole('artist');">Artist</div>
+			<button class="popup-button" onclick="setProfileRole('writer');">Writer</button>
+			<button class="popup-button" onclick="setProfileRole('reader');">Reader</button>
+			<button class="popup-button" onclick="setProfileRole('listener');">Listener</button>
+			<button class="popup-button" onclick="setProfileRole('poet');">Poet</button>
+			<button class="popup-button" onclick="setProfileRole('critic');">Critic</button>
+			<button class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</button>
+			<button class="popup-button" onclick="setProfileRole('analyser');">Analyser</button>
+			<button class="popup-button" onclick="setProfileRole('teacher');">Teacher</button>
+			<button class="popup-button" onclick="setProfileRole('student');">Student</button>
+			<button class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</button>
+			<button class="popup-button" onclick="setProfileRole('casual');">Casual</button>
+			<button class="popup-button" onclick="setProfileRole('artist');">Artist</button>
 		</div>
 		<br>
 		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="8" oninput="setProfileRole(value)">
 		<br>
-		<div class="popup-button" onclick="profileRole.style.display = 'none'; executeAccountAction(actionType.UpdateRole, role)">Done</div>
+		<button class="popup-button" onclick="profileRole.style.display = 'none'; executeAccountAction(actionType.UpdateRole, role)">Done</button>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
 	</div>
 	<div id="accountEmail" style="height: fit-content; width: 30%; display: none;" class="popup">
 		<h2>Enter your email:</h2>
 		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="64" oninput="setProfileEmail(value)">
 		<br>
-		<div class="popup-button" onclick="accountEmail.style.display = 'none'; executeAccountAction(actionType.UpdateEmail, email)">Done</div>
+		<button class="popup-button" onclick="accountEmail.style.display = 'none'; executeAccountAction(actionType.UpdateEmail, email)">Done</button>
 	</div>
 	<div class="div-centre">
 		<div class="profile-container">
@@ -256,7 +256,7 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
-		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.style.display = 'block';">
+		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.style.display = 'flex';">
 			Change Email
 			<div class="button-tooltip">Change the primary email used for login, and allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or other important updates</div>
 		</button>

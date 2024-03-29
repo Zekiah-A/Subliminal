@@ -16,7 +16,7 @@
  
 <body style="background: initial;">
     <div class="title-blur">
-        <h2 class="centre content" id="poemTitle">Poem - By Author</h2>
+        <h2 class="title-header content" id="poemTitle">Poem - By Author</h2>
         <hr>
     </div>
     <div id="poemMain" class="poem-centre">
@@ -28,22 +28,22 @@
     <div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
         <h2>Poem Editor:</h2>
         <div style="display: flex; column-gap: 8px;">
-            <div class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
+            <button class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
                 </div>
-            </div>
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.origin + '/poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
+            </button>
+            <button class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.origin + '/poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
                 </div>
-            </div>
+            </button>
         </div>
         <br>
-        <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
+        <button class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</button>
     </div>
     <a id="back" href="javascript: window.location.href = window.location.origin + '/contents';" class="back"> &lt;- Back</a>
-    <div onclick="editFrame.style.display = 'block';" class="edit">
+    <div onclick="editFrame.style.display = 'flex';" class="edit">
         <svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
     </div>
 </body>
@@ -73,7 +73,7 @@
             poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
             const poemDocument = new EditorDocument(poemData.poemContent)
             poemDocument.renderHtmlData(poemContent)
-            poemMain.setAttribute("class", poemData.pageStyle) 
+            poemMain.classList.add(poemData.pageStyle)
             document.body.style.background = poemData.pageBackground
 
             //Probably useless since pages are procedurally generated...

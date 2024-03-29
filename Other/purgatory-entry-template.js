@@ -5,6 +5,7 @@ class PurgatoryEntry extends HTMLElement {
     }
 
     connectedCallback() {
+        // TODO: Clear up slightly XSS prone string interpolations
         this.shadowRoot.innerHTML = html`
             <div class="preview" id="poemPreview"></div>
             ${this.getAttribute('notification')
@@ -36,7 +37,7 @@ class PurgatoryEntry extends HTMLElement {
                 min-width: 200px;
                 height: 200px;
                 border-radius: 4px;
-                background-color: var(--button-opaque);
+                background-color: var(--button-transparent);
                 position: relative;
                 cursor: pointer;
                 max-width: 200px;
@@ -60,6 +61,7 @@ class PurgatoryEntry extends HTMLElement {
                 overflow: clip;
                 font-size: 16px;
                 height: 64px;
+                mask-image: linear-gradient(transparent, white, transparent);
             }
 
             .special-notification {
@@ -77,18 +79,6 @@ class PurgatoryEntry extends HTMLElement {
             .button-tooltip {
                 left: 0px !important;
                 top: 0px !important;
-            }
-
-            .preview::after {
-                opacity: 1;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                position: absolute;
-                background: linear-gradient(var(--button-opaque), transparent, var(--button-opaque));
-                content: "";
-                transition: opacity 1s;
             }
 
             .info {

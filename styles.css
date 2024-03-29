@@ -7,6 +7,69 @@
     --background-transparent: #ffffff33;
     --input-hilight: #0074d9;
     --text-colour: #000000;
+
+    --scroll-background-shadow: rgba(128, 128, 128, 0.4);
+
+    /* Credit to: https://css-tricks.com/books/greatest-css-tricks/scroll-shadows */
+    --horizontal-scroll-background:
+        /* Top and bottom shadow faders */
+        linear-gradient(
+            to bottom,
+            var(--background-opaque),
+            transparent 10%,
+            transparent 90%,
+            var(--background-opaque)
+        ),
+        /* Right and left shadow hiders (cover over shadows) */
+        linear-gradient(
+            to right,
+            var(--background-opaque) 30%,
+            transparent
+        ) left center,
+        linear-gradient(
+            to left,
+            var(--background-opaque) 70%, 
+            transparent
+        ) right center,
+        /* Right and left shadows */
+        linear-gradient(
+            to right,
+            var(--scroll-background-shadow),
+            transparent
+        ) left center,
+        linear-gradient(
+            to left,
+            var(--scroll-background-shadow),
+            transparent
+        ) right center;
+    --horizontal-scroll-background-repeat: no-repeat;
+    --horizontal-scroll-background-size: 100% 100%, 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+    --horizontal-scroll-background-attachment: local, local, local, scroll, scroll;
+
+    --vertical-scroll-background:
+        /* Rop and bottom shadow hiders (cover over shadows) */
+        linear-gradient(
+            var(--background-opaque) 30%,
+            transparent
+        ) center top,
+        linear-gradient(
+            transparent, 
+            var(--background-opaque) 70%
+        ) center bottom,
+        /* Top and bottom shadows */
+        radial-gradient(
+            farthest-side at 50% 0,
+            var(--scroll-background-shadow),
+            transparent
+        ) center top,
+        radial-gradient(
+            farthest-side at 50% 100%,
+            var(--scroll-background-shadow),
+            transparent
+        ) center bottom;
+    --vertical-scroll-background-repeat: no-repeat;
+    --vertical-scroll-background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    --vertical-scroll-background-attachment: local, local, scroll, scroll;
 }
 
 @media(prefers-color-scheme: dark) {
@@ -109,6 +172,11 @@ h2 {
     background: transparent;
 }
 
+.title-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .centre {
     display: flex;
     flex-direction: column;
@@ -165,6 +233,20 @@ h2 {
     font-size: 10px;
 }
 
+.horizontal-scroll-shadow {
+    background: var(--horizontal-scroll-background);
+    background-repeat: var(--horizontal-scroll-background-repeat);
+    background-size: var(--horizontal-scroll-background-size);
+    background-attachment: var(--horizontal-scroll-background-attachment);
+}
+
+.vertical-scroll-shadow {
+    background: var(--vertical-scroll-background);
+    background-repeat: var(--vertical-scroll-background-repeat);
+    background-size: var(--vertical-scroll-background-size);
+    background-attachment: var(--vertical-scroll-background-attachment);
+}
+
 .popup {
     position: fixed;
     left: 50%;
@@ -179,6 +261,12 @@ h2 {
     max-height: calc(100% - 32px);
     overflow-x: hidden;
     overflow-y: auto;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.popup > h2 {
+    margin: 0;
 }
 
 .popup-button {
@@ -193,6 +281,11 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
+    /*
+    display: block;
+    width: 100%;
+    */
 }
 
 .popup-button[disabled] {
@@ -259,9 +352,8 @@ h2 {
 }
 
 .poem-card {
-    width: calc(100% - 32px);
     height: 64px;
-    background: var(--button-opaque);
+    background: var(--button-transparent);
     border-radius: 8px;
     display: flex;
     flex-direction: row;
@@ -397,44 +489,13 @@ h2 {
         overflow-wrap: break-word;
     }
 
-    /* Credit to: https://css-tricks.com/books/greatest-css-tricks/scroll-shadows */
-    .poem-centre, .poem-centre-wide/*, .centre*/ {
+    .poem-centre, .poem-centre-wide, .centre {
         margin: auto;
         overflow-x: auto;
-        background:
-            /* Top and bottom shadow fadings */
-            linear-gradient(
-                to bottom,
-                var(--background-opaque),
-                transparent 10%,
-                transparent 90%,
-                var(--background-opaque)
-            ),
-            /* Right and left shadow hiders (cover over shadows) */
-            linear-gradient(
-                to right,
-                var(--background-opaque) 30%,
-                transparent
-            ) left center,
-            linear-gradient(
-                to left,
-                var(--background-opaque) 70%, 
-                transparent
-            ) right center,
-            /* Right and left shadows */
-            linear-gradient(
-                to right,
-                rgba(128, 128, 128, 0.4),
-                transparent
-            ) left center,
-            linear-gradient(
-                to left,
-                rgba(128, 128, 128, 0.4),
-                transparent
-            ) right center;
-        background-repeat: no-repeat;
-        background-size: 100% 100%, 40px 100%, 40px 100%, 14px 100%, 14px 100%;
-        background-attachment: local, local, local, scroll, scroll;
+        background: var(--horizontal-scroll-background);
+        background-repeat: var(--horizontal-scroll-background-repeat);
+        background-size: var(--horizontal-scroll-background-size);
+        background-attachment: var(--horizontal-scroll-background-attachment);
     }
 
     .contents-div-centre {

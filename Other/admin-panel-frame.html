@@ -11,28 +11,28 @@
         <h2>Admin controls:</h2>
         <p>No functions here will work if you are not an admin on subliminal. However, feel free to snoop around and see how we keep the site based!</p>
         <div style="display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
-            <div class="popup-button" onclick="
+            <button class="popup-button" onclick="
                 viewPurgatoryReports()
-            ">View purgatory reports</div>
-            <div class="popup-button" onclick="
+            ">View purgatory reports</button>
+            <button class="popup-button" onclick="
                 prompt('Enter poem GUID')
                 prompt('Enter deletion reason')
                 confirm('Are you sure you want to delete {NAME} for {REASON}?')
-            ">Remove purgatory poem</div>
-            <div class="popup-button" onclick="
+            ">Remove purgatory poem</button>
+            <button class="popup-button" onclick="
                 prompt('Enter account GUID')
                 prompt('Enter termination reason')
                 confirm('Are you sure you want to terminate {NAME} for {REASON}?')
-            ">Terminate account</div>
-            <div class="popup-button" onclick="
+            ">Terminate account</button>
+            <button class="popup-button" onclick="
                 prompt('Enter account GUID')
                 prompt('Award or revoke')
                 prompt(`Enter badge name (${Object.keys(badgeType).join(', ')})`)
-            ">Award or revoke badge</div>
-            <div class="popup-button" onclick="
+            ">Award or revoke badge</button>
+            <button class="popup-button" onclick="
                 viewPurgatoryPicks()
-            ">View purgatory picks</div>
-            <div class="popup-button" onclick="
+            ">View purgatory picks</button>
+            <button class="popup-button" onclick="
                 optionContent.animate([
                     { maxHeight: '500' },
                     { maxHeight: '0' }
@@ -46,11 +46,11 @@
                         optionContent.removeChild(optionContent.firstChild)
                     }
                 }, 200)
-            ">Collapse</div>            
+            ">Collapse</button>            
         </div>
         <br>
         <div id="optionContent" style="overflow-y: scroll; max-height: 500px;"></div>
-        <div class="popup-button">Done</div>
+        <button class="popup-button">Done</button>
         <p style="opacity:0.6;">Be responsible, always be impartial.</p>
     </div>
 </body>

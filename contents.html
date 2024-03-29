@@ -186,7 +186,8 @@
             user-select: none;
             overflow-y: hidden;
 
-            height: 80vh;
+            height: min-content;
+            max-height: 80vh;
             box-sizing: border-box;
         }
 
@@ -198,7 +199,8 @@
             overflow-y: scroll;
             position: relative;
 
-            height: 80vh;
+            height: min-content;
+            max-height: 80vh;
             box-sizing: border-box;
         }
         
@@ -221,18 +223,6 @@
         .purgatory-actions-bottom {
             display: flex;
         }
-
-        /*#purgatoryGrid::after {
-            opacity: 1;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            position: absolute;
-            background: linear-gradient(white 4px, transparent 64px, transparent calc(100% - 64px), white calc(100% - 4px));
-            content: "";
-            transition: opacity 1s;
-        }*/
 
         #filtersBar {
             display: flex;
@@ -378,8 +368,9 @@
         </div>
         <div id="purgatoryFlex">
         </div>
-        <div id="purgatoryGrid" style="display: none;">
+        <div id="purgatoryGrid" class="vertical-scroll-shadow" style="display: none;">
         </div>
+        <br>
         <div class="purgatory-actions-bottom">
             <a href="poem-editor">+Add a Poem</a>
         </div>
@@ -388,15 +379,15 @@
             <h2 style="text-align: center;">Poem name - By User</h2>
             <div class="poem-centre" style="flex-grow: 1;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
             <div style="display: flex; position: sticky; column-gap: 8px; width: 100%; bottom: 16px; ">
-                <div class="popup-button">
+                <button class="popup-button">
                     <svg width="16" height="16" viewBox="0 -256 1850 1850">
                         <g transform="matrix(1 0 0 -1 30.373 1426.9)">
                             <path d="m1408 608v-320q0-119-84.5-203.5t-203.5-84.5h-832q-119 0-203.5 84.5t-84.5 203.5v832q0 119 84.5 203.5t203.5 84.5h704q14 0 23-9t9-23v-64q0-14-9-23t-23-9h-704q-66 0-113-47t-47-113v-832q0-66 47-113t113-47h832q66 0 113 47t47 113v320q0 14 9 23t23 9h64q14 0 23-9t9-23zm384 864v-512q0-26-19-45t-45-19-45 19l-176 176-652-652q-10-10-23-10t-23 10l-114 114q-10 10-10 23t10 23l652 652-176 176q-19 19-19 45t19 45 45 19h512q26 0 45-19t19-45z" fill="currentColor"></path>
                         </g>
                     </svg>
                 Visit poem
-                </div>
-            <div class="popup-button">Close</div>
+                </button>
+            <button class="popup-button">Close</button>
             </div>
         </div>
         <h3 style="margin-bottom: 0px;">Seminars:</h3>
@@ -721,13 +712,37 @@
         let entries = []
         let element = purgatoryFlex
 
-        if (filter === "all") {
+        if (filter === "new") {        
             purgatoryFlex.style.display = "none"
             purgatoryGrid.style.display = "grid"
             element = purgatoryGrid
-            
-            try { entries = await (await fetch(serverBaseAddress + "/PurgatoryAll")).json() }
-            catch(error) { console.warn("Error loading purgatory all: ", error) }
+            for (let i = 0; i < 10; i++) {
+                purgatoryGrid.appendChild(createFromData("purgatory-entry", {
+                    name: "Loading...",
+                    author: "...",
+                    approves: 0,
+                    vetoes: 0,
+                    preview: ""
+                }))
+            }
+
+            const response = await fetch(serverBaseAddress + "/PurgatoryNew")
+            if (response.ok) {
+                try {
+                    entries = await response.json()
+                }
+                catch(error) {
+                    console.error("Failed to load purgatory new: ", error)
+                }
+            }
+            else {
+                console.error("Failed to load purgatory new: ", response.status, response.statusText)
+            }
+            if (entries.length === 0) {
+                purgatoryGrid.innerHTML = `<div class="purgatory-warning">
+                    <span>😢 Couldn't load any purgatory poems! Try again later.</span>
+                </div>`
+            }
         }
         else if (filter === "liked") {
             if (!await isLoggedIn()) {

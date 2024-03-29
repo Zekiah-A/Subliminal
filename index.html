@@ -69,7 +69,6 @@
         }
 
         /* Sections, below main style */
-
         .section {
             display: flex;
             flex-direction: row;
@@ -95,7 +94,7 @@
             margin-right: 0px;
         }
 
-        .section-double > div > img, video {
+        .section-double img, .section-double video {
             width: 180px;
             height: 320px;
             object-fit: cover;
@@ -248,8 +247,8 @@
     <subliminal-header></subliminal-header>
     <div class="div-centre">
         <p class="profile-title">Subliminal</p>
-        <p>The methallyne blue analogy of stuff.</p>
-        <p>Probably the weirdest poetry anthology to ever exist.</p>
+        <p>“The methallyne blue analogy of stuff.</p>
+        <p>Probably the weirdest poetry anthology to ever exist.”</p>
         <img class="index-image" src="Resources/AbbstrakDog.png" width="70%" height="70%" alt="Dog">
         <p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup>
         <sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
@@ -259,7 +258,6 @@
         <p style="padding-left: 5%;" class="profile-title">About Subliminal</p>
         <div id="aboutSection" class="section">
            <div style="flex-grow: 1;">
-                <p>Not sure why you didn't read the description of the site above, but if you're really curious</p>
                 <p>Subliminal is an open source project to create the largest repository of poems in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
                 <p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
                 <p>As long as it's a poem, it's good enough for subliminal.</p>
@@ -288,9 +286,9 @@
         <div id="aboutInfo" class="section-info">
             <div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Did you know?</div>
             <div style="padding-left: 32px;">
-                <p>-> There are 100 poems already on the anthology, with more being added each day!</p>
-                <p>-> There is a full rich text poem editor, to make your works come to light both literally and visually.</p>
-                <p>-> Free cloud saving, and accounts allow you to acess, read and write poems from anywhere in the world!</p>
+                <p>-> We have over 100 hand crafted curated originals to read and take inspiration from!</p>
+                <p>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</p>
+                <p>-> Free cloud saving, and accounts allow you to acess, read and write poems anywhere, across your devices!</p>
             </div>
             <br>
             <p style="margin-left: 12px;">If you aren't on subliminal, what are you even doing with your life?</p>
@@ -337,10 +335,12 @@
         <p style="padding-left: 5%;" class="profile-title">Other stuff</p>
         <div id="otherSection" class="section section-double">
             <div id="rplaceAdSection" class="section">
-                <img alt="A fun game to play in your free time" src="Resources/Advert2.png">
+                <a href="https://rplace.live">
+                    <img src="Resources/Advert2.png" alt="A fun game to play in your free time">
+                </a>
                 <div style="flex-grow: 1">
-                    <p>rplace.live, a spinoff of the reddit place event!</p>
-                    <p>A game by Zekiah-A and BlobKat, based on a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
+                    <p style="font-weight: bold;">Rplace.live: a spinoff of the reddit place event!</p>
+                    <p>A game by Zekiah-A and BlobKat, featuring a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
                 </div>
             </div>
 
@@ -349,7 +349,7 @@
                     <source src="Resources/Advert3.webm" type="video/webm">
                 </video>       
                 <div style="flex-grow: 1">
-                    <p>The best waste of money since buying an NFT!</p>
+                    <p style="font-weight: bold;">The best waste of money since buying an NFT!</p>
                     <p>Help fund development of subliminal, and support me with my other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
                 </div>
             </div>
