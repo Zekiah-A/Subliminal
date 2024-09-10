@@ -455,7 +455,7 @@ div.popup {
 		color: var(--text-colour);
 	}
 
-	header img {
+	header img, .icon-image {
 		filter: invert(1);
 	}
 

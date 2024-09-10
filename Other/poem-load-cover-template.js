@@ -21,7 +21,7 @@ class PoemLoadCover extends HTMLElement {
 			"Loading: Crossing the Ts...",
 			"Loading: Dotting every I...",
 			"Loading: Looking busy...",
-			"Getting things ready...",
+			"Loading: Getting things ready...",
 		]
 		loadLabel.textContent = loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
 		loadContainer.appendChild(loadLabel)

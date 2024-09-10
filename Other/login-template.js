@@ -13,7 +13,6 @@ class LoginSignup extends HTMLElement {
 		this.value = true
 
 		this.shadowRoot.innerHTML = html`
-			<!-- TODO: Find a more efficient style application if possible (perhaps remove shadowroot nesting if singleton) -->
 			<link rel="stylesheet" href="styles.css">
 			<dialog id="login" class="popup" currentpage="signin">
 				<div style="display: flex;flex-grow: 1;">

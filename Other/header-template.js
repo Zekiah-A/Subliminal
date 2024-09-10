@@ -6,12 +6,15 @@ class SubliminalHeader extends HTMLElement {
 
 	connectedCallback() {
 		this.shadowRoot.innerHTML = html`
+			<link rel="stylesheet" href="styles.css">
 			<div>
 				<img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.origin">
 				<h1 style="margin: 0px; align-self: center;">Subliminal</h1>
-				<a href="contents">-&gt; Poems</a>
-				<a href="account">-&gt; Profile</a>
-				<a href="sounds">-&gt; Sounds</a>
+				<nav id="pageLinks">
+					<a href="contents">-&gt; Poems</a>
+					<a href="account">-&gt; Profile</a>
+					<a href="sounds">-&gt; Sounds</a>
+				</nav>
 				<div class="hilight" id="hilight"></div>
 				<div id="right">
 					<input id="loginButton" type="button" value="Login to Subliminal"
@@ -98,6 +101,11 @@ class SubliminalHeader extends HTMLElement {
 				transform: rotate(8deg) scale(1.1);
 			}
 			
+			#pageLinks {
+				display: flex;
+				column-gap: 16px;
+			}
+			
 			#right {
 				flex-grow: 1;
 				display: flex;
@@ -167,7 +175,7 @@ class SubliminalHeader extends HTMLElement {
 		this.shadowRoot.append(style)
 		defineAndInject(this, this.shadowRoot)
 
-		for (let child of this.shadowRoot.children[0].childNodes) {
+		for (const child of this.pageLinks.childNodes) {
 			if (child.href == location.toString().replace(".html", "")) {
 				child.setAttribute("current", true)
 			}
@@ -175,6 +183,7 @@ class SubliminalHeader extends HTMLElement {
 
 		;(async function(_this){
 			if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
+				// TODO: Potentially change right to just display 'The coolest crowdsourced anthology on the web' (delete buttons)
 				_this.right.style.display = 'none'
 				console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
 				return
