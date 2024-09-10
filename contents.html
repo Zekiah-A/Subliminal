@@ -260,6 +260,7 @@
 			backdrop-filter: blur(10px);
 			z-index: 1;
 			border: 1px solid gray;
+			border-radius: 4px;
 			padding-left: 8px;
 		}
 
@@ -270,13 +271,12 @@
 			position: sticky;
 			line-height: 40px;
 			z-index: 3;
-			margin: 0px;
+			margin: 0;
 			padding: 0px;
 			transition: .2s background-color, .2s margin, .2s padding, .2s border;
 		}
 
 		.classics-header.stuck {
-			background-color; #ffffff85;
 			border: 1px solid gray;
 			padding: 8px;
 			margin: -8px;
@@ -285,7 +285,7 @@
 		}
 
 		.classics-header.stuck > .searchbar {
-			border-radius: 8px 0px 0px 8px;
+			border-radius: 8px 0 0 8px;
 		}
 
 		@media screen and (orientation:portrait) {
@@ -430,7 +430,7 @@
 				</div>
 			</div>
 		</div>-->
-		<h3 style="margin-bottom: 0px;">Subliminal classics:</h3>
+		<h3>Subliminal classics:</h3>
 		<div id="classicsHeader" class="classics-header">
 			<input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
 			<subliminal-select placeholder="Volume">
