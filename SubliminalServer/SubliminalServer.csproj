@@ -1,44 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0-preview.7.23375.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.7.23375.4">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0-preview.7.23375.4" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Compile Remove="DataProto\**" />
-        <Compile Remove="WatsonWebsocketPlus\**" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <EmbeddedResource Remove="DataProto\**" />
-      <EmbeddedResource Remove="WatsonWebsocketPlus\**" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Content Remove="DataProto\**" />
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DataProto\**" />
+    <Compile Remove="WatsonWebsocketPlus\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="DataProto\**" />
+    <EmbeddedResource Remove="WatsonWebsocketPlus\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="DataProto\**" />
     <Content Remove="WatsonWebsocketPlus\**" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <None Remove="DataProto\**" />
-        <None Remove="WatsonWebsocketPlus\**" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <ProjectReference Include="DataProto\DataProto\DataProto.csproj" />
-        <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
-    </ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="DataProto\**" />
+    <None Remove="WatsonWebsocketPlus\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="DataProto\DataProto\DataProto.csproj" />
+    <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
+  </ItemGroup>
 </Project>

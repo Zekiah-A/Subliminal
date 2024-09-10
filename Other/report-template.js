@@ -1,18 +1,18 @@
 class ReportPopup extends HTMLElement {
-    constructor() {
-        super()
-        this.attachShadow({ mode: "open" })
-    }
+	constructor() {
+		super()
+		this.attachShadow({ mode: "open" })
+	}
 
-    connectedCallback() {
-        this.shadowRoot.innerHTML = html`
-        `
+	connectedCallback() {
+		this.shadowRoot.innerHTML = html`
+		`
 
-        const style = document.createElement("style")
-        style.innerHTML = css`
-        `
-        this.shadowRoot.append(style)
-    }
+		const style = document.createElement("style")
+		style.innerHTML = css`
+		`
+		this.shadowRoot.append(style)
+	}
 }
 
 customElements.define("report-popup", ReportPopup)

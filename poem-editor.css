@@ -1,475 +1,475 @@
 #main {
-    position: relative;
-    box-shadow: gray 0px 0px 2px;
-    border-radius: 4px;
-    background-color: var(--background-opaque);
+	position: relative;
+	box-shadow: gray 0px 0px 2px;
+	border-radius: 4px;
+	background-color: var(--background-opaque);
 }
 #editorCanvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: text;
+	display: block;
+	width: 100%;
+	height: 100%;
+	cursor: text;
 }
 #editorCanvas:focus {
-    outline: none;
+	outline: none;
 }
 #editorContext {
-    display: flex;
-    visibility: hidden;
-    transition: left 0.1s ease 0s;
-    position: fixed;
-    width: 200px;
-    background-color: var(--button-transparent);
-    backdrop-filter: blur(5px);
-    border-radius: 4px;
-    box-shadow: 0px 0px 10px #656565;
-    border: 1px solid darkgray;
-    flex-direction: column;
-    padding: 4px;
-    row-gap: 4px;
+	display: flex;
+	visibility: hidden;
+	transition: left 0.1s ease 0s;
+	position: fixed;
+	width: 200px;
+	background-color: var(--button-transparent);
+	backdrop-filter: blur(5px);
+	border-radius: 4px;
+	box-shadow: 0px 0px 10px #656565;
+	border: 1px solid darkgray;
+	flex-direction: column;
+	padding: 4px;
+	row-gap: 4px;
 }
 #editorContext > button {
-    height: 32px;
-    background-color: transparent;
-    border: 1px solid var(--button-opaque);
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-    transition: .05 transform;
-    user-select: none;
+	height: 32px;
+	background-color: transparent;
+	border: 1px solid var(--button-opaque);
+	display: flex;
+	align-items: center;
+	column-gap: 8px;
+	transition: .05 transform;
+	user-select: none;
 }
 #editorContext > button:hover {
-    background-color: var(--button-opaque-hover);
+	background-color: var(--button-opaque-hover);
 }
 #editorContext > button:active {
-    transform: scale(0.98);
+	transform: scale(0.98);
 }
 #editorContext > button > svg {
-    opacity: 0.6;
-    fill: var(--text-colour);
+	opacity: 0.6;
+	fill: var(--text-colour);
 }
 #editorContext > button > span {
-    font-weight: bold;
-    opacity: 0.4;
-    flex-grow: 1;
-    text-align: end;
+	font-weight: bold;
+	opacity: 0.4;
+	flex-grow: 1;
+	text-align: end;
 }
 .tool {
-    margin: 1px;
-    height: 24px;
-    max-width: 100%;
+	margin: 1px;
+	height: 24px;
+	max-width: 100%;
 }
 .text-tools {
-    position: fixed;
-    top: 146px;
-    left: 16px;
-    width: 160px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: var(--button-transparent);
-    backdrop-filter: blur(5px);
-    z-index: 1;
-    transition: height 0.5s;
+	position: fixed;
+	top: 146px;
+	left: 16px;
+	width: 160px;
+	padding: 8px;
+	border-radius: 8px;
+	background-color: var(--button-transparent);
+	backdrop-filter: blur(5px);
+	z-index: 1;
+	transition: height 0.5s;
 }
 .tools-collapsed {
-    text-align: right;
-    position: absolute;
-    right: 16px;
-    rotate: 180deg;
-    transform: translateY(4px);
+	text-align: right;
+	position: absolute;
+	right: 16px;
+	rotate: 180deg;
+	transform: translateY(4px);
 }
 .tools-collapsed > svg {
-    fill: var(--text-colour);
+	fill: var(--text-colour);
 }
 .text-tools[collapsed="true"] {
-    height: 36px;
-    overflow: hidden;
-    }
+	height: 36px;
+	overflow: hidden;
+	}
 .text-tools[collapsed="true"] .tools-collapsed {
-    rotate: 0deg;
+	rotate: 0deg;
 }
 #formattingToolbar {
-    display: flex;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    column-gap: 8px;
-    max-width: 100%;
-    overflow-x: visible;
+	display: flex;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	column-gap: 8px;
+	max-width: 100%;
+	overflow-x: visible;
 }
 .toolbar-item {
-    height: 32px;
-    width: 32px;
-    min-width: 32px;
-    line-height: 32px;
-    text-align: center;
-    border-radius: 4px;
-    user-select: none;
-    padding: 1px;
-    border: none;
-    transition: .05 transform;
+	height: 32px;
+	width: 32px;
+	min-width: 32px;
+	line-height: 32px;
+	text-align: center;
+	border-radius: 4px;
+	user-select: none;
+	padding: 1px;
+	border: none;
+	transition: .05 transform;
 }
 .toolbar-item:active {
-    transform: scale(0.98);
+	transform: scale(0.98);
 }
 .toolbar-item > div {
-    background-color: var(--button-transparent);
-    border-radius: 4px;
-    pointer-events: none;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px; 
+	background-color: var(--button-transparent);
+	border-radius: 4px;
+	pointer-events: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px; 
 }
 .separator {
-    background: transparent;
-    width: 1px !important;
-    min-width: 1px !important;
-    border-radius: 0px !important;
-    opacity: 0.1;
-    margin-left: 8px;
-    margin-right: 8px;
-    flex-grow: 1;
+	background: transparent;
+	width: 1px !important;
+	min-width: 1px !important;
+	border-radius: 0px !important;
+	opacity: 0.1;
+	margin-left: 8px;
+	margin-right: 8px;
+	flex-grow: 1;
 }
 #formattingColourRect {
-    background-color: black;
-    width: calc(100% - 2px);
-    height: calc(100% - 2px);
-    margin: 1px;
-    border-radius: 4px;
+	background-color: black;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
+	margin: 1px;
+	border-radius: 4px;
 }
 #poem-tags button {
-    border-radius: 4px;
-    margin: 2px;
+	border-radius: 4px;
+	margin: 2px;
 }
 #side {
-    position: fixed;
-    top: 126px;
-    right: 0px;
-    width: max(16%, 320px);
-    padding: 8px;
-    background-color: var(--button-transparent);
-    backdrop-filter: blur(5px);
-    box-shadow: 0px 0px 8px grey;
-    z-index: 2;
-    height: calc(100% - 126px);
-    overflow-y: scroll;
-    transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height, .2s background-color;
+	position: fixed;
+	top: 126px;
+	right: 0px;
+	width: max(16%, 320px);
+	padding: 8px;
+	background-color: var(--button-transparent);
+	backdrop-filter: blur(5px);
+	box-shadow: 0px 0px 8px grey;
+	z-index: 2;
+	height: calc(100% - 126px);
+	overflow-y: scroll;
+	transition: .2s width, .2s padding-left, .2s padding-right, .2s box-shadow, .2s height, .2s background-color;
 }
 #side[collapsed] {
-    width: 0px;
-    padding-left: 48px;
-    padding-right: 0px;
-    overflow: hidden;
-    box-shadow: none;
-    border-left: 2px solid gray;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    background: transparent;
-    z-index: 0;
+	width: 0px;
+	padding-left: 48px;
+	padding-right: 0px;
+	overflow: hidden;
+	box-shadow: none;
+	border-left: 2px solid gray;
+	cursor: pointer;
+	backdrop-filter: blur(5px);
+	background: transparent;
+	z-index: 0;
 }
 #side[collapsed] .side-close-button {
-    display: none;
+	display: none;
 }
 /* Small hack to hide overflowing contents when side has collapsed */
 #side[collapsed] > div {
-    transition: 0s opacity;
-    transition-delay: 0.2s;
-    opacity: 0;
+	transition: 0s opacity;
+	transition-delay: 0.2s;
+	opacity: 0;
 }
 #side > :not(div[close]) {
 display: none;
 }
 #side[mode="upload"] > div[upload], #side[mode="rhyme"] > div[rhyme], #side[mode="coauthor"] > div[coauthor] {
-    display: flex;
+	display: flex;
 }
 .side-content {
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
 }
 .side-close-button {
-    width: 80%;
-    height: 48px;
-    border: 1px solid gray;
-    position: relative;
-    border-radius: 64px;
-    align-self: center;
-    margin-top: 32px;
-    transition: 0.2s transform;
-    cursor: pointer;
-    display: block !important;
+	width: 80%;
+	height: 48px;
+	border: 1px solid gray;
+	position: relative;
+	border-radius: 64px;
+	align-self: center;
+	margin-top: 32px;
+	transition: 0.2s transform;
+	cursor: pointer;
+	display: block !important;
 }
 .side-close-button > svg {
-    height: calc(100% - 16px);
-    left: 50%;
-    position: relative;
-    transform: translateX(-50%);
-    fill: gray;
-    top: 8px;
+	height: calc(100% - 16px);
+	left: 50%;
+	position: relative;
+	transform: translateX(-50%);
+	fill: gray;
+	top: 8px;
 }
 .side-close-button:hover {
-    transform: scale(1.1);
+	transform: scale(1.1);
 }
 #sideRhymeMatches {
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
 }
 .management-button {
-    position: relative;
-    height: 32px;
-    width: 100%;
-    margin-top: 8px;
+	position: relative;
+	height: 32px;
+	width: 100%;
+	margin-top: 8px;
 }
 .button-tooltip {
-    left: calc(-100% - 32px) !important;
+	left: calc(-100% - 32px) !important;
 }
 .content-ghost {
-    position: absolute;
-    z-index: -1;
-    opacity: 0.2;
-    user-select: none;
-    margin: 0px;
-    opacity: 0.6;
-    top: 28px;
-    left: 10px;
+	position: absolute;
+	z-index: -1;
+	opacity: 0.2;
+	user-select: none;
+	margin: 0px;
+	opacity: 0.6;
+	top: 28px;
+	left: 10px;
 }
 /* patches for if the poem is in centre style */
 .centre > .content-ghost {
-    width: 100%;
-    margin-top: -18px;
+	width: 100%;
+	margin-top: -18px;
 }
 .tool-header {
-    background-color: var(--button-opaque);
-    width: 100%;
-    display: block;
-    padding: 8px;
-    border-radius: 4px;
-    margin-bottom: 4px;
+	background-color: var(--button-opaque);
+	width: 100%;
+	display: block;
+	padding: 8px;
+	border-radius: 4px;
+	margin-bottom: 4px;
 }
 #loadedContainer {
-    display: flex;
-    flex-direction: column;
-    row-gap: 5px;
-    max-height: 512px;
-    overflow-y: scroll;
-    height: 512px;
-    margin-bottom: 8px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 5px;
+	max-height: 512px;
+	overflow-y: scroll;
+	height: 512px;
+	margin-bottom: 8px;
 }
 #summaryArea {
-    min-height: 50px;
-    width: 100%;
-    height: 254px;
-    resize: none;
-    background: var(--button-opaque);
-    border: none;
-    outline: none;
-    border-radius: 8px;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 8px;
-    transition: 0.2s box-shadow;
+	min-height: 50px;
+	width: 100%;
+	height: 254px;
+	resize: none;
+	background: var(--button-opaque);
+	border: none;
+	outline: none;
+	border-radius: 8px;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 8px;
+	transition: 0.2s box-shadow;
 }
 #tagContainer {
-    background: var(--button-opaque);
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: 33% 33% 33%;
-    padding: 8px;
-    grid-template-rows: auto auto;
-    grid-gap: 2px;
+	background: var(--button-opaque);
+	border-radius: 8px;
+	display: grid;
+	grid-template-columns: 33% 33% 33%;
+	padding: 8px;
+	grid-template-rows: auto auto;
+	grid-gap: 2px;
 }
 #tagContainer > button {
-    border-radius: 4px;
-    height: 64px;
-    background: lightgrey;
-    padding: 4px;
-    text-align: center;
-    position: relative;
-    overflow: clip;
-    transition: 0.2s color;
+	border-radius: 4px;
+	height: 64px;
+	background: lightgrey;
+	padding: 4px;
+	text-align: center;
+	position: relative;
+	overflow: clip;
+	transition: 0.2s color;
 }
 #tagContainer > button:hover {
 color: white;
 }
 #tagContainer > button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, #b92a2a, #e914149c);
-    opacity: 0;
-    transition: 0.2s opacity;
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(45deg, #b92a2a, #e914149c);
+	opacity: 0;
+	transition: 0.2s opacity;
 }
 #tagContainer > button > span {
-    z-index: 1;
-    position: relative;
+	z-index: 1;
+	position: relative;
 }
 #tagContainer > button[add]::before {
-    background: linear-gradient(45deg, #2ab936, #26e9149c);
+	background: linear-gradient(45deg, #2ab936, #26e9149c);
 }
 #tagContainer > button:hover::before {
-    opacity: 1;
+	opacity: 1;
 }
 #tagContainer > button:active::before {
-    opacity: 0;
+	opacity: 0;
 }
 #tagContainer, #cWarningContainer, #summaryArea {
-    transition: 0.2s box-shadow;
+	transition: 0.2s box-shadow;
 }
 #summaryArea:hover, #tagContainer:hover, #cWarningContainer:hover {
-    box-shadow: 0px 0px 8px darkgray;
+	box-shadow: 0px 0px 8px darkgray;
 }
 #builtinFreePopup img {
-    border-radius: 4px;
-    max-width: 100%;
+	border-radius: 4px;
+	max-width: 100%;
 }
 .background-grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-gap: 4px;
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-gap: 4px;
 }
 .background-grid > div {
-    position: relative;
-    overflow: clip;
+	position: relative;
+	overflow: clip;
 }
 .background-grid > div:hover > div {
-    top: 50%;
+	top: 50%;
 }
 .background-grid > div > div {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    height: 50%;
-    overflow: hidden;
-    transition: 0.2s top;
-    background-color: var(--button-transparent);
-    user-select: none;
-    pointer-events: none;
-    backdrop-filter: blur(4px);
-    padding: 8px;
-    overflow-y: auto;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	height: 50%;
+	overflow: hidden;
+	transition: 0.2s top;
+	background-color: var(--button-transparent);
+	user-select: none;
+	pointer-events: none;
+	backdrop-filter: blur(4px);
+	padding: 8px;
+	overflow-y: auto;
 }
 .suggestions {
-    width: 192px;
-    position: absolute;
-    background: #bdbdbd;
-    z-index: 3;
-    border-radius: 4px;
-    top: 0px;
-    display: flex;
-    background-color: var(--button-transparent);
-    flex-direction: column;
-    border: 1px solid gray;
-    overflow: clip;
-    overflow-y: scroll;
+	width: 192px;
+	position: absolute;
+	background: #bdbdbd;
+	z-index: 3;
+	border-radius: 4px;
+	top: 0px;
+	display: flex;
+	background-color: var(--button-transparent);
+	flex-direction: column;
+	border: 1px solid gray;
+	overflow: clip;
+	overflow-y: scroll;
 }
 .suggestions-item {
-    padding: 8px;
-    display: flex;
+	padding: 8px;
+	display: flex;
 }
 .suggestions-item > span:nth-child(1) {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 .suggestions-item > span:nth-child(2) {
-    font-size: 10px;
-    opacity: 0.6;
+	font-size: 10px;
+	opacity: 0.6;
 }
 .online-editors {
-    position: fixed;
-    left: 16px;
-    display: flex;
-    flex-direction: column;
+	position: fixed;
+	left: 16px;
+	display: flex;
+	flex-direction: column;
 }
 .online-editors > div {
-    position: relative;
-    display: flex;
-    column-gap: 8px;
-    margin-bottom: -16px;
-    display: flex;
-    cursor: pointer;
-    padding: 4px;
-    padding-left: 16px;
-    padding-right: 16px;
-    transition: .2s margin-bottom, .2s margin-top, .2s background-color;
+	position: relative;
+	display: flex;
+	column-gap: 8px;
+	margin-bottom: -16px;
+	display: flex;
+	cursor: pointer;
+	padding: 4px;
+	padding-left: 16px;
+	padding-right: 16px;
+	transition: .2s margin-bottom, .2s margin-top, .2s background-color;
 }
 .online-editors > div:hover {
-    margin-bottom: 0px;
-    margin-top: 8px;
-    background-color: var(--button-opaque);
-    border-radius: 8px;
+	margin-bottom: 0px;
+	margin-top: 8px;
+	background-color: var(--button-opaque);
+	border-radius: 8px;
 }
 .options {
-    background-color: var(--button-opaque);
-    border-radius: 4px;
-    margin-top: 4px;
-    border: 1px solid darkgray;
-    pointer-events: all !important;
-    display: none;
-    user-select: none;
+	background-color: var(--button-opaque);
+	border-radius: 4px;
+	margin-top: 4px;
+	border: 1px solid darkgray;
+	pointer-events: all !important;
+	display: none;
+	user-select: none;
 }
 .options div[selected] {
-    background-color: darkgray;
+	background-color: darkgray;
 }
 .options div:hover {
-    background-color: darkgray;
+	background-color: darkgray;
 }
 @media screen and (orientation: portrait) {
-    #main {
-        margin-bottom: 48px;
-    }
-    .text-tools {
-        position: inherit !important;
-        width: calc(100% - 12px);
-    }
-    #side {
-        width: 100%;
-        height: 60%;
-        bottom: 0px;
-        top: inherit;
-        padding-top: 0px;
-    }
-    #side[collapsed] {
-        height: 0px;
-        padding-top: 48px;
-        width: 100%;
-        padding-left: 0px;
-        padding-right: 0px;
-        border-top: 2px solid gray;
-        border-left: none;
-        left: 0px;
-        z-index: 0;
-        cursor: pointer;
-        overflow: clip;
-    }
-    .side-close-button {
-        width: 60%;
-    }
-    #formattingToolbar {
-        overflow-x: scroll;
-    }
-    #loadedContainer {
-        height: calc(100% - 96px);
-        max-height: calc(100% - 96px);
-    }
-    .separator {
-        background: var(--text-colour);
-    }
-    .background-grid {
-        grid-template-columns: auto auto;
-    }
-    .online-editors {
-        bottom: 8px;
-        right: 8px;
-        left: unset;
-        z-index: 2;
-    }
-    .options {
-        position: absolute;
-        z-index: 2;
-        top: calc(100% + 48px);
-        left: 50%;
-        transform: translateX(-50%) scale(2);
-    }
+	#main {
+		margin-bottom: 48px;
+	}
+	.text-tools {
+		position: inherit !important;
+		width: calc(100% - 12px);
+	}
+	#side {
+		width: 100%;
+		height: 60%;
+		bottom: 0px;
+		top: inherit;
+		padding-top: 0px;
+	}
+	#side[collapsed] {
+		height: 0px;
+		padding-top: 48px;
+		width: 100%;
+		padding-left: 0px;
+		padding-right: 0px;
+		border-top: 2px solid gray;
+		border-left: none;
+		left: 0px;
+		z-index: 0;
+		cursor: pointer;
+		overflow: clip;
+	}
+	.side-close-button {
+		width: 60%;
+	}
+	#formattingToolbar {
+		overflow-x: scroll;
+	}
+	#loadedContainer {
+		height: calc(100% - 96px);
+		max-height: calc(100% - 96px);
+	}
+	.separator {
+		background: var(--text-colour);
+	}
+	.background-grid {
+		grid-template-columns: auto auto;
+	}
+	.online-editors {
+		bottom: 8px;
+		right: 8px;
+		left: unset;
+		z-index: 2;
+	}
+	.options {
+		position: absolute;
+		z-index: 2;
+		top: calc(100% + 48px);
+		left: 50%;
+		transform: translateX(-50%) scale(2);
+	}
 }

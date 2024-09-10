@@ -218,7 +218,7 @@
 					<p class="profile-title">I'm </p>
 					<input id="profileName" type="text" class="profile-title editable" placeholder="username"
 						maxlength="16" oninput="
-						    //min-width: 198px;
+							//min-width: 198px;
 							if (this.value) {
 								this.style.width = 0;
 								this.style.setProperty('--contentWidth', this.scrollWidth + 'px');
@@ -307,10 +307,10 @@
 
 	//TODO: Move all this to my custom profile template frame component
 	let stringToHtml = text => {
-      let htmlObject = document.createElement('temp')
-      htmlObject.innerHTML = text
-      return htmlObject.firstElementChild
-    }
+	  let htmlObject = document.createElement('temp')
+	  htmlObject.innerHTML = text
+	  return htmlObject.firstElementChild
+	}
 
 	function setProfileAvatar(newUrl) {
 		if (newUrl == null) return
@@ -442,8 +442,12 @@
 
 	async function initialise() {
 		if (!await isLoggedIn()) {
-			if (confirm("You don't seem to have an account here, or are not logged in. Log in now?"))
+			if (confirm("You don't seem to have an account here, or are not logged in. Log in now?")) {
 				window.location.href = window.location.origin + "/login?referrer=/account"
+			}
+			else {
+				history.back()
+			}				
 			return
 		}
 
