@@ -5,13 +5,13 @@ using SubliminalServer.DataModel.Account;
 
 namespace SubliminalServer.DataModel.Report;
 
-[PrimaryKey(nameof(ReportKey))]
+[PrimaryKey(nameof(ReportId))]
 public class Report
 {
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string ReportKey { get; set; }
+    public string ReportId { get; set; }
     
     // Foreign key Account Data
     [Required]

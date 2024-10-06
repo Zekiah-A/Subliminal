@@ -9,21 +9,21 @@ public class PurgatoryDraftConfiguration  : IEntityTypeConfiguration<PurgatoryDr
     public void Configure(EntityTypeBuilder<PurgatoryDraft> builder)
     {
         // Define the primary key
-        builder.HasKey(entry => entry.DraftKey);
+        builder.HasKey(entry => entry.Id);
         
         // Many to one (AccountData)
         builder.HasOne(draft => draft.Author)
             .WithMany(account => account.Drafts) // Use the correct navigation property
-            .HasForeignKey(draft => draft.AuthorKey);
+            .HasForeignKey(draft => draft.AuthorId);
         
         // One to many PurgatoryEntry (Amends), PurgatoryEntry (AmendedBy)
         builder.HasOne(draft => draft.Amends)
             .WithMany()
-            .HasForeignKey(draft => draft.AmendsKey);
+            .HasForeignKey(draft => draft.AmendsId);
 
         // One to many PurgatoryEntry (Edits), PurgatoryEntry (AmendedBy)
         builder.HasOne(draft => draft.Edits)
             .WithMany()
-            .HasForeignKey(draft => draft.EditsKey);
+            .HasForeignKey(draft => draft.EditsId);
     }
 }

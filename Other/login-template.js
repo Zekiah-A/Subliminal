@@ -29,7 +29,7 @@ class LoginSignup extends HTMLElement {
 						this.shadowThis.validateUsername(this)">
 					<input id="loginSigninEmail" type="text" class="popup-input" placeholder="Email">
 					<input id="loginQRInput" type="file" accept="image/*" capture="environment" style="display: none;">
-					<button class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value); this.shadowThis.login();"
+					<button class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value);"
 						style="margin-bottom: 8px;">Login</button>
 
 					<div style="display:flex;column-gap:8px;margin-top:8px">
@@ -85,7 +85,7 @@ class LoginSignup extends HTMLElement {
 				<div id="loginError" class="page">
 					<div id="errorMessage"><!--Erorr message text--></div>
 					<div style="display:flex;column-gap:8px;margin-top:8px">
-						<button class="popup-button" onclick="this.shadowThis.close();">Ok</button>
+						<button class="popup-button" onclick="this.shadowThis.login.close();">Ok</button>
 					</div>
 				</div>
 			</dialog>
@@ -97,7 +97,7 @@ class LoginSignup extends HTMLElement {
 				display: flex;
 				flex-direction: column;
 				max-width: 400px;
-				height: 230px;
+				height: 236px;
 				transition: .2s height;
 			}
 
@@ -145,7 +145,7 @@ class LoginSignup extends HTMLElement {
 			}
 
 			#login[currentpage="signin"] > #loginSignin, #login[currentpage="signup"] > #loginSignup,
-				#login[currentpage="loginerror"] > #loginError, #login[currentpage="code"] > #loginCode {
+				#login[currentpage="error"] > #loginError, #login[currentpage="code"] > #loginCode {
 				display: flex !important;
 			}
 
@@ -184,7 +184,7 @@ class LoginSignup extends HTMLElement {
 
 	async signup(username, email) {
 		try {
-			const response = await fetch(serverBaseAddress + "/Signup", {
+			const response = await fetch(serverBaseAddress + "/auth/signup", {
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ Username: username, Email: email }) // Convert to JSON format
@@ -206,7 +206,7 @@ class LoginSignup extends HTMLElement {
 	//Impossible to log in without code, GUID can be retrieved though
 	async signin(username, email) {
 		try {
-			const signinResponse = await fetch(serverBaseAddress + "/Signin", {
+			const signinResponse = await fetch(serverBaseAddress + "/auth/signin", {
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ Username: username, Email: email })
@@ -249,7 +249,7 @@ class LoginSignup extends HTMLElement {
 
 	confirmFail(err) {
 		this.errorMessage.textContent = err
-		this.login.setAttribute("currentPage", "loginerror")
+		this.login.setAttribute("currentpage", "error")
 	}
 
 	validateLoginSignup() {

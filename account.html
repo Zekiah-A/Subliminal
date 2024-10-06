@@ -118,6 +118,8 @@
 
 		.editable {
 			position: relative;
+			background-color: transparent;
+			color: var(--text-colour);
 			border: none;
 		}
 
@@ -153,34 +155,34 @@
 
 <body class="headered-body">
 	<subliminal-header></subliminal-header>
-	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
+	<dialog id="profileRole" style="height: fit-content; width: 40%;" class="popup">
 		<h2>Your profile role:</h2>
 		<div class="role-grid">
-			<button class="popup-button" onclick="setProfileRole('writer');">Writer</button>
-			<button class="popup-button" onclick="setProfileRole('reader');">Reader</button>
-			<button class="popup-button" onclick="setProfileRole('listener');">Listener</button>
-			<button class="popup-button" onclick="setProfileRole('poet');">Poet</button>
-			<button class="popup-button" onclick="setProfileRole('critic');">Critic</button>
-			<button class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</button>
-			<button class="popup-button" onclick="setProfileRole('analyser');">Analyser</button>
-			<button class="popup-button" onclick="setProfileRole('teacher');">Teacher</button>
-			<button class="popup-button" onclick="setProfileRole('student');">Student</button>
-			<button class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</button>
-			<button class="popup-button" onclick="setProfileRole('casual');">Casual</button>
-			<button class="popup-button" onclick="setProfileRole('artist');">Artist</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('writer');">Writer</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('reader');">Reader</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('listener');">Listener</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('poet');">Poet</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('critic');">Critic</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('analyser');">Analyser</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('teacher');">Teacher</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('student');">Student</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('casual');">Casual</button>
+			<button type="button" class="popup-button" onclick="setProfileRole('artist');">Artist</button>
 		</div>
 		<br>
 		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="8" oninput="setProfileRole(value)">
 		<br>
-		<button class="popup-button" onclick="profileRole.style.display = 'none'; executeAccountAction(actionType.UpdateRole, role)">Done</button>
+		<button type="button" class="popup-button" onclick="profileRole.close(); executeAccountAction(actionType.UpdateRole, role)">Done</button>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
-	</div>
-	<div id="accountEmail" style="height: fit-content; width: 30%; display: none;" class="popup">
+	</dialog>
+	<dialog id="accountEmail" style="height: fit-content; width: 30%;" class="popup">
 		<h2>Enter your email:</h2>
 		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="64" oninput="setProfileEmail(value)">
 		<br>
-		<button class="popup-button" onclick="accountEmail.style.display = 'none'; executeAccountAction(actionType.UpdateEmail, email)">Done</button>
-	</div>
+		<button class="popup-button" onclick="accountEmail.close(); executeAccountAction(actionType.UpdateEmail, email)">Done</button>
+	</dialog>
 	<div class="div-centre">
 		<div class="profile-container">
 		<div class="profile-picture">
@@ -216,7 +218,7 @@
 			<div class="profile-aside">
 				<div class="profile-title-container">
 					<p class="profile-title">I'm </p>
-					<input id="profileName" type="text" class="profile-title editable" placeholder="username"
+					<input id="profileName" type="text" class="profile-title editable" placeholder="Nickname"
 						maxlength="16" oninput="
 							//min-width: 198px;
 							if (this.value) {
@@ -231,7 +233,7 @@
 					<p class="profile-title">, </p>
 					<p class="profile-title" id="profileRoleText" style="cursor: pointer;"
 						onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';"
-						onclick="profileRole.style.display = 'block';">a writer</p>
+						onclick="profileRole.showModal()">a writer</p>
 				</div>
 				<span id="profileUsername">@username</span>
 				<textarea id="profileBiography" class="editable" placeholder="Click here to start writing your bio!"
@@ -256,7 +258,7 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
-		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.style.display = 'flex';">
+		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.showModal()">
 			Change Email
 			<div class="button-tooltip">Change the primary email used for login, and allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or other important updates</div>
 		</button>
@@ -289,7 +291,7 @@
 				can be accessed in the case of a data leak, and allowing you to remove any data you have uploaded here on request
 				as per compliance with GDPR regulations.
 			</p>
-			<p>If you use this site, with the explicit purpose to publicly post illegal, nsfw, or plain morally objectable content,
+			<p>If you use this site, with the explicit purpose to publicly post illegal, nsfw, or plainly morally objectable content,
 				your account may be removed, or IP blocked from submitting content to the site. Keep in mind that if you post any
 				personally identifying information publicly on this site, it may be used against you by others, and we are not accountable
 				for any consequences that may become of it. 
@@ -392,7 +394,7 @@
 		}
 
 		for (let guid of newGuids) {
-			let poem = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
+			let poem = await (await fetch(serverBaseAddress + "/purgatory/" + guid)).json()
 
 			let el = document.createElement("div")
 			el.className = "poem-card"
@@ -451,7 +453,7 @@
 			return
 		}
 
-		fetch(serverBaseAddress + "/Signin", {
+		fetch(serverBaseAddress + "/auth/signin", {
 			method: "POST",
 			headers: { 'Content-Type': 'application/json' },
 			body: '"' + localStorage.accountCode + '"'

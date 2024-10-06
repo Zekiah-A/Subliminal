@@ -8,7 +8,7 @@ public class AccountBadgeConfiguration : IEntityTypeConfiguration<AccountBadge>
 {
     public void Configure(EntityTypeBuilder<AccountBadge> builder)
     {
-        builder.HasKey(badge => badge.BadgeKey);
+        builder.HasKey(badge => badge.Id);
 
         // One to many (AccountData)
         builder.HasOne(badge => badge.Account)

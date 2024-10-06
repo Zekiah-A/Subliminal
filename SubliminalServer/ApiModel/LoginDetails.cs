@@ -1,3 +1,3 @@
-namespace SubliminalServer.DataModel.Api;
+namespace SubliminalServer.ApiModel;
 
 public record LoginDetails(string Username, string Email);

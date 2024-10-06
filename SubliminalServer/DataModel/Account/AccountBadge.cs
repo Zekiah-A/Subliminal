@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Account;
 
-[PrimaryKey(nameof(BadgeKey))]
+[PrimaryKey(nameof(Id))]
 public class AccountBadge
 {
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int BadgeKey { get; set; }
+    public int Id { get; set; }
 
     public BadgeType Badge { get; set; }
     public DateTime DateAwarded { get; set; }

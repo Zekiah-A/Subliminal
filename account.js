@@ -61,7 +61,7 @@ function getBadgeInfo(badge) {
 async function getAccountData() {
 	let data = null
 	
-	await fetch(serverBaseAddress + "/Signin", {
+	await fetch(serverBaseAddress + "/auth/signin", {
 		method: "POST",
 		headers: { 'Content-Type': 'application/json' },
 		body: '"' + localStorage.accountCode + '"'
@@ -72,10 +72,10 @@ async function getAccountData() {
 	return data
 }
 
-async function getPublicProfile(guid) {
+async function getPublicProfile(accountId) {
 	let profile = null
 
-	await fetch(serverBaseAddress + "/AccountProfile/" + guid, {
+	await fetch(serverBaseAddress + "/profiles/" + accountId, {
 		method: "GET",
 		headers: { 'Content-Type': 'application/json' },
 	})
@@ -85,24 +85,10 @@ async function getPublicProfile(guid) {
 	return profile
 }
 
-async function executeAccountAction(action, value) {
-	let accountAction = {
-		code: localStorage.accountCode,
-		actionType: action,
-		value: value
-	}
-
-	return await (fetch(serverBaseAddress + "/ExecuteAccountAction", {
-		method: "POST",
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(accountAction)
-	}))
-}
-
 async function isLoggedIn() {
 	if (!localStorage.accountCode) return false
 
-	let response = await fetch(serverBaseAddress + "/Signin", {
+	let response = await fetch(serverBaseAddress + "/auth/signin/token", {
 		method: "POST",
 		headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}
 	)

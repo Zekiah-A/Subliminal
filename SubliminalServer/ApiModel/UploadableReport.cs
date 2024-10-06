@@ -1,6 +1,6 @@
 using SubliminalServer.DataModel.Report;
 
-namespace SubliminalServer.DataModel.Api;
+namespace SubliminalServer.ApiModel;
 
 public class UploadableReport
 {

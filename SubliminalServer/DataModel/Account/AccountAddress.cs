@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SubliminalServer.DataModel.Account;
 
-[PrimaryKey(nameof(AddressKey))]
+[PrimaryKey(nameof(Id))]
 public class AccountAddress
 {
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int AddressKey { get; set; }
+    public int Id { get; set; }
     public string IpAddress { get; set; }
+    public DateTime LastUsed { get; set; }
 
     // Foreign key AccountData
     public int AccountKey { get; set; }

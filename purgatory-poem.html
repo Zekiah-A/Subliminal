@@ -91,8 +91,8 @@
 		<p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
 		<div id="ratingContainer" class="rating-container" style="visibility: hidden;">
 			<div>
-				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Approve })" class="rate-button">Approve</a>
-				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Veto })" class="rate-button">Veto</a>
+				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: poemId, Type: ratingType.Approve })" class="rate-button">Approve</a>
+				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: poemId, Type: ratingType.Veto })" class="rate-button">Veto</a>
 			</div>
 			<a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
 		</div>
@@ -100,10 +100,10 @@
 	<div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
 		<h2>Edit poem:</h2>
 		<div style="display: flex; column-gap: 8px;">
-			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + guid;">
+			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
 				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
 			</button>
-			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + guid;">
+			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + poemId;">
 				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
 			</button>
 		</div>
@@ -149,7 +149,7 @@ ___________________________________________________________
 <script>
 	const params = new URLSearchParams(document.location.search)
 	const encoder = new TextEncoder()
-	const guid = params.get("guid")
+	const poemId = params.get("guid")
 
 	async function togglePoemLike(liked) {
 		if (!localStorage.liked) {
@@ -161,13 +161,13 @@ ___________________________________________________________
 			likeButton.children[0].style.fill = "transparent"
 
 			if (await isLoggedIn()) {
-				executeAccountAction(actionType.UnlikePoem, guid)
+				executeAccountAction(actionType.UnlikePoem, poemId)
 				return
 			}
 
 			let storeLiked = JSON.parse(localStorage.liked)
-			if (storeLiked.indexOf(guid) == -1) return
-			storeLiked.splice(storeLiked.indexOf(guid), 1)
+			if (storeLiked.indexOf(poemId) == -1) return
+			storeLiked.splice(storeLiked.indexOf(poemId), 1)
 			localStorage.liked = JSON.stringify(storeLiked)
 			return
 		}
@@ -176,12 +176,12 @@ ___________________________________________________________
 		likeButton.children[0].style.fill = "#ffd500"
 
 		if (await isLoggedIn()) {
-			executeAccountAction(actionType.LikePoem, guid)
+			executeAccountAction(actionType.LikePoem, poemId)
 			return
 		}
 
 		let storeLiked = JSON.parse(localStorage.liked)
-		storeLiked.push(guid)
+		storeLiked.push(poemId)
 		localStorage.liked = JSON.stringify(storeLiked)
 	}
 
@@ -189,13 +189,13 @@ ___________________________________________________________
 		if (pinned == "true") { 
 			pinButton.setAttribute("pinned", false)
 			pinButton.children[1].style.fill = "transparent"
-			executeAccountAction(actionType.UnpinPoem, guid)
+			executeAccountAction(actionType.UnpinPoem, poemId)
 			return
 		}
 
 		pinButton.setAttribute('pinned', true)
 		pinButton.children[1].style.fill = "url(#b)"
-		executeAccountAction(actionType.PinPoem, guid)
+		executeAccountAction(actionType.PinPoem, poemId)
 	}
 
 	async function initialise() {
@@ -213,7 +213,7 @@ ___________________________________________________________
 		}
 
 		//fetch poem data
-		let poemData = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
+		let poemData = await (await fetch(serverBaseAddress + "/purgatory/" + poemId)).json()
 		
 		//Set up title for vanity
 		document.title = "Subliminal - " + poemData.poemName
@@ -259,7 +259,7 @@ ___________________________________________________________
 		const accountData = await isLoggedIn() ? await getAccountData() : null
 		const localLiked = localStorage.liked ? JSON.parse(localStorage.liked) : null
 
-		if ((accountData && accountData.likedPoems.includes(guid)) || (localLiked && localLiked.includes(guid))) {
+		if ((accountData && accountData.likedPoems.includes(poemId)) || (localLiked && localLiked.includes(poemId))) {
 			likeButton.setAttribute("liked", true)
 			likeButton.children[0].style.fill = "#ffd500"
 		}

@@ -1,6 +1,7 @@
 {
-    "Certificate": "",
-    "Key": "",
+    "Version": 0,
+    "Certificate": null,
+    "Key": null,
     "Port": 1234,
     "UseHttps": false
 }

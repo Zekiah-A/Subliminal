@@ -190,7 +190,7 @@ h2 {
 	overflow-wrap: break-word;
 }
 
-.contents-div-centre {
+.contents-main-centre {
 	margin: auto;
 	width: 100%;
 	width: min(1112px, 100%);
@@ -499,7 +499,7 @@ div.popup {
 		background-attachment: var(--horizontal-scroll-background-attachment);
 	}
 
-	.contents-div-centre {
+	.contents-main-centre {
 		width: 100%;
 	}
 

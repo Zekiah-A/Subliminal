@@ -104,6 +104,7 @@ class PurgatoryEntry extends HTMLElement {
 		`
 		this.shadowRoot.append(style)
 		defineAndInject(this, this.shadowRoot)
+		this.setAttribute("tabindex", "0")
 
 		if (this.getAttribute("tooltip")) {
 			
@@ -114,7 +115,7 @@ class PurgatoryEntry extends HTMLElement {
 		this.approves.textContent = this.getAttribute("approves")
 		this.vetoes.textContent = this.getAttribute("vetoes")
 		
-		if (this.getAttribute('new')) {
+		if (this.getAttribute("new")) {
 			setTimeout(() => {
 				this.classList.add("entry-new")
 				this.setAttribute("style", `
@@ -131,8 +132,12 @@ class PurgatoryEntry extends HTMLElement {
 				this.classList.remove("entry-new")
 			}, 1600)
 		}
-		this.onclick = () =>
-			window.location.href = './purgatory-poem?guid=' + this.getAttribute('guid')
+		this.onclick = function() {
+			const guid = this.getAttribute("guid")
+			if (guid) {
+				window.location.href = "./purgatory-poem?guid=" + guid			
+			}
+		}
 	}
 }
 

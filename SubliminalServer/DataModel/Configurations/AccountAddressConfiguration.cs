@@ -8,13 +8,13 @@ public class AccountAddressConfiguration : IEntityTypeConfiguration<AccountAddre
 {
     public void Configure(EntityTypeBuilder<AccountAddress> builder)
     {
-        builder.HasKey(address => address.AddressKey);
-        builder.Property(address => address.AddressKey)
+        builder.HasKey(address => address.Id);
+        builder.Property(address => address.Id)
             .ValueGeneratedOnAdd();
 
         // One to many (AccountData)
         builder.HasOne(address => address.Account)
             .WithMany(account => account.KnownIPs)
-            .HasForeignKey(address => address.AddressKey);
+            .HasForeignKey(address => address.Id);
     }
 }

@@ -10,7 +10,7 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
     public void Configure(EntityTypeBuilder<AccountData> builder)
     {
         // Define the primary key
-        builder.HasKey(account => account.AccountKey);
+        builder.HasKey(account => account.Id);
 
         // Unique email
         builder.HasIndex(account => account.Username).IsUnique();
@@ -19,12 +19,12 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
         // One to many Poems (PurgatoryEntry)
         builder.HasMany(account => account.Poems)
             .WithOne(entry => entry.Author)
-            .HasForeignKey(entry => entry.AuthorKey);
+            .HasForeignKey(entry => entry.AuthorId);
 
         // One to many Drafts (PurgatoryEntry)
         builder.HasMany(account => account.Drafts)
             .WithOne(draft => draft.Author)
-            .HasForeignKey(draft => draft.AuthorKey);
+            .HasForeignKey(draft => draft.AuthorId);
 
         // One to many Badges (AccountBadge)
         builder.HasMany(account => account.Badges)

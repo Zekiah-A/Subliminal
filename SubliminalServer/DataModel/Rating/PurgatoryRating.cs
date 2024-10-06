@@ -6,12 +6,12 @@ using SubliminalServer.DataModel.Purgatory;
 
 namespace SubliminalServer.DataModel.Rating;
 
-[PrimaryKey(nameof(RatingKey))]
+[PrimaryKey(nameof(Id))]
 public class PurgatoryRating
 {
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int RatingKey { get; set; }
+    public int Id { get; set; }
     // This should only be Approve | Veto
     public RatingType RatingType { get; set; }
     

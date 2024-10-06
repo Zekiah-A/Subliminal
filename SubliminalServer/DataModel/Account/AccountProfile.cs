@@ -18,7 +18,7 @@ public class AccountProfile
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int AccountKey { get; set; }
+    public int Id { get; set; }
     
     // Unique
     [Required]

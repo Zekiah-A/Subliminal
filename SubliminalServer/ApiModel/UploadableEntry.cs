@@ -1,6 +1,6 @@
 using SubliminalServer.DataModel.Purgatory;
 
-namespace SubliminalServer.DataModel.Api;
+namespace SubliminalServer.ApiModel;
 
 public class UploadableEntry
 {
@@ -8,8 +8,8 @@ public class UploadableEntry
     public bool ContentWarning { get; set; }
     public PageStyle PageStyle { get; set; }
     public string? Background { get; set; }
-    
-    public IReadOnlyList<string> PoemTags { get; set; }
+
+    public List<string> PoemTags { get; set; }
     public string PoemName { get; set; }
     public string PoemContent { get; set; }
     

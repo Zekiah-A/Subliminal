@@ -21,18 +21,6 @@
     <Compile Remove="WatsonWebsocketPlus\**" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Remove="DataProto\**" />
-    <EmbeddedResource Remove="WatsonWebsocketPlus\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="DataProto\**" />
-    <Content Remove="WatsonWebsocketPlus\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="DataProto\**" />
-    <None Remove="WatsonWebsocketPlus\**" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="DataProto\DataProto\DataProto.csproj" />
     <ProjectReference Include="WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj" />
   </ItemGroup>

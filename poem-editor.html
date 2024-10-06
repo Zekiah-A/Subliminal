@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="./poem-editor.css">
 	</head>
 	<body style="max-width: 100%; overflow-x: hidden; overflow-y: auto" onclick="editorContext.style.visibility = 'hidden'">
-		<div id="licenseAgreePopup" class="popup" style="display: none; width: max(30%, 500px)">
+		<dialog id="licenseAgreePopup" class="popup" style="width: max(30%, 500px)">
 			<h2>You're almost there!</h2>
 			<img src="Resources/Celebration.png" style="width: 100%" />
 			<p>
@@ -54,11 +54,11 @@
 					this site.
 				</p>
 			</div>
-			<button class="popup-button" onclick="licenseAgreePopup.style.display = 'none'; uploadCurrent();">
+			<button class="popup-button" onclick="licenseAgreePopup.close(); uploadCurrent();">
 				Submit
 			</button>
-		</div>
-		<div id="builtinFreePopup" class="popup" style="display: none">
+		</dialog>
+		<dialog id="builtinFreePopup" class="popup">
 			<h2>Built-in backgrounds:</h2>
 			<p>
 				These backgrounds are free for you to use to jazz up your poem's look!
@@ -66,7 +66,7 @@
 			</p>
 			<div class="background-grid" onclick="if (event.target == this) return
 				applyBuiltinBackground(event.target)
-				builtinFreePopup.style.display = 'none'
+				builtinFreePopup.close()
 				">
 				<div>
 					<img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg" />
@@ -153,8 +153,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div id="loadPoemPopup" class="popup" style="display: none;">
+		</dialog>
+		<dialog id="loadPoemPopup" class="popup">
 			<h2>Load poem:</h2>
 			<input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none">
 			<div id="loadedContainer" class="vertical-scroll-shadow"></div>
@@ -188,17 +188,17 @@
 							console.error('Uploaded poem was not a text (.txt) or JSON (.json) file, can not import!')
 						}
 						fetchStorage()
-						loadPoemPopup.style.display = 'none'
+						loadPoemPopup.close()
 					}
 					reader.readAsText(file)
 				}
 				">
 				Import from local file
 			</button>
-			<button class="popup-button" onclick="loadPoemPopup.style.display = 'none';">
+			<button class="popup-button" onclick="loadPoemPopup.close()">
 				Done
 			</button>
-		</div>
+		</dialog>
 		<div class="title-blur" style="z-index: 3">
 			<div style="display: flex">
 				<h2 id="poemName" onpaste="event.preventDefault()" onkeydown="
@@ -241,12 +241,12 @@
 							">
 							Save poem
 						</div>
-						<div onclick="loadPoemPopup.style.display = 'flex'">
+						<div onclick="loadPoemPopup.showModal()">
 							Open another
 						</div>
 						<div onclick="
 							if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
-								licenseAgreePopup.style.display = 'block'
+								licenseAgreePopup.showModal()
 							}
 							else {
 								side.setAttribute('mode', 'upload')
@@ -305,7 +305,7 @@
 							From link
 						</div>
 						<div style="opacity: 0.6">Upload file</div>
-						<div onclick="builtinFreePopup.style.display = 'block';">
+						<div onclick="builtinFreePopup.showModal();">
 							Built-in free
 						</div>
 					</div>
@@ -323,11 +323,11 @@
 			</div>
 			<hr>
 		</div>
-		<div id="editorsPopup" class="popup" style="display: none">
+		<dialog id="editorsPopup" class="popup">
 			<h2>Find someone to invite</h2>
 			<input type="text" placeholder="Search for user by username" />
 			<div id="editorsResults" style="height: 500px"></div>
-		</div>
+		</dialog>
 		<div class="online-editors">
 			Online editors:
 			<div>
@@ -584,8 +584,7 @@
 						<input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px" disabled="" />
 					</div>
 				</div>
-				<button class="popup-button" style="flex-grow: inherit" onclick=" licenseAgreePopup.style.display = 'block'
-					">
+				<button class="popup-button" style="flex-grow: inherit" onclick="licenseAgreePopup.showModal()">
 					Upload to site
 				</button>
 			</div>
@@ -695,7 +694,7 @@
 					cardEl.className = "poem-card"
 					cardEl.onclick = () => {
 						loadKey(localStorage.key(i))
-						loadPoemPopup.style.display = "none"
+						loadPoemPopup.close()
 					};
 					
 					let cardTitle = document.createElement("h4")
@@ -730,7 +729,7 @@
 						
 						cardEl.onclick = async () => {
 							load(await executeAccountAction(actionType.GetDraft, id).json())
-							loadPoemPopup.style.display = "none"
+							loadPoemPopup.close()
 						};
 						
 						let cardTitle = document.createElement("h4")
@@ -818,7 +817,7 @@
 					poemJson.code = localStorage.accountCode
 				}
 				
-				fetch(serverBaseAddress + "/PurgatoryUpload", {
+				fetch(serverBaseAddress + "/purgatory", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(poemJson),
@@ -826,7 +825,7 @@
 				.then((res) => {
 					if (!res.ok) {
 						console.error("Cricical error in uploading" + res)
-						licenseAgreePopup.style.display = "none"
+						licenseAgreePopup.close()
 						alert("Sorry!\n\nFailed to upload poem to purgatory. Maybe try again...")
 						return null
 					}
@@ -880,13 +879,13 @@
 			
 			async function fetchPathJson(path) {
 				return await (
-					await fetch((path.includes("/") ? window.location.origin : serverBaseAddress + "/Purgatory/") + path)
+					await fetch((path.includes("/") ? window.location.origin : serverBaseAddress + "/purgatory/") + path)
 				).json()
 			}
 			
 			async function amendMode() {
 				throw new Error("Not implemented")
-				loadPoemPopup.style.display = "none"
+				loadPoemPopup.close()
 				//Load up amendment poem
 				let currentJson = await fetchPathJson(amend);
 				currentJson.amends = amend
@@ -988,7 +987,7 @@
 			}
 			
 			async function editMode() {
-				loadPoemPopup.style.display = "none"
+				loadPoemPopup.close()
 				let currentJson = await fetchPathJson(edit)
 				currentJson.edits = edit
 				load(currentJson)

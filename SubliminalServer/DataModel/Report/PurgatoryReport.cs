@@ -8,6 +8,6 @@ public class PurgatoryReport : Report
 {
     [Required]
     [ForeignKey(nameof(Poem))]
-    public int PoemKey { get; set; }
+    public int PoemId { get; set; }
     public PurgatoryEntry Poem { get; set; }
 }

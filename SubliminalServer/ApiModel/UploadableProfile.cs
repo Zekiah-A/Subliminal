@@ -1,6 +1,6 @@
 using SubliminalServer.DataModel.Account;
 
-namespace SubliminalServer.DataModel.Api;
+namespace SubliminalServer.ApiModel;
 
 public class UploadableProfile
 {
@@ -27,17 +27,17 @@ public class UploadableProfile
 
     public UploadableProfile(AccountData account)
     {
-        AccountKey = account.AccountKey;
+        AccountKey = account.Id;
         Username = account.Username;
         PenName = account.PenName;
         Biography = account.Biography;
         Location = account.Location;
         Role = account.Role;
         AvatarUrl = account.AvatarUrl;
-        Badges = account.Badges.Select(badge => badge.BadgeKey).ToList();
-        PinnedPoems = account.PinnedPoems.Select(entry => entry.EntryKey).ToList();
-        Poems = account.Poems.Select(entry => entry.EntryKey).ToList();
-        Following = account.Following.Select(profile => profile.AccountKey).ToList();
+        Badges = account.Badges.Select(badge => badge.Id).ToList();
+        PinnedPoems = account.PinnedPoems.Select(entry => entry.Id).ToList();
+        Poems = account.Poems.Select(entry => entry.Id).ToList();
+        Following = account.Following.Select(profile => profile.Id).ToList();
         JoinDate = account.JoinDate;
     }
 }

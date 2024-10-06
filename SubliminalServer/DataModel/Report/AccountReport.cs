@@ -8,7 +8,7 @@ public class AccountReport : Report
 {
     [Required]
     [ForeignKey(nameof(Account))]
-    public int AccountKey { get; set; }
+    public int AccountId { get; set; }
     public AccountData Account { get; set; }
 
 }

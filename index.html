@@ -113,6 +113,7 @@
 			display: flex;
 			flex-direction: column;
 			width: 60%;
+			margin: 0px;
 		}
 
 		.presenter {
@@ -142,6 +143,7 @@
 
 		.presenter-caption {
 			opacity: 0.6;
+			margin-top: 8px;
 			font-style: italic;
 		}
 
@@ -262,7 +264,7 @@
 				<p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
 				<p>As long as it's a poem, it's good enough for subliminal.</p>
 			</div>
-			<div class="presenter-container">
+			<figure class="presenter-container">
 				<div class="presenter">
 					<img src="Resources/AlMogus.webp">
 					<p>
@@ -279,8 +281,8 @@
 						...
 					</p>
 				</div>
-				<span class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</span>
-			</div>
+				<figcaption class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</figcaption>
+			</figure>
 		</div>
 
 		<div id="aboutInfo" class="section-info">
@@ -296,12 +298,12 @@
 
 		<p style="padding-left: 5%;" class="profile-title">Get started</p>
 		<div id="getStartedSection" class="section">
-			<div class="presenter-container">
+			<figure class="presenter-container">
 				<div class="presenter">
 					<img src="Resources/AccountProfile.svg" style="filter: saturate(0.5);">
 				</div>
-				<span class="presenter-caption">Creating a profile for yourself is as cool as it can get!</span>
-			</div>
+				<figcaption class="presenter-caption">Creating a profile for yourself is as cool as it can get!</figcaption>
+			</figure>
 
 			<div style="flex-grow: 1;">
 				<p>Getting started on subliminal is easy!</p>
@@ -355,9 +357,10 @@
 			</div>
 		</div>
 	 </div>
-
-	 <hr>
-	 <p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2024</p>
+	 <footer>
+	 	<hr>
+	 	<p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2024</p>
+	 </footer>
 </body>
 <script>
 	function handleIntersect(entries, observer) {

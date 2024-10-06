@@ -5,13 +5,13 @@ using SubliminalServer.DataModel.Account;
 
 namespace SubliminalServer.DataModel.Purgatory;
 
-[PrimaryKey(nameof(AnnotationKey))]
+[PrimaryKey(nameof(Id))]
 public class PurgatoryAnnotation
 {
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int AnnotationKey { get; set; }
+    public int Id { get; set; }
     
     // Foreign key PurgatoryEntry
     [Required]

@@ -2,18 +2,18 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using SubliminalServer.ApiModel;
 using SubliminalServer.DataModel.Account;
-using SubliminalServer.DataModel.Api;
 
 namespace SubliminalServer.DataModel.Purgatory;
 
-[PrimaryKey(nameof(DraftKey))]
+[PrimaryKey(nameof(Id))]
 public class PurgatoryDraft : UploadableEntry, IDatabasePoem
 {
     // Unique, Primary key
     [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int DraftKey { get; set; }
+    public int Id { get; set; }
 
     // Client submitted
     [MaxLength(300)]
@@ -32,14 +32,14 @@ public class PurgatoryDraft : UploadableEntry, IDatabasePoem
     
     // Foreign key AccountData
     [ForeignKey(nameof(Author))]
-    public int? AuthorKey { get; set; }
+    public int? AuthorId { get; set; }
     [JsonIgnore]
     [JsonPropertyName("Author")]
     public AccountData? Author { get; set; }
     
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Amends))]
-    public int? AmendsKey { get; set; }
+    public int? AmendsId { get; set; }
     [JsonIgnore]
     [JsonPropertyName("Amends")]
     public PurgatoryEntry? Amends { get; set;  }
@@ -47,7 +47,7 @@ public class PurgatoryDraft : UploadableEntry, IDatabasePoem
     // Foreign key PurgatoryEntry
     [ForeignKey(nameof(Edits))]
     [JsonPropertyName("Edits")]
-    public int? EditsKey { get; set; }
+    public int? EditsId { get; set; }
     [JsonIgnore]
     public PurgatoryEntry Edits { get; set; }
 }
