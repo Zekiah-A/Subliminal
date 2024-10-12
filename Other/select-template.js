@@ -1,3 +1,4 @@
+"use strict";
 class SubliminalSelect extends HTMLElement {
 	constructor() {
 		super()

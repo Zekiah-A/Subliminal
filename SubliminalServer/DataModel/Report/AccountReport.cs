@@ -9,6 +9,7 @@ public class AccountReport : Report
     [Required]
     [ForeignKey(nameof(Account))]
     public int AccountId { get; set; }
+    // Navigation property to reported account
     public AccountData Account { get; set; }
 
 }

@@ -3,7 +3,7 @@ using SubliminalServer.ApiModel;
 
 namespace SubliminalServer;
 
-public static partial class Program 
+internal static partial class Program 
 {
     private static void AddProfileEndpoints()
     {
@@ -19,8 +19,7 @@ public static partial class Program
             }
 
             var profile = new UploadableProfile(account);
-            return Results.Json(profile);
+            return Results.Ok(profile);
         });
-        rateLimitEndpoints.Add("/Profiles", (1, TimeSpan.FromMilliseconds(500)));
     }
 }

@@ -1,3 +1,4 @@
+"use strict";
 class ReportPopup extends HTMLElement {
 	constructor() {
 		super()

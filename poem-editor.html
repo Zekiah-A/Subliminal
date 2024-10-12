@@ -1,1030 +1,820 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>Subliminal</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<link rel="stylesheet" href="./styles.css" />
-		<script src="./account.js"></script>
-		<script src="./polyfill.js"></script>
-		<script src="./editor-document.js"></script>
-		<script src="./Other/component-registrar.js"></script>
-		<script src="./Other/notification-template.js"></script>
-		<script src="./Other/select-template.js"></script>
-		<script src="./Other/server.js"></script>
-		<link rel="stylesheet" href="./poem-editor.css">
-	</head>
-	<body style="max-width: 100%; overflow-x: hidden; overflow-y: auto" onclick="editorContext.style.visibility = 'hidden'">
-		<dialog id="licenseAgreePopup" class="popup" style="width: max(30%, 500px)">
-			<h2>You're almost there!</h2>
-			<img src="Resources/Celebration.png" style="width: 100%" />
+<head>
+	<meta charset="UTF-8" />
+	<title>Subliminal</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<link rel="stylesheet" href="./styles.css" />
+	<script src="./account.js"></script>
+	<script src="./polyfill.js"></script>
+	<script src="./editor-document.js"></script>
+	<script src="./Other/component-registrar.js"></script>
+	<script src="./Other/notification-template.js"></script>
+	<script src="./Other/select-template.js"></script>
+	<script src="./Other/poem-canvas-editor-template.js"></script>
+	<script src="./server.js"></script>
+	<link rel="stylesheet" href="./poem-editor.css">
+</head>
+<body style="max-width: 100%; overflow-x: hidden; overflow-y: auto">
+	<dialog id="licenseAgreePopup" class="popup" style="width: max(30%, 500px)">
+		<h2>You're almost there!</h2>
+		<img src="Resources/Celebration.png" style="width: 100%" />
+		<p>
+			When you click submit, your poem will be uploaded publicly to the poem
+			purgatory. For more information, see the license agreement below.
+		</p>
+		<hr/>
+		<h2 style="cursor: pointer" onclick="licenseAgreement.style.display = licenseAgreement.style.display == 'none' ? 'block' : 'none';">
+			License agreement +
+		</h2>
+		<div style="display: none" id="licenseAgreement">
 			<p>
-				When you click submit, your poem will be uploaded publicly to the poem
-				purgatory. For more information, see the license agreement below.
+				All content on this site must be licensed under the Creative Commons
+				Attribution-NonCommercial-ShareAlike 4.0, in order to make open source
+				contribution easy, with the underlying source code used to format and
+				display that content licensed under the GNU GPL-3 license. Summaries
+				of these licenses are available at CC BY-NC-SA and GPL-3.
 			</p>
-			<hr/>
-			<h2 style="cursor: pointer" onclick="licenseAgreement.style.display = licenseAgreement.style.display == 'none' ? 'block' : 'none';">
-				License agreement +
-			</h2>
-			<div style="display: none" id="licenseAgreement">
-				<p>
-					All content on this site must be licensed under the Creative Commons
-					Attribution-NonCommercial-ShareAlike 4.0, in order to make open source
-					contribution easy, with the underlying source code used to format and
-					display that content licensed under the GNU GPL-3 license. Summaries
-					of these licenses are available at CC BY-NC-SA and GPL-3.
-				</p>
-				<p>
-					By uploading your work to this site, you give consent for your poem to
-					be licensed under Creative Commons
-					Attribution-NonCommercial-ShareAlike 4.0.
-				</p>
-				<p>
-					You also agree to allow us permission to store and process your work.
-					We can also accept no responsibility, if you write something that gets
-					you in trouble with people you know, an institution, or local
-					government, you agree that you WILLINGLY chose to upload it here. We
-					accept no responsibility how your work is interpreted, and what
-					consequences may or may not come as a result of it.
-				</p>
-				<p>
-					You will always be the lone copyright owner of your work, we will
-					never take ownership of what you made from you, and we will always
-					comply if you ask for your poem to be modified, and or taken down from
-					this site.
-				</p>
+			<p>
+				By uploading your work to this site, you give consent for your poem to
+				be licensed under Creative Commons
+				Attribution-NonCommercial-ShareAlike 4.0.
+			</p>
+			<p>
+				You also agree to allow us permission to store and process your work.
+				We can also accept no responsibility, if you write something that gets
+				you in trouble with people you know, an institution, or local
+				government, you agree that you WILLINGLY chose to upload it here. We
+				accept no responsibility how your work is interpreted, and what
+				consequences may or may not come as a result of it.
+			</p>
+			<p>
+				You will always be the lone copyright owner of your work, we will
+				never take ownership of what you made from you, and we will always
+				comply if you ask for your poem to be modified, and or taken down from
+				this site.
+			</p>
+		</div>
+		<button class="popup-button" onclick="licenseAgreePopup.close(); uploadCurrent();">
+			Submit
+		</button>
+	</dialog>
+	<dialog id="builtinFreePopup" class="popup">
+		<h2>Built-in backgrounds:</h2>
+		<p>
+			These backgrounds are free for you to use to jazz up your poem's look!
+			Drawn and shot by members of the subliminal team.
+		</p>
+		<div class="background-grid" onclick="if (event.target == this) return
+			applyBuiltinBackground(event.target)
+			builtinFreePopup.close()
+			">
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg" />
+				<div>Taken somewhere in the Chilterns, UK.</div>
 			</div>
-			<button class="popup-button" onclick="licenseAgreePopup.close(); uploadCurrent();">
-				Submit
-			</button>
-		</dialog>
-		<dialog id="builtinFreePopup" class="popup">
-			<h2>Built-in backgrounds:</h2>
-			<p>
-				These backgrounds are free for you to use to jazz up your poem's look!
-				Drawn and shot by members of the subliminal team.
-			</p>
-			<div class="background-grid" onclick="if (event.target == this) return
-				applyBuiltinBackground(event.target)
-				builtinFreePopup.close()
-				">
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/FinlandIntersection.jpg" />
 				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg" />
-					<div>Taken somewhere in the Chilterns, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/FinlandIntersection.jpg" />
-					<div>
-						Taken at an intersection somewhere between Uusikaupunki and
-						Helsinki, Finland.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/IsoBoy.jpg" />
-					<div>
-						A fish that mysteriously disappeared the next day, Island near
-						Uusikaupunki, Finland.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/LondonCity.jpg" />
-					<div>A bridge to the Tate, London, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/LondonStreets.jpg" />
-					<div>A day in the city, near Farringdon, London, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/Portheleven.jpg" />
-					<div>
-						It took standing on a rock in the middle of the sea to get this,
-						Portheleven, UK.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/FalmouthShellCave.jpg" />
-					<div>
-						A really old shell cave, in Gyllyngdune Gardens, Falmouth, UK.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaPath.jpg" />
-					<div>A long path to mount Snowdon (maybe), Wales, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry.jpg" />
-					<div>
-						A spooky snap of quarry taken from a moving vehicle, Snowdonia,
-						Wales, UK.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry2.jpg" />
-					<div>A sunnier view of the massive quarry, Snowdonia, Wales, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry3.jpg" />
-					<div>
-						An atmospheric pee(a)k (punny) of a quarry, Snowdonia, Wales, UK.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/UusikaupunkiHorsepower.jpg" />
-					<div>
-						This boat certainly has more than 5 horsepower, Island near
-						Uusikaupunki, Finland.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/YorkshireMoorRoad.jpg" />
-					<div>A long, long road, past field and moor, Yorkshire, UK.</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/ChaosDrawing.png" />
-					<div>
-						Chaos, for those who want to have a bit of zazz around their stuff.
-					</div>
-				</div>
-				<div>
-					<img loading="lazy" src="./Resources/Backgrounds/AbbstraktBird.png" />
-					<div>
-						Is it a bird? Dog? A secret message of text? All we know is that
-						this mascot is iconic.
-					</div>
+					Taken at an intersection somewhere between Uusikaupunki and
+					Helsinki, Finland.
 				</div>
 			</div>
-		</dialog>
-		<dialog id="loadPoemPopup" class="popup">
-			<h2>Load poem:</h2>
-			<input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none">
-			<div id="loadedContainer" class="vertical-scroll-shadow"></div>
-			<button class="popup-button" onclick="
-				poemImportInput.click() // TODO: Use new filesystem access API
-				for (let file of poemImportInput.files) {
-					let guid = newGuid()
-					let reader = new FileReader()
-					reader.onload = () => {
-						if (file.name.endsWith('.txt')) {
-							// TODO: Do a simple \n to our format replacement
-							let poemData = {
-								summary: '', //meta description
-								tags: '', //meta keywords
-								cWarning: false, //content warning
-								cWarningAdditions: '', //content warning additional notes
-								poemName: file.name.split('.txt')[0],
-								poemAuthor: 'Unknown', //poem header title
-								poemContent: reader.result, //poem html
-								pageStyle: 'poem-centre', //poem visual format
-								pageBackground: '' //poem background image
-							}
-							localStorage.setItem(guid, JSON.stringify(poemData))
-							loadKey(guid)
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/IsoBoy.jpg" />
+				<div>
+					A fish that mysteriously disappeared the next day, Island near
+					Uusikaupunki, Finland.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/LondonCity.jpg" />
+				<div>A bridge to the Tate, London, UK.</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/LondonStreets.jpg" />
+				<div>A day in the city, near Farringdon, London, UK.</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/Portheleven.jpg" />
+				<div>
+					It took standing on a rock in the middle of the sea to get this,
+					Portheleven, UK.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/FalmouthShellCave.jpg" />
+				<div>
+					A really old shell cave, in Gyllyngdune Gardens, Falmouth, UK.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaPath.jpg" />
+				<div>A long path to mount Snowdon (maybe), Wales, UK.</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry.jpg" />
+				<div>
+					A spooky snap of quarry taken from a moving vehicle, Snowdonia,
+					Wales, UK.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry2.jpg" />
+				<div>A sunnier view of the massive quarry, Snowdonia, Wales, UK.</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry3.jpg" />
+				<div>
+					An atmospheric pee(a)k (punny) of a quarry, Snowdonia, Wales, UK.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/UusikaupunkiHorsepower.jpg" />
+				<div>
+					This boat certainly has more than 5 horsepower, Island near
+					Uusikaupunki, Finland.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/YorkshireMoorRoad.jpg" />
+				<div>A long, long road, past field and moor, Yorkshire, UK.</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/ChaosDrawing.png" />
+				<div>
+					Chaos, for those who want to have a bit of zazz around their stuff.
+				</div>
+			</div>
+			<div>
+				<img loading="lazy" src="./Resources/Backgrounds/AbbstraktBird.png" />
+				<div>
+					Is it a bird? Dog? A secret message of text? All we know is that
+					this mascot is iconic.
+				</div>
+			</div>
+		</div>
+	</dialog>
+	<dialog id="loadPoemPopup" class="popup">
+		<h2>Load poem:</h2>
+		<input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none">
+		<div id="loadedContainer" class="vertical-scroll-shadow"></div>
+		<button class="popup-button" onclick="
+			poemImportInput.click() // TODO: Use new filesystem access API
+			for (let file of poemImportInput.files) {
+				let guid = newGuid()
+				let reader = new FileReader()
+				reader.onload = () => {
+					if (file.name.endsWith('.txt')) {
+						// TODO: Do a simple \n to our format replacement
+						let poemData = {
+							summary: '', //meta description
+							tags: '', //meta keywords
+							cWarning: false, //content warning
+							cWarningAdditions: '', //content warning additional notes
+							poemName: file.name.split('.txt')[0],
+							poemAuthor: 'Unknown', //poem header title
+							poemContent: reader.result, //poem html
+							pageStyle: 'poem-centre', //poem visual format
+							pageBackground: '' //poem background image
 						}
-						else if (file.name.endsWith('.json')) {
-							localStorage.setItem(guid, reader.result)
-							loadKey(guid)
+						localStorage.setItem(guid, JSON.stringify(poemData))
+						loadKey(guid)
+					}
+					else if (file.name.endsWith('.json')) {
+						localStorage.setItem(guid, reader.result)
+						loadKey(guid)
+					}
+					else {
+						console.error('Uploaded poem was not a text (.txt) or JSON (.json) file, can not import!')
+					}
+					fetchStorage()
+					loadPoemPopup.close()
+				}
+				reader.readAsText(file)
+			}
+			">
+			Import from local file
+		</button>
+		<button class="popup-button" onclick="loadPoemPopup.close()">
+			Done
+		</button>
+	</dialog>
+	<div class="title-blur" style="z-index: 3">
+		<div style="display: flex">
+			<h2 id="poemName" onpaste="event.preventDefault()" onkeydown="
+				if (event.key === 'Enter') {
+					event.preventDefault()
+					return false
+				}
+				" style="display: inline; flex-grow: 1; text-align: right" contenteditable="true">
+				Click On Me to Start Editing
+			</h2>
+			<h2 class="centre" style="display: inline">&nbsp;- By&nbsp;</h2>
+			<h2 id="poemAuthor" onpaste="event.preventDefault()" onkeydown="
+				if (event.key === 'Enter') {
+					event.preventDefault()
+					return false
+				}
+				" style="display: inline; flex-grow: 1; text-align: left" contenteditable="true">
+				Click On Me to Start Editing
+			</h2>
+		</div>
+		<hr />
+		<div id="formattingToolbar">
+			<button class="toolbar-item" style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+				<div>File ⯆</div>
+				<div class="options" style="width: 140px">
+					<div onclick=" params.delete('edit')
+						params.delete('append')
+						location.href = location.origin + '/poem-editor' + (params ? '?' + params.toString() : '')
+						">
+						Open new
+					</div>
+					<div onclick="
+						downloadCurrent()
+						document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully downloaded poem data.' }))
+					">
+						Download poem
+					</div>
+					<div onclick="saveCurrent()
+						document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully saved poem' }))
+						">
+						Save poem
+					</div>
+					<div onclick="loadPoemPopup.showModal()">
+						Open another
+					</div>
+					<div onclick="
+						if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
+							licenseAgreePopup.showModal()
 						}
 						else {
-							console.error('Uploaded poem was not a text (.txt) or JSON (.json) file, can not import!')
+							side.setAttribute('mode', 'upload')
+							side.removeAttribute('collapsed')
 						}
-						fetchStorage()
-						loadPoemPopup.close()
-					}
-					reader.readAsText(file)
-				}
-				">
-				Import from local file
+					">
+						Upload to site
+					</div>
+				</div>
 			</button>
-			<button class="popup-button" onclick="loadPoemPopup.close()">
-				Done
+			<button class="toolbar-item" onclick="format('undo', null)" style="width: 72px; min-width: 72px">
+				<div>↩ undo</div>
 			</button>
-		</dialog>
-		<div class="title-blur" style="z-index: 3">
-			<div style="display: flex">
-				<h2 id="poemName" onpaste="event.preventDefault()" onkeydown="
-					if (event.key === 'Enter') {
-						event.preventDefault()
-						return false
-					}
-					" style="display: inline; flex-grow: 1; text-align: right" contenteditable="true">
-					Click On Me to Start Editing
-				</h2>
-				<h2 class="centre" style="display: inline">&nbsp;- By&nbsp;</h2>
-				<h2 id="poemAuthor" onpaste="event.preventDefault()" onkeydown="
-					if (event.key === 'Enter') {
-						event.preventDefault()
-						return false
-					}
-					" style="display: inline; flex-grow: 1; text-align: left" contenteditable="true">
-					Click On Me to Start Editing
-				</h2>
-			</div>
-			<hr />
-			<div id="formattingToolbar">
-				<button class="toolbar-item" style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-					<div>File ⯆</div>
-					<div class="options" style="width: 140px">
-						<div onclick=" params.delete('edit')
-							params.delete('append')
-							location.href = location.origin + '/poem-editor' + (params ? '?' + params.toString() : '')
-							">
-							Open new
-						</div>
-						<div onclick="
-							downloadCurrent()
-							document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully downloaded poem data.' }))
-						">
-							Download poem
-						</div>
-						<div onclick="saveCurrent()
-							document.body.appendChild(createFromData('subliminal-notification', { message: 'Successfully saved poem' }))
-							">
-							Save poem
-						</div>
-						<div onclick="loadPoemPopup.showModal()">
-							Open another
-						</div>
-						<div onclick="
-							if (!side.getAttribute('collapsed') && side.getAttribute('mode') == 'upload') {
-								licenseAgreePopup.showModal()
-							}
-							else {
-								side.setAttribute('mode', 'upload')
-								side.removeAttribute('collapsed')
-							}
-						">
-							Upload to site
-						</div>
+			<button class="toolbar-item" onclick="format('redo', null)" style="width: 72px; min-width: 72px">
+				<div>redo ↪</div>
+			</button>
+			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.bold)">
+				<div style="font-weight: bold">B</div>
+			</button>
+			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.italic)">
+				<div style="font-style: italic">I</div>
+			</button>
+			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.monospace)">
+				<div style="font-family: monospace">C</div>
+			</button>
+			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.superscript)">
+				<div>Sup</div>
+			</button>
+			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.subscript)">
+				<div>Sub</div>
+			</button>
+			<button class="toolbar-item" style="position: relative" onclick="formatColourInput.click()">
+				<input id="formatColourInput" type="color" class="tool colour-tool-item" value="#000" oninput="
+					editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
+					formattingColourRect.style.background = this.value
+				" style="display: none;">
+				<div id="formattingColourRect"></div>
+			</button>
+			<button class="toolbar-item">
+				<div>🖼️</div>
+			</button>
+			<div class="toolbar-item separator"></div>
+			<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+				<div>Page layout ⯆</div>
+				<div class="options">
+					<div onclick="changePageStyle('poem-centre')">Poem centre</div>
+					<div onclick="changePageStyle('poem-centre-wide')">Poem wide</div>
+					<div onclick="changePageStyle('centre')">Centre</div>
+				</div>
+			</button>
+			<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+				<div>Background ⯆</div>
+				<div class="options">
+					<div onclick="document.body.style.background = ''">None</div>
+					<div onclick="document.body.style.background = `url(\'${prompt('Enter the background image URL')}\')`">
+						From link
 					</div>
-				</button>
-				<button class="toolbar-item" onclick="format('undo', null)" style="width: 72px; min-width: 72px">
-					<div>↩ undo</div>
-				</button>
-				<button class="toolbar-item" onclick="format('redo', null)" style="width: 72px; min-width: 72px">
-					<div>redo ↪</div>
-				</button>
-				<button class="toolbar-item" onclick="editor.addStyle(styleCodes.bold)">
-					<div style="font-weight: bold">B</div>
-				</button>
-				<button class="toolbar-item" onclick="editor.addStyle(styleCodes.italic)">
-					<div style="font-style: italic">I</div>
-				</button>
-				<button class="toolbar-item" onclick="editor.addStyle(styleCodes.monospace)">
-					<div style="font-family: monospace">C</div>
-				</button>
-				<button class="toolbar-item" onclick="editor.addStyle(styleCodes.superscript)">
-					<div>Sup</div>
-				</button>
-				<button class="toolbar-item" onclick="editor.addStyle(styleCodes.subscript)">
-					<div>Sub</div>
-				</button>
-				<button class="toolbar-item" style="position: relative" onclick="formatColourInput.click()">
-					<input id="formatColourInput" type="color" class="tool colour-tool-item" value="#000" oninput="
-						editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
-						formattingColourRect.style.background = this.value
-					" style="display: none;">
-					<div id="formattingColourRect"></div>
-				</button>
-				<button class="toolbar-item">
-					<div>🖼️</div>
-				</button>
-				<div class="toolbar-item separator"></div>
-				<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-					<div>Page layout ⯆</div>
-					<div class="options">
-						<div onclick="changePageStyle('poem-centre')">Poem centre</div>
-						<div onclick="changePageStyle('poem-centre-wide')">Poem wide</div>
-						<div onclick="changePageStyle('centre')">Centre</div>
+					<div style="opacity: 0.6">Upload file</div>
+					<div onclick="builtinFreePopup.showModal();">
+						Built-in free
 					</div>
-				</button>
-				<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
-					<div>Background ⯆</div>
-					<div class="options">
-						<div onclick="document.body.style.background = ''">None</div>
-						<div onclick="document.body.style.background = `url(\'${prompt('Enter the background image URL')}\')`">
-							From link
-						</div>
-						<div style="opacity: 0.6">Upload file</div>
-						<div onclick="builtinFreePopup.showModal();">
-							Built-in free
-						</div>
-					</div>
-				</button>
-				<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
-					side.setAttribute('mode', 'rhyme')
-					" style="width: 132px; min-width: 132px">
-					<div>Rhyme finder ➕</div>
-				</button>
-				<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
-					side.setAttribute('mode', 'coauthor')
-					" style="width: 132px; min-width: 132px">
-					<div>AI coauthor ➕</div>
-				</button>
-			</div>
-			<hr>
+				</div>
+			</button>
+			<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
+				side.setAttribute('mode', 'rhyme')
+				" style="width: 132px; min-width: 132px">
+				<div>Rhyme finder ➕</div>
+			</button>
+			<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
+				side.setAttribute('mode', 'coauthor')
+				" style="width: 132px; min-width: 132px">
+				<div>AI coauthor ➕</div>
+			</button>
 		</div>
-		<dialog id="editorsPopup" class="popup">
-			<h2>Find someone to invite</h2>
-			<input type="text" placeholder="Search for user by username" />
-			<div id="editorsResults" style="height: 500px"></div>
-		</dialog>
-		<div class="online-editors">
-			Online editors:
+		<hr>
+	</div>
+	<dialog id="editorsPopup" class="popup">
+		<h2>Find someone to invite</h2>
+		<input type="text" placeholder="Search for user by username" />
+		<div id="editorsResults" style="height: 500px"></div>
+	</dialog>
+	<div class="online-editors">
+		Online editors:
+		<div>
+			<img src="Resources/DefaultAvatar.png" style="border-radius: 100%; background-color: white" width="48" height="48" />
+			<div style=" padding: 4px;
+				border-radius: 8px;
+				background: linear-gradient(lightblue, blue);
+				color: white;
+				height: 24px;
+				position: relative;
+				align-self: center;
+				">
+				You
+			</div>
+		</div>
+		<button style="margin-top: 24px" onclick="">Invite editor</button>
+	</div>
+	<div id="main" class="poem-centre">
+		<poem-canvas-editor id="poemEditor"></poem-canvas-editor>
+	</div>
+	<div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
+		if (side.getAttribute('collapsed')) side.removeAttribute('collapsed')
+	">
+		<div class="side-content" upload>
 			<div>
-				<img src="Resources/DefaultAvatar.png" style="border-radius: 100%; background-color: white" width="48" height="48" />
-				<div style=" padding: 4px;
+				<div style="display: flex; flex-direction: row; height: 48px">
+					<p style="margin: 0px; align-self: center">Poem summary:</p>
+				</div>
+				<textarea id="summaryArea" type="text" maxlength="160"></textarea>
+			</div>
+			<div>
+				<div style="display: flex; flex-direction: row; height: 48px">
+					<p style="margin: 0px; align-self: center">Poem tags:</p>
+				</div>
+				<div id="tagContainer">
+					<button add="true" style="line-height: 64px" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">
+					<span>+ Add tag</span>
+					</button>
+				</div>
+			</div>
+			<div>
+				<div style="display: flex; flex-direction: row; height: 48px">
+					<p style="margin: 0px; align-self: center">Content Warning:</p>
+				</div>
+				<div id="cWarningContainer" style=" background: var(--button-opaque);
 					border-radius: 8px;
-					background: linear-gradient(lightblue, blue);
-					color: white;
-					height: 24px;
-					position: relative;
-					align-self: center;
+					padding: 8px;
 					">
-					You
+					<input type="checkbox" id="cWarningCheckbox" onchange="cWarningNotesInput.disabled = this.checked ? false : true" />
+					<label for="cWarningCheckbox"> Enabled</label>
+					<input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px" disabled="" />
 				</div>
 			</div>
-			<button style="margin-top: 24px" onclick="">Invite editor</button>
+			<button class="popup-button" style="flex-grow: inherit" onclick="licenseAgreePopup.showModal()">
+				Upload to site
+			</button>
 		</div>
-		<div id="main" class="poem-centre">
-			<div id="suggestions" class="suggestions" style="display: none">
-				<!--Rhyme suggestions-->
+		<div class="side-content" rhyme>
+			<p>Poem Rhyme finder:</p>
+			<input id="rhymeFinderInput" style="font-size: 16px" type="text" class="popup-input" placeholder="Enter word" />
+			<p style="opacity: 0.6; font-size: 10px">
+				Use * to match any word ending, or ?? to match anything within a word,
+				for example pai* (paint, pain), p???t (paint, print)
+			</p>
+			<!--TODO: Call rhymeFinderFind(rhymeFinderInput.value, event.target.dataset.api)-->
+			<subliminal-select placeholder="Word search type">
+				<option value="ml">Similar meaning</option>
+				<option value="sl">Sound like</option>
+				<option value="sp">Spelled similarly</option>
+				<option value="rel_jjb">Adjectives used to describe</option>
+				<option value="rel_jja">Nouns described by</option>
+				<option value="rel_rhy">Perfect rhymes</option>
+				<option value="rel_nry">Half rhymes</option>
+				<option value="rel_nry">Homophones</option>
+				<option value="rel_ant">Antonyms</option>
+				<option value="rel_nry">Matching consonant</option>
+			</subliminal-select>
+			<div id="sideRhymeMatches">
+				<!--Container for side rhyme match elements-->
 			</div>
-			<!-- Hack to allow for mobile virtual keyboard and input because the virtual keyboard API has stupid restrictions on where you can use .show()-->
-			<input type="text" id="editorInputCatcher" virtualkeyboardpolicy="manual" style="position: absolute; opacity: 0; pointer-events: none"
-				onkeydown="
-					if (!(event.ctrlKey && event.key.toLowerCase() === 'v')) {
-						editorCanvas.dispatchEvent(new event.constructor(event.type, event))
-						event.preventDefault()
-					}
-					// Uses clipboard API if possible
-					else if (navigator.clipboard.readText) {
-						navigator.clipboard.readText()
-							.then((paste) => {
-								editor.insertText(paste)
-								editor.renderCanvasData(editorCanvas)
-							})
-							.catch((error) => {
-								alert('Could not paste text. Please give the site access to the clipboard')
-							})
-					}
-				" onpaste="
-					// HACK: For browsers not supporting the navigator clipboard readText API, we let onkeydown event trickle through
-					// HACK: to an onpaste event, catch the text, and then pass it to the editor and finally surpress inserting text
-					// HACK: into the input
-					if (navigator.clipboard.readText) return
-					const paste = (event.clipboardData || window.clipboardData).getData('text')
-					editor.insertText(paste)
-					editor.renderCanvasData(editorCanvas)
-					event.preventDefault()
-				" />
-			<canvas id="editorCanvas" tabindex="0" ondblclick=" // TODO: Select word on mobile handles
-				" oncontextmenu="
-					editorContext.style.left = (event.clientX) + 'px'
-					editorContext.style.top = (event.clientY) + 'px'
-					editorContext.style.visibility = 'visible'
-					return event.preventDefault()
-				" onmousedown="
-					if (event.button === 2) return
-					event.preventDefault()
-					// TODO: handle virtkeyboard geometry in scrolldown
-					editorInputCatcher.focus()
-					navigator.virtualKeyboard?.show()
-					this['pressed'] = true
-					editor.clearSelection()
-					editor.position = editor.realToTextPosition(event.offsetX, event.offsetY, this)
-					editor.renderCanvasData(this)
-					editorContext.style.visibility = 'hidden'
-				" onmousemove="
-					if (this['pressed']) {
-						let endPosition = editor.realToTextPosition(event.offsetX, event.offsetY, this)
-						editor.selection.start = editor.position > endPosition ? endPosition : editor.position
-						editor.selection.end = editor.position > endPosition ? editor.position : endPosition
-						editor.renderCanvasData(this)
-					}
-				" onmouseup=" this['pressed'] = false
-				" onkeydown="
-					if (event.key === 'Backspace') {
-						editor.deleteText()
-					}
-					else if (event.key === 'Delete') {
-						editor.deleteText(-1)
-					}
-					else if (event.key === 'Enter') {
-						editor.addNewLine()
-						// TODO: only scroll down if cursor becomes off the screen
-						setTimeout(() => window.scrollTo(0, 1e5), 10)
-					}
-					else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-						editor.movePosition(
-							event.key == 'ArrowLeft'
-								? positionMovements.left
-								: event.key == 'ArrowRight'
-								? positionMovements.right
-								: event.key == 'ArrowUp'
-								? positionMovements.up
-								: positionMovements.down, event.shiftKey)
-					}
-					else if (event.key == 'Home') {
-						throw new Error('\'Home\' control key is not implemented')
-					}
-					else if (event.key == 'End') {
-						throw new Error('\'End\' control key is not implemented')
-					}
-					else if (event.key == 'Tab') {
-						editor.insertText('\t')
-					}
-					else if (event.key === 'Shift' || event.key.length > 1) {
-						return
-					}
-					else if (event.ctrlKey) {
-						switch (event.key.toLowerCase()) {
-							case 'a': {
-								editor.selectAll()
-								break
-							}
-							case 'x': {
-								navigator.clipboard.writeText(editor.getSelectionText())
-								editor.deleteSelection()
-								break
-							}
-							case 'c': {
-								navigator.clipboard.writeText(editor.getSelectionText())
-								break
-							}
-							case 'v': {
-								if (navigator.clipboard.readText) { // HACK: See handler in input catcher
-									navigator.clipboard.readText().then((clipText) => editor.insertText(clipText))
-								}
-								break
-							}
-						}
-					}
-					else {
-						editor.insertText(event.key)
-					}
-					editor.renderCanvasData(this)
-				" onblur="editor.renderCanvasData(this, false)" onfocus="editor.renderCanvasData(this)"></canvas>
-			<div id="editorContext">
-				<button type="button" disabled>
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M280-200v-80h284q63 0 109.5-40T720-420q0-60-46.5-100T564-560H312l104 104-56 56-200-200 200-200 56 56-104 104h252q97 0 166.5 63T800-420q0 94-69.5 157T564-200H280Z" />
-					</svg>
-					Undo
-					<span>Ctrl + Z</span>
-				</button>
-				<button type="button" disabled>
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M396-200q-97 0-166.5-63T160-420q0-94 69.5-157T396-640h252L544-744l56-56 200 200-200 200-56-56 104-104H396q-63 0-109.5 40T240-420q0 60 46.5 100T396-280h284v80H396Z" />
-					</svg>
-					Redo
-					<span>Ctrl + Shift + Z</span>
-				</button>
-				<button type="button" onclick="
-					navigator.clipboard.writeText(editor.getSelectionText())
-					editor.deleteSelection()
-					editor.renderCanvasData(editorCanvas)
+			<p style="opacity: 0.6; font-size: 10px">
+				Credits to datamuse for their fantastic API. https://www.datamuse.com/
+			</p>
+		</div>
+		<div class="side-content" coauthor>
+			<p>Poem AI coauthor:</p>
+			<span style="opacity: 0.6">Use the subliminal poem writing AI to help cowrite your work!</span
+				>
+			<subliminal-select placeholder="Base the AI's results off of:">
+				<option>My work so far</option>
+				<option>Subliminal poems</option>
+			</subliminal-select>
+			<button class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
+				Start coauthor
+			</button>
+		</div>
+		<div class="side-content" close>
+			<div class="side-close-button" onclick=" side.setAttribute('collapsed', true)
+				side.setAttribute('mode', 'upload')
+				event.stopPropagation()
 				">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M760-120 480-400l-94 94q8 15 11 32t3 34q0 66-47 113T240-80q-66 0-113-47T80-240q0-66 47-113t113-47q17 0 34 3t32 11l94-94-94-94q-15 8-32 11t-34 3q-66 0-113-47T80-720q0-66 47-113t113-47q66 0 113 47t47 113q0 17-3 34t-11 32l494 494v40H760ZM600-520l-80-80 240-240h120v40L600-520ZM240-640q33 0 56.5-23.5T320-720q0-33-23.5-56.5T240-800q-33 0-56.5 23.5T160-720q0 33 23.5 56.5T240-640Zm240 180q8 0 14-6t6-14q0-8-6-14t-14-6q-8 0-14 6t-6 14q0 8 6 14t14 6ZM240-160q33 0 56.5-23.5T320-240q0-33-23.5-56.5T240-320q-33 0-56.5 23.5T160-240q0 33 23.5 56.5T240-160Z" />
-					</svg>
-					Cut
-					<span>Ctrl + X</span>
-				</button>
-				<button type="button" onclick="
-					const selectionText = editor.getSelectionText()
-					if (selectionText) {
-						navigator.clipboard.writeText()
-						document.body.appendChild(createFromData('subliminal-notification', {
-							message: 'Selection copied to clipboard'
-						}))
-					}
-					else {
-						document.body.appendChild(createFromData('subliminal-notification', {
-							message: 'Couldn\'t copy selection text to clipboard. No selection present'
-						}))
-					}
-				">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
-					</svg>
-					Copy
-					<span>Ctrl + C</span>
-				</button>
-				<button type="button" onclick="
-					if (navigator.clipboard.readText) { // HACK: See handler in input catcher
-						navigator.clipboard.readText().then((clipText) => {
-							editor.insertText(clipText)
-							editor.renderCanvasData(editorCanvas)
-						})
-					}
-					else {
-						document.body.appendChild(createFromData('subliminal-notification', {
-							message: 'Couldn\'t copy text to clipboard. Please give site clipboard permissions'
-						}))
-					}
-				">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm280-560q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z" />
-					</svg>
-					Paste
-					<span>Ctrl + V</span>
-				</button>
-				<button type="button" onclick="
-					editor.deleteSelection()
-					editor.renderCanvasData(editorCanvas)
-				">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-					</svg>
-					Delete
-					<span>Del</span>
-				</button>
-				<button type="button" onclick="
-					editor.selectAll()
-					editor.renderCanvasData(editorCanvas)
-				">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-						<path d="M280-280v-400h400v400H280Zm80-80h240v-240H360v240ZM200-200v80q-33 0-56.5-23.5T120-200h80Zm-80-80v-80h80v80h-80Zm0-160v-80h80v80h-80Zm0-160v-80h80v80h-80Zm80-160h-80q0-33 23.5-56.5T200-840v80Zm80 640v-80h80v80h-80Zm0-640v-80h80v80h-80Zm160 640v-80h80v80h-80Zm0-640v-80h80v80h-80Zm160 640v-80h80v80h-80Zm0-640v-80h80v80h-80Zm160 640v-80h80q0 33-23.5 56.5T760-120Zm0-160v-80h80v80h-80Zm0-160v-80h80v80h-80Zm0-160v-80h80v80h-80Zm0-160v-80q33 0 56.5 23.5T840-760h-80Z" />
-					</svg>
-					Select all
-					<span>Ctrl + A</span>
-				</button>
+				<svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20">
+					<path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
+				</svg>
 			</div>
 		</div>
-		<div id="side" class="document-tools" collapsed="false" mode="upload" onclick="
-			if (side.getAttribute('collapsed')) side.removeAttribute('collapsed')
-		">
-			<div class="side-content" upload>
-				<div>
-					<div style="display: flex; flex-direction: row; height: 48px">
-						<p style="margin: 0px; align-self: center">Poem summary:</p>
-					</div>
-					<textarea id="summaryArea" type="text" maxlength="160"></textarea>
-				</div>
-				<div>
-					<div style="display: flex; flex-direction: row; height: 48px">
-						<p style="margin: 0px; align-self: center">Poem tags:</p>
-					</div>
-					<div id="tagContainer">
-						<button add="true" style="line-height: 64px" onclick="addPoemTag(window.prompt('Enter tag you would like to add'))">
-						<span>+ Add tag</span>
-						</button>
-					</div>
-				</div>
-				<div>
-					<div style="display: flex; flex-direction: row; height: 48px">
-						<p style="margin: 0px; align-self: center">Content Warning:</p>
-					</div>
-					<div id="cWarningContainer" style=" background: var(--button-opaque);
-						border-radius: 8px;
-						padding: 8px;
-						">
-						<input type="checkbox" id="cWarningCheckbox" onchange="cWarningNotesInput.disabled = this.checked ? false : true" />
-						<label for="cWarningCheckbox"> Enabled</label>
-						<input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px" disabled="" />
-					</div>
-				</div>
-				<button class="popup-button" style="flex-grow: inherit" onclick="licenseAgreePopup.showModal()">
-					Upload to site
-				</button>
-			</div>
-			<div class="side-content" rhyme>
-				<p>Poem Rhyme finder:</p>
-				<input id="rhymeFinderInput" style="font-size: 16px" type="text" class="popup-input" placeholder="Enter word" />
-				<p style="opacity: 0.6; font-size: 10px">
-					Use * to match any word ending, or ?? to match anything within a word,
-					for example pai* (paint, pain), p???t (paint, print)
-				</p>
-				<!--TODO: Call rhymeFinderFind(rhymeFinderInput.value, event.target.dataset.api)-->
-				<subliminal-select placeholder="Word search type">
-					<option value="ml">Similar meaning</option>
-					<option value="sl">Sound like</option>
-					<option value="sp">Spelled similarly</option>
-					<option value="rel_jjb">Adjectives used to describe</option>
-					<option value="rel_jja">Nouns described by</option>
-					<option value="rel_rhy">Perfect rhymes</option>
-					<option value="rel_nry">Half rhymes</option>
-					<option value="rel_nry">Homophones</option>
-					<option value="rel_ant">Antonyms</option>
-					<option value="rel_nry">Matching consonant</option>
-				</subliminal-select>
-				<div id="sideRhymeMatches">
-					<!--Container for side rhyme match elements-->
-				</div>
-				<p style="opacity: 0.6; font-size: 10px">
-					Credits to datamuse for their fantastic API. https://www.datamuse.com/
-				</p>
-			</div>
-			<div class="side-content" coauthor>
-				<p>Poem AI coauthor:</p>
-				<span style="opacity: 0.6">Use the subliminal poem writing AI to help cowrite your work!</span
-					>
-				<subliminal-select placeholder="Base the AI's results off of:">
-					<option>My work so far</option>
-					<option>Subliminal poems</option>
-				</subliminal-select>
-				<button class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
-					Start coauthor
-				</button>
-			</div>
-			<div class="side-content" close>
-				<div class="side-close-button" onclick=" side.setAttribute('collapsed', true)
-					side.setAttribute('mode', 'upload')
-					event.stopPropagation()
-					">
-					<svg xmlns="http://www.w3.org/2000/svg" data-name="icons final" viewBox="0 0 20 20">
-						<path d="M18.442 2.442l-.884-.884L10 9.116 2.442 1.558l-.884.884L9.116 10l-7.558 7.558.884.884L10 10.884l7.558 7.558.884-.884L10.884 10l7.558-7.558z"></path>
-					</svg>
-				</div>
-			</div>
-		</div>
-		<a href="./contents" style="z-index: 1" class="back"> &lt;- Back</a>
-	</body>
-	<script>
-		const params = new URLSearchParams(document.location.search)
-		const edit = params.get("edit")
-		const amend = params.get("amend")
-		const decoder = new TextDecoder()
-		const editorScale = 1.5
-		const editor = new EditorDocument("Click On Me to Start Editing", editorScale, 18)
-		let currentGuid = ""
-		let poemTags = []
-		let network = null
-		
-		// Make user confirm that they want to leave the page.
-		window.onbeforeunload = () => true
-		
-		// format title to subliminal title format, used in poem download files, remove all non-fs friendly chars
-		function formatDash(text) {
-			return text
-				.trim()
-				.toLowerCase()
-				.replaceAll(" ", "-")
-				.replaceAll(/(^\.|[<>:"/\|?*])/g, "");
-		}
-			
-		// Save poem with a unique GUID so that we do not encounter overlaps
-		function newGuid() {
-			return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
-				.replace(/[018]/g, (char) =>
-					(char ^(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (char / 4)))).toString(16))
-		}
+	</div>
+	<a href="./contents" style="z-index: 1" class="back"> &lt;- Back</a>
+</body>
+<script>
+	const params = new URLSearchParams(document.location.search)
+	const edit = params.get("edit")
+	const amend = params.get("amend")
+	const decoder = new TextDecoder()
+	let currentGuid = ""
+	let poemTags = []
+	let network = null
 
-		let pageToHtml = (text) => {
-			let htmlObject = document.createElement("body")
-			htmlObject.innerHTML = text
-			return htmlObject
-		};
+	const editor = new EditorDocument("Click On Me to Start Editing", 1.5, 18)
+	poemEditor.useDocument(editor)
+	
+	// Make user confirm that they want to leave the page.
+	window.onbeforeunload = () => true
+	
+	// format title to subliminal title format, used in poem download files, remove all non-fs friendly chars
+	function formatDash(text) {
+		return text
+			.trim()
+			.toLowerCase()
+			.replaceAll(" ", "-")
+			.replaceAll(/(^\.|[<>:"/\|?*])/g, "");
+	}
 		
-		async function fetchStorage() {
-			// Clear anything that may already be in the laoded container
-			while (loadedContainer.firstChild) {
-				loadedContainer.removeChild(loadedContainer.firstChild)
+	// Save poem with a unique GUID so that we do not encounter overlaps
+	function newGuid() {
+		return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11)
+			.replace(/[018]/g, (char) =>
+				(char ^(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (char / 4)))).toString(16))
+	}
+
+	let pageToHtml = (text) => {
+		let htmlObject = document.createElement("body")
+		htmlObject.innerHTML = text
+		return htmlObject
+	};
+	
+	async function fetchStorage() {
+		// Clear anything that may already be in the laoded container
+		while (loadedContainer.firstChild) {
+			loadedContainer.removeChild(loadedContainer.firstChild)
+		}
+		
+		// Fetch poems in localstorage
+		for (let i = 0; i < localStorage.length; i++) {
+			if (localStorage.key(i).length != 36) {
+				console.log(`Could not identify localStorage poem with key ${localStorage.key(i)} as a poem.`)
+				 continue
+			}
+				
+			let current = JSON.parse(localStorage.getItem(localStorage.key(i)))
+			let cardEl = document.createElement("div")
+			cardEl.className = "poem-card"
+			cardEl.onclick = () => {
+				loadKey(localStorage.key(i))
+				loadPoemPopup.close()
+			};
+			
+			let cardTitle = document.createElement("h4")
+			cardTitle.textContent = current.poemName
+			cardEl.appendChild(cardTitle)
+			
+			let cardPreview = document.createElement("p")
+			cardPreview.className = "poem-preview"
+			let pContent = null
+			try {
+				pContent = current.poemContent
+			} catch (e) {
+				continue
+			}
+			cardPreview.textContent = pContent
+			
+			cardEl.appendChild(cardPreview)
+			loadedContainer.appendChild(cardEl)
+		}
+		
+		// If logged in, try to fetch poems from the subliminal cloud
+		if (localStorage.code) {
+			let draftPoemIds = await getAccountData().draftPoemIds
+			
+			for (let id of draftPoemIds) {
+				let draft = await executeAccountAction(
+					actionType.GetDraft,
+					id
+				).json()
+				let cardEl = document.createElement("div")
+				cardEl.className = "poem-card"
+				
+				cardEl.onclick = async () => {
+					load(await executeAccountAction(actionType.GetDraft, id).json())
+					loadPoemPopup.close()
+				};
+				
+				let cardTitle = document.createElement("h4")
+				cardTitle.textContent = draft.poemName
+				cardEl.appendChild(cardTitle)
+				
+				let cardPreview = document.createElement("p")
+				cardPreview.className = "poem-preview"
+				cardPreview.textContent = draft.poemContent
+			}
+		}
+	}
+		
+		function saveCurrent() {
+			let saveData = {
+				summary: summaryArea.value, //meta description
+				tags: poemTags.toString(), //meta keywords
+				cWarning: cWarningCheckbox.checked, //content warning
+				cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
+				poemName: poemName.innerText,
+				poemAuthor: poemAuthor.innerText, //poem header title
+				poemContent: editor.data, //poem html
+				pageStyle: main.className, //poem visual format
+				pageBackground: document.body.style.background //poem background image
 			}
 			
-			// Fetch poems in localstorage
-			for (let i = 0; i < localStorage.length; i++) {
-				if (localStorage.key(i).length != 36) {
-					console.log(`Could not identify localStorage poem with key ${localStorage.key(i)} as a poem.`)
-					 continue
+			currentGuid ||= newGuid()
+			localStorage.setItem(currentGuid, JSON.stringify(saveData))
+			
+			//Refresh load box with latest poem.
+			fetchStorage()
+		}
+		
+		function loadKey(key) {
+			currentGuid = key
+			let poemJson = JSON.parse(localStorage.getItem(key))
+			load(poemJson)
+		}
+		
+		function load(poemJson) {
+			poemTags = [];
+			while (!tagContainer.lastElementChild.getAttribute("add")) {
+				tagContainer.removeChild(tagContainer.lastElementChild)
+			}
+			
+			if (poemJson.tags) {
+				for (let tag of poemJson.tags?.split(",")) {
+					addPoemTag(tag)
 				}
-					
-					let current = JSON.parse(localStorage.getItem(localStorage.key(i)))
-					let cardEl = document.createElement("div")
-					cardEl.className = "poem-card"
-					cardEl.onclick = () => {
-						loadKey(localStorage.key(i))
-						loadPoemPopup.close()
-					};
-					
-					let cardTitle = document.createElement("h4")
-					cardTitle.textContent = current.poemName
-					cardEl.appendChild(cardTitle)
-					
-					let cardPreview = document.createElement("p")
-					cardPreview.className = "poem-preview"
-					let pContent = null
-					try {
-						pContent = current.poemContent
-					} catch (e) {
-						continue
-					}
-					cardPreview.textContent = pContent
-					
-					cardEl.appendChild(cardPreview)
-					loadedContainer.appendChild(cardEl)
+			}
+			
+			summaryArea.value = poemJson.summary ?? ""
+			cWarningCheckbox.checked = poemJson.cWarning ?? ""
+			cWarningNotesInput.disabled = !poemJson.cWarning
+			cWarningNotesInput.value = poemJson.cWarningAdditions ?? ""
+			poemName.innerText = poemJson.poemName ?? "undefined"
+			poemAuthor.innerText = poemJson.poemAuthor ?? "undefined"
+			editor.data = poemJson.poemContent ?? "undefined"
+			document.body.style.background = poemJson.pageBackground ?? ""
+			changePageStyle(poemJson.pageStyle ?? "poem-centre")
+		}
+		
+		//This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
+		function downloadCurrent() {
+			saveCurrent()
+			let el = document.createElement("a")
+			el.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(currentGuid)))
+			el.setAttribute("download", formatDash(poemName.innerText) + ".json")
+			el.style.display = "none"
+			document.body.appendChild(el)
+			el.click()
+			document.body.removeChild(el)
+		}
+		
+		async function uploadCurrent() {
+			saveCurrent()
+			let loadObject = JSON.parse(localStorage.getItem(currentGuid))
+			
+			await upload(loadObject)
+		}
+		
+		async function upload(poemJson) {
+			if (await isLoggedIn()) {
+				poemJson.code = localStorage.accountCode
+			}
+			
+			fetch(serverBaseAddress + "/purgatory", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(poemJson),
+			})
+			.then((res) => {
+				if (!res.ok) {
+					console.error("Cricical error in uploading" + res)
+					licenseAgreePopup.close()
+					alert("Sorry!\n\nFailed to upload poem to purgatory. Maybe try again...")
+					return null
 				}
 				
-				// If logged in, try to fetch poems from the subliminal cloud
-				if (localStorage.code) {
-					let draftPoemIds = await getAccountData().draftPoemIds
-					
-					for (let id of draftPoemIds) {
-						let draft = await executeAccountAction(
-							actionType.GetDraft,
-							id
-						).json()
-						let cardEl = document.createElement("div")
-						cardEl.className = "poem-card"
-						
-						cardEl.onclick = async () => {
-							load(await executeAccountAction(actionType.GetDraft, id).json())
-							loadPoemPopup.close()
-						};
-						
-						let cardTitle = document.createElement("h4")
-						cardTitle.textContent = draft.poemName
-						cardEl.appendChild(cardTitle)
-						
-						let cardPreview = document.createElement("p")
-						cardPreview.className = "poem-preview"
-						cardPreview.textContent = draft.poemContent
-					}
-				}
-			}
-			
-			function saveCurrent() {
-				let saveData = {
-					summary: summaryArea.value, //meta description
-					tags: poemTags.toString(), //meta keywords
-					cWarning: cWarningCheckbox.checked, //content warning
-					cWarningAdditions: cWarningNotesInput.value, //content warning additional notes
-					poemName: poemName.innerText,
-					poemAuthor: poemAuthor.innerText, //poem header title
-					poemContent: editor.data, //poem html
-					pageStyle: main.className, //poem visual format
-					pageBackground: document.body.style.background //poem background image
-				}
-				
-				currentGuid ||= newGuid()
-				localStorage.setItem(currentGuid, JSON.stringify(saveData))
-				
-				//Refresh load box with latest poem.
-				fetchStorage()
-			}
-			
-			function loadKey(key) {
-				currentGuid = key
-				let poemJson = JSON.parse(localStorage.getItem(key))
-				load(poemJson)
-			}
-			
-			function load(poemJson) {
-				poemTags = [];
-				while (!tagContainer.lastElementChild.getAttribute("add")) {
-					tagContainer.removeChild(tagContainer.lastElementChild)
-				}
-				
-				if (poemJson.tags) {
-					for (let tag of poemJson.tags?.split(",")) {
-						addPoemTag(tag)
-					}
-				}
-				
-				summaryArea.value = poemJson.summary ?? ""
-				cWarningCheckbox.checked = poemJson.cWarning ?? ""
-				cWarningNotesInput.disabled = !poemJson.cWarning
-				cWarningNotesInput.value = poemJson.cWarningAdditions ?? ""
-				poemName.innerText = poemJson.poemName ?? "undefined"
-				poemAuthor.innerText = poemJson.poemAuthor ?? "undefined"
-				editor.data = poemJson.poemContent ?? "undefined"
-				document.body.style.background = poemJson.pageBackground ?? ""
-				changePageStyle(poemJson.pageStyle ?? "poem-centre")
-				editor.renderCanvasData(editorCanvas)
-			}
-			
-			//This itelf is just the poem-editor, content will be moved from here to a new template file, and then downloaded
-			function downloadCurrent() {
-				saveCurrent()
-				let el = document.createElement("a")
-				el.setAttribute("href", "data:text/html;charset=UTF-8," + encodeURIComponent(localStorage.getItem(currentGuid)))
-				el.setAttribute("download", formatDash(poemName.innerText) + ".json")
-				el.style.display = "none"
-				document.body.appendChild(el)
-				el.click()
-				document.body.removeChild(el)
-			}
-			
-			async function uploadCurrent() {
-				saveCurrent()
-				let loadObject = JSON.parse(localStorage.getItem(currentGuid))
-				
-				await upload(loadObject)
-			}
-			
-			async function upload(poemJson) {
-				if (await isLoggedIn()) {
-					poemJson.code = localStorage.accountCode
-				}
-				
-				fetch(serverBaseAddress + "/purgatory", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(poemJson),
-				})
-				.then((res) => {
-					if (!res.ok) {
-						console.error("Cricical error in uploading" + res)
-						licenseAgreePopup.close()
-						alert("Sorry!\n\nFailed to upload poem to purgatory. Maybe try again...")
-						return null
-					}
-					
-					return res.text()
-				})
-				.then((guidResponse) => {
-					if (guidResponse == null) {
-						return
-					}
-					
-					console.log("Upload sucessful, redirecting.")
-					window.onbeforeunload = () => {}
-					window.location.href = "./contents?purgatorynew=" + guidResponse
-				});
-			}
-			
-			function changePageStyle(newStyle) {
-				main.className = newStyle;
-				editorCanvas.width = editorCanvas.offsetWidth * editorScale
-				editor.renderCanvasData(editorCanvas)
-			}
-			
-			function applyBuiltinBackground(target) {
-				if (!target.src) return
-				document.body.style.background = `url('${target.src}')`
-			}
-			
-			function addPoemTag(tagName) {
-				if (!tagName || poemTags.includes(tagName) || poemTags.length >= 5) {
+				return res.text()
+			})
+			.then((guidResponse) => {
+				if (guidResponse == null) {
 					return
 				}
-				tagName = tagName.replace(/\W+/g, "").slice(0, 12)
-				poemTags.push(tagName)
-				let newTag = document.createElement("button")
-				let newLabel = document.createElement("span")
-				newLabel.textContent = tagName
-				newTag.appendChild(newLabel)
-				newTag.onclick = () => {
-					removePoemTag(tagName)
-				}
-				tagContainer.appendChild(newTag)
-			}
-			
-			function removePoemTag(tagName) {
-				poemTags.splice(poemTags.indexOf(tagName), 1)
-				for (let tag of tagContainer.children) {
-					if (tag.innerText == tagName) tagContainer.removeChild(tag)
-				}
-			}
-			
-			async function fetchPathJson(path) {
-				return await (
-					await fetch((path.includes("/") ? window.location.origin : serverBaseAddress + "/purgatory/") + path)
-				).json()
-			}
-			
-			async function amendMode() {
-				throw new Error("Not implemented")
-				loadPoemPopup.close()
-				//Load up amendment poem
-				let currentJson = await fetchPathJson(amend);
-				currentJson.amends = amend
-				/*TODO: Reimplement
-				  originalContent.style.display = "block"
-				  originalContent.style.top = content.offsetTop + "px"
-				  originalContent.style.maxWidth = content.offsetWidth + "px"
-				  originalContent.innerHTML = currentJson.poemContent || ""*/
-				load(currentJson)
-			}
-			
-			async function rhymeFinderFind(word, apiPath) {
-				let path = "https://api.datamuse.com/words?" + apiPath + "=" + word.replaceAll(" ", "+")
-				if ((word.includes("*") || word.includes("?")) && apiPath != "sp") {
-					path += "&sp=" + word
-				}
 				
-				let response = await fetch(path);
-				let matches = response.ok ? await response.json() : []
-				
-				while (sideRhymeMatches.lastElementChild) {
-					sideRhymeMatches.removeChild(sideRhymeMatches.lastElementChild)
-				}
-				
-				matches.sort((a, b) => a.score > b.score ? -1 : a.score == b.score ? 0 : 1)
-				
-				for (let match of matches) {
-					let el = document.createElement("div")
-					el.textContent = match.word
-					let score = document.createElement("span")
-					score.style.opacity = "0.6"
-					score.textContent = " (" + match.score + " score)"
-					el.appendChild(score)
-					sideRhymeMatches.appendChild(el)
-				}
+				console.log("Upload sucessful, redirecting.")
+				window.onbeforeunload = () => {}
+				window.location.href = "./contents?purgatorynew=" + guidResponse
+			});
+		}
+		
+		function changePageStyle(newStyle) {
+			main.className = newStyle
+			poemEditor.updateCanvas()
+		}
+		
+		function applyBuiltinBackground(target) {
+			if (!target.src) return
+			document.body.style.background = `url('${target.src}')`
+		}
+		
+		function addPoemTag(tagName) {
+			if (!tagName || poemTags.includes(tagName) || poemTags.length >= 5) {
+				return
+			}
+			tagName = tagName.replace(/\W+/g, "").slice(0, 12)
+			poemTags.push(tagName)
+			let newTag = document.createElement("button")
+			let newLabel = document.createElement("span")
+			newLabel.textContent = tagName
+			newTag.appendChild(newLabel)
+			newTag.onclick = () => {
+				removePoemTag(tagName)
+			}
+			tagContainer.appendChild(newTag)
+		}
+		
+		function removePoemTag(tagName) {
+			poemTags.splice(poemTags.indexOf(tagName), 1)
+			for (let tag of tagContainer.children) {
+				if (tag.innerText == tagName) tagContainer.removeChild(tag)
+			}
+		}
+		
+		async function fetchPathJson(path) {
+			return await (
+				await fetch((path.includes("/") ? window.location.origin : serverBaseAddress + "/purgatory/") + path)
+			).json()
+		}
+		
+		async function amendMode() {
+			throw new Error("Not implemented")
+			loadPoemPopup.close()
+			//Load up amendment poem
+			let currentJson = await fetchPathJson(amend);
+			currentJson.amends = amend
+			/*TODO: Reimplement
+			  originalContent.style.display = "block"
+			  originalContent.style.top = content.offsetTop + "px"
+			  originalContent.style.maxWidth = content.offsetWidth + "px"
+			  originalContent.innerHTML = currentJson.poemContent || ""*/
+			load(currentJson)
+		}
+		
+		async function rhymeFinderFind(word, apiPath) {
+			let path = "https://api.datamuse.com/words?" + apiPath + "=" + word.replaceAll(" ", "+")
+			if ((word.includes("*") || word.includes("?")) && apiPath != "sp") {
+				path += "&sp=" + word
 			}
 			
-			async function getRhymes(word) {
-				let response = await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)
-				return response.ok ? await response.json() : []
+			let response = await fetch(path);
+			let matches = response.ok ? await response.json() : []
+			
+			while (sideRhymeMatches.lastElementChild) {
+				sideRhymeMatches.removeChild(sideRhymeMatches.lastElementChild)
 			}
 			
-			async function getWordInfo(word) {
-				let response = await fetch("https://rhymebrain.com/talk?function=getWordInfo&word=" + word)
-				return response.ok ? await response.json() : null
-			}
+			matches.sort((a, b) => a.score > b.score ? -1 : a.score == b.score ? 0 : 1)
 			
-			async function spawnRhymePopup(event) {
-				const findWord = (text, position) => {
-					const after = text.substring(position).match(/^[a-zA-Z0-9-_]+/)
-					const before = text.substring(0, position).match(/[a-zA-Z0-9-_]+$/)
-					return (before || "") + (after || "");
-				};
+			for (let match of matches) {
+				let el = document.createElement("div")
+				el.textContent = match.word
+				let score = document.createElement("span")
+				score.style.opacity = "0.6"
+				score.textContent = " (" + match.score + " score)"
+				el.appendChild(score)
+				sideRhymeMatches.appendChild(el)
+			}
+		}
+		
+		async function getRhymes(word) {
+			let response = await fetch("https:\/\/rhymebrain.com/talk?function=getRhymes&word=" + word)
+			return response.ok ? await response.json() : []
+		}
+		
+		async function getWordInfo(word) {
+			let response = await fetch("https://rhymebrain.com/talk?function=getWordInfo&word=" + word)
+			return response.ok ? await response.json() : null
+		}
+		
+		async function spawnRhymePopup(event) {
+			const findWord = (text, position) => {
+				const after = text.substring(position).match(/^[a-zA-Z0-9-_]+/)
+				const before = text.substring(0, position).match(/[a-zA-Z0-9-_]+$/)
+				return (before || "") + (after || "");
+			};
 
-				// TODO: Fix for new poem editor system
-				let offset =
-					document.getSelection().baseOffset ||
-					document.getSelection().getRangeAt(0).startOffset
-				let selectedWord = findWord(event.target.textContent, offset)
-				let rhymes = await getRhymes(selectedWord)
-				let selectedSyllables = (await getWordInfo(selectedWord))?.syllables || 2
-				if (offset == null || rhymes == null) return
-				
-				rhymes.sort((a, b) => Math.abs(selectedSyllables - a.syllables) < Math.abs(selectedSyllables - b.syllables)
-					? -1
-					: Math.abs(selectedSyllables - a.syllables) == Math.abs(selectedSyllables - b.syllables) ? 0 : 1)
+			// TODO: Fix for new poem editor system
+			let offset =
+				document.getSelection().baseOffset ||
+				document.getSelection().getRangeAt(0).startOffset
+			let selectedWord = findWord(event.target.textContent, offset)
+			let rhymes = await getRhymes(selectedWord)
+			let selectedSyllables = (await getWordInfo(selectedWord))?.syllables || 2
+			if (offset == null || rhymes == null) return
+			
+			rhymes.sort((a, b) => Math.abs(selectedSyllables - a.syllables) < Math.abs(selectedSyllables - b.syllables)
+				? -1
+				: Math.abs(selectedSyllables - a.syllables) == Math.abs(selectedSyllables - b.syllables) ? 0 : 1)
 
-				while (suggestions.lastElementChild) {
-					suggestions.removeChild(suggestions.lastElementChild)
-				}
-				
-				for (let rhyme of rhymes) {
-					if (!rhyme.word || rhyme.word.length <= 1) continue
-					let item = document.createElement("div")
-					item.className = "suggestions-item"
-					item.innerHTML = `<span>${rhyme.word}</span><span>(${rhyme.syllables} syllable${rhyme.syllables > 1 ? "s" : ""})</span>`
-					suggestions.appendChild(item)
-				}
-				
+			while (suggestions.lastElementChild) {
+				suggestions.removeChild(suggestions.lastElementChild)
+			}
+			
+			for (let rhyme of rhymes) {
+				if (!rhyme.word || rhyme.word.length <= 1) continue
 				let item = document.createElement("div")
 				item.className = "suggestions-item"
-				item.innerHTML = `<span>❤️&nbsp;</span><span>All credits goes to rhymebrain for their fantastic API. https://rhymebrain.com</span>`
+				item.innerHTML = `<span>${rhyme.word}</span><span>(${rhyme.syllables} syllable${rhyme.syllables > 1 ? "s" : ""})</span>`
 				suggestions.appendChild(item)
-				
-				suggestions.style.display = "block"
-				suggestions.style.top = event.offsetY + 48 + "px"
-				suggestions.style.left = event.offsetX + 16 + "px"
-				suggestions.scrollTo(0, 0)
-				suggestions.animate([{ maxHeight: "0px" }, { maxHeight: "256px" }], {
-					duration: 200,
-					iterations: 1,
-					fill: "both",
-				})
 			}
 			
-			function appendRhyme(event) {
-				// TODO: Rhyme
-				console.log(event)
-			}
+			let item = document.createElement("div")
+			item.className = "suggestions-item"
+			item.innerHTML = `<span>❤️&nbsp;</span><span>All credits goes to rhymebrain for their fantastic API. https://rhymebrain.com</span>`
+			suggestions.appendChild(item)
 			
-			async function editMode() {
-				loadPoemPopup.close()
-				let currentJson = await fetchPathJson(edit)
-				currentJson.edits = edit
-				load(currentJson)
-			}
-			
-			if (amend)
-			amendMode(); //enter poem amendment mode
-			else if (edit) editMode();
-			else fetchStorage(); //Load saved poems from local storage
-			
-			formattingToolbar.addEventListener("mousemove", (event) => {
-				for (let button of formattingToolbar.children) {
-					if (button.className == "separator") continue;
-					button.style.background =
-						"radial-gradient(at left " +
-						(event.screenX - button.offsetLeft) +
-						"px top " +
-						(event.screenY - button.offsetTop) +
-						"px, darkgray, var(--background-opaque)"
-				}
-			});
-			
-			formattingToolbar.addEventListener("mouseleave", (event) => {
-				for (let button of formattingToolbar.children) {
-					if (button.className == "separator") continue
-					button.style.background = "none"
-				}
-			});
-			
-			addEventListener("resize", (event) => {
-				editorCanvas.width = editorCanvas.offsetWidth * editorScale
-				editorCanvas.height = editorCanvas.offsetHeight * editorScale
-				editor.renderCanvasData(editorCanvas)
+			suggestions.style.display = "block"
+			suggestions.style.top = event.offsetY + 48 + "px"
+			suggestions.style.left = event.offsetX + 16 + "px"
+			suggestions.scrollTo(0, 0)
+			suggestions.animate([{ maxHeight: "0px" }, { maxHeight: "256px" }], {
+				duration: 200,
+				iterations: 1,
+				fill: "both",
 			})
-			
-			editorCanvas.width = editorCanvas.offsetWidth * editorScale
-			editorCanvas.height = editorCanvas.offsetHeight * editorScale
-			editor.renderCanvasData(editorCanvas, false)
-	</script>
+		}
+		
+		function appendRhyme(event) {
+			// TODO: Rhyme
+			console.log(event)
+		}
+		
+		async function editMode() {
+			loadPoemPopup.close()
+			let currentJson = await fetchPathJson(edit)
+			currentJson.edits = edit
+			load(currentJson)
+		}
+		
+		if (amend)
+		amendMode(); //enter poem amendment mode
+		else if (edit) editMode();
+		else fetchStorage(); //Load saved poems from local storage
+		
+		formattingToolbar.addEventListener("mousemove", (event) => {
+			for (let button of formattingToolbar.children) {
+				if (button.className == "separator") continue;
+				button.style.background =
+					"radial-gradient(at left " +
+					(event.screenX - button.offsetLeft) +
+					"px top " +
+					(event.screenY - button.offsetTop) +
+					"px, darkgray, var(--background-opaque)"
+			}
+		});
+		
+		formattingToolbar.addEventListener("mouseleave", (event) => {
+			for (let button of formattingToolbar.children) {
+				if (button.className == "separator") continue
+				button.style.background = "none"
+			}
+		});
+		
+		
+</script>
 </html>

@@ -1,3 +1,4 @@
+"use strict";
 class LoginSignup extends HTMLElement {
 	#nocancel = false
 
@@ -203,13 +204,13 @@ class LoginSignup extends HTMLElement {
 		}
 	}
 
-	//Impossible to log in without code, GUID can be retrieved though
 	async signin(username, email) {
+		let signinData = null
 		try {
 			const signinResponse = await fetch(serverBaseAddress + "/auth/signin", {
 				method: "POST",
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ Username: username, Email: email })
+				body: JSON.stringify({ username, email })
 			})
 
 			if (!signinResponse.ok) {
@@ -217,19 +218,16 @@ class LoginSignup extends HTMLElement {
 				return
 			}
 
-			const signinData = await signinResponse.json()
-		
-			localStorage.accountUsername = username
-			localStorage.accountEmail = email
-			//localStorage.accountGuid = signinData.guid
-
-			showMyAccount()
+			signinData = await signinResponse.json()
+			//sessionStorage.accountId = signinData.id
+			//sessionStorage.accountToken = signinData.token
+			this.login.close()
 		}
 		catch (error) {
 			this.confirmFail(error)
 		}
 
-		const finishEvent = new CustomEvent("finished", { type: "signin" })
+		const finishEvent = new CustomEvent("finished", { type: "signin", data: signinData })
 		this.dispatchEvent(finishEvent)
 	}
 

@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Will instance the given element, returning it so that it can be inserted into the DOM.
  * @param {HTMLElement} name Element to be instanced
@@ -8,7 +9,9 @@ function createFromData(name, data = null) {
 	let element = document.createElement(name)
 	if (data) {
 		for (const [key, value] of Object.entries(data)) {
-			element.setAttribute(key, value.toString())
+			if (value !== undefined) {
+				element.setAttribute("data-" + key, value.toString())
+			}
 		}
 	}
 	// TODO: This causes issues with some nodes wanting to be IN the dom before methods can be used on them

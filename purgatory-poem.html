@@ -2,17 +2,19 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Subliminal - Loading...</title>
+	<title>Subliminal</title>
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
 	<meta name="keywords" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<script src="account.js"></script>
 	<script src="./editor-document.js"></script>
-	<script src="./Other/server.js"></script>
+	<script src="./server.js"></script>
 	<script src="./Other/component-registrar.js"></script>
 	<script src="./Other/poem-ghost-template.js"></script>
 	<script src="./Other/poem-load-cover-template.js"></script>
+	<script src="./Other/account-options-template.js"></script>
 	<style>
 		.rating-container {
 			user-select: none;
@@ -41,15 +43,17 @@
 			flex: 1 1 0px;
 		}
 
-		.action-icon {
+		.title-options {
+			display: flex;
+			column-gap: 8px;
 			position: absolute;
+			right: 24px;
 			top: 50%;
 			transform: translateY(-50%);
-			opacity: 0.6;
-			cursor:pointer;
 		}
 
 		.action-icon:hover path {
+			cursor: pointer;
 			transition: .2s all;
 		}
 
@@ -68,18 +72,21 @@
 <!--<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m16.15 37.75 7.85-4.7 7.85 4.75-2.1-8.9 6.9-6-9.1-.8L24 13.7l-3.55 8.35-9.1.8 6.9 6Zm7.85-1.2-9.3 5.6q-.4.25-.85.225-.45-.025-.8-.275-.35-.25-.525-.65-.175-.4-.075-.9l2.45-10.6-8.2-7.15q-.4-.35-.475-.775-.075-.425.025-.825.1-.4.45-.675t.85-.325l10.85-.95 4.2-10q.2-.45.6-.675.4-.225.8-.225t.8.225q.4.225.6.675l4.2 10 10.85.95q.5.05.85.325t.45.675q.1.4.025.825-.075.425-.475.775l-8.2 7.15 2.45 10.6q.1.5-.075.9t-.525.65q-.35.25-.8.275-.45.025-.85-.225Zm0-10.3Z"/></svg>-->
 <body>
 	<div class="title-blur">
-		<div style="display: flex;">
+		<div class="title-header">
 			<h2 id="poemTitle" style="display: inline; flex-grow: 1; text-align: end; margin-bottom: 12px;">Poem</h2>
 			<h2 style="display: inline; margin-bottom: 12px; white-space: pre;"> - By </h2>
 			<h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px;">Author</h2>
 		</div>
-		<svg id="likeButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 56px;" class="action-icon" onclick="togglePoemLike(this.getAttribute('liked'))">
-			<path id="likePath" d="m12 44 3-15-11-9 14-2 6-14 6 14 14 2-11 9 3 15-12-8Z" style="fill:#ffd500;fill-opacity:1;stroke:var(--text-colour);stroke-width:1.8049;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
-		</svg>
-		<svg id="pinButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 16px;" class="action-icon" onclick="togglePoemPin(this.getAttribute('pinned'))">
-			<defs><linearGradient id="a"><stop style="stop-color:red;stop-opacity:1" offset="0"/><stop style="stop-color:red;stop-opacity:1" offset=".7"/><stop style="stop-color:#b1b1b1;stop-opacity:1" offset=".7"/><stop style="stop-color:#909090;stop-opacity:1" offset="1"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="48" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.95894 0 0 .95892 1 1)"/></defs>
-			<path id="pinPath" d="M30 6s0 0 0 0l1 3v1L18 20l-1 1h0-1c-4-1-7-2-10 1v2l8 8-3 4-8 9 9-8 4-3 8 8h2s0 0 0 0c2-3 2-7 1-10 0 0 0 0 0 0l12-15h0l3 1v-1l3-2v-1L34 3h0l-4 3z" style="fill:url(#b);fill-opacity:1;stroke:var(--text-colour);stroke-width:1.99677;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
-		</svg>
+		<div class="title-options">
+			<svg id="likeButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 56px;" class="action-icon" onclick="togglePoemLike(this.getAttribute('liked'))">
+				<path id="likePath" d="m12 44 3-15-11-9 14-2 6-14 6 14 14 2-11 9 3 15-12-8Z" style="fill:#ffd500;fill-opacity:1;stroke:var(--text-colour);stroke-width:1.8049;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
+			</svg>
+				<svg id="pinButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 16px;" class="action-icon" onclick="togglePoemPin(this.getAttribute('pinned'))">
+				<defs><linearGradient id="a"><stop style="stop-color:red;stop-opacity:1" offset="0"/><stop style="stop-color:red;stop-opacity:1" offset=".7"/><stop style="stop-color:#b1b1b1;stop-opacity:1" offset=".7"/><stop style="stop-color:#909090;stop-opacity:1" offset="1"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="48" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.95894 0 0 .95892 1 1)"/></defs>
+					<path id="pinPath" d="M30 6s0 0 0 0l1 3v1L18 20l-1 1h0-1c-4-1-7-2-10 1v2l8 8-3 4-8 9 9-8 4-3 8 8h2s0 0 0 0c2-3 2-7 1-10 0 0 0 0 0 0l12-15h0l3 1v-1l3-2v-1L34 3h0l-4 3z" style="fill:url(#b);fill-opacity:1;stroke:var(--text-colour);stroke-width:1.99677;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
+			</svg>
+			<account-options></account-options>
+		</div>
 		<hr>
 	</div>
 	<div id="poemMain" class="poem-centre">
@@ -97,7 +104,7 @@
 			<a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
 		</div>
 	</div>
-	<div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
+	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">
 		<h2>Edit poem:</h2>
 		<div style="display: flex; column-gap: 8px;">
 			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
@@ -108,8 +115,8 @@
 			</button>
 		</div>
 		<br>
-		<button class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</button>
-	</div>
+		<button class="popup-button" onclick="editFrame.close()">Cancel</button>
+	</dialog>
 	<div id="profileFrame" style="display: none;" class="popup">
 		<iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
 		<button class="popup-button" onclick="profileFrame.style.display = 'none';">Done</button>
@@ -142,14 +149,14 @@ ___________________________________________________________
 		</pre>
 	</div>  
 	<a href="../../contents" class="back"> &lt;- Back</a>
-	<div onclick="editFrame.style.display = 'block';" class="edit">
+	<div onclick="editFrame.showModal()" class="edit">
 		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
 	</div>
 </body>
 <script>
 	const params = new URLSearchParams(document.location.search)
 	const encoder = new TextEncoder()
-	const poemId = params.get("guid")
+	const poemId = params.get("id")
 
 	async function togglePoemLike(liked) {
 		if (!localStorage.liked) {
@@ -200,10 +207,10 @@ ___________________________________________________________
 
 	async function initialise() {
 		//init localstorage
-		if (!localStorage.getItem('approved')) 
-			localStorage.approved = new Set()
-		if (!localStorage.getItem('vetoed'))
-			localStorage.vetoed = new Set()
+		if (!localStorage.getItem("approved")) 
+			localStorage.approved = JSON.stringify(new Set())
+		if (!localStorage.getItem("vetoed"))
+			localStorage.vetoed = JSON.stringify(new Set())
 
 		// You can not pin a poem unless you have an account
 		if (!await isLoggedIn()) {
@@ -213,7 +220,12 @@ ___________________________________________________________
 		}
 
 		//fetch poem data
-		let poemData = await (await fetch(serverBaseAddress + "/purgatory/" + poemId)).json()
+		const res = await fetch(serverBaseAddress + "/purgatory/" + poemId)
+		if (!res.ok) {
+			alert("Failed to load poem")
+			history.back()
+		}
+		const poemData = await res.json()
 		
 		//Set up title for vanity
 		document.title = "Subliminal - " + poemData.poemName
@@ -238,7 +250,8 @@ ___________________________________________________________
 		poemAuthor.textContent = poemData.poemAuthor
 		
 		//Set up main poem content
-		const poemDocument = new EditorDocument(poemData.poemContent)
+		const poemContentObject = JSON.parse(poemData.poemContent)
+		const poemDocument = new EditorDocument(poemContentObject)
 		poemDocument.renderHtmlData(poemContent)
 		poemMain.classList.add(poemData.pageStyle)
 		document.body.style.background = poemData.pageBackground

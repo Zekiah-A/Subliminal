@@ -56,5 +56,6 @@ public class PurgatoryEntry : IDatabasePoem
     public int Approves { get; set; }
     public int Vetoes { get; set; }
     public DateTime DateCreated { get; set; }
+    // TODO: Make pick object instead to track who assigned what pick
     public bool Pick { get; set; }
 }

@@ -21,7 +21,7 @@ const argv = yargs(hideBin(process.argv))
     .argv
 
 const app = express()
-const port = 3000
+const port = 80
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 app.get("*", (req, res) => {

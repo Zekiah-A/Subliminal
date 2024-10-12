@@ -1,3 +1,4 @@
+"use strict";
 class SubliminalHeader extends HTMLElement {
 	constructor() {
 		super()
@@ -8,7 +9,9 @@ class SubliminalHeader extends HTMLElement {
 		this.shadowRoot.innerHTML = html`
 			<link rel="stylesheet" href="styles.css">
 			<div>
-				<img src="Resources/AbbstrakDog.png" alt="Dog" width="48" height="48" onclick="window.location.href = window.location.origin">
+				<a href="/" class="logo-button">
+					<img src="Resources/AbbstraktDog.png" loading="eager" class="logo" alt="Subliminal dog logo" width="48" height="48">
+				</a>
 				<h1 style="margin: 0px; align-self: center;">Subliminal</h1>
 				<nav id="pageLinks">
 					<a href="contents">-&gt; Poems</a>
@@ -17,16 +20,7 @@ class SubliminalHeader extends HTMLElement {
 				</nav>
 				<div class="hilight" id="hilight"></div>
 				<div id="right">
-					<input id="loginButton" type="button" value="Login to Subliminal"
-						onclick="
-							let loginSignup = document.querySelector('login-signup');
-							if (loginSignup) { loginSignup.remove() }
-							loginSignup = createFromData('login-signup');
-							this.parentDocument.body.appendChild(loginSignup)
-							loginSignup.open()
-						">
-					<input id="logoutButton" type="button" value="Logout"
-						onclick="window.location.reload(true)" style="display: none;"> <!-- TODO: This -->
+					<account-options id="accountOptions"></account-options>
 				</div>
 			</div>
 			<hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
@@ -64,13 +58,18 @@ class SubliminalHeader extends HTMLElement {
 				line-height: 64px;
 				white-space: nowrap;
 			}
-			
-			a {
+
+			nav > a {
 				align-self: center;
 				white-space: nowrap;
 				/*Click hitboxes*/
 				padding-top: 24px;
 				padding-bottom: 24px;
+			}
+
+			nav > a[current] {
+				background-color: #0074d90d;
+				border-bottom: 4px solid var(--input-hilight);
 			}
 
 			span, div {
@@ -80,24 +79,23 @@ class SubliminalHeader extends HTMLElement {
 			p, a {
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 110%;
-			}            
-			
-			a[current] {
-				background-color: #0074d90d;
-				border-bottom: 4px solid var(--input-hilight);
 			}
 			
-			img {
-				align-self: center;
+			.logo-button {
+				display: flex;
 				cursor: pointer;
+			}
+			
+			.logo {
+				align-self: center;
 				transition: .2s transform;
 			}
-			
-			img:hover {
+
+			.logo:hover {
 				transform: rotate(10deg) scale(1.5);
 			}
-			
-			img:active {
+
+			.logo:active {
 				transform: rotate(8deg) scale(1.1);
 			}
 			
@@ -113,7 +111,7 @@ class SubliminalHeader extends HTMLElement {
 				column-gap: 8px;
 				padding: 8px;
 			}
-
+			
 			hr {
 				border: none;
 				border-top: 1px solid gray;
@@ -129,12 +127,12 @@ class SubliminalHeader extends HTMLElement {
 					display: none;
 				}
 			
-				img {
+				.logo {
 					width: 48px;
 					height: 48px;
 				}
 			
-				a {
+				nav > a {
 					font-size: 3.4vw;
 					flex: 1 1 auto;
 					white-space: nowrap;
@@ -163,7 +161,7 @@ class SubliminalHeader extends HTMLElement {
 			}
 
 			@media(prefers-color-scheme: dark) {
-				img {
+				.logo {
 					filter: invert(1);
 				}
 
@@ -181,19 +179,12 @@ class SubliminalHeader extends HTMLElement {
 			}
 		}
 
-		;(async function(_this){
-			if (_this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
-				// TODO: Potentially change right to just display 'The coolest crowdsourced anthology on the web' (delete buttons)
-				_this.right.style.display = 'none'
-				console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
-				return
-			}
-
-			if (await isLoggedIn()) {
-				_this.loginButton.style.display = "none"
-				_this.logoutButton.style.display = "block"
-			}
-		})(this)
+		if (this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
+			// TODO: Potentially change right to just display 'The coolest crowdsourced anthology on the web' (delete buttons)
+			this.right.style.display = 'none'
+			console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
+			return
+		}
 	}
 }
 

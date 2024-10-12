@@ -1,5 +1,5 @@
-// Code that handles logic for complex poem editor interactions
 "use strict";
+// Code that handles logic for complex poem editor interactions
 const positionMovements = {
 	up: 0,
 	down: 1,

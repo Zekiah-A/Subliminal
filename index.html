@@ -1,264 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>Subliminal</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="google-site-verification" content="3HzNFq1xj99Jk3fvQnbEuEwF25UjxEv9IEWx-eN4X54" />
 	<meta name="description" content="Probably the weirdest poetry anthology to ever exist. This site is a spin-off of traditional poetic anthologies, intended to bring maximum humour.">
 	<meta name="keywords" content="Poetry, Anthology, Subliminal, Methallyne blue, Poem">
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
 	<link rel="stylesheet" href="styles.css">
-	<script src="./Other/component-registrar.js"></script> 
+	<link rel="stylesheet" href="index.css">
+	<script src="./Other/component-registrar.js"></script>
+	<script src="./Other/account-options-template.js"></script> 
 	<script src="./Other/header-template.js"></script>
 	<script src="./Other/login-template.js"></script>
+	<script src="./server.js"></script>
 	<script src="./account.js"></script>
-	<style>
-		body {
-			overflow-x: clip;
-			overflow-y: scroll;
-		}
-
-		.fixed {
-			vertical-align: middle;
-			text-align: center;
-			height: calc(100% - 40px);
-			width: 100%;
-			overflow: scroll;
-			margin-bottom: 5px;
-			scroll-behavior: smooth;
-			-ms-overflow-style: none;
-			scrollbar-width: none;
-			border-radius: 2px;
-			transition: width .5s;
-		}
-
-		.fixed:has(a > #advert3:target) {
-			width: 128%;
-		}
-
-		.fixed::-webkit-scrollbar {
-			display: none;
-		}
-
-		.fixed-container {
-			position: fixed;
-			top: 30%;
-			left: 65%;
-			height: 46vh;
-			width: 18vh;
-		}
-
-		.slide-link {
-			text-decoration: none;
-			padding: 2px 6px 2px 6px;
-			color: rgb(50, 50, 50);
-			background-color: #eeeeee;
-			border: 1px solid rgb(50, 50, 50);
-			border-radius: 2px;
-		}
-
-		.scroll-in {
-			opacity: 1 !important;
-			transform: unset !important;
-		}
-
-		.scroll-unseen {
-			opacity: 0;
-			transform: translateY(64px) scale(1.1);
-			transition: .5s opacity, .5s transform; 
-		}
-
-		/* Sections, below main style */
-		.section {
-			display: flex;
-			flex-direction: row;
-			border-radius: 8px;
-			background-color: var(--button-transparent);
-			padding: 8px;
-			margin-left: 5%;
-			margin-right: 5%;
-			align-self: center;
-			column-gap: 16px;
-		}
-
-		/*Special bottom section code*/
-		.section-double {
-			flex-direction: row;
-			background: transparent;
-		}
-
-		.section-double > div {
-			/*max-height: 256px;
-			height: 256px;*/
-			margin-left: 0px;
-			margin-right: 0px;
-		}
-
-		.section-double img, .section-double video {
-			width: 180px;
-			height: 320px;
-			object-fit: cover;
-			border-radius: 4px;
-		}
-
-		/* Relatable-s messages */
-		.section-info {
-			margin-left: 5%;
-			margin-right: 5%;
-			margin-top: 32px;
-			margin-bottom: 128px;
-		}
-
-		.presenter-container {
-			display: flex;
-			flex-direction: column;
-			width: 60%;
-			margin: 0px;
-		}
-
-		.presenter {
-			position: relative;
-			width: 100%; 
-			border-radius: 4px;
-			overflow: hidden;
-			user-select: none;
-			flex-grow: 1;
-		}
-
-		.presenter img {
-			width: 100%;
-			height: 100%;
-		}
-
-		.presenter  p {
-			position: absolute;
-			top: 0px;
-			left: 30%;
-			transform: rotateX(42deg) rotateY(-12deg) rotateZ(24deg) translate(-50%);
-			white-space: pre;font-size: 1.1vw;color: white;
-			opacity: 0.6;
-			font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-			line-height: 1; font-weight: bolder;
-		}
-
-		.presenter-caption {
-			opacity: 0.6;
-			margin-top: 8px;
-			font-style: italic;
-		}
-
-		#aboutInfo.scroll-unseen {
-			transform: translateX(-90%);
-		}
-
-		#poemProcessSubInfo {
-			display: flex;
-			column-gap: 64px;
-			transition: .5s column-gap, .2s background-color;
-			overflow-x: auto;
-			-ms-overflow-style: none;
-			scrollbar-width: none;
-			transition: .5s column-gap, .2s background-color;
-		}
-
-		#poemProcessSubInfo::-webkit-scrollbar {
-			display: none;
-		}
-
-		#poemProcessSubInfo > div {
-			background-color: var(--panel-transparent);
-			padding: 8px;
-			border-radius: 8px;
-			min-width: 156px;
-			user-select: none;
-		}
-
-		#poemProcessSubInfo > div > p {
-			opacity: 0.6;
-			transition: .2s opacity;
-		}
-
-		#poemProcessSubInfo > div:hover {
-			background-color: var(--button-opaque-hover);
-		}
-
-		#poemProcessSubInfo > div:hover > p {
-			opacity: 1;
-		}
-
-		#poemProcessSubInfo.scroll-in {
-			column-gap: 4px;
-		}
-
-		#topBackground {
-			position: absolute;
-			z-index: -1;
-			left: 0px;
-			top: 0px;
-		}
-
-		#topBackground > img {
-			width: 100%;
-		}
-
-		#topBackground::after {
-			position: absolute;
-			left: 0px;
-			top: 0px;
-			width: 100%;
-			height: 100%;
-			background: linear-gradient(to bottom, transparent, var(--background-opaque) 90%);
-			content: "";
-		}
-
-		@media(prefers-color-scheme: dark) {
-			.index-image {
-				filter: invert(1);
-			}
-		}
-
-		@media screen and (orientation:portrait) {
-			.fixed-container {
-				left: auto;
-				right: 32px;
-			}
-
-			.section {
-				flex-direction: column-reverse;
-			}
-
-			.section-double {
-				row-gap: 16px;
-			}
-
-			.presenter p {
-				font-size: 4vw;
-			}
-
-			.presenter-container {
-				display: flex;
-				flex-direction: column;
-				width: 100%;
-			}
-		}
-	</style>
 </head>
-
 <body class="headered-body">
-	<div id="topBackground"><img src="Resources/TopBackground.webp" class="index-image"></div>
+	<div id="topBackground"><img src="Resources/TopBackground.webp" loading="eager" alt="Subliminal scenery background" class="index-image"></div>
 	<subliminal-header></subliminal-header>
 	<div class="div-centre">
 		<p class="profile-title">Subliminal</p>
 		<p>“The methallyne blue analogy of stuff.</p>
 		<p>Probably the weirdest poetry anthology to ever exist.”</p>
-		<img class="index-image" src="Resources/AbbstrakDog.png" width="70%" height="70%" alt="Dog">
+		<img class="index-image main-logo" alt="Enlarged subliminal dog logo" src="Resources/AbbstraktDog.png" width="70%" height="70%" alt="Dog">
 		<p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup>
 		<sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
 	</div>
 
 	<div style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
 		<p style="padding-left: 5%;" class="profile-title">About Subliminal</p>
-		<div id="aboutSection" class="section">
+		<section id="aboutSection" class="section">
 		   <div style="flex-grow: 1;">
 				<p>Subliminal is an open source project to create the largest repository of poems in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
 				<p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
@@ -278,26 +50,26 @@
 						A vulture, flew overhead,<br>
 						then dropped down dead! Beating<br>
 						my back like a brick of lead. Yet I<br>
+						Shouted 'horay', meat for days!<br>
+						On my way to Al'mogus.<br>
 						...
 					</p>
 				</div>
 				<figcaption class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</figcaption>
 			</figure>
-		</div>
-
-		<div id="aboutInfo" class="section-info">
+		</section>
+		<section id="aboutInfo" class="section-info">
 			<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Did you know?</div>
-			<div style="padding-left: 32px;">
-				<p>-> We have over 100 hand crafted curated originals to read and take inspiration from!</p>
-				<p>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</p>
-				<p>-> Free cloud saving, and accounts allow you to acess, read and write poems anywhere, across your devices!</p>
-			</div>
+			<ul class="info-list">
+				<li>-> We have over 100 hand crafted curated originals to read and take inspiration from!</li>
+				<li>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</li>
+				<li>-> Free cloud saving, and accounts allow you to acess, read and write poems anywhere, across your devices!</li>
+			</ul>
 			<br>
 			<p style="margin-left: 12px;">If you aren't on subliminal, what are you even doing with your life?</p>
-		</div>
-
+		</section>
 		<p style="padding-left: 5%;" class="profile-title">Get started</p>
-		<div id="getStartedSection" class="section">
+		<section id="getStartedSection" class="section">
 			<figure class="presenter-container">
 				<div class="presenter">
 					<img src="Resources/AccountProfile.svg" style="filter: saturate(0.5);">
@@ -310,52 +82,49 @@
 				<p>Simply navigate to the "poems" page to see all of the contents of the anthology. Here you can also set up an account, or start writing your own poem with the "+add a poem" button whenever you like!</p>
 				<p>If you ever have any questions, check the dictionary and disclaimer pages for more info on what you may find here...</p>
 			</div>
-		</div>
-
-		<div id="getStartedInfo" class="section-info">
+		</section>
+		<section id="getStartedInfo" class="section-info">
 			<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
 			<p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-			<div id="poemProcessSubInfo" onwheel="
+			<ol id="poemProcessSubInfo" onwheel="
 				scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })
 				event.preventDefault()
-			">
-				<div><p>💡 Burst of inspiration at the most unexpected moment.</p></div>
-				<div><p>✍️ Spontaneous writing, tiring yourself out as you refine your work.</p></div>
-				<div><p>😨 Writer's block.</p></div>
-				<div><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></div>
-				<div><p>🎉 Finally completed poem! Sigh a breath of relief.</p></div>
-				<div><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></div>
-			</div>
-			<div style="padding-left: 32px;">
-				<p style="margin-left: 12px;">-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</p>
-				<p style="margin-left: 12px;">-> That's why subliminal provides a  community where people can share and grow, so we can all can write the poems that future generations will be tortured with in class one day.</p>
-			</div>
+			" style="margin: 0px; padding: 0px;">
+				<li><p>💡 Burst of inspiration at the most unexpected moment.</p></li>
+				<li><p>✍️Spontaneous writing, tiring yourself out as you refine your work.</p></li>
+				<li><p>😨 Writer's block.</p></li>
+				<li><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></li>
+				<li><p>🎉 Finally completed poem! Sigh a breath of relief.</p></li>
+				<li><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></li>
+			</ol>
+			<ul class="info-list">
+				<li>-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</li>
+				<li>-> That's why subliminal provides a  community where people can share and grow, so we can all can write the poems that future generations will be tortured with in class one day.</li>
+			</ul>
 			<br>
 			<p style="margin-left: 12px;">Poetry may not solve your crippling internet addiction, but it's a step in the right direction!</p>
-		</div>
-
+		</section>
 		<p style="padding-left: 5%;" class="profile-title">Other stuff</p>
-		<div id="otherSection" class="section section-double">
-			<div id="rplaceAdSection" class="section">
+		<section id="otherSection" class="section section-double">
+			<figure id="rplaceAdSection" class="section" style="margin:0px;">
 				<a href="https://rplace.live">
 					<img src="Resources/Advert2.png" alt="A fun game to play in your free time">
 				</a>
-				<div style="flex-grow: 1">
+				<figcaption style="flex-grow: 1">
 					<p style="font-weight: bold;">Rplace.live: a spinoff of the reddit place event!</p>
 					<p>A game by Zekiah-A and BlobKat, featuring a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
-				</div>
-			</div>
-
-			<div id="supportAdSection" class="section">
+				</figcaption>
+			</figure>
+			<figure id="supportAdSection" class="section" style="margin:0px;">
 				<video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
 					<source src="Resources/Advert3.webm" type="video/webm">
 				</video>       
-				<div style="flex-grow: 1">
+				<figcaption style="flex-grow: 1">
 					<p style="font-weight: bold;">The best waste of money since buying an NFT!</p>
 					<p>Help fund development of subliminal, and support me with my other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
-				</div>
-			</div>
-		</div>
+				</figcaption>
+			</figure>
+		</section>
 	 </div>
 	 <footer>
 	 	<hr>
@@ -363,6 +132,7 @@
 	 </footer>
 </body>
 <script>
+	"use strict";
 	function handleIntersect(entries, observer) {
 		entries.forEach(entry => {
 			if (entry.isIntersecting) {

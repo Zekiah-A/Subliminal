@@ -20,7 +20,7 @@ public class AccountData : AccountProfile
 
     // Navigation property
     [JsonIgnore]
-    public List<AccountAddress> KnownIPs { get; set; }
+    public List<AccountClient> KnownIPs { get; set; }
     // Navigation property
     [JsonIgnore]
     public List<PurgatoryDraft> Drafts { get; set; }
@@ -35,7 +35,7 @@ public class AccountData : AccountProfile
     {
         Token = token;
         Email = email;
-        KnownIPs = new List<AccountAddress>();
+        KnownIPs = new List<AccountClient>();
         Drafts = new List<PurgatoryDraft>();
         Blocked = new List<AccountData>();
         LikedPoems = new List<PurgatoryEntry>();

@@ -1,3 +1,4 @@
+"use strict";
 class PoemGhost extends HTMLElement {
 	constructor() {
 		super()

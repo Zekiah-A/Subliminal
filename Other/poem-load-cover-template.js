@@ -1,3 +1,4 @@
+"use strict";
 class PoemLoadCover extends HTMLElement {
 	constructor() {
 		super()

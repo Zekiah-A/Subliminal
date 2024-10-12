@@ -1,3 +1,4 @@
+"use strict";
 class SubliminalNotification extends HTMLElement {
 	constructor() {
 		super()

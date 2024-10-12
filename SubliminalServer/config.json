@@ -3,5 +3,6 @@
     "Certificate": null,
     "Key": null,
     "Port": 1234,
-    "UseHttps": false
+    "UseHttps": false,
+    "CorsCookie": false
 }

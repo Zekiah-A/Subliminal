@@ -1,31 +1,4 @@
-const actionType = {
-	// General account actions
-	BlockUser: 0,
-	UnblockUser: 1,
-	FollowUser: 2,
-	UnfollowUser: 3,
-	LikePoem: 4,
-	UnlikePoem: 5,
-	RatePoem: 6,
-	UploadDraft: 7,
-	DeleteDraft: 8,
-	GetDraft: 9,
-	Report: 10,
-
-	// Location - Account data
-	UpdateEmail: 11,
-	UpdateNumber: 12,
-	
-	//Location - Account profile
-	UpdatePenName: 13,
-	UpdateBiography: 14,
-	UpdateLocation: 15,
-	UpdateRole: 16,
-	UpdateAvatar: 17,
-	PinPoem: 18,
-	UnpinPoem: 19
-}
-
+"use strict";
 const badgeType = {
 	Admin: 0,
 	Based: 1,
@@ -59,17 +32,15 @@ function getBadgeInfo(badge) {
 }
 
 async function getAccountData() {
-	let data = null
-	
-	await fetch(serverBaseAddress + "/auth/signin", {
+	const res = await fetch(serverBaseAddress + "/accounts/me", {
 		method: "POST",
-		headers: { 'Content-Type': 'application/json' },
-		body: '"' + localStorage.accountCode + '"'
+		headers: { 'Content-Type': 'application/json' }
 	})
-	.then((res) => res.json())
-	.then((dataObject) => data = dataObject)
-
-	return data
+	if (!res.ok) {
+		return null
+	}
+	const accountData = await res.json()
+	return accountData
 }
 
 async function getPublicProfile(accountId) {
@@ -86,14 +57,20 @@ async function getPublicProfile(accountId) {
 }
 
 async function isLoggedIn() {
-	if (!localStorage.accountCode) return false
+	if (sessionStorage.accountToken) {
+		return true
+	}
 
 	let response = await fetch(serverBaseAddress + "/auth/signin/token", {
 		method: "POST",
-		headers: { 'Content-Type': 'application/json' }, body: '"' + localStorage.accountCode + '"'}
-	)
+		headers: {'Content-Type': 'application/json'}
+	})
 	return response.ok
 }
 
-console.log("%cPrivate account data may be held in browser local storage, a thing that can be acessed by putting code in this browser console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
+async function signout() {
+	window.location.reload(true)
+}
+
+console.log("%cAccount credentials may be held in browser storage, a thing that can be acessed by putting code in this console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
 console.log("%cTL;DR: Never put anything you do not understand here. Uncool things may happen.", "color: blue; font-size: x-large")

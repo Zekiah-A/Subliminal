@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Subliminal</title>
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="">
 	<meta name="keywords" content="">
@@ -24,7 +25,7 @@
 			<subliminal-poem-load-cover></subliminal-poem-load-cover>
 		</p>
 	</div>
-	<div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
+	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">
 		<h2>Edit poem:</h2>
 		<div style="display: flex; column-gap: 8px;">
 			<button class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
@@ -39,10 +40,10 @@
 			</button>
 		</div>
 		<br>
-		<button class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</button>
-	</div>
+		<button class="popup-button" onclick="editFrame.close();">Cancel</button>
+	</dialog>
 	<a id="back" href="javascript: window.location.href = window.location.origin + '/contents';" class="back"> &lt;- Back</a>
-	<div onclick="editFrame.style.display = 'flex';" class="edit">
+	<div onclick="editFrame.showModal();" class="edit">
 		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
 	</div>
 </body>
@@ -58,24 +59,24 @@
 		}
 		try {
 			const poemData = await response.json()
-			//Set up title and url bar for vanity
+			// Set up title and url bar for vanity
 			window.history.replaceState(null, "Title", path)
 			document.title = "Subliminal - " + poemData.poemName
 
-			//Display content warning with additions if needed
+			// Display content warning with additions if needed
 			if (poemData.cWarning === true) {
 				document.body.insertBefore(
 					createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
 			}
 
-			//Place poem data into the DOM
+			// Place poem data into the DOM
 			poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
 			const poemDocument = new EditorDocument(poemData.poemContent)
 			poemDocument.renderHtmlData(poemContent)
 			poemMain.classList.add(poemData.pageStyle)
 			document.body.style.background = poemData.pageBackground
 
-			//Probably useless since pages are procedurally generated...
+			// Probably useless since pages are procedurally generated...
 			document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
 			document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
 		}

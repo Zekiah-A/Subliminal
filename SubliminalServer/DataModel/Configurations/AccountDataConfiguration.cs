@@ -34,7 +34,7 @@ public class AccountDataConfiguration : IEntityTypeConfiguration<AccountData>
         // One to many IPs (AccountBadge)
         builder.HasMany(mainEntity => mainEntity.KnownIPs)
             .WithOne(address => address.Account)
-            .HasForeignKey(address => address.AccountKey);
+            .HasForeignKey(address => address.AccountId);
 
         // Many to many AccountData (Blocked), AccountData (BlockedBy)
         builder.HasMany(account => account.Blocked)

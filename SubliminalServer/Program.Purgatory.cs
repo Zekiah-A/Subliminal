@@ -1,65 +1,37 @@
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SubliminalServer.ApiModel;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Purgatory;
+using SubliminalServer.DataModel.Report;
 
 namespace SubliminalServer;
 
-public static partial class Program
+internal static partial class Program
 {
+    // /accounts/{id:int}
+    [GeneratedRegex(@"^\/purgatory\/\d+\/report\/*$")]
+    private static partial Regex PurgatoryReportEndpointRegex();
+    [GeneratedRegex(@"^\/purgatory\/\d+\/report\/*$")]
+    private static partial Regex PurgatoryEndpointRegex();
+
+    
     private static void AddPurgatoryEndpoints()
     {
-        httpServer.MapGet("/purgatory/{poemId}/report", (string poemId) =>
+        httpServer.MapGet("/purgatory/{poemId:int}", async (int poemId, DatabaseContext dbContext) =>
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"WIP: Report function - Poem {poemId} has been reported, please investigate!");
-            Console.ResetColor();
-            return Results.Ok();
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
+
+            return Results.Ok(poem);
         });
-        // TODO: Reimplement this
-        //authRequiredEndpoints.Add("/purgatory/{poemId}/report");
-        //rateLimitEndpoints.Add("/purgatory/{poemId}/report", (1, TimeSpan.FromSeconds(5)));
-        //sizeLimitEndpoints.Add("/purgatory/{poemId}/report", PayloadSize.FromKilobytes(100));
-
-        httpServer.MapGet("/purgatory/picks", ([FromServices] DatabaseContext database) =>
-        {
-            var entries = database.PurgatoryEntries
-                .Where(entry => entry.Pick == true)
-                .Select(entry => entry.Id);
-            return Results.Json(entries);
-        });
-        rateLimitEndpoints.Add("/purgatory/picks", (1, TimeSpan.FromSeconds(2)));
-
-        httpServer.MapGet("/purgatory/after", ([FromQuery(Name = "date")] DateTime date, [FromQuery(Name = "count")] int count, [FromServices] DatabaseContext database) =>
-        {
-            var poemIds = database.PurgatoryEntries
-                .Where(entry => entry.DateCreated > date)
-                .Take(Math.Clamp(count, 1, 50))
-                .Select(poem => poem.Id);
-            return Results.Json(poemIds);
-        });
-        rateLimitEndpoints.Add("/purgatory/after", (1, TimeSpan.FromSeconds(2)));
 
 
-        httpServer.MapGet("/purgatory/before", ([FromQuery(Name = "date")] DateTime date, [FromQuery(Name = "count")] int count, [FromServices] DatabaseContext database) =>
-        {
-            var poemIds = database.PurgatoryEntries
-                .Where(entry => entry.DateCreated < date)
-                .Take(Math.Clamp(count, 1, 50))
-                .Select(poem => poem.Id);
-            return Results.Json(poemIds);
-        });
-        rateLimitEndpoints.Add("/purgatory/before", (1, TimeSpan.FromSeconds(2)));
-
-        // Take into account genres that they have liked, accounts they have blocked, new poems and interactions when reccomending
-        httpServer.MapGet("/purgatory/recommended", () =>
-        {
-            return Results.Problem();
-        });
-        authRequiredEndpoints.Add("/purgatory/recommended");
-        rateLimitEndpoints.Add("/purgatory/recommended", (1, TimeSpan.FromSeconds(5)));
-
-        httpServer.MapPost("/purgatory", ([FromBody] UploadableEntry entryUpload, [FromServices] DatabaseContext database, HttpContext context) =>
+        httpServer.MapPost("/purgatory/upload", ([FromBody] UploadableEntry entryUpload, [FromServices] DatabaseContext database, HttpContext context) =>
         {
             var validationIssues = new Dictionary<string, string[]>();
             var tags = new List<PurgatoryTag>();
@@ -129,36 +101,162 @@ public static partial class Program
 
             return Results.Ok(entry.Id);
         });
-        authRequiredEndpoints.Add("/purgatory");
+        authRequiredEndpoints.Add("/purgatory/upload");
         if (!httpServer.Environment.IsDevelopment())
         {
             rateLimitEndpoints.Add("/purgatory", (1, TimeSpan.FromSeconds(60)));
             sizeLimitEndpoints.Add("/purgatory", PayloadSize.FromMegabytes(5));
         }
-        
-        httpServer.MapPost("/purgatory/{id}/like", ([FromBody] int poemId, HttpContext context) =>
+
+        httpServer.MapGet("/purgatory/picks", async ([FromServices] DatabaseContext database) =>
+        {
+            var entriesQuery = database.PurgatoryEntries
+                .Where(entry => entry.Pick == true)
+                .Select(entry => entry.Id);
+            var entries = await entriesQuery.ToListAsync();
+            return Results.Ok(entries);
+        });
+        rateLimitEndpoints.Add("/purgatory/picks", (1, TimeSpan.FromSeconds(2)));
+
+        httpServer.MapGet("/purgatory/after", ([FromQuery(Name = "date")] DateTime date, [FromQuery(Name = "count")] int count, [FromServices] DatabaseContext database) =>
+        {
+            var poemIds = database.PurgatoryEntries
+                .Where(entry => entry.DateCreated > date)
+                .Take(Math.Clamp(count, 1, 50))
+                .Select(poem => poem.Id);
+            return Results.Ok(poemIds);
+        });
+        rateLimitEndpoints.Add("/purgatory/after", (1, TimeSpan.FromSeconds(2)));
+
+
+        httpServer.MapGet("/purgatory/before", ([FromQuery(Name = "date")] DateTime date, [FromQuery(Name = "count")] int count, [FromServices] DatabaseContext database) =>
+        {
+            var poemIds = database.PurgatoryEntries
+                .Where(entry => entry.DateCreated < date)
+                .Take(Math.Clamp(count, 1, 50))
+                .Select(poem => poem.Id);
+            return Results.Ok(poemIds);
+        });
+        rateLimitEndpoints.Add("/purgatory/before", (1, TimeSpan.FromSeconds(2)));
+
+        // Take into account genres that they have liked, accounts they have blocked, new poems and interactions when reccomending
+        httpServer.MapGet("/purgatory/recommended", () =>
+        {
+            return Results.Problem();
+        });
+        authRequiredEndpoints.Add("/purgatory/recommended");
+        rateLimitEndpoints.Add("/purgatory/recommended", (1, TimeSpan.FromSeconds(5)));
+
+        httpServer.MapPost("/purgatory/{poemId:int}/like", async (int poemId, HttpContext context, DatabaseContext dbContext) =>
+        {
+            var account = (AccountData)context.Items["Account"]!;
+
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
+
+            if (!account.LikedPoems.Contains(poem))
+            {
+                account.LikedPoems.Add(poem);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return Results.Ok();
+        });
+
+        httpServer.MapPost("/purgatory/{poemId:int}/unlike", async (int poemId, HttpContext context, DatabaseContext dbContext) =>
+        {
+            var account = (AccountData)context.Items["Account"]!;
+
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
+
+            if (account.LikedPoems.Contains(poem))
+            {
+                account.LikedPoems.Remove(poem);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return Results.Ok();
+        });
+
+        httpServer.MapPost("/purgatory/{poemId:int}/pin", async (int poemId, HttpContext context, DatabaseContext dbContext) =>
+        {
+            var account = (AccountData)context.Items["Account"]!;
+
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
+
+            if (!account.PinnedPoems.Contains(poem))
+            {
+                account.PinnedPoems.Add(poem);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return Results.Ok();
+        });
+
+        httpServer.MapPost("/purgatory/{poemId:int}/unpin", async (int poemId, HttpContext context, DatabaseContext dbContext) =>
+        {
+            var account = (AccountData)context.Items["Account"]!;
+
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
+
+            if (account.PinnedPoems.Contains(poem))
+            {
+                account.PinnedPoems.Remove(poem);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return Results.Ok();
+        });
+
+        httpServer.MapPost("/purgatory/{poemId:int}/rate", async (int poemId, [FromBody] UploadableRating ratingUpload, HttpContext context, DatabaseContext dbContext) =>
         {
             throw new NotImplementedException();
         });
 
-        httpServer.MapPost("/purgatory/{id}/unlike", ([FromBody] int poemId, HttpContext context) =>
+        httpServer.MapPost("/purgatory/{poemId:int}/report", async (int poemId, DatabaseContext dbContext) =>
         {
             throw new NotImplementedException();
-        });
 
-        httpServer.MapPost("/purgatory/{id}/pin", ([FromBody] int poemId, HttpContext context) =>
-        {
-            throw new NotImplementedException();
-        });
+            var poem = await dbContext.PurgatoryEntries.FindAsync(poemId);
+            if (poem is null)
+            {
+                return Results.NotFound();
+            }
 
-        httpServer.MapPost("/purgatory/{id}/unpin", ([FromBody] int poemId, HttpContext context) =>
-        {
-            throw new NotImplementedException();
-        });
+            var report = new PurgatoryReport
+            {
+                PoemId = poemId,
+                Poem = poem,
+                // Add any other necessary report details
+            };
 
-        httpServer.MapPost("/purgatory/{id}/rate", ([FromBody] UploadableRating ratingUpload, HttpContext context) =>
+            dbContext.PurgatoryReports.Add(report);
+            await dbContext.SaveChangesAsync();
+
+            return Results.Ok();
+        }).UseMiddleware<EnsuredAuthorizationMiddleware>(httpServer, PurgatoryReportEndpointRegex);
+        if (!httpServer.Environment.IsDevelopment())
         {
-            throw new NotImplementedException();
-        });
+            httpServer.UseWhen
+            (
+                context => PurgatoryReportEndpointRegex().IsMatch(context.Request.Path),
+                appBuilder => appBuilder.UseMiddleware<RateLimitMiddleware>(1, TimeSpan.FromSeconds(5))
+            );
+        }
     }
 }

@@ -4,56 +4,6 @@
 	border-radius: 4px;
 	background-color: var(--background-opaque);
 }
-#editorCanvas {
-	display: block;
-	width: 100%;
-	height: 100%;
-	cursor: text;
-}
-#editorCanvas:focus {
-	outline: none;
-}
-#editorContext {
-	display: flex;
-	visibility: hidden;
-	transition: left 0.1s ease 0s;
-	position: fixed;
-	width: 200px;
-	background-color: var(--button-transparent);
-	backdrop-filter: blur(5px);
-	border-radius: 4px;
-	box-shadow: 0px 0px 10px #656565;
-	border: 1px solid darkgray;
-	flex-direction: column;
-	padding: 4px;
-	row-gap: 4px;
-}
-#editorContext > button {
-	height: 32px;
-	background-color: transparent;
-	border: 1px solid var(--button-opaque);
-	display: flex;
-	align-items: center;
-	column-gap: 8px;
-	transition: .05 transform;
-	user-select: none;
-}
-#editorContext > button:hover {
-	background-color: var(--button-opaque-hover);
-}
-#editorContext > button:active {
-	transform: scale(0.98);
-}
-#editorContext > button > svg {
-	opacity: 0.6;
-	fill: var(--text-colour);
-}
-#editorContext > button > span {
-	font-weight: bold;
-	opacity: 0.4;
-	flex-grow: 1;
-	text-align: end;
-}
 .tool {
 	margin: 1px;
 	height: 24px;
@@ -281,7 +231,6 @@ display: none;
 #tagContainer > button {
 	border-radius: 4px;
 	height: 64px;
-	background: lightgrey;
 	padding: 4px;
 	text-align: center;
 	position: relative;
@@ -350,31 +299,6 @@ color: white;
 	backdrop-filter: blur(4px);
 	padding: 8px;
 	overflow-y: auto;
-}
-.suggestions {
-	width: 192px;
-	position: absolute;
-	background: #bdbdbd;
-	z-index: 3;
-	border-radius: 4px;
-	top: 0px;
-	display: flex;
-	background-color: var(--button-transparent);
-	flex-direction: column;
-	border: 1px solid gray;
-	overflow: clip;
-	overflow-y: scroll;
-}
-.suggestions-item {
-	padding: 8px;
-	display: flex;
-}
-.suggestions-item > span:nth-child(1) {
-	flex-grow: 1;
-}
-.suggestions-item > span:nth-child(2) {
-	font-size: 10px;
-	opacity: 0.6;
 }
 .online-editors {
 	position: fixed;

@@ -7,7 +7,6 @@
  */
 (() => {
 	"use strict"
-
 	Path2D.prototype.roundRect ??= roundRect;
 	if (globalThis.CanvasRenderingContext2D) {
 		globalThis.CanvasRenderingContext2D.prototype.roundRect ??= roundRect

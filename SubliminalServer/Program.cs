@@ -17,13 +17,16 @@ namespace SubliminalServer;
 // Prerelease .NET 9 may require "dotnet tool install --global dotnet-ef --prerelease"
 // to update from a non-prerelease, do "dotnet tool update --global dotnet-ef --prerelease"
 
-public static partial class Program
+internal static partial class Program
 {
     private static WebApplication httpServer;
     private static List<string> authRequiredEndpoints;
     private static Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)> rateLimitEndpoints;
     // Should only really be needed on POST endpoint
     private static Dictionary<string, PayloadSize> sizeLimitEndpoints;
+
+    private static DirectoryInfo profileImagesDir;
+    private static ServerConfig? config;
     
     [GeneratedRegex("^[a-z][a-z0-9_-]{0,23}$")]
     private static partial Regex PermissibleTagRegex();
@@ -33,19 +36,29 @@ public static partial class Program
     public static async Task Main(string[] args)
     {
         var dataDir = new DirectoryInfo("Data");
-        var profileImageDir = new DirectoryInfo(Path.Join(dataDir.FullName, "ProfileImages"));
+        var profilesDir = new DirectoryInfo(Path.Combine(dataDir.FullName, "Profiles", "Avatars"));
+        profileImagesDir = new DirectoryInfo(Path.Combine(dataDir.FullName, "Profiles", "Avatars"));
         var soundsDir = new DirectoryInfo(Path.Join(dataDir.FullName, "Sounds"));
         var configFile = new FileInfo("config.json");
         var dbPath = Path.Join(dataDir.FullName, "subliminal.db");
-
-        ServerConfig? config = null;
  
         if (File.Exists(configFile.Name))
         {
-            var configText = File.ReadAllText(configFile.Name);
+            var configText = await File.ReadAllTextAsync(configFile.Name);
             config = JsonSerializer.Deserialize<ServerConfig>(configText);
         }
 
+        if (config?.Version < ServerConfig.LatestVersion)
+        {
+            var configMoveLocation = configFile.FullName.Replace(".json", $".version{config.Version}.old.json");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("[WARN]: Current config of version {0} older than current version {1}." +
+                "Outdated config file will be moved to {2}.",
+                config.Version, ServerConfig.LatestVersion, configMoveLocation);
+            Console.ResetColor();
+            File.Move(configFile.FullName, configMoveLocation);
+            config = null;
+        }
         if (config is null)
         {
             await using var stream = File.OpenWrite(configFile.Name);
@@ -55,13 +68,13 @@ public static partial class Program
             });
             await stream.FlushAsync();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[LOG]: Config created! Please edit {0} and run this program again!", configFile);
+            Console.WriteLine("[LOG]: New config created! Please edit {0} and run this program again!", configFile);
             Console.ResetColor();
             Environment.Exit(0);
         }
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        foreach (var dirPath in new[] { dataDir, profileImageDir })
+        foreach (var dirPath in new[] { dataDir, profilesDir, profileImagesDir, soundsDir })
         {
             if (!Directory.Exists(dirPath.FullName))
             {
@@ -81,11 +94,13 @@ public static partial class Program
         {
             options.AddDefaultPolicy(policy =>
             {
-                policy.WithOrigins("https://poemanthology.org", "*")
-                    .WithOrigins("https://zekiah-a.github.io/", "*");
+                policy.WithOrigins("http://localhost:80", "http://localhost:1234", "https://poemanthology.org")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
-
+        
         builder.Services.Configure<JsonOptions>(options =>
         {
             options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -113,21 +128,16 @@ public static partial class Program
 
         httpServer.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(profileImageDir.FullName),
-            RequestPath = "/ProfileImage"
+            FileProvider = new PhysicalFileProvider(profileImagesDir.FullName),
+            RequestPath = "/profiles/avatars"
         });
-
+        
         if (httpServer.Environment.IsDevelopment())
         {
             httpServer.UseSwagger();
             httpServer.UseSwaggerUI();
         }
         
-        // This is some straightup weirdness to force inject the DB, it seems to work for out current use though
-        var scope = httpServer.Services.CreateScope();
-        var serviceProvider = scope.ServiceProvider;
-        httpServer.UseMiddleware<AuthorizationMiddleware>(serviceProvider.GetRequiredService<DatabaseContext>());
-
         authRequiredEndpoints = new List<string>();
         rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
         sizeLimitEndpoints = new Dictionary<string, PayloadSize>(); // Should only really be needed on POST endpoints
@@ -170,7 +180,7 @@ public static partial class Program
                 context => context.Request.Path.StartsWithSegments(endpoint),
                 appBuilder =>
                 {
-                    appBuilder.UseMiddleware<EnsureAuthorizationMiddleware>();
+                    appBuilder.UseMiddleware<EnsuredAuthorizationMiddleware>();
                 }
             );
         }
@@ -182,7 +192,7 @@ public static partial class Program
     {
         var tokenBytes = RandomNumberGenerator.GetBytes(32);
         var tokenString = Convert.ToBase64String(tokenBytes)
-            + ";" + DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds();
+            + "_" + DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds();
         return tokenString;
     }
 }

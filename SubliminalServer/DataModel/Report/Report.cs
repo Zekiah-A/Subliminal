@@ -16,7 +16,7 @@ public class Report
     // Foreign key Account Data
     [Required]
     [ForeignKey(nameof(Reporter))]
-    public int ReporterKey { get; set; }
+    public int ReporterId { get; set; }
     public AccountData Reporter { get; set;  }
     
     [MaxLength(300)]
