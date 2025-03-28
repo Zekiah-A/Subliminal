@@ -303,10 +303,15 @@ color: white;
 .online-editors {
 	position: fixed;
 	left: 16px;
+}
+.online-editors > ul {
 	display: flex;
 	flex-direction: column;
+	list-style-type: none;
+    padding: 0px;
+    margin: 0px;
 }
-.online-editors > div {
+.online-editors li {
 	position: relative;
 	display: flex;
 	column-gap: 8px;
@@ -318,7 +323,7 @@ color: white;
 	padding-right: 16px;
 	transition: .2s margin-bottom, .2s margin-top, .2s background-color;
 }
-.online-editors > div:hover {
+.online-editors li:hover {
 	margin-bottom: 0px;
 	margin-top: 8px;
 	background-color: var(--button-opaque);

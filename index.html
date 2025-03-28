@@ -30,11 +30,12 @@
 
 	<div style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
 		<p style="padding-left: 5%;" class="profile-title">About Subliminal</p>
-		<section id="aboutSection" class="section">
+		<section id="aboutSection" class="section elevated">
 		   <div style="flex-grow: 1;">
-				<p>Subliminal is an open source project to create the largest repository of poems in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
+				<h3 class="section-title">Subliminal is a place to post poems, writings and creative works.</h3>
+				<p>At the core of subliminal lies an open source project to create a massive repository of creativity in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
 				<p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
-				<p>As long as it's a poem, it's good enough for subliminal.</p>
+				<p>If it's creative, it belongs on Subliminal.</p>
 			</div>
 			<figure class="presenter-container">
 				<div class="presenter">
@@ -42,7 +43,7 @@
 					<p>
 						Earth and Bones, old sticks and stones, <br>
 						Just one long road to Al'mogus. <br>
-						Sandles, seared by the sun-struck path, <br>
+						Sandals, seared by the sun-struck path, <br>
 						oh how I wish I had taken the car. <br>
 						All for a land, oh so, so far. <br>
 						Struggling to Al'mogus.<br>
@@ -50,7 +51,7 @@
 						A vulture, flew overhead,<br>
 						then dropped down dead! Beating<br>
 						my back like a brick of lead. Yet I<br>
-						Shouted 'horay', meat for days!<br>
+						Shouted 'hooray', meat for days!<br>
 						On my way to Al'mogus.<br>
 						...
 					</p>
@@ -63,22 +64,22 @@
 			<ul class="info-list">
 				<li>-> We have over 100 hand crafted curated originals to read and take inspiration from!</li>
 				<li>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</li>
-				<li>-> Free cloud saving, and accounts allow you to acess, read and write poems anywhere, across your devices!</li>
+				<li>-> Free cloud saving, and accounts allow you to access, read and write poems anywhere, across your devices!</li>
 			</ul>
 			<br>
 			<p style="margin-left: 12px;">If you aren't on subliminal, what are you even doing with your life?</p>
 		</section>
 		<p style="padding-left: 5%;" class="profile-title">Get started</p>
-		<section id="getStartedSection" class="section">
+		<section id="getStartedSection" class="section elevated">
 			<figure class="presenter-container">
 				<div class="presenter">
-					<img src="Resources/AccountProfile.svg" style="filter: saturate(0.5);">
+					<img alt="Account profile" src="Resources/AccountProfile.svg">
 				</div>
 				<figcaption class="presenter-caption">Creating a profile for yourself is as cool as it can get!</figcaption>
 			</figure>
 
 			<div style="flex-grow: 1;">
-				<p>Getting started on subliminal is easy!</p>
+				<h3 class="section-title">Getting started on subliminal is easy!</h3>
 				<p>Simply navigate to the "poems" page to see all of the contents of the anthology. Here you can also set up an account, or start writing your own poem with the "+add a poem" button whenever you like!</p>
 				<p>If you ever have any questions, check the dictionary and disclaimer pages for more info on what you may find here...</p>
 			</div>
@@ -87,15 +88,17 @@
 			<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
 			<p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
 			<ol id="poemProcessSubInfo" onwheel="
-				scroll({ left: event.deltaY + this.scrollLeft, top: 0, behavior: 'smooth' })
-				event.preventDefault()
+				this.scrollBy({ left: event.deltaY, top: 0, behavior: 'smooth' })
+				if (this.scrollLeft !== 0 && this.scrollLeft < this.offsetWidth) {
+					event.preventDefault()
+				}
 			" style="margin: 0px; padding: 0px;">
-				<li><p>💡 Burst of inspiration at the most unexpected moment.</p></li>
-				<li><p>✍️Spontaneous writing, tiring yourself out as you refine your work.</p></li>
-				<li><p>😨 Writer's block.</p></li>
-				<li><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></li>
-				<li><p>🎉 Finally completed poem! Sigh a breath of relief.</p></li>
-				<li><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></li>
+				<li class="elevated"><p>💡 Burst of inspiration at the most unexpected moment.</p></li>
+				<li class="elevated"><p>✍️Spontaneous writing, tiring yourself out as you refine your work.</p></li>
+				<li class="elevated"><p>😨 Writer's block.</p></li>
+				<li class="elevated"><p>✨ A second hope, reading back on some previous works, you are motivated to finish what you started.</p></li>
+				<li class="elevated"><p>🎉 Finally completed poem! Sigh a breath of relief.</p></li>
+				<li class="elevated"><p>🗣️ Tell everyone! Have your teacher, friends, family, read and review your poem!</p></li>
 			</ol>
 			<ul class="info-list">
 				<li>-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</li>
@@ -106,29 +109,31 @@
 		</section>
 		<p style="padding-left: 5%;" class="profile-title">Other stuff</p>
 		<section id="otherSection" class="section section-double">
-			<figure id="rplaceAdSection" class="section" style="margin:0px;">
+			<figure id="rplaceAdSection" class="section elevated" style="margin:0px;">
 				<a href="https://rplace.live">
 					<img src="Resources/Advert2.png" alt="A fun game to play in your free time">
 				</a>
 				<figcaption style="flex-grow: 1">
 					<p style="font-weight: bold;">Rplace.live: a spinoff of the reddit place event!</p>
 					<p>A game by Zekiah-A and BlobKat, featuring a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
+					<a rel="noopener" target="_blank" href="https://rplace.live">Play now</a>
 				</figcaption>
 			</figure>
-			<figure id="supportAdSection" class="section" style="margin:0px;">
+			<figure id="supportAdSection" class="section elevated" style="margin:0px;">
 				<video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
 					<source src="Resources/Advert3.webm" type="video/webm">
 				</video>       
 				<figcaption style="flex-grow: 1">
 					<p style="font-weight: bold;">The best waste of money since buying an NFT!</p>
-					<p>Help fund development of subliminal, and support me with my other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
+					<p>Help fund development of subliminal, and support us with our other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
+					<a target="_blank" href="mailto:admin@poemantholoogy.org">Contact us</a>
 				</figcaption>
 			</figure>
 		</section>
 	 </div>
 	 <footer>
 	 	<hr>
-	 	<p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2024</p>
+	 	<p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2025</p>
 	 </footer>
 </body>
 <script>
@@ -142,9 +147,9 @@
 	}
 	
 	//A threshold of 0.1 means that when 10% of section is in view, it will be animated.
-	let observer = new IntersectionObserver(handleIntersect, {root: null, rootMargin: '0px', threshold: 0.1 })
-	let obseravbles = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]
-	obseravbles.forEach((element) => {
+	const observer = new IntersectionObserver(handleIntersect, { root: null, rootMargin: '0px', threshold: 0.1 })
+	const observables = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]
+	observables.forEach((element) => {
 		observer.observe(element)
 		element.classList.add("scroll-unseen")
 	})

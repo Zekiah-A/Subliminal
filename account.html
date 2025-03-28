@@ -267,8 +267,10 @@
 
 		<br><br>
 		<hr>
-		<h2 style="cursor: pointer;" onclick="accountAgreement.style.display = accountAgreement.style.display == 'none' ? 'block' : 'none';">Account agreement +</h2>
-		<div id="accountAgreement" style="display: none;">
+		<details>
+			<summary>
+				<h2 style="cursor: pointer; display: inline-block;">Account agreement</h2>
+			</summary>
 			<h3>Privacy and Security:</h3>
 			<p>
 				Account security is a priority here. This site does not use tracking systems,
@@ -300,7 +302,7 @@
 				site, it could be used against you by others. We are not liable for any consequences that
 				may arise from such actions.
 			</p>
-		</div>
+		</details>
 	</div>
 	<a href="./contents" class="back"> &lt;- Back</a>
 </body>

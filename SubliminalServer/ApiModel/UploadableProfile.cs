@@ -4,7 +4,7 @@ namespace SubliminalServer.ApiModel;
 
 public class UploadableProfile
 {
-    public int AccountKey { get; set; }
+    public int Id { get; set; }
     public string Username { get; set; }
     
     public string? PenName { get; set; }
@@ -27,7 +27,7 @@ public class UploadableProfile
 
     public UploadableProfile(AccountData account)
     {
-        AccountKey = account.Id;
+        Id = account.Id;
         Username = account.Username;
         PenName = account.PenName;
         Biography = account.Biography;

@@ -31,7 +31,7 @@ internal static partial class Program
             throw new NotImplementedException();
         });
 
-        var reportEndpoint = httpServer.MapPost("/accounts/{accountId}/report", (int accountId, [FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
+        httpServer.MapPost("/accounts/{accountId}/report", (int accountId, [FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
         {
             var validationIssues = new Dictionary<string, string[]>();
             if (reportUpload.Reason.Length > 300)

@@ -16,7 +16,7 @@ class SubliminalHeader extends HTMLElement {
 				<nav id="pageLinks">
 					<a href="contents">-&gt; Poems</a>
 					<a href="account">-&gt; Profile</a>
-					<a href="sounds">-&gt; Sounds</a>
+					<a href="sounds" class="disabled">-&gt; Sounds</a>
 				</nav>
 				<div class="hilight" id="hilight"></div>
 				<div id="right">
@@ -48,6 +48,11 @@ class SubliminalHeader extends HTMLElement {
 				margin-right: 16px;
 				height: 64px;
 				position: relative;
+			}
+			
+			.disabled {
+				opacity: 0.6;
+				pointer-events: none;
 			}
 			
 			p {

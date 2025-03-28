@@ -107,6 +107,10 @@ hr {
 	margin: 8px;
 }
 
+textarea {
+	color: var(--text-colour);
+}
+
 button, input[type="button"] {
 	background-color: var(--button-opaque);
 	color: var(--text-colour);
@@ -364,6 +368,7 @@ div.popup {
 	margin-bottom: 0;
 	white-space: pre;
 	display: inline-block;
+	height: fit-content;
 }
 
 .profile-container {
@@ -454,6 +459,11 @@ div.popup {
 
 .following-card p {
 	max-height: 32px;
+}
+
+.elevated {
+	box-shadow: 0 4px 8px #0000004f;
+    border: 1px solid var(--scroll-background-shadow);
 }
 
 /*Dark Mode Optimisations*/

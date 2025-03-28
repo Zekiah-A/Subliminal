@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Editor rendering lab</title>
 	<script src="../editor-document.js"></script>
+	<script src="./component-registrar.js"></script>
+	<script src="./poem-canvas-editor-template.js"></script>
 	<style>
 		:root {
 			--text-color: #000;
@@ -62,24 +64,24 @@
 	</select>
 	<select onchange="
 		if (this.value == 'light') {
-			editor.colourHex = '#000000'
+			editorDocument.colourHex = '#000000'
 			document.documentElement.className = 'light'
 		}
 		else if (this.value == 'dark') {
-			editor.colourHex = '#DADADA'
+			editorDocument.colourHex = '#DADADA'
 			document.documentElement.className = 'dark'
 		}
-		editor.renderCanvasData(editorCanvas)
+		editorDocument.renderCanvasData(editorCanvas, false)
 	">
 		<option value="light">Light mode</option>
 		<option value="dark">Dark mode</option>
 	</select>
 	<button type="button" onclick="
 		const canvasStart = performance.now()
-		editor.renderCanvasData(editorCanvas)
+		editorDocument.renderCanvasData(editorCanvas, false)
 		console.log('Canvas render took:', performance.now() - canvasStart + 'ms')
 		const htmlStart = performance.now()
-		editor.renderHtmlData(editorHtml)
+		editorDocument.renderHtmlData(editorHtml)
 		console.log('HTML render took:', performance.now() - htmlStart + 'ms')
 	">Re-render outputs</button>
 	<label>Editor views ABAB:</label>
@@ -88,6 +90,11 @@
 	">
 	<div class="main">
 		<div class="tests-container">
+			<div class="test">
+				<h4 style="margin: 0px;">Bounding box Output:</h4>
+				<hr>
+				<canvas id="editorBounds" height="360" width="1020"></canvas>
+			</div>
 			<div class="test">
 				<h4 style="margin: 0px;">Canvas Output:</h4>
 				<hr>
@@ -99,22 +106,30 @@
 				<div id="editorHtml" style="width: 680px;"></div>
 			</div>
 		</div>
-		<div class="test">
-			<h4 style="margin: 0px;">Live JSON data editor:</h4>
-			<hr>
-			<textarea id="editorJsonEdit" oninput="
-				try {
-					const newData = JSON.parse(this.value)
-					editor.data = newData
-					editor.renderCanvasData(editorCanvas)
-					editor.renderHtmlData(editorHtml)
-					editorJsonEdit.style.border = '1px solid green'
-				}
-				catch (e) {
-					console.log(e)
-					editorJsonEdit.style.border = '1px solid red'
-				}
-			" style="width: 680px; height: 360px;" placeholder="No test data available"></textarea>
+		<div class="tests-container">
+			<div class="test">
+				<h4 style="margin: 0px;">Live JSON data editor:</h4>
+				<hr>
+				<textarea id="editorJsonEdit" oninput="
+					try {
+						const newData = JSON.parse(this.value)
+						editorDocument.data = newData
+						editorDocument.renderCanvasData(editorCanvas, false)
+						editorDocument.renderHtmlData(editorHtml)
+						poemEditor.updateCanvas()
+						editorJsonEdit.style.border = '1px solid green'
+					}
+					catch (e) {
+						console.log(e)
+						editorJsonEdit.style.border = '1px solid red'
+					}
+				" style="width: 680px; height: 360px;" placeholder="No test data available"></textarea>
+			</div>
+			<div class="test">
+				<h4 style="margin: 0px;">Live canvas visual editor:</h4>
+				<hr>
+				<poem-canvas-editor id="poemEditor"></poem-canvas-editor>
+			</div>
 		</div>
 	</div>
 </body>
@@ -311,15 +326,18 @@
 
 	function setTest(name) {
 		if (name == "styledText") {
-			editor.data = styledTextDocument
+			editorDocument.data = styledTextDocument
 		}
-		editorJsonEdit.innerHTML = JSON.stringify(editor.data, null, 4)
-		editor.renderCanvasData(editorCanvas)
-		editor.renderHtmlData(editorHtml)
+		editorJsonEdit.innerHTML = JSON.stringify(editorDocument.data, null, 4)
+		editorDocument.renderCanvasData(editorCanvas, false)
+		editorDocument.renderHtmlData(editorHtml)
+		editorDocument.renderBoundingBoxes(editorBounds)
+		poemEditor.useDocument(editorDocument)
 	}
 
 	const editorScale = 1.5
-	const editor = new EditorDocument("", editorScale, 18)
+	const editorDocument = new EditorDocument("", editorScale, 18)
+	editorDocument.canvasDebug = true
 	setTest("styledText")
 </script>
 </html>

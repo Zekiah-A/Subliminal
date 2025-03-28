@@ -1,12 +1,8 @@
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using SubliminalServer.ApiModel;
-using SubliminalServer.DataModel.Account;
-using SubliminalServer.DataModel.Report;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace SubliminalServer;
