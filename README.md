@@ -10,6 +10,7 @@ Tervetuoli. This site is a spin-off of traditional poetic anthologies, intended 
 Here you can find the weirdest, coolest and most unexpected poems known to ~~mankind~~ peoplekind.
 Enjoy 😎.
 
+
 ### Note:
 
 All content on this Website has been produced as a joke, nothing said here reflects the views or beliefs of any real-world authors.
@@ -21,6 +22,3 @@ The content of this site itself is licensed under the [Creative Commons Attribut
 Summaries of these licenses are available at [CC BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/) and [GPL-3](https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)).
 
 For plaintext versions of these licenses, see enclosed copies in the project source at `LICENSE` and `CONTENT_LICENSE` respectively.
-
-### Are you a lost developer?
-Come check out the [technical specifications](./TECHNICAL_SPECIFICATIONS.md) for help on getting started!
