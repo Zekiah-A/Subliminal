@@ -1,3 +1,6 @@
+using System.Buffers.Binary;
+using System.Text;
+using System.Text.Json;
 using WatsonWebsocket;
 
 namespace SubliminalServer.LiveEdit;
@@ -9,7 +12,7 @@ public class LiveEditSocketServer
 {
     private readonly WatsonWsServer app;
     // List of draft guids + draft poem data that currently have clients connected
-    /*private readonly Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();*/
+    private readonly Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();
     private readonly Dictionary<ClientMetadata, LiveEditClient> clients = new();
 
     private readonly DirectoryInfo draftsDir = new(@"Drafts");
@@ -19,19 +22,14 @@ public class LiveEditSocketServer
         app = new WatsonWsServer(port);
     }
     
-    /*
     public async Task StartAsync()
     {
-        app.MessageReceived += (sender, args) =>
+        //In the server's eyes, client does not exist until it has sent a join session packet, therefore no onconnect handler.
+        
+        app.MessageReceived += async (sender, args) =>
         {
-            if (args.Data.Array is null)
-            {
-                return;
-            }
-            
-            var dataPacket = new ReadablePacket(args.Data.Array);
 
-            switch ((LiveEditClientPacket) dataPacket.ReadByte())
+            switch ((LiveEditClientPacket) args.Data[0])
             {
                 // Client is attempting to join a session, via it's draft GUID.
                 case LiveEditClientPacket.JoinSession:
@@ -41,20 +39,20 @@ public class LiveEditSocketServer
                     // Bytes after will be draftGuid
                     var draftGuid = Encoding.UTF8.GetString(args.Data[42..]);
 
-                    if (!await Account.Account.CodeIsValid(code))
+                    /*if (!await Account.Account.CodeIsValid(code))
                     {
                         await DisconnectClient(args.Client, "Unable to authorise account ownership.");
                         return;
-                    }
+                    }*/
 
                     //Create session if does not exist, and load poem data into mem
                     if (!sessions.ContainsKey(draftGuid))
                     {
-                       // await using var openStream = File.OpenRead(Path.Join(draftsDir.Name, draftGuid));
-                      //  var draftData = await JsonSerializer.DeserializeAsync<PurgatoryAuthenticatedEntry>(openStream, Utils.DefaultJsonOptions);
+                        await using var openStream = File.OpenRead(Path.Join(draftsDir.Name, draftGuid));
+                        var draftData = await JsonSerializer.DeserializeAsync<PurgatoryAuthenticatedEntry>(openStream, Utils.DefaultJsonOptions);
                         if (draftData is null)
                         {
-                            //await DisconnectClient(args.Client, "Draft poem to edit does not exist.");
+                            await DisconnectClient(args.Client, "Draft poem to edit does not exist.");
                             return;
                         }
                         
@@ -65,7 +63,7 @@ public class LiveEditSocketServer
                     var clientGuid = "";//await Account.Account.GetGuid(code);
 
                     //If client is authed in this draft's data, or is literally the poem owner, then we allow them into the session
-                    
+                    /*
                     if (!sessions[draftGuid].AuthorProfileKey.Equals(clientGuid) || !sessions[draftGuid].AuthorisedEditors.Contains(clientGuid))
                     {
                         await DisconnectClient(args.Client, "You are not an authorised editor of this poem.");
@@ -88,7 +86,7 @@ public class LiveEditSocketServer
                     else
                     {
                         clients[args.Client] = clients[args.Client] with { Session = draftGuid };
-                    }
+                    }*/
                     break;
                 }
                 case LiveEditClientPacket.FormatText:
@@ -118,7 +116,7 @@ public class LiveEditSocketServer
                     
                     foreach (var other in ClientSessionMembers(sessionClient))
                     {
-                     //   await app.SendAsync(other.Key, args.Data);
+                        await app.SendAsync(other.Key, args.Data);
                     }
                     break;
                 }
@@ -127,7 +125,7 @@ public class LiveEditSocketServer
                     var sessionClient = clients[args.Client];
                     foreach (var other in ClientSessionMembers(sessionClient))
                     {
-                       // await app.SendAsync(other.Key, args.Data);
+                        await app.SendAsync(other.Key, args.Data);
                     }
                     break;
                 }
@@ -184,5 +182,4 @@ public class LiveEditSocketServer
     {
         return clients.Where(c => c.Value.Session == client.Session && c.Value != client);
     }
-    */
 }

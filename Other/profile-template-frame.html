@@ -6,40 +6,40 @@
   <link rel="stylesheet" href="../styles.css">
   <script src="../account.js"></script>
 </head>
-<body class="headered-body">
-	<h1>Account</h1>
-	<div class="profile-container">
-		<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
-		<div style="flex-direction:column">
-			<p class="profile-title">I'm </p><p class="profile-title" id="profileName">Nameless</p><p class="profile-title" id="profileRoleText">, a writer</p>
-			<p style="width: min(442px, 100%); line-break: anywhere;"  id="profileBiography">I have no biography, I am the unknown.</p>
-			<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
-				<div>🌍&nbsp;<span id="profileLocation">Planet of Earth, Milky Way</span></div>
-				<div>📌&nbsp;<span id="profilePinned">Nothing pinned yet!</span></div>
-			</div>
-			<div id="profileBadges"></div>
-		</div>
-	</div>
-	<br>
-	<h2>Recent works:</h2>
-	<div id="recentWorks">
-		<div class="poem-card">
-			<h4>London</h4>
-			<p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
-		</div>
-	</div>
-	<br>
+<body>
+    <h1>Account</h1>
+    <div class="profile-container">
+        <img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200">
+        <div style="flex-direction:column">
+            <p class="profile-title">I'm </p><p class="profile-title" id="profileName">Nameless</p><p class="profile-title" id="profileRoleText">, a writer</p>
+            <p style="width: min(442px, 100%); line-break: anywhere;"  id="profileBiography">I have no biography, I am the unknown.</p>
+            <div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
+                <div>🌍&nbsp;<span id="profileLocation">Planet of Earth, Milky Way</span></div>
+                <div>📌&nbsp;<span id="profilePinned">Nothing pinned yet!</span></div>
+            </div>
+            <div id="profileBadges"></div>
+        </div>
+    </div>
+    <br>
+    <h2>Recent works:</h2>
+    <div id="recentWorks">
+        <div class="poem-card">
+            <h4>London</h4>
+            <p class="poem-preview">I walk through each chartered street, near where the chartered thames do flow. And marks on every face I meet, marks of weakness, marks of woe.</p>
+        </div>
+    </div>
+    <br>
 </body>
 <script>
-	const params = new URLSearchParams(location.search)
+    const params = new URLSearchParams(location.search)
 
 	let stringToHtml = text => {
-	  let htmlObject = document.createElement('temp')
-	  htmlObject.innerHTML = text
-	  return htmlObject.firstElementChild
-	}
+      let htmlObject = document.createElement('temp')
+      htmlObject.innerHTML = text
+      return htmlObject.firstElementChild
+    }
 
-	function setProfileAvatar(newUrl) {
+    function setProfileAvatar(newUrl) {
 		if (newUrl == null) return
 		profileAvatar.src = newUrl
 	}
@@ -50,7 +50,7 @@
 		profileRoleText.textContent = (["a", "e", "i", "o", "u"].indexOf(newRole[0].toLowerCase()) !== -1 ? ", an " : ", a ") + newRole
 	}
 
-	async function setProfileBadges(newBadges) {
+    async function setProfileBadges(newBadges) {
 		if (newBadges == null) return
 		
 		for (let badge of newBadges) {
@@ -74,11 +74,11 @@
 		}
 	}
 
-	async function initialise() {
-		if (!params.get("guid")) {
-			console.error("Could not display profile information: No GUID provided")
+    async function initialise() {
+        if (!params.get("guid")) {
+            console.error("Could not display profile information: No GUID provided")
 			return
-		}
+        }
 
 		let profileObject = await getPublicProfile(params.get("guid"))
 		profileName.textContent = profileObject.penName || "Nameless"
@@ -88,8 +88,8 @@
 		setProfileRole(profileObject.role || "writer")
 		setProfileAvatar(profileObject.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
 		setProfileBadges(profileObject.badges)
-	}
+    }
 
-	initialise()
+    initialise()
 </script>
 </html>

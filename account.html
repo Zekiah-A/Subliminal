@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<title>Subliminal</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="Resources/AbbstraktDog.ico">
-	<link rel="stylesheet" href="./styles.css">
-	<script src="./Other/component-registrar.js"></script>
-	<script src="./Other/account-options-template.js"></script>
-	<script src="./Other/header-template.js"></script>
-	<script src="./Other/login-template.js"></script>
-	<script src="./server.js"></script>
-	<script src="./account.js"></script>
-	<style>
+   <title>Subliminal</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./styles.css">
+   <script src="./Other/component-registrar.js"></script> 
+   <script src="./Other/header-template.js"></script>
+   <script src="./Other/server.js"></script>
+   <script src="account.js"></script>
+   <style>
 		body {
 			overflow-x: hidden;
 			overflow-y: scroll;
@@ -33,62 +30,11 @@
 			display: flex;
 		}
 
-		.profile-picture {
-			position: relative;
-			height: 200px;
-			width: 200px;
-			display: flex;
-			overflow: clip;
-			border-radius: 4px;
-		}
-
-		.profile-picture::before {
-			position: absolute;
-			content: "";
-			width: 100%;
-			height: 100%;
-			opacity: 0;
-			transition: .2s opacity;
-			background-color: rgba(0, 0, 0, 0.2);
-		}
-
-		.profile-picture:focus-within > button,
-			.profile-picture:hover > button,
-			.profile-picture:focus-within::before,
-			.profile-picture:hover::before {
-			opacity: 1;
-		}
-
-		.profile-picture > button {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			width: max-content;
-			text-align: center;
-			display: flex;
-			align-items: center;
-			transition: .2s opacity;
-			opacity: 0;
-		}
-
 		#profileName {
-			--contentWidth: 198px;
+			--contentWidth: 186px;
 			display: inline-block;
-			width: 198px;
-		}
-
-		#profileUsername {
-			opacity: 0.8;
-			font-weight: bold;
-		}
-
-		#profileBiography {
-			width: min(442px, 100%);
-			line-break: anywhere;
-			resize: none;
-			margin-top: 8px;
-			min-height: 72px;
+			min-width: 186px;
+			width: 186px;
 		}
 
 		#recentWorks {
@@ -105,23 +51,8 @@
 			margin-bottom: 16px;
 		}
 
-		.profile-details {
-			display:flex;
-			column-gap:16px;
-			flex-direction:column;
-			margin-top:8px
-		}
-
-		.profile-aside {
-			flex-direction:column;
-			display: flex;
-			flex-wrap: wrap;
-		}
-
 		.editable {
 			position: relative;
-			background-color: transparent;
-			color: var(--text-colour);
 			border: none;
 		}
 
@@ -155,85 +86,74 @@
    </style>
 </head>
 
-<body class="headered-body">
+<body>
 	<subliminal-header></subliminal-header>
-	<dialog id="profileRole" style="height: fit-content; width: 40%;" class="popup">
+	<br><br>
+	<div id="profileRole" style="height: fit-content; width: 40%; display: none;" class="popup">
 		<h2>Your profile role:</h2>
 		<div class="role-grid">
-			<button type="button" class="popup-button" onclick="setProfileRole('writer');">Writer</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('reader');">Reader</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('listener');">Listener</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('poet');">Poet</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('critic');">Critic</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('analyser');">Analyser</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('teacher');">Teacher</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('student');">Student</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('casual');">Casual</button>
-			<button type="button" class="popup-button" onclick="setProfileRole('artist');">Artist</button>
+			<div class="popup-button" onclick="setProfileRole('writer');">Writer</div>
+			<div class="popup-button" onclick="setProfileRole('reader');">Reader</div>
+			<div class="popup-button" onclick="setProfileRole('listener');">Listener</div>
+			<div class="popup-button" onclick="setProfileRole('poet');">Poet</div>
+			<div class="popup-button" onclick="setProfileRole('critic');">Critic</div>
+			<div class="popup-button" onclick="setProfileRole('reviewer');">Reviewer</div>
+			<div class="popup-button" onclick="setProfileRole('analyser');">Analyser</div>
+			<div class="popup-button" onclick="setProfileRole('teacher');">Teacher</div>
+			<div class="popup-button" onclick="setProfileRole('student');">Student</div>
+			<div class="popup-button" onclick="setProfileRole('hobbyist');">Hobbyist</div>
+			<div class="popup-button" onclick="setProfileRole('casual');">Casual</div>
+			<div class="popup-button" onclick="setProfileRole('artist');">Artist</div>
 		</div>
 		<br>
-		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="12" oninput="setProfileRole(value)">
+		<input type="text" class="popup-input" placeholder="Write your own!" maxlength="8" oninput="setProfileRole(value)">
 		<br>
-		<button type="button" class="popup-button" onclick="profileRole.close(); updateAccount('role', role)">Done</button>
+		<div class="popup-button" onclick="profileRole.style.display = 'none'; executeAccountAction(actionType.UpdateRole, role)">Done</div>
 		<p style="opacity: 0.6;">These are for vanity purposes only, setting a certain role won't limit you from doing certain actions!</p>
-	</dialog>
-	<dialog id="accountEmail" style="height: fit-content; width: 30%;" class="popup flex-popup">
+	</div>
+	<div id="accountEmail" style="height: fit-content; width: 30%; display: none;" class="popup">
 		<h2>Enter your email:</h2>
 		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="64" oninput="setProfileEmail(value)">
 		<br>
-		<button class="popup-button" onclick="accountEmail.close(); updateAccount('email', email)">Done</button>
-	</dialog>
-	<div class="div-centre">
-		<div class="profile-container">
-		<div class="profile-picture">
-			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200"
-				ondragenter="
-					event.stopPropagation()
-					event.preventDefault()
-				" ondragover="
-					event.stopPropagation()
-					event.preventDefault()
-					this.style.outline = '4px solid var(--input-hilight)'
-					profilePictureButton.focus()
-				" ondrop="
-					event.stopPropagation()
-					event.preventDefault()
-					this.style.outline = 'initial'
-					const file = event.dataTransfer.files[0]
-					if (file && file.type.startsWith('image/')) updateProfilePicture(file)
-				" ondragleave="
-					event.stopPropagation()
-					event.preventDefault() 
-					this.style.outline = 'initial'
-				">
-				<button type="button" id="profilePictureButton" onclick="profilePictureInput.click()">
-					<img src="./Resources/EditPhoto.svg" alt="Edit">
-					Click to change
-				</button>
-				<input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="
-					if (this.files[0]) {
-						updateProfilePicture(this.files[0])
-					}">
+		<div class="popup-button" onclick="accountEmail.style.display = 'none'; executeAccountAction(actionType.UpdateEmail, email)">Done</div>
+	</div>
+	<div id="accountNumber" style="height: fit-content; width: 30%; display: none;" class="popup">
+		<h2>Enter your phone number:</h2>
+		<div style="display: flex; column-gap: 4px">
+			<input id="accountCCodeInput" type="text" class="popup-input" style="width: 64px; display: inline;" placeholder="+44" value="+" maxlength="4" oninput="if (value.length < 1) value = '+';">
+			<input id="accountNumberInput" type="text" class="popup-input" style="flex-grow: 1; display: inline;" placeholder="0123456789">
 		</div>
-			<div class="profile-aside">
+		<br>
+		<div class="popup-button" onclick="accountNumber.style.display = 'none'; setProfileNumber(accountCCodeInput.value + accountNumberInput.value); executeAccountAction(actionType.UpdateNumber, number)">Done</div>
+	</div>
+	<div id="profileAvatarUrl" style="height: fit-content; width: 40%; display: none;" class="popup"> <!--display: none;-->
+		<h2>Set profile image</h2>
+		<p>Enter image link:</p>
+		<input id="profileAvatarInput" type="text" placeholder="https://public.keskofiles.com/f/k-ruoka/product/7350126081371" style="width:calc(100% - 8px);display:block;line-height:200%">
+		<br>
+		<div class="popup-button" onclick="profileAvatarUrl.style.display = 'none'; setProfileAvatar(profileAvatarInput.value); executeAccountAction(actionType.UpdateAvatar, avatarUrl)">Done</div>
+	</div>
+	<div class="div-centre">
+		<br><br><br>
+		<div class="profile-container">
+			<img id="profileAvatar" src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg" width="200" height="200" onclick="profileAvatarUrl.style.display='block';">
+			<div style="flex-direction:column;display: flex;flex-wrap: wrap;">
 				<div class="profile-title-container">
 					<p class="profile-title">I'm </p>
-					<input id="profileName" type="text" class="profile-title editable" placeholder="Nickname"
-						maxlength="16" oninput="setProfileName(this.value)"
-						onblur="updateAccount('pen-name', profileName.value)" value="Nameless">
+					<input id="profileName" type="text" class="profile-title editable"  placeholder="username"
+						maxlength="16" oninput="this.style.width = 0; this.style.setProperty('--contentWidth', this.scrollWidth + 'px'); this.style.width = 'var(--contentWidth)';"
+						onblur="executeAccountAction(actionType.UpdatePenName, profileName.value)" value="Nameless">
 					<p class="profile-title">, </p>
 					<p class="profile-title" id="profileRoleText" style="cursor: pointer;"
 						onmouseover="this.style.textDecoration = 'underline'" onmouseleave="this.style.textDecoration = 'none';"
-						onclick="profileRole.showModal()">a writer</p>
+						onclick="profileRole.style.display = 'block';">a writer</p>
 				</div>
-				<span id="profileUsername">@username</span>
-				<textarea id="profileBiography" class="editable" placeholder="Click here to start writing your bio!"
-					maxlength="360" onblur="updateAccount('biography', profileBiography.value)"></textarea>
-				<div class="profile-details">
+				<textarea id="profileBiography" style="width: min(442px, 100%); line-break: anywhere; resize: none; margin-top: 16px; min-height: 72px;"
+					class="editable" placeholder="Click here to start writing your bio!" maxlength="360"
+					onblur="executeAccountAction(actionType.UpdateBiography, profileBiography.value)"></textarea>
+				<div style="display:flex;column-gap:16px;flex-direction:column;margin-top:8px">
 					<div>🌍&nbsp;<input id="profileLocation" type="text" class="editable"
-						onblur="updateAccount('location', profileLocation.value)"
+						onblur="executeAccountAction(actionType.UpdateLocation, profileLocation.value)"
 						placeholder="Planet of Earth, Milky Way" maxlength="36"></div>
 					<div>📌&nbsp;<span id="profilePinned">Poem1, Poem2, Poem3, Poem4, Poem5</span></div>
 				</div>
@@ -251,9 +171,14 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
-		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.showModal()">
-			Change Email
-			<div class="button-tooltip">Change the primary email used for login, and allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or other important updates</div>
+		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountEmail.style.display = 'block';">
+			Edit Email
+			<div class="button-tooltip">Allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or just spam your inbox with random stuff</div>
+		</button>
+
+		<button style="padding: 8px;margin: 4px;position: relative;" onclick="accountNumber.style.display = 'block';">
+			Edit Phone Number
+			<div class="button-tooltip">Use 2FA with your account, and allow us to send you messages about account activity, or just send random sms funnnies</div>
 		</button>
 
 		<br><br>
@@ -267,42 +192,29 @@
 
 		<br><br>
 		<hr>
-		<details>
-			<summary>
-				<h2 style="cursor: pointer; display: inline-block;">Account agreement</h2>
-			</summary>
+		<h2 style="cursor: pointer;"
+			onclick="accountAgreement.style.display = accountAgreement.style.display == 'none' ? 'block' : 'none';">Account agreement +</h2>
+		<div id="accountAgreement" style="display: none;">
 			<h3>Privacy and Security:</h3>
-			<p>
-				Account security is a priority here. This site does not use tracking systems,
-				external cookies, or any methods that compromise your privacy. We never sell,
-				share, or process your personal information or account data with any third party.
-				If you believe your account has been compromised or someone else has gained access
-				to it, please report the issue immediately <a href="mailto:zekiahamoako@outlook.com">here</a>.
+			<p>While other things on this site may be, account security is no joke here, this site does not make use of tracking,
+				external cookies, etc, and the same principle goes for accounts, we will ever sell, share, or process
+				anything related to personal information or accounts with a third party. If you think you have lost acess to your account,
+				or someone else has gained access to it, please report <a href="mailto:zekiahamoako@outlook.com">here</a>.
 			</p>
-			<h3>Terms of Service (TOS) and Guidelines:</h3>
-			<p>
-				This site aims to be a place for freedom of expression through the medium of poetry.
-				While we support and protect your creative freedom, we cannot take responsibility for
-				if you face penalties, legal action, or persecution from institutions, governments,
-				or individuals due to your work submitted here. However, we will strive to protect your
-				rights and works whenever possible. This includes:
+			<h3>TOS and Regulations:</h3>
+			<p>This site aims to be a place for freedom of expresion through the medium of poetry. While we can not claim
+				responsibility for if you fall under punishment, penilisation, or persecution by an institution, government, or
+				other individual as a result of a work submitted here, we will try to protect your works when possible. This
+				means, not allowing your private personal info to be shared with anyone but you, ensuring that minimal information
+				can be accessed in the case of a data leak, and allowing you to remove any data you have uploaded here on request
+				as per compliance with GDPR regulations.
 			</p>
-			<ul>
-				<li>Keeping your private information confidential and only accessible to you.</li>
-				<li>Minimizing the information at risk in the event of a data breach.</li>
-				<li>Enabling you to delete any data you've uploaded, in accordance with GDPR regulations.</li>
-			</ul>
-			<p>
-				If you use this site to publicly post illegal, NSFW (Not Safe For Work), or otherwise
-				morally objectionable content, your account may be suspended, and your IP address
-				blocked from submitting future content.
+			<p>If you use this site, with the explicit purpose to publicly post illegal, nsfw, or plain morally objectable content,
+				your account may be removed, or IP blocked from submitting content to the site. Keep in mind that if you post any
+				personally identifying information publicly on this site, it may be used against you by others, and we are not accountable
+				for any consequences that may become of it. 
 			</p>
-			<p>
-				Please be aware that if you publicly post any personally identifying information on this
-				site, it could be used against you by others. We are not liable for any consequences that
-				may arise from such actions.
-			</p>
-		</details>
+		</div>
 	</div>
 	<a href="./contents" class="back"> &lt;- Back</a>
 </body>
@@ -312,12 +224,13 @@
 	let number = ""
 	let email = ""
 
+
 	//TODO: Move all this to my custom profile template frame component
 	let stringToHtml = text => {
-	  let htmlObject = document.createElement('temp')
-	  htmlObject.innerHTML = text
-	  return htmlObject.firstElementChild
-	}
+      let htmlObject = document.createElement('temp')
+      htmlObject.innerHTML = text
+      return htmlObject.firstElementChild
+    }
 
 	function setProfileAvatar(newUrl) {
 		if (newUrl == null) return
@@ -344,23 +257,18 @@
 		email = newEmail
 	}
 
-	function setProfileName(value) {
-		profileName.value = value
+	function setProfileNumber(newNumber) {
+		if (newNumber == null) return
 
-		if (value) {
-			profileName.style.width = "0"
-			profileName.style.minWidth = ""
+		if (!number) {
+			accountCCodeInput.value = newNumber.substring(0, 2)
+			accountNumberInput.value = newNumber.slice(3) 
+		}
 
-			requestAnimationFrame(() => {
-				profileName.style.setProperty("--contentWidth", profileName.scrollWidth + "px")
-				profileName.style.width = "var(--contentWidth)"
-			})
-		}
-		else {
-			// Placeholder min-width: 196px
-			profileName.style.minWidth = "198px"
-		}
+		number = newNumber
 	}
+
+
 	// This method should produce:
 	// <div class="following-card">
 	//		<img src="https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg">
@@ -416,7 +324,7 @@
 		}
 
 		for (let guid of newGuids) {
-			let poem = await (await fetch(serverBaseAddress + "/purgatory/" + guid)).json()
+			let poem = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
 
 			let el = document.createElement("div")
 			el.className = "poem-card"
@@ -463,103 +371,40 @@
 			localStorage.removeItem("accountGuid")
 		}
 	}
-	
-	async function updateAccount(propertyPath, value) {
-		const response = await fetch(serverBaseAddress + "/accounts/me/" + propertyPath, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(value)
-		});
-
-		if (!response.ok) {
-			confirmFail()
-			return
-		}
-	}
-
-	// https://stackoverflow.com/questions/12710001/how-to-convert-uint8-array-to-base64-encoded-string
-	async function bufferToBase64(buffer) {
-		const base64url = await new Promise(resolve => {
-			const reader = new FileReader()
-			reader.onload = () => resolve(reader.result)
-			reader.readAsDataURL(new Blob([buffer]))
-		})
-
-		return base64url.slice(base64url.indexOf(',') + 1);
-	}
-
-	async function updateProfilePicture(file) {
-		let reader = new FileReader()
-		reader.onload = async function (event) {
-			const resultBytes = new Uint8Array(event.target.result)
-			let encodedResult = await bufferToBase64(resultBytes)
-			const res = await fetch(serverBaseAddress + "/accounts/me/avatar", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			    body: JSON.stringify({
-					mimeType: file.type,
-					data: encodedResult
-				})
-			})
-			if (res.ok) {
-				profileAvatar.src = imageUrl
-			}
-			else {
-				confirmFail("Failed to update profile avatar")
-			}
-		}
-		reader.readAsArrayBuffer(file)
-		const imageUrl = URL.createObjectURL(file)
-	}
 
 	async function initialise() {
 		if (!await isLoggedIn()) {
-			if (confirm("You don't seem to have an account here, or are not logged in. Log in now?")) {
-				window.location.href = window.location.origin + "/login?referrer=/account"
-			}
-			else {
-				history.back()
-			}				
+			alert("You don't seem to have an account here, or are not logged in.\n\nHead over to the contents page to create one or sign in.")
 			return
 		}
 
-		try {
-			const response = await fetch(serverBaseAddress + "/accounts/me", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+		fetch(serverBaseAddress + "/Signin", {
+			method: "POST",
+			headers: { 'Content-Type': 'application/json' },
+			body: '"' + localStorage.accountCode + '"'
+		})
+		.then((signinResponse) => {
+			if (!signinResponse.ok) { confirmFail(); return }
+			return signinResponse.json() 
+		})
+		.then((signinObject) => {
+			profileName.value = signinObject.profile?.penName || "Nameless"
+			profileName.size = profileName.value.length
 
-			if (!response.ok) {
-				confirmFail()
-				return
-			}
-
-			const accountData = await response.json()
-			setProfileName(accountData.penName || "Nameless")
-			profileUsername.textContent = "@" + accountData.username
-			profileBiography.value = accountData.biography || "Click here to start writing your bio!"
-			profileLocation.value = accountData.location || "Planet Earth, Milky Way"
-			profilePinned.textContent = accountData.pinnedPoems?.length > 0 ? accountData.pinnedPoems : "Nothing pinned yet."
-			setProfileRole(accountData.role || "writer")
-			setProfileAvatar(accountData.avatarUrl 
-				? serverBaseAddress + accountData.avatarUrl
-				: "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
-			setProfileBadges(accountData.badges || [])
-			setProfileFollowing(accountData.following || [])
-			setProfileRecent(accountData.poems || [])
-		}
-		catch (error) {
-			console.error("Sign-in failed:", error)
-			confirmFail()
-		}
+			profileBiography.value = signinObject.profile?.biography || "Click here to start writing your bio!"
+			profileLocation.value = signinObject.profile?.location || "Planet Earth, Milky Way"
+			profilePinned.textContent = (signinObject.profile?.pinnedPoems?.length > 0 ? signinObject.profile?.pinnedPoems : "Nothing pinned yet.") || "Nothing pinned yet."
+			setProfileRole(signinObject.profile?.role || "writer")
+			setProfileAvatar(signinObject.profile?.avatarUrl || "https://user-images.githubusercontent.com/11250/39013954-f5091c3a-43e6-11e8-9cac-37cf8e8c8e4e.jpg")
+			setProfileBadges(signinObject.profile?.badges)
+			setProfileFollowing(signinObject.profile?.following)
+			setProfileRecent(signinObject.profile?.poemGuids)
+		})
+		.catch((e) => confirmFail())
 	}
 
 	initialise()
+	console.log("%cYour account's data is held in browser local storage, a thing that can be acessed by putting code in this browser console! If someone tells you to put something here, there is a high chance that you may get hacked!", "background: red; color: yellow; font-size: large")
+	console.log("%cTL;DR: Never put anything you do not understand here. Uncool things may happen.", "color: blue; font-size: x-large")
 </script>
 </html>

@@ -2,6 +2,7 @@
 	path = SubliminalServer/WatsonWebsocketPlus
 	url = https://github.com/Zekiah-A/WatsonWebsocketPlus.git
 	branch = plus
-[submodule "SubliminalServer/DataProto"]
-	path = SubliminalServer/DataProto
-	url = https://github.com/Zekiah-A/DataProto.git
+[submodule "SubliminalServer/UnbloatDB"]
+	path = SubliminalServer/UnbloatDB
+	url = https://github.com/Zekiah-A/UnbloatDB.git
+	branch = reference2
