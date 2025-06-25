@@ -2,20 +2,346 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Antholgies | Subliminal</title>
+	<title>Antholgy | Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="assets/AbbstraktDog.ico">
+	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="contents.css">
 	<script src="src/components/component-registrar.js"></script>
 	<script src="src/components/account-options-template.js"></script>
 	<script src="src/components/header-template.js"></script>
 	<script src="src/components/login-template.js"></script>
+	<script src="src/components/select-template.js"></script>
 	<script src="src/account.js"></script>
 </head>
-<body>
+<body class="headered-body">
 	<subliminal-header></subliminal-header>
+	<main class="contents-main-centre">
+		<section>
+			<h1>Subliminal classics:</h1>
+			<div id="classicsHeader" class="classics-header">
+				<input type="text" class="searchbar" id="searchbar" onkeyup="searchContents(this.value)" placeholder="search poems">
+				<subliminal-select placeholder="Volume">
+					<option>All</option>
+					<hr>
+					<option>War and Phrenics</option>
+					<option>Really Stupid Stuff</option>
+					<option>Parodies and Adaptations</option>
+					<hr>
+					<option>Idiots</option>
+					<option>Sublime and Revelation</option>
+					<option>Tales and Tomes</option>
+					<hr>
+					<option>Copypastas</option>
+				</subliminal-select>
+			</div>
+			<div id="contentsGridContainer" class="grid-container">
+				<div>
+					<h3>Volume 1: (Phrenes and Memes)</h3>
+					<!-- TODO: Migrate from div soup to details and summary for simplicity -->
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">War and Phrenics:</p>
+						<p class="section-description">A collection of poems based on conflict and mentality</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-1/war-and-phrenics/besusk">1. Besusk - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/the-sitting-down-of-the-opacity-brigade">2. The sitting down of the opacity brigade - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/venger">3. Venger - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/stomped">4. Stomped - By Junaid</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/bamitz">5. Bamitz - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/seppaku">6. Seppaku - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/blood-oath">7. Blood Oath - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/viiiiibraaanium">8. Viiiiibraaanium! - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/happy-old-man">9. Happy Old Man - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/tenacity">10. Tenacity - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/who-art-in-heaven">11. Who art in heaven? - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/the-ride">12. The Ride - By Axel</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/blitzkrieg">13. BLITZKRIEG - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/war-and-phrenics/thalassophobia">14. Thalassophobia - By Junaid</a>
+						</div>
+					</div>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Really Stupid Stuff:</p>
+						<p class="section-description">Humorous, nonsensical, and utterly ridiculous poems</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-1/really-stupid-stuff/bibbilance">1. Bibbilance - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/sylable-of-obamama">2. Sylable Of Obamama - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/han-vaan-istu">3. Hän vaan istu - By Noah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/organs">4. Organs - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/shifty-will">5. Shifty Will - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/i-don't-write-poems">6. I don't write POEMS - By Noah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/i-saw-you-at-503-on-persely-road">7. I saw you at 5:03 on Persely Road - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/badges-ft-cardi-b">8. Badges (Ft Cardi B) - By Lucky</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/statude-des-amongus">9. Statude des Amongus - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/81959">10. 8:19:59 - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/once-in-princess-selva's-classroom">11. Once in Princess Selva's classroom - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/effavescence">12. Effavescence - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/creativity">13. Creativity - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/this-is-(not)-the-art-of-war">14. This is (not) "the art of war" - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/trolling-my-pen">15. Trolling my Pen - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/squib-games">16. Squib Games - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/mr-fisher">17. Mr Fisher - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/skyfall">18. Skyfall - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/carbo-hydron-of-death">19. Carbo-Hydron of death - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/soyware">20. Soyware - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/jet-black">21. Jet Black - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/really-stupid-stuff/ten">22. TEN - By Zekiah</a>
+							<br>
+						</div>
+					</div>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Parodies and Adaptations:</p>
+						<p class="section-description">Parodies of iconic poems you learned in school</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/the-interlude">1. The Interlude - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/stuff-on-the-iso">2. Stuff On The Iso - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/ink">3. Ink - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/tree-stumps">4. Tree Stumps - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/ozyandyas">5. Ozyandyas - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/public-toilet">6. Public Toilet - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/ketones">7. Ketones - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/my-first-among-us-game">8. My first Among Us game - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/composed-upon-mount-isso">9. Composed upon Mount Isso, March 22, 2022 - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-1/parodies-and-adaptations/the-charge-of-the-bike-brigade">10. The Charge Of The Bike Brigade - By Angelos</a>
+							<br>
+						</div>
+					</div>
+				</div>
+				<div>
+					<h3>Volume 2: (Idiots and Revelations)</h3>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Idiots:</p>
+						<p class="section-description">Critiques of society, people and culture</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-2/idiots/the-great-prison-of-america">1. The Great Prison Of America - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/industrial-society">2. Industrial Society - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/a-conclusive-thesis-on-modern-day-consumerism">3. A conclusive thesis on modern day consumerism - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/reality">4. Reality - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/a-long-road-to-al'mogus">5. A long road to Al'mogus - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/dear-liberals">6. Dear, liberals - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/old-man-consequences">7. Old Man Consequences - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/i-am-sorrounded-by-idiots">8. I am sorrounded by Idiots - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/an-unfortunate-event">9. An Unfortunate Event - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/modern-day-brockelhurst">10. Modern Day Brockelhurst - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/the-epilogue">11. The Epilogue - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/erfolgreich-wenn">12. Erfolgreich Wenn? - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/asylum">13. Asylum - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/a-doctor-of-schizophrenia">14. A doctor of Schizophrenia - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/five-a-side-footie">15. Five-a-side Footie - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/a-gay-encounter">16. A gay encounter - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/we-live-in-a-dictatorship">17. We live in a dictatorship - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/the-police-cause-all-the-chaos">18. The police cause all the chaos - By Angelos</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/suspended-in-h">19. Suspended in H - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/mifism">20. MIFISM - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/litigations">21. Litigations - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/almost-as-stone-as-a-rock">22. Almost as stone as a rock - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/idiots/cupcake-bomb">23. Cupcake Bomb - By Zekiah</a>
+							<br>
+						</div>
+					</div>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Sublime and Revelation:</p>
+						<p class="section-description">A collection of poems asking the big questions in life</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-2/sublime-and-revelation/babarian">1. Babarian - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/sublime-and-revelation/chiss">2. Chiss - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/sublime-and-revelation/delly">3. Delly - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/sublime-and-revelation/spiders">4. Spiders - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/volume-2/sublime-and-revelation/a-morbin-time">5. A morbin Time - By Bushi</a>
+							<br>
+						</div>
+					</div>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Tales and Tomes:</p>
+						<p class="section-description">Whimsical, mysterious and epic poems</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/volume-2/tales-and-tomes/the-tale-of-major-korean">1. The Tale of Major Korean - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/tales-and-tomes/the-burial-of-herr-fischer-vi">2. The Burial of Herr Fischer VI - By Bushi</a>
+							<br>
+							<a href="./poem?path=/volume-2/tales-and-tomes/bull-and-bush">3. Bull and Bush - By Angelos</a>
+							<br>
+						</div>
+					</div>
+					<h3>Other stuff:</h3>
+					<div class="grid-sub-container elevated" tabindex="0">
+						<p class="section-title">Copypastas:</p>
+						<p class="section-description">A collection of short stories, skits and tales</p>
+						<span class="section-collapsed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" height="36" width="36"><path d="m24 30.75-12-12 2.15-2.15L24 26.5l9.85-9.85L36 18.8Z"></path></svg></span>
+						<div class="section-body">
+							<a href="./poem?path=/other/a-joke">1. A joke - By Zekiah</a>
+							<br>
+							<a href="./poem?path=/other/the-redditor">2. The Redditor - By Bushi</a>
+							<br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<a href="disclaimer">-&gt; Subliminal Classics (disclaimer)</a>
+		<a href="./anthologies" class="back">&lt;- Back</a>
+	</main>
 </body>
 <script>
-    
+	"use strict";
+
+	// Classics searchbar and header
+	let requestedFrame = null
+	window.addEventListener("scroll", (event) => {
+		if (requestedFrame !== null) {
+			return
+		}
+		requestedFrame = requestAnimationFrame(() => {
+			const headerStuck = classicsHeader.getBoundingClientRect().y < 80
+			if (headerStuck) {
+				classicsHeader.classList.add("stuck")
+			}
+			else {
+				classicsHeader.classList.remove("stuck")
+			}
+			requestedFrame = null
+		})
+	})
+
+	function searchContents(value) {
+		//search through poem, authors, etc
+		document.querySelectorAll(".section-body a").forEach((link) => {
+			link.style.display = 'inline-block'
+			if (!value.toLowerCase().trim()) return
+			if (!link.textContent.toLowerCase().includes(value.toLowerCase().trim())) {
+				link.style.display = 'none'
+				return
+			}
+
+			openClassicSection(link.parentElement.parentElement)
+		})
+		document.querySelectorAll(".section-body br").forEach((lnb) => {
+			lnb.style.display = 'inline-block'
+			if (!value.toLowerCase().trim()) return
+			else lnb.style.display = 'none'
+		})
+	}
+
+	// Classics section initialisation
+	function toggleClassicSection(container) {
+		if (container.getAttribute("collapsed")) {
+			openClassicSection(container)
+		}
+		else {
+			collapseClassicSection(container)
+		}
+	}
+
+	function openClassicSection(container) {
+		container.removeAttribute("collapsed")
+		for (const link of container.querySelectorAll("a")) {
+			link.tabIndex = "0"
+		}
+	}
+
+	function collapseClassicSection(container) {
+		container.setAttribute("collapsed", "true")
+		for (const link of container.querySelectorAll("a")) {
+			link.tabIndex = "-1"
+		}
+	}
+
+	document.querySelectorAll(".grid-sub-container").forEach(container => {
+		collapseClassicSection(container)
+		container.addEventListener("click", event => {
+			openClassicSection(container)
+		})
+
+		container.addEventListener("keypress", event => {
+			if (event.target.classList.contains("grid-sub-container") && event.key == "Enter") {
+				toggleClassicSection(event.target)
+			}
+		})
+
+		container.querySelectorAll(".section-title, .section-collapsed").forEach(collapseLabel => {
+			collapseLabel.addEventListener("click", event => {
+				let section = event.target.parentElement
+				while (!section.classList.contains("grid-sub-container")) {
+					section = section.parentElement
+				}
+				toggleClassicSection(section)
+				event.stopPropagation()
+			})
+		})
+	})
 </script>
 </html>

@@ -178,17 +178,21 @@ body {
 	list-style-type: none;
 }
 
-#poemProcessSubInfo > li > p {
+#poemProcessSubInfo > li > * {
 	opacity: 0.6;
 	transition: .2s opacity;
 }
 
-#poemProcessSubInfo > li:hover {
-	background-color: var(--button-opaque-hover);
+#poemProcessSubInfo > li:hover > * {
+	opacity: 1;
 }
 
-#poemProcessSubInfo > li:hover > p {
-	opacity: 1;
+#poemProcessSubInfo > li > h4 {
+	margin: 0;
+}
+
+#poemProcessSubInfo > li:hover {
+	background-color: var(--button-opaque-hover);
 }
 
 #poemProcessSubInfo.scroll-in {

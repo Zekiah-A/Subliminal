@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="assets/AbbstraktDog.ico">
+	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
 	<meta name="keywords" content="">
@@ -108,19 +108,19 @@
 	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">
 		<h2>Edit poem:</h2>
 		<div style="display: flex; column-gap: 8px;">
-			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
+			<button type="button" class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
 				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./assets/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
 			</button>
-			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + poemId;">
+			<button type="button" class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + poemId;">
 				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./assets/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
 			</button>
 		</div>
 		<br>
-		<button class="popup-button" onclick="editFrame.close()">Cancel</button>
+		<button type="button" class="popup-button" onclick="editFrame.close()">Cancel</button>
 	</dialog>
 	<div id="profileFrame" style="display: none;" class="popup">
 		<iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
-		<button class="popup-button" onclick="profileFrame.style.display = 'none';">Done</button>
+		<button type="button" class="popup-button" onclick="profileFrame.style.display = 'none';">Done</button>
 	</div>
 
 	<div id="contentWarning" style="display: none;">
@@ -149,7 +149,7 @@ _______________________________________________________________
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 		</pre>
 	</div>  
-	<a href="../../contents" class="back"> &lt;- Back</a>
+	<a href="../../poems" class="back"> &lt;- Back</a>
 	<div onclick="editFrame.showModal()" class="edit">
 		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
 	</div>

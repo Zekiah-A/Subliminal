@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="assets/AbbstraktDog.ico">
+	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<script src="src/components/component-registrar.js"></script>
 	<script src="src/components/account-options-template.js"></script>
@@ -183,7 +183,7 @@
 		<h2>Enter your email:</h2>
 		<input id="accountEmailInput" type="text" class="popup-input" placeholder="example@example.com" maxlength="64" oninput="setProfileEmail(value)">
 		<br>
-		<button class="popup-button" onclick="accountEmail.close(); updateAccount('email', email)">Done</button>
+		<button type="button" class="popup-button" onclick="accountEmail.close(); updateAccount('email', email)">Done</button>
 	</dialog>
 	<div class="div-centre">
 		<div class="profile-container">
@@ -251,7 +251,7 @@
 		<h2>Private account info:</h2>
 		<hr>
 		<p>This stuff won't appear on your profile, it is for your eyes only!</p>
-		<button style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.showModal()">
+		<button type="button" style="padding: 8px; margin: 4px; position: relative;" onclick="accountEmail.showModal()">
 			Change Email
 			<div class="button-tooltip">Change the primary email used for login, and allow us to notify you when a new poem is uploaded, your poem recieves some feedback, or other important updates</div>
 		</button>
@@ -304,7 +304,7 @@
 			</p>
 		</details>
 	</div>
-	<a href="./contents" class="back"> &lt;- Back</a>
+	<a href="./poems" class="back"> &lt;- Back</a>
 </body>
 <script>
 	let role = ""

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Subliminal</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The contents page of the weirdest poetry anthology to ever exist. Manage your account, and search for poems here.">
+	<meta name="keywords" content="Poetry, Contents, Anthology, Subliminal, Search">
+	<link rel="icon" href="favicon.ico">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="contents.css">
+	<script src="src/components/component-registrar.js"></script> 
+	<script src="src/components/purgatory-entry-template.js"></script>
+	<script src="src/components/account-options-template.js"></script>
+	<script src="src/components/header-template.js"></script>
+	<script src="src/components/login-template.js"></script>
+	<script src="src/components/select-template.js"></script>
+	<script src="src/editor-document.js"></script>
+	<script src="src/server.js"></script>
+	<script src="src/account.js"></script>
+</head>
+<body class="headered-body">
+	<subliminal-header></subliminal-header>
+	<main class="contents-main-centre">
+		<!--<div class="poem-preview">
+			<iframe src="/volume-1/really-stupid-stuff/bibbilance">
+
+			</iframe>
+		</div>-->
+		<h1 style="margin-bottom: 0px;">Poem Purgatory:</h1>
+		<section>
+			<div id="filtersBar">
+				<button type="button" onclick="addPurgatoryEntries('new')">
+					<div>New</div>
+					<tooltip class="button-tooltip">The top poems with the most recent activity, be it new reviews or releases.</tooltip>
+				</button>
+				<button type="button" onclick="addPurgatoryEntries('liked')">
+					<div>Liked</div>
+					<tooltip class="button-tooltip">Your favourite poems, in the purgatory. Use the star icon in the corner of a poem to like or unlike it.</tooltip>
+				</button>
+				<button type="button" onclick="addPurgatoryEntries('recommended')">
+					<div>For me</div>
+					<tooltip class="button-tooltip">Poems recommended for you based on your past activity.</tooltip>
+				</button>
+			</div>
+			<div id="purgatoryFlex" class="horizontal-scroll-shadow">
+			</div>
+			<div id="purgatoryGrid" class="vertical-scroll-shadow" style="display: none;">
+			</div>
+			<br>
+			<div class="purgatory-actions-bottom">
+				<a href="poem-editor">+Create a Poem</a>
+			</div>
+		</section>
+		<!--<div class="popup" style="width: 60%; position: fixed; height: 80%; display: none;flex-direction: column;">
+			<h2 style="text-align: center;">Poem name - By User</h2>
+			<div class="poem-centre" style="flex-grow: 1;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
+			<div style="display: flex; position: sticky; column-gap: 8px; width: 100%; bottom: 16px; ">
+				<button type="button" class="popup-button">
+					<svg width="16" height="16" viewBox="0 -256 1850 1850">
+						<g transform="matrix(1 0 0 -1 30.373 1426.9)">
+							<path d="m1408 608v-320q0-119-84.5-203.5t-203.5-84.5h-832q-119 0-203.5 84.5t-84.5 203.5v832q0 119 84.5 203.5t203.5 84.5h704q14 0 23-9t9-23v-64q0-14-9-23t-23-9h-704q-66 0-113-47t-47-113v-832q0-66 47-113t113-47h832q66 0 113 47t47 113v320q0 14 9 23t23 9h64q14 0 23-9t9-23zm384 864v-512q0-26-19-45t-45-19-45 19l-176 176-652-652q-10-10-23-10t-23 10l-114 114q-10 10-10 23t10 23l652 652-176 176q-19 19-19 45t19 45 45 19h512q26 0 45-19t19-45z" fill="currentColor"></path>
+						</g>
+					</svg>
+				Visit poem
+				</button>
+			<button type="button" class="popup-button">Close</button>
+			</div>
+		</div>-->
+		<!--<section>
+			<h3 style="margin-bottom: 0px;">Seminars:</h3>
+			<div class="seminars-parent">
+				<figure class="seminars-side">
+					<div style="flex-grow: 1;"></div>
+					<figcaption>
+						<p style="margin: 0px;font-size: 24px;">Writing a poem people will actually want to read</p>
+						<p style="margin: 0px;">By Zekiah</p>
+					</figcaption>
+				</figure>
+				<figure class="seminars-centre">
+					<p style="color: white;text-align: center;font-size: 32px;">Check out what's new, right now!</p>
+					<video style="flex-grow: 1;border-radius: 8px;margin-left: 32px;margin-right: 32px;" controls>
+						<source src="movie.mp4" type="video/mp4">
+					</video>
+					<p style="color: white;text-align: center;font-size: 24px;">Learn more with subliminal seminars</p>
+					<a href="" style="text-align: center;">poemanthology.org/seminars</a>
+				</figure>
+				<figure class="seminars-side">
+					<div style="flex-grow: 1;"></div>
+					<figcaption>
+						<p style="margin: 0px;font-size: 24px;">Analysing a poetic work</p>
+						<p style="margin: 0px;">By Zekiah</p>
+					</figcaption>
+				</figure>
+			</div>
+		</section>-->
+		<!--<div class="seminars-parent-mobile">
+			<div class="seminars-centre">
+				<p style="color: white;text-align: center;font-size: 32px;margin: 8px;">Check out what's new, right now!</p>
+				<video style="flex-grow: 1;border-radius: 8px;/*! margin-left: 32px; *//*! margin-right: 32px; */" controls="">
+					<source src="movie.mp4" type="video/mp4">
+				</video>
+				<p style="color: white;text-align: center;font-size: 24px;margin: 8px;">Learn more with subliminal seminars</p>
+				<a href="" style="text-align: center;">poemanthology.org/seminars</a>
+			</div>
+			<div class="seminars-side-parent-mobile">
+				<div class="seminars-side-mobile">
+					<div style="flex-grow: 1;"></div>
+					<p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Writing a poem people will actually want to read</p>
+					<p style="margin: 0px;">By Zekiah</p>
+				</div>
+				<div class="seminars-side-mobile">
+					<div style="flex-grow: 1;"></div>
+					<p style="margin: 0px;font-size: 24px;max-height: 64px;overflow: auto;">Analysing a poetic work</p>
+					<p style="margin: 0px;">By Zekiah</p>
+				</div>
+			</div>
+		</div>-->
+	</main>
+	<a href="./" class="back">&lt;- Home</a>
+</body>
+<script>
+	"use strict";
+	const params = new URLSearchParams(document.location.search)
+
+	async function addPurgatoryEntries(filter) {
+		while (purgatoryFlex.firstChild) { purgatoryFlex.removeChild(purgatoryFlex.lastChild) }
+		while (purgatoryGrid.firstChild) { purgatoryGrid.removeChild(purgatoryGrid.lastChild) }
+
+		purgatoryGrid.style.display = "none"
+		purgatoryFlex.style.display = "flex"
+
+		let entries = []
+		let element = purgatoryFlex
+
+		if (filter === "new") {        
+			purgatoryFlex.style.display = "none"
+			purgatoryGrid.style.display = "grid"
+			element = purgatoryGrid
+			/*for (let i = 0; i < 10; i++) {
+				purgatoryGrid.appendChild(createFromData("purgatory-entry", {
+					name: "Loading...",
+					author: "...",
+					approves: 0,
+					vetoes: 0,
+					preview: ""
+				}))
+			}*/
+
+			const currentISO = new Date().toISOString()
+			const response = await fetch(serverBaseAddress + `/purgatory/before?date=${currentISO}&count=${10}`)
+			if (response.ok) {
+				try {
+					entries = await response.json()
+				}
+				catch (error) {
+					console.error("Failed to load purgatory new: ", error)
+				}
+			}
+			else {
+				console.error("Failed to load purgatory new: ", response.status, response.statusText)
+			}
+			if (!Array.isArray(entries) || entries.length === 0) {
+				purgatoryGrid.innerHTML = `<div class="purgatory-warning">
+					<span>😢 Couldn't load any purgatory poems! Try again later.</span>
+				</div>`
+			}
+		}
+		else if (filter === "liked") {
+			/*for (let i = 0; i < 6; i++) {
+				purgatoryFlex.appendChild(createFromData("purgatory-entry", {
+					name: "Loading...",
+					author: "...",
+					approves: 0,
+					vetoes: 0,
+					preview: ""
+				}))
+			}*/
+			if (!await isLoggedIn()) {
+				purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+						<span>😢 You aren't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
+					</div>`
+				return
+			}
+			
+			entries = (await getAccountData()).likedPoems
+			if (entries == null || entries.length === 0) {
+				purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+						<span>😢 You haven't liked any poems...<br>Press the star icon on a poem to add one to your liked list!</span>
+					</div>`
+				return
+			}
+		}
+		else if (filter === "recommended") {
+			for (let i = 0; i < 6; i++) {
+				purgatoryFlex.appendChild(createFromData("purgatory-entry", {
+					name: "Loading...",
+					author: "...",
+					approves: 0,
+					vetoes: 0,
+					preview: ""
+				}))
+			}
+			//Picks appear first on new, and have a different template
+			let picks = []
+			try { picks = await (await fetch(serverBaseAddress + "/purgatory/picks")).json() }
+			catch(error) { console.warn("Error loading purgatory new: ", error) }
+			
+			let extraData = {
+				notification: "Subliminal pick",
+				tooltip: "This poem has been reccomended to you based on your previous activity"
+			}
+			purgatoryFlex.innerHTML = `<div class="purgatory-warning">
+					<span>😢 You aren't logged in...<br>Log in or create an account to see your reccomendations!</span>
+				</div>`
+		   
+			for (let pickEntry of picks) {
+				await appendEntry(pickEntry, purgatoryFlex, extraData)
+			}
+			entries = await (await fetch(serverBaseAddress + "/purgatory/recommended")).json()
+		}
+
+		for (let entry of entries) { await appendEntry(entry, element/*, entryTemplate*/) }
+		if (!params.get("purgatorynew") || filter !== "new" || !purgatoryFlex.children[0]) {
+			return
+		}
+
+		let extraData = {
+			notification: "New submission!",
+			tooltip: "Well done, but only the purgatory can decide the fate of this poem now..."
+		}
+		let newElement = await appendEntry(params.get("purgatorynew"), purgatoryFlex, extraData)
+		
+		window.scrollTo(0, 0)
+		purgatoryFlex.scrollTo(1e4, 0) 
+		newElement.classList.add("entry-new")
+		setTimeout(() => newElement.classList.remove("entry-new"), 800)
+		params.delete("purgatorynew")
+	}
+
+	async function appendEntry(entry, element, extraData) {
+		const res = await fetch(serverBaseAddress + "/purgatory/" + entry)
+		if (!res.ok) {
+			console.error("Failed to append purgatory entry: ", res)
+			return null
+		}
+		let entryData = await res.json()
+		if (entryData == null) {
+			return null
+		}
+		let entryElement = createFromData("purgatory-entry", {
+			id: entryData.id,
+			name: entryData.poemName?.substring(0, 32),
+			author: entryData.poemAuthor?.substring(0, 12),
+			approves: entryData.approves || 0,
+			vetoes: entryData.vetoes || 0,
+			preview: new EditorDocument(JSON.parse(entryData.poemContent)).getText().slice(0, 150),
+			...extraData 
+		})
+
+		element.appendChild(entryElement)
+		return entryElement
+	}
+
+	// Purgatory initialisation
+	addPurgatoryEntries("new")
+
+	filtersBar.addEventListener("mousemove", event => {
+		for (let button of filtersBar.children) {
+			button.style.background =
+				"radial-gradient(at left " + (event.screenX - button.offsetLeft) +
+				"px top " + (event.screenY - button.offsetTop) + "px, darkgray, var(--background-opaque)"
+		}
+	})
+
+	filtersBar.addEventListener("mouseleave", event => {
+		for (let button of filtersBar.children) {
+			if (button.className === "separator") continue
+			button.style.background = 'none'
+		}
+	})
+</script>
+</html>

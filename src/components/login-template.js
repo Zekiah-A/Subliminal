@@ -30,14 +30,14 @@ class LoginSignup extends HTMLElement {
 						this.shadowThis.validateUsername(this)">
 					<input id="loginSigninEmail" type="text" class="popup-input" placeholder="Email">
 					<input id="loginQRInput" type="file" accept="image/*" capture="environment" style="display: none;">
-					<button class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value);"
+					<button type="button" class="popup-button" onclick="this.shadowThis.signin(this.shadowThis.loginSigninUsername.value, this.shadowThis.loginSigninEmail.value);"
 						style="margin-bottom: 8px;">Login</button>
 
 					<div style="display:flex;column-gap:8px;margin-top:8px">
-						<button class="popup-button" onclick="this.shadowThis.login.setAttribute('currentpage', 'signup');">
+						<button type="button" class="popup-button" onclick="this.shadowThis.login.setAttribute('currentpage', 'signup');">
 							I don't have an account
 						</button>
-						<button class="popup-button" disabled>Account recovery</button>
+						<button type="button" class="popup-button" disabled>Account recovery</button>
 					</div>
 				</div>
 				<div id="loginSignup" class="page">
@@ -86,7 +86,7 @@ class LoginSignup extends HTMLElement {
 				<div id="loginError" class="page">
 					<div id="errorMessage"><!--Erorr message text--></div>
 					<div style="display:flex;column-gap:8px;margin-top:8px">
-						<button class="popup-button" onclick="this.shadowThis.login.close();">Ok</button>
+						<button type="button" class="popup-button" onclick="this.shadowThis.login.close();">Ok</button>
 					</div>
 				</div>
 			</dialog>

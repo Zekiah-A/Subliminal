@@ -24,7 +24,7 @@ class ContentWarning extends HTMLElement {
 					</p>
 					<p id="addition"></p>
 					<a href="/disclaimer">-> See Disclaimer</a>
-					<button class="popup-button" onclick="event.preventDefault(); document.querySelector('content-warning').hide()">Continue -></button>
+					<button type="button" class="popup-button" onclick="event.preventDefault(); document.querySelector('content-warning').hide()">Continue -></button>
 				</div>
 			</div>
 		`

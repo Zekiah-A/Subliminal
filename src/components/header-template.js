@@ -14,9 +14,9 @@ class SubliminalHeader extends HTMLElement {
 				</a>
 				<h1 style="margin: 0px; align-self: center;">Subliminal</h1>
 				<nav id="pageLinks">
-					<a href="contents">-&gt; Poems</a>
-					<a href="anthologies">-&gt; Anthologies</a>
-					<a href="create" class="disabled">-&gt; Create</a>
+					<a href="/poems">-&gt; Poems</a>
+					<a href="/anthologies">-&gt; Anthologies</a>
+					<a href="/create" class="disabled">-&gt; Create</a>
 				</nav>
 				<div class="hilight" id="hilight"></div>
 				<div id="right">

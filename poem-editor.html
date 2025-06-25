@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="assets/AbbstraktDog.ico">
+	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="./styles.css" />
 	<script src="src/account.js"></script>
 	<script src="src/polyfill.js"></script>
@@ -56,7 +56,7 @@
 				this site.
 			</p>
 		</div>
-		<button class="popup-button" onclick="licenseAgreePopup.close(); uploadCurrent();">
+		<button type="button" class="popup-button" onclick="licenseAgreePopup.close(); uploadCurrent();">
 			Submit
 		</button>
 	</dialog>
@@ -160,7 +160,7 @@
 		<h2>Load poem:</h2>
 		<input type="file" multiple="true" id="poemImportInput" accept=".json, .txt" style="display: none">
 		<div id="loadedContainer" class="vertical-scroll-shadow"></div>
-		<button class="popup-button" onclick="
+		<button type="button" class="popup-button" onclick="
 			poemImportInput.click() // TODO: Use new filesystem access API
 			for (let file of poemImportInput.files) {
 				let guid = newGuid()
@@ -197,7 +197,7 @@
 			">
 			Import from local file
 		</button>
-		<button class="popup-button" onclick="loadPoemPopup.close()">
+		<button type="button" class="popup-button" onclick="loadPoemPopup.close()">
 			Done
 		</button>
 	</dialog>
@@ -223,7 +223,7 @@
 		</div>
 		<hr />
 		<div id="formattingToolbar">
-			<button class="toolbar-item" style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+			<button type="button" class="toolbar-item" style="width: 72px; min-width: 72px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
 				<div>File ⯆</div>
 				<div class="options" style="width: 140px">
 					<div onclick=" params.delete('edit')
@@ -259,39 +259,39 @@
 					</div>
 				</div>
 			</button>
-			<button class="toolbar-item" onclick="format('undo', null)" style="width: 72px; min-width: 72px">
+			<button type="button" class="toolbar-item" onclick="format('undo', null)" style="width: 72px; min-width: 72px">
 				<div>↩ undo</div>
 			</button>
-			<button class="toolbar-item" onclick="format('redo', null)" style="width: 72px; min-width: 72px">
+			<button type="button" class="toolbar-item" onclick="format('redo', null)" style="width: 72px; min-width: 72px">
 				<div>redo ↪</div>
 			</button>
-			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.bold)">
+			<button type="button" class="toolbar-item" onclick="editor.addStyle(styleCodes.bold)">
 				<div style="font-weight: bold">B</div>
 			</button>
-			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.italic)">
+			<button type="button" class="toolbar-item" onclick="editor.addStyle(styleCodes.italic)">
 				<div style="font-style: italic">I</div>
 			</button>
-			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.monospace)">
+			<button type="button" class="toolbar-item" onclick="editor.addStyle(styleCodes.monospace)">
 				<div style="font-family: monospace">C</div>
 			</button>
-			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.superscript)">
+			<button type="button" class="toolbar-item" onclick="editor.addStyle(styleCodes.superscript)">
 				<div>Sup</div>
 			</button>
-			<button class="toolbar-item" onclick="editor.addStyle(styleCodes.subscript)">
+			<button type="button" class="toolbar-item" onclick="editor.addStyle(styleCodes.subscript)">
 				<div>Sub</div>
 			</button>
-			<button class="toolbar-item" style="position: relative" onclick="formatColourInput.click()">
+			<button type="button" class="toolbar-item" style="position: relative" onclick="formatColourInput.click()">
 				<input id="formatColourInput" type="color" class="tool colour-tool-item" value="#000" oninput="
 					editor.addStyle(styleCodes.colour, parseInt(this.value.slice(1), '16'))
 					formattingColourRect.style.background = this.value
 				" style="display: none;">
 				<div id="formattingColourRect"></div>
 			</button>
-			<button class="toolbar-item">
+			<button type="button" class="toolbar-item">
 				<div>🖼️</div>
 			</button>
 			<div class="toolbar-item separator"></div>
-			<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+			<button type="button" class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
 				<div>Page layout ⯆</div>
 				<div class="options">
 					<div onclick="changePageStyle('poem-centre')">Poem centre</div>
@@ -299,7 +299,7 @@
 					<div onclick="changePageStyle('centre')">Centre</div>
 				</div>
 			</button>
-			<button class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
+			<button type="button" class="toolbar-item" style="width: 112px; min-width: 112px" onclick="this.children[1].style.display = this.children[1].style.display == 'block' ? 'none' : 'block'" onblur="this.children[1].style.display = 'none'">
 				<div>Background ⯆</div>
 				<div class="options">
 					<div onclick="document.body.style.background = ''">None</div>
@@ -312,12 +312,12 @@
 					</div>
 				</div>
 			</button>
-			<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
+			<button type="button" class="toolbar-item" onclick=" side.removeAttribute('collapsed')
 				side.setAttribute('mode', 'rhyme')
 				" style="width: 132px; min-width: 132px">
 				<div>Rhyme finder ➕</div>
 			</button>
-			<button class="toolbar-item" onclick=" side.removeAttribute('collapsed')
+			<button type="button" class="toolbar-item" onclick=" side.removeAttribute('collapsed')
 				side.setAttribute('mode', 'coauthor')
 				" style="width: 132px; min-width: 132px">
 				<div>AI coauthor ➕</div>
@@ -385,7 +385,7 @@
 					<input type="text" id="cWarningNotesInput" class="popup-input" placeholder="Additional warning notes" style="width: 100%; height: 24px" disabled="" />
 				</div>
 			</div>
-			<button class="popup-button" style="flex-grow: inherit" onclick="licenseAgreePopup.showModal()">
+			<button type="button" class="popup-button" style="flex-grow: inherit" onclick="licenseAgreePopup.showModal()">
 				Upload to site
 			</button>
 		</div>
@@ -424,7 +424,7 @@
 				<option>My work so far</option>
 				<option>Subliminal poems</option>
 			</subliminal-select>
-			<button class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
+			<button type="button" class="popup-button" style="flex-grow: inherit" onclick="alert('An error occurred - please try again later')">
 				Start coauthor
 			</button>
 		</div>
@@ -439,7 +439,7 @@
 			</div>
 		</div>
 	</div>
-	<a href="./contents" style="z-index: 1" class="back"> &lt;- Back</a>
+	<a href="./poems" style="z-index: 1" class="back"> &lt;- Back</a>
 </body>
 <script>
 	const params = new URLSearchParams(document.location.search)
@@ -640,7 +640,7 @@
 				
 				console.log("Upload sucessful, redirecting.")
 				window.onbeforeunload = () => {}
-				window.location.href = "./contents?purgatorynew=" + guidResponse
+				window.location.href = "./poems?purgatorynew=" + guidResponse
 			});
 		}
 		
