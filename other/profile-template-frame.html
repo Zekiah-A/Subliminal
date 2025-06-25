@@ -64,7 +64,7 @@
 			tooltip.textContent = getBadgeInfo(badge)
 			badgeElement.appendChild(tooltip)
 
-			let icon = stringToHtml(await (await fetch("../Resources/" + badgeName + "Badge.svg")).text())
+			let icon = stringToHtml(await (await fetch("../assets/" + badgeName + "Badge.svg")).text())
 			icon.setAttribute("viewBox", "0 0 64 64")
 			icon.setAttribute("width", "32")
 			icon.setAttribute("height", "32")

@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Subliminal</title>
-	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="assets/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
 	<meta name="keywords" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<script src="account.js"></script>
-	<script src="./editor-document.js"></script>
-	<script src="./server.js"></script>
-	<script src="./Other/component-registrar.js"></script>
-	<script src="./Other/poem-ghost-template.js"></script>
-	<script src="./Other/poem-load-cover-template.js"></script>
-	<script src="./Other/account-options-template.js"></script>
+	<script src="src/editor-document.js"></script>
+	<script src="src/server.js"></script>
+	<script src="src/components/component-registrar.js"></script>
+	<script src="src/components/poem-ghost-template.js"></script>
+	<script src="src/components/poem-load-cover-template.js"></script>
+	<script src="src/components/account-options-template.js"></script>
 	<style>
 		.rating-container {
 			user-select: none;
@@ -108,10 +109,10 @@
 		<h2>Edit poem:</h2>
 		<div style="display: flex; column-gap: 8px;">
 			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
-				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
+				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./assets/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
 			</button>
 			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + poemId;">
-				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
+				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./assets/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
 			</button>
 		</div>
 		<br>
@@ -124,28 +125,28 @@
 
 	<div id="contentWarning" style="display: none;">
 		<pre class="warning-centre">
-___________________________________________________________
-| Disclaimer: This is a poem in the subliminal poem       |
-| purgatory, created in the <a href="./poem-editor">poem editor</a>, and awaiting     |
-| approval or rejection to be added to the site, we can't |
-| confirm that the events within this poem are fictional, |
-| and shouldn't be taken as moral, political, or religious|
-| advice, or represents the beliefs of the author in any  |
-| way.                                                    |
-|                                                         |
-| If this poem is unironically bad, not even a poem, or   |
-| you just don't like it for any reason feel free to VETO |
-| by pressing the VETO button at the bottom of the screen |
-| likewise, if it's great, APPROVE it!                    |
-|                                                         |
-| If you are concerned as to if there is illegal content  |
-| contained within this submission, please report via the |
-| report button, and we will investigate ASAP.            |
-|                                                         |
-| <a class="continue" href="#contentWarning">Continue -></a>                                             |
-| <a href="./disclaimer">See Disclaimer -></a>                                       |
-|                                                         |
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+_______________________________________________________________
+| Disclaimer: This is a poem in the subliminal poem           |
+| purgatory, created in the <a href="./poem-editor">poem editor</a>, and awaiting         |
+| approval or rejection to be added to an anthology, we can't |
+| confirm that the events within this poem are fictional,     |
+| and shouldn't be taken as moral, political, or religious    |
+| advice, or represents the beliefs of the author in any      |
+| way.                                                        |
+|                                                             |
+| If this poem is unironically bad, not even a poem, or       |
+| you just don't like it for any reason feel free to VETO     |
+| by pressing the VETO button at the bottom of the screen     |
+| likewise, if it's great, APPROVE it!                        |
+|                                                             |
+| If you are concerned as to if there is illegal content      |
+| contained within this submission, please report via the     |
+| report button, and we will investigate ASAP.                |
+|                                                             |
+| <a class="continue" href="#contentWarning">Continue -></a>                                                 |
+| <a href="./disclaimer">See Disclaimer -></a>                                           |
+|                                                             |
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 		</pre>
 	</div>  
 	<a href="../../contents" class="back"> &lt;- Back</a>
@@ -242,7 +243,7 @@ ___________________________________________________________
 			poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
 			poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
 			poemAuthor.style.cursor = "pointer"
-			profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.authorGuid
+			profileIframe.src = "./other/profile-template-frame.html?guid=" + poemData.authorGuid
 		}
 		
 		//Set up title

@@ -1,1 +1,65 @@
-<script>location.replace(location.origin+"/poem?path="+location.pathname)</script>
+<script>
+	/**
+	 * Github pages clientside redirection URL spec:
+	 *  Purgatory formats (orphaned/anthologyless poems):
+	 *    - /1234-poemname
+	 *      - Global purgatory poem name and id URL format, will redirect user to /poem?id=1234
+	 *    - /poems/1234-poemname
+	 *      - Global purgatory poem name URL format, will redirect user to /poem?id=1234
+	 *    - /poems/1234
+	 *      - Global purgatory poem id URL format, will redirect user to /poem?id=1234
+	 *  Anthology formats:
+	 *    - /anthologyname
+	 *       - Global anthology name URL format, will redirect user to /anthology?name=anthologyname 
+	 *    - /anthologies/anthologyname
+	 *       - Anthologies anthology name URL format, will recirect user to /anthology?name=anthologyname
+	 *    - /anthologyname/poemname
+	 *       - Direct poem URL format, will redirect user to /poem?anthology=anthologyname&name=poemname
+	 *    - /anthologies/anthologyname/poemname
+	 *       - Anthology poem name URL format, will redirect user to /poem?anthology=anthologyname&name=poemname 
+	 */
+	const path = location.pathname.replace(/^\/|\/$/g, ""); // trim slashes
+	const segments = path.split("/");
+
+	let redirectURL = null;
+
+	if (segments.length === 1) {
+		if (/^\d+(-[\w-]+)?$/.test(segments[0])) {
+			// /1234 or /1234-poemname
+			const id = segments[0].split("-")[0];
+			redirectURL = `/poem?id=${id}`;
+		}
+		else {
+			// /anthologyname
+			redirectURL = `/anthology?name=${encodeURIComponent(segments[0])}`;
+		}
+	}
+	else if (segments[0] === "poems") {
+		const id = segments[1]?.split("-")[0];
+		if (id) {
+			redirectURL = `/poem?id=${id}`;
+		}
+	}
+	else if (segments[0] === "anthologies") {
+		if (segments.length === 2) {
+			// /anthologies/anthologyname
+			redirectURL = `/anthology?name=${encodeURIComponent(segments[1])}`;
+		} else if (segments.length === 3) {
+			// /anthologies/anthologyname/poempath
+			redirectURL = `/poem?anthology=${encodeURIComponent(segments[1])}&path=${segments[2]}`;
+		}
+	}
+	else if (segments.length === 2) {
+		// /anthologyname/poempath
+		redirectURL = `/poem?anthology=${encodeURIComponent(segments[0])}&path=${segments[1]}`;
+	}
+
+	if (redirectURL) {
+		console.log(`Redirecting to: ${redirectURL}`);
+		location.replace(redirectURL);
+	}
+	else {
+		console.warn(`No redirect rule matched for path: ${location.pathname}, redirecting to homepage`);
+		location.replace("/");
+	}
+</script>

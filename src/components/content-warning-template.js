@@ -15,7 +15,7 @@ class ContentWarning extends HTMLElement {
 			<div id="contentWarning">
 				<div class="warning-centre">
 					<div style="display: flex;align-items: center;column-gap: 8px;">
-						<img class="icon-image" src="/Resources/AbbstraktDog.svg" width="32" height="32">
+						<img class="icon-image" src="/assets/AbbstraktDog.svg" width="32" height="32">
 						<h2 style="margin: 0px;">Disclaimer:</h2>
 					</div>
 					<p>

@@ -10,13 +10,13 @@ class SubliminalHeader extends HTMLElement {
 			<link rel="stylesheet" href="styles.css">
 			<div>
 				<a href="/" class="logo-button">
-					<img src="Resources/AbbstraktDog.png" loading="eager" class="logo" alt="Subliminal dog logo" width="48" height="48">
+					<img src="assets/AbbstraktDog.png" loading="eager" class="logo" alt="Subliminal dog logo" width="48" height="48">
 				</a>
 				<h1 style="margin: 0px; align-self: center;">Subliminal</h1>
 				<nav id="pageLinks">
 					<a href="contents">-&gt; Poems</a>
-					<a href="account">-&gt; Profile</a>
-					<a href="sounds" class="disabled">-&gt; Sounds</a>
+					<a href="anthologies">-&gt; Anthologies</a>
+					<a href="create" class="disabled">-&gt; Create</a>
 				</nav>
 				<div class="hilight" id="hilight"></div>
 				<div id="right">

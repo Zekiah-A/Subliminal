@@ -13,7 +13,7 @@ class PoemLoadCover extends HTMLElement {
 		const brand = document.createElement("span")
 		brand.textContent = "poemanthology.org"
 		logo.appendChild(brand)
-		logo.src = "/Resources/SmallLogo.png"
+		logo.src = "/assets/SmallLogo.png"
 		loadContainer.appendChild(logo)
 		const loadLabel = document.createElement("h2")
 		loadLabel.classList.add("load-label")

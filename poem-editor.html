@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8" />
 	<title>Subliminal</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="assets/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css" />
-	<script src="./account.js"></script>
-	<script src="./polyfill.js"></script>
-	<script src="./editor-document.js"></script>
-	<script src="./Other/component-registrar.js"></script>
-	<script src="./Other/notification-template.js"></script>
-	<script src="./Other/select-template.js"></script>
-	<script src="./Other/poem-canvas-editor-template.js"></script>
-	<script src="./server.js"></script>
+	<script src="src/account.js"></script>
+	<script src="src/polyfill.js"></script>
+	<script src="src/editor-document.js"></script>
+	<script src="src/components/component-registrar.js"></script>
+	<script src="src/components/notification-template.js"></script>
+	<script src="src/components/select-template.js"></script>
+	<script src="src/components/poem-canvas-editor-template.js"></script>
+	<script src="src/server.js"></script>
 	<link rel="stylesheet" href="./poem-editor.css">
 </head>
 <body style="max-width: 100%; overflow-x: hidden; overflow-y: auto">
 	<dialog id="licenseAgreePopup" class="popup" style="width: max(30%, 500px)">
 		<h2>You're almost there!</h2>
-		<img src="Resources/Celebration.png" style="width: 100%" />
+		<img src="assets/Celebration.png" style="width: 100%" />
 		<p>
 			When you click submit, your poem will be uploaded publicly to the poem
 			purgatory. For more information, see the license agreement below.
@@ -71,84 +71,84 @@
 			builtinFreePopup.close()
 			">
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/ChilternsWalk.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/ChilternsWalk.jpg" />
 				<div>Taken somewhere in the Chilterns, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/FinlandIntersection.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/FinlandIntersection.jpg" />
 				<div>
 					Taken at an intersection somewhere between Uusikaupunki and
 					Helsinki, Finland.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/IsoBoy.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/IsoBoy.jpg" />
 				<div>
 					A fish that mysteriously disappeared the next day, Island near
 					Uusikaupunki, Finland.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/LondonCity.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/LondonCity.jpg" />
 				<div>A bridge to the Tate, London, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/LondonStreets.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/LondonStreets.jpg" />
 				<div>A day in the city, near Farringdon, London, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/Portheleven.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/Portheleven.jpg" />
 				<div>
 					It took standing on a rock in the middle of the sea to get this,
 					Portheleven, UK.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/FalmouthShellCave.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/FalmouthShellCave.jpg" />
 				<div>
 					A really old shell cave, in Gyllyngdune Gardens, Falmouth, UK.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaPath.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/SnowdoniaPath.jpg" />
 				<div>A long path to mount Snowdon (maybe), Wales, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/SnowdoniaQuarry.jpg" />
 				<div>
 					A spooky snap of quarry taken from a moving vehicle, Snowdonia,
 					Wales, UK.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry2.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/SnowdoniaQuarry2.jpg" />
 				<div>A sunnier view of the massive quarry, Snowdonia, Wales, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/SnowdoniaQuarry3.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/SnowdoniaQuarry3.jpg" />
 				<div>
 					An atmospheric pee(a)k (punny) of a quarry, Snowdonia, Wales, UK.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/UusikaupunkiHorsepower.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/UusikaupunkiHorsepower.jpg" />
 				<div>
 					This boat certainly has more than 5 horsepower, Island near
 					Uusikaupunki, Finland.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/YorkshireMoorRoad.jpg" />
+				<img loading="lazy" src="./assets/backgrounds/YorkshireMoorRoad.jpg" />
 				<div>A long, long road, past field and moor, Yorkshire, UK.</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/ChaosDrawing.png" />
+				<img loading="lazy" src="./assets/backgrounds/ChaosDrawing.png" />
 				<div>
 					Chaos, for those who want to have a bit of zazz around their stuff.
 				</div>
 			</div>
 			<div>
-				<img loading="lazy" src="./Resources/Backgrounds/AbbstraktBird.png" />
+				<img loading="lazy" src="./assets/backgrounds/AbbstraktBird.png" />
 				<div>
 					Is it a bird? Dog? A secret message of text? All we know is that
 					this mascot is iconic.
@@ -334,7 +334,7 @@
 		<h4 style="margin: 0;">Online editors:</h4>
 		<ul>
 			<li>
-				<img src="Resources/DefaultAvatar.png" style="border-radius: 100%; background-color: white" width="48" height="48" />
+				<img src="assets/DefaultAvatar.png" style="border-radius: 100%; background-color: white" width="48" height="48" />
 				<div style=" padding: 4px;
 					border-radius: 8px;
 					background: linear-gradient(lightblue, blue);

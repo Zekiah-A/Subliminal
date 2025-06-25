@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>Subliminal</title>
-	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="assets/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<script src="./editor-document.js"></script>
-	<script src="./Other/component-registrar.js"></script>
-	<script src="./Other/content-warning-template.js"></script>
-	<script src="./Other/poem-ghost-template.js"></script>
-	<script src="./Other/poem-load-cover-template.js"></script>
+	<script src="src/editor-document.js"></script>
+	<script src="src/components/component-registrar.js"></script>
+	<script src="src/components/content-warning-template.js"></script>
+	<script src="src/components/poem-ghost-template.js"></script>
+	<script src="src/components/poem-load-cover-template.js"></script>
 </head>
 <body>
 	<div class="title-blur">
@@ -30,12 +30,12 @@
 		<div style="display: flex; column-gap: 8px;">
 			<button class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
 				<div style="display: flex; flex-direction: column; align-items: center;">
-					<img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
+					<img src="./assets/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
 				</div>
 			</button>
 			<button class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.origin + '/poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
 				<div style="display: flex; flex-direction: column; align-items: center;">
-					<img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
+					<img src="./assets/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
 				</div>
 			</button>
 		</div>

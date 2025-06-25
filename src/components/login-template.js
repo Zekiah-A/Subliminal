@@ -69,7 +69,7 @@ class LoginSignup extends HTMLElement {
 				</div>
 				<div id="loginCode" class="page">
 					<div class="login-code-banner">
-						<img src="./Resources/SmallLogo.png" width="32" height="32">
+						<img src="./assets/SmallLogo.png" width="32" height="32">
 						<h3>It's time to confirm your account!</h3>
 					</div>
 					<p>If you're lucky we have sent you an email to verify your account, enter the code we sent you below to continue!</p>

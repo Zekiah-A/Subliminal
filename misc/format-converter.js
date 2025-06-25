@@ -3,12 +3,12 @@ const fs = require("fs")
 const path = require("path")
 
 const poemPaths = [
-	"../Volume-1/Parodies-And-Adaptations",
-	"../Volume-1/Really-Stupid-Stuff",
-	"../Volume-1/War-And-Phrenics",
-	"../Volume-2/Idiots",
-	"../Volume-2/Sublime-And-Revelation",
-	"../Volume-2/Tales-And-Tomes"
+	"../volume-1/parodies-and-adaptations",
+	"../volume-1/really-stupid-stuff",
+	"../volume-1/war-and-phrenics",
+	"../volume-2/idiots",
+	"../volume-2/sublime-and-revelation",
+	"../volume-2/tales-and-tomes"
 ]
 
 for (let poemPath of poemPaths) {

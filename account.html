@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Subliminal</title>
 	<meta charset="UTF-8">
+	<title>Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<link rel="icon" href="assets/AbbstraktDog.ico">
 	<link rel="stylesheet" href="./styles.css">
-	<script src="./Other/component-registrar.js"></script>
-	<script src="./Other/account-options-template.js"></script>
-	<script src="./Other/header-template.js"></script>
-	<script src="./Other/login-template.js"></script>
-	<script src="./server.js"></script>
-	<script src="./account.js"></script>
+	<script src="src/components/component-registrar.js"></script>
+	<script src="src/components/account-options-template.js"></script>
+	<script src="src/components/header-template.js"></script>
+	<script src="src/components/login-template.js"></script>
+	<script src="src/server.js"></script>
+	<script src="src/account.js"></script>
 	<style>
 		body {
 			overflow-x: hidden;
@@ -133,7 +133,7 @@
 		}
 		.editable::after {
 			content: " ";
-			background-image: url("Resources/Edit.svg");
+			background-image: url("assets/Edit.svg");
 			background-size: 16px;
 			position: absolute;
 			right: -16px;
@@ -209,7 +209,7 @@
 					this.style.outline = 'initial'
 				">
 				<button type="button" id="profilePictureButton" onclick="profilePictureInput.click()">
-					<img src="./Resources/EditPhoto.svg" alt="Edit">
+					<img src="./assets/EditPhoto.svg" alt="Edit">
 					Click to change
 				</button>
 				<input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="
@@ -447,7 +447,7 @@
 			tooltip.textContent = getBadgeInfo(badge)
 			badgeElement.appendChild(tooltip)
 
-			let icon = stringToHtml(await (await fetch("./Resources/" + badgeName + "Badge.svg")).text())
+			let icon = stringToHtml(await (await fetch("./assets/" + badgeName + "Badge.svg")).text())
 			icon.setAttribute("viewBox", "0 0 64 64")
 			icon.setAttribute("width", "32")
 			icon.setAttribute("height", "32")

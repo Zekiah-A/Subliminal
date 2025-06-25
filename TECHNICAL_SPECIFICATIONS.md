@@ -15,8 +15,8 @@ you read this to aid contributing or developing for this site.
 
 **Development dependencies:**
   - Latest version of `dotnet`, preferably .net 8 prerelease.
-  - `node`, `npm` and `npx` may be used in order to debug the client, 
-  use `node test-server.js` to take advantage of the special page navigation 
+  - `bun` is required in order to debug the frontend.
+  use `bun run dev` to take advantage of the special page navigation 
   functionality used by the site.
 
 **Recommended software:**

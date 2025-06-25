@@ -1,5 +1,5 @@
 # Subliminal
-Link: [zekiah-a.github.io/Subliminal](https://zekiah-a.github.io/Subliminal) or out new domain, at [poemanthology.org](https://poemanthology.org)
+Link: [poemanthology.org](https://poemanthology.org)
 
 The methallyne blue analogy of stuff.
 
