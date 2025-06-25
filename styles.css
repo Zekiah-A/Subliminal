@@ -1,491 +1,577 @@
 :root {
-    --button-opaque: #f2f2f2;
-    --button-opaque-hover: #e9e9e9;
-    --button-transparent: #f2f2f2b8;
-    --panel-transparent: #f2f2f240;
-    --background-opaque: #ffffff;
-    --background-transparent: #ffffff33;
-    --input-hilight: #0074d9;
-    --text-colour: #000000;
+	--button-opaque: #f2f2f2;
+	--button-opaque-hover: #e9e9e9;
+	--button-transparent: #f2f2f2b8;
+	--panel-transparent: #f2f2f240;
+	--background-opaque: #ffffff;
+	--background-transparent: #ffffff33;
+	--input-hilight: #0074d9;
+	--text-colour: #000000;
+
+	--scroll-background-shadow: rgba(128, 128, 128, 0.4);
+
+	/* Credit to: https://css-tricks.com/books/greatest-css-tricks/scroll-shadows */
+	--horizontal-scroll-background:
+		/* Top and bottom shadow faders */
+		linear-gradient(
+			to bottom,
+			var(--background-opaque),
+			transparent 10%,
+			transparent 90%,
+			var(--background-opaque)
+		),
+		/* Right and left shadow hiders (cover over shadows) */
+		linear-gradient(
+			to right,
+			var(--background-opaque) 30%,
+			transparent
+		) left center,
+		linear-gradient(
+			to left,
+			var(--background-opaque) 70%, 
+			transparent
+		) right center,
+		/* Right and left shadows */
+		linear-gradient(
+			to right,
+			var(--scroll-background-shadow),
+			transparent
+		) left center,
+		linear-gradient(
+			to left,
+			var(--scroll-background-shadow),
+			transparent
+		) right center;
+	--horizontal-scroll-background-repeat: no-repeat;
+	--horizontal-scroll-background-size: 100% 100%, 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+	--horizontal-scroll-background-attachment: local, local, local, scroll, scroll;
+
+	--vertical-scroll-background:
+		/* Rop and bottom shadow hiders (cover over shadows) */
+		linear-gradient(
+			var(--background-opaque) 30%,
+			transparent
+		) center top,
+		linear-gradient(
+			transparent, 
+			var(--background-opaque) 70%
+		) center bottom,
+		/* Top and bottom shadows */
+		radial-gradient(
+			farthest-side at 50% 0,
+			var(--scroll-background-shadow),
+			transparent
+		) center top,
+		radial-gradient(
+			farthest-side at 50% 100%,
+			var(--scroll-background-shadow),
+			transparent
+		) center bottom;
+	--vertical-scroll-background-repeat: no-repeat;
+	--vertical-scroll-background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+	--vertical-scroll-background-attachment: local, local, scroll, scroll;
 }
 
 @media(prefers-color-scheme: dark) {
-    :root {
-        --button-opaque: #373737;
-        --button-opaque-hover: #2c2c2c;
-        --button-transparent: #373737b8;
-        --panel-transparent: #37373740;
-        --background-opaque: #1e1e1e;
-        --background-transparent: #1e1e1e33;
-        --text-colour: #DADADA;
-    }
+	:root {
+		--button-opaque: #373737;
+		--button-opaque-hover: #2c2c2c;
+		--button-transparent: #373737b8;
+		--panel-transparent: #37373740;
+		--background-opaque: #1e1e1e;
+		--background-transparent: #1e1e1e33;
+		--text-colour: #DADADA;
+	}
+}
+
+* { box-sizing: border-box; }
+
+.headered-body {
+	padding: 10px;
+	padding-top: 72px;
 }
 
 body {
-    margin: 0px;
-    background-size: cover !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
+	margin: 0px;
+	background-size: cover !important;
+	background-repeat: no-repeat !important;
+	background-attachment: fixed !important;
+	box-sizing: border-box;
+}
+
+figure {
+	margin: 0px;
 }
 
 hr {
-    margin: 8px;
+	margin: 8px;
+}
+
+textarea {
+	color: var(--text-colour);
 }
 
 button, input[type="button"] {
-    background-color: var(--button-opaque);
-    color: var(--text-colour);
-    border: 1px solid #8f8f9d;
-    border-radius: 4px;
+	background-color: var(--button-opaque);
+	color: var(--text-colour);
+	border: 1px solid #8f8f9d;
+	border-radius: 4px;
+	cursor: default;
 }
 
 button:hover, input[type="button"]:hover {
-    background-color: #85859269;
+	background-color: #85859269;
 }
 
 button[disabled], input[disabled] {
-    background-color: #d2d2d3c9;
-    pointer-events: none;
+	background-color: #d2d2d3c9;
+	pointer-events: none;
+}
+
+input[type="text"] {
+	background-color: var(--background-opaque);
+	color: var(--text-colour);
 }
 
 /*Site-Wide font*/
-p, a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 110%;
+p, a, li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 110%;
 }
 
 span, div {
-    font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 h2 {
-    font-family: initial;
+	font-family: initial;
 }
 
 div[backgroundenabled] > p {
-    text-shadow: 0px 0px 16px var(--background-opaque),
-        -4px 0px 16px var(--background-opaque),
-        4px 0px 16px var(--background-opaque),
-        0px -4px 16px var(--background-opaque),
-        0px 4px 16px var(--background-opaque);
+	text-shadow: 0px 0px 16px var(--background-opaque),
+		-4px 0px 16px var(--background-opaque),
+		4px 0px 16px var(--background-opaque),
+		0px -4px 16px var(--background-opaque),
+		0px 4px 16px var(--background-opaque);
 }
 
 h2 {
-    margin-top: 0px;
+	margin-top: 0px;
 }
 
 /*Hovering any direct parent of a button tooltip will cause it to appear */
 *:hover > .button-tooltip {
-    pointer-events: all;
-    opacity: 1;
+	pointer-events: all;
+	opacity: 1;
 }
 
 #headerFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    position: fixed;
-    pointer-events: none;
+	width: 100%;
+	height: 100%;
+	border: none;
+	position: fixed;
+	pointer-events: none;
 }
 
 /*Header bar*/
 .title-blur {
-    position: relative;
-    position: sticky;
-    position: -webkit-sticky;
-    top: 0;
-    width: 100%;
-    padding-top: 20px;
-    backdrop-filter: blur(5px);
-    background: transparent;
+	position: relative;
+	position: sticky;
+	position: -webkit-sticky;
+	top: 0;
+	width: 100%;
+	padding-top: 20px;
+	backdrop-filter: blur(5px);
+	background: transparent;
 }
 
+.title-header {
+	text-align: center;
+	margin-bottom: 20px;
+}
 
 .centre {
-    text-align: center;
-    overflow-wrap: break-word;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	overflow-wrap: break-word;
 }
 
-.contents-div-centre {
-    margin: auto;
-    width: min(1112px, calc(100% - 20px));
-    padding: 10px;
+.contents-main-centre {
+	margin: auto;
+	width: 100%;
+	width: min(1112px, 100%);
 }
 
 .back {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
 }
 
 .edit {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    opacity: 0.4;
-    cursor: pointer;
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	opacity: 0.4;
+	cursor: pointer;
 }
 
 .previous {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
 }
 
 .next {
-    position: fixed;
-    bottom: 10px;
-    right: 40%;
+	position: fixed;
+	bottom: 10px;
+	right: 40%;
 }
 
 .external-link {
-    font-size: small;
+	font-size: small;
 }
 
 
 .comment-date {
-    position: absolute;
-    top: 0px;
-    right: 2px;
+	position: absolute;
+	top: 0px;
+	right: 2px;
 }
 
 .one-line-poem-name {
-    color: gray;
-    font-size: 10px;
+	color: gray;
+	font-size: 10px;
+}
+
+.horizontal-scroll-shadow {
+	background: var(--horizontal-scroll-background);
+	background-repeat: var(--horizontal-scroll-background-repeat);
+	background-size: var(--horizontal-scroll-background-size);
+	background-attachment: var(--horizontal-scroll-background-attachment);
+}
+
+.vertical-scroll-shadow {
+	background: var(--vertical-scroll-background);
+	background-repeat: var(--vertical-scroll-background-repeat);
+	background-size: var(--vertical-scroll-background-size);
+	background-attachment: var(--vertical-scroll-background-attachment);
+}
+
+/* TODO: Fully phase out div popups in favour of dialogs */
+div.popup {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .popup {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 8px;
-    padding: 8px;
-    box-shadow: 0 0 16px #000;
-    z-index: 4;
-    backdrop-filter: blur(16px);
-    width: 50%;
-    max-height: calc(100% - 32px);
-    overflow-x: hidden;
-    overflow-y: auto;
+	color: var(--text-colour);
+	border-radius: 8px;
+	padding: 8px;
+	box-shadow: 0 0 16px #000;
+	z-index: 4;
+	border: 1px solid grey;
+	background-color: var(--background-transparent);
+	backdrop-filter: blur(16px);
+	width: 50%;
+	max-height: calc(100% - 32px);
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.flex-popup[open] {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+}
+
+.popup > h2 {
+	margin: 0;
 }
 
 .popup-button {
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 4px;
-    padding: 8px;
-    text-align: center;
-    cursor: pointer;
-    background-color: var(--button-opaque);
-    flex-grow: 1;
-    transition: .2s background-color;
-    user-select: none;
+	font-family: Arial, Helvetica, sans-serif;
+	border-radius: 4px;
+	padding: 8px;
+	cursor: pointer;
+	background-color: var(--button-opaque);
+	flex-grow: 1;
+	transition: .2s background-color;
+	user-select: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	/*
+	display: block;
+	width: 100%;
+	*/
 }
 
 .popup-button[disabled] {
-    pointer-events: none;
-    opacity: 0.6;
+	pointer-events: none;
+	opacity: 0.6;
 }
 
 .popup-button:not([disabled]):hover {
-    background-color: var(--button-opaque-hover);
+	background-color: var(--button-opaque-hover);
 }
 
 .popup-input {
-    width: calc(100% - 8px);
-    display: block;
-    line-height: 1.5;
-    height: 2.1em;
-    padding: 4px 8px;
-    border: 1px solid #aaa;
-    background-color: #fff;
-    border-radius: 2px;
-    transition: all 0.3s;
-    width: calc(100% - 16px);
+	display: block;
+	line-height: 1.5;
+	height: 32px;
+	padding: 4px 8px;
+	border: 1px solid #aaa;
+	background-color: #fff;
+	border-radius: 2px;
+	transition: all 0.3s;
+	width: 100%;
+}
+
+.popup-input:invalid {
+	border: 1px solid red;
 }
 
 .popup-input:focus {
-    border: 1px solid var(--input-hilight);
-    outline: 0;
+	border: 1px solid var(--input-hilight);
+	outline: 0;
 }
 
 .button-tooltip {
-    opacity: 0;
-    position: absolute;
-    background-color: var(--button-opaque);
-    border-radius: 4px;
-    box-shadow: 0px 0px 4px 0px black;
-    left: calc(-100% - 16px);
-    width: 100%;
-    z-index: 1;
-    top: 0px;
-    transition: opacity 0.5s;
-    pointer-events: none;
-    padding: 8px;
+	opacity: 0;
+	position: absolute;
+	background-color: var(--button-opaque);
+	border-radius: 4px;
+	box-shadow: 0px 0px 4px 0px black;
+	left: calc(-100% - 16px);
+	width: 100%;
+	z-index: 1;
+	top: 0px;
+	transition: opacity 0.5s;
+	pointer-events: none;
+	padding: 8px;
 }
 
 .button-tooltip:hover {
-    opacity: 1;
+	opacity: 1;
 }
 
 .profile-title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 42px;
-    margin-top: 0;
-    margin-bottom: 0;
-    white-space: pre;
-    display: inline-block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 42px;
+	margin-top: 0;
+	margin-bottom: 0;
+	white-space: pre;
+	display: inline-block;
+	height: fit-content;
 }
 
 .profile-container {
-    display: flex;
-    column-gap: 16px;
+	display: flex;
+	column-gap: 16px;
 }
 
 .poem-card {
-    width: calc(100% - 32px);
-    height: 64px;
-    background: var(--button-opaque);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: row;
-    column-gap: 16px;
-    padding: 4px;
-    padding-left: 16px;
-    padding-right: 16px;
-    cursor: pointer;
+	height: 64px;
+	background: var(--button-transparent);
+	border-radius: 8px;
+	display: flex;
+	flex-direction: row;
+	column-gap: 16px;
+	padding: 4px;
+	padding-left: 16px;
+	padding-right: 16px;
+	cursor: pointer;
 }
 
 .poem-card > h4 {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .poem-preview {
-    position: relative;
-    margin: 0px;
-    padding: 8px;
-    overflow: hidden;
-}
-
-.poem-preview::after {
-    opacity: 1;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    position: absolute;
-    background: linear-gradient(var(--button-opaque), transparent, var(--button-opaque));
-    content: '';
-    display: inline;
+	position: relative;
+	margin: 0px;
+	padding: 8px;
+	overflow: hidden;
+	mask-image: linear-gradient(transparent, white, transparent);
 }
 
 .profile-badge {
-    background: linear-gradient(white, #f9f3f3);
-    width: 32px;
-    height: 32px;
-    display: block;
-    border-radius: 100%;
-    border: 1px solid grey;
-    text-align: center;
-    line-height: 32px;
-    position: relative;
+	background: linear-gradient(white, #f9f3f3);
+	width: 32px;
+	height: 32px;
+	display: block;
+	border-radius: 100%;
+	border: 1px solid grey;
+	text-align: center;
+	line-height: 32px;
+	position: relative;
 }
 
 .button-tooltip {
-    left: calc(-100% - 184px) !important;
-    width: 200px !important;
+	left: calc(-100% - 184px) !important;
+	width: 200px !important;
 }
 
 #profileAvatar {
-    border-radius: 4px;
-    cursor: pointer;
-    object-fit: cover;
+	border-radius: 4px;
+	cursor: pointer;
+	object-fit: cover;
 }
 
 #profileBadges {
-    width: 100%;
-    height: 32px;
-    margin: 8px;
-    display: flex;
-    column-gap: 8px;
+	width: 100%;
+	height: 32px;
+	margin: 8px;
+	display: flex;
+	column-gap: 8px;
 }
 
 .following-card {
-    width: 100%;
-    height: 96px;
-    background-color: var(--button-opaque);
-    border-radius: 8px;
-    display: flex;
-    column-gap: 8px;
-    cursor: pointer;
+	width: 100%;
+	height: 96px;
+	background-color: var(--button-opaque);
+	border-radius: 8px;
+	display: flex;
+	column-gap: 8px;
+	cursor: pointer;
 }
 
 .following-card > img {
-    width: 96px;
-    height: 96px;
-    border-radius: 8px 0px 0px 8px;
+	width: 96px;
+	height: 96px;
+	border-radius: 8px 0px 0px 8px;
 }
 
 .following-card > div {
-    align-self: center;
-    user-select: none;
+	align-self: center;
+	user-select: none;
 }
 
 .following-card h4 {
-    margin: 0px;
+	margin: 0px;
 }
 
 .following-card p {
-    max-height: 32px;
+	max-height: 32px;
 }
 
-.options {
-    background-color: var(--button-opaque);
-    border-radius: 4px;
-    margin-top: 4px;
-    border: 1px solid darkgray;
-    pointer-events: all !important;
-    display: none;
-    user-select: none;
-}
-
-.options div[selected] {
-    background-color: darkgray;
-}
-
-.options div:hover {
-    background-color: darkgray;
+.elevated {
+	box-shadow: 0 4px 8px #0000004f;
+    border: 1px solid var(--scroll-background-shadow);
 }
 
 /*Dark Mode Optimisations*/
 @media(prefers-color-scheme: dark) {
-    body {
-        background: #1e1e1e;
-        color: var(--text-colour);
-    }
+	body {
+		background: #1e1e1e;
+		color: var(--text-colour);
+	}
 
-    header img {
-        filter: invert(1);
-    }
+	header img, .icon-image {
+		filter: invert(1);
+	}
 
-    a:link {
-        color: lightblue;
-    }
+	a:link {
+		color: lightblue;
+	}
 
-    a:visited {
-        color: #bbb8b8;
-    }
-
-    .searchbar {
-        color: var(--text-colour);
-        background-color: #ffffff33;
-        backdrop-filter: blur(10px);
-        z-index: 1;
-        border: 1px solid gray;
-    }
+	a:visited {
+		color: #bbb8b8;
+	}
 }
 
 /*Mobile and thin screen optimisations*/
-@media screen and (orientation:portrait) {
-    .searchbar {
-        position: fixed;
-        width: calc(100% - 40px);
-        padding-left: 10px;
-        padding-right: 10px;
-        line-height: 40px;
-        top: 64px;
-        z-index: 2;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+@media screen and (orientation: portrait) {
+	.headered-body {
+		padding-top: 56px;
+	}
 
-    .poem-centre {
-        margin-left: 0px;
-        margin-right: 0px;
-        max-width: calc(100% - 40px);
-        padding: 20px;
-        overflow-wrap: break-word;
-    }
+	.poem-centre {
+		margin-left: 0px;
+		margin-right: 0px;
+		max-width: calc(100% - 40px);
+		padding: 20px;
+		overflow-wrap: break-word;
+	}
 
-    .poem-centre-wide {
-        margin-left: 0px;
-        margin-right: 0px;
-        max-width: calc(100% - 10px);
-        padding: 5px;
-        overflow-wrap: break-word;
-    }
+	.poem-centre-wide {
+		margin-left: 0px;
+		margin-right: 0px;
+		max-width: calc(100% - 10px);
+		padding: 5px;
+		overflow-wrap: break-word;
+	}
 
-    .contents-div-centre {
-        margin: 0px;
-        width: calc(100% - 20px);
-    }
+	.poem-centre, .poem-centre-wide, .centre {
+		margin: auto;
+		overflow-x: auto;
+		background: var(--horizontal-scroll-background);
+		background-repeat: var(--horizontal-scroll-background-repeat);
+		background-size: var(--horizontal-scroll-background-size);
+		background-attachment: var(--horizontal-scroll-background-attachment);
+	}
 
-    .comment {
-        position: relative;
-        border: 1px solid black;
-        margin-top: 15px;
-        width: 100%;
-    }
+	.contents-main-centre {
+		width: 100%;
+	}
 
-    .div-centre {
-        margin: auto;
-        width: calc(100% - 20px);
-        padding: 10px;
-    }
+	.comment {
+		position: relative;
+		border: 1px solid black;
+		margin-top: 15px;
+		width: 100%;
+	}
 
-    .popup {
-        width: calc(100% - 32px) !important;
-        height: calc(100% - 32px);
-        transform: translate(-50% -50%) !important;
-        overflow-y: scroll !important;
-    }
+	.div-centre {
+		margin: auto;
+		width: calc(100% - 20px);
+		padding: 10px;
+	}
 
-    .profile-container {
-        flex-direction: column-reverse;
-    }
+	.popup {
+		width: calc(100% - 32px) !important;
+		height: calc(100% - 32px);
+		transform: translate(-50% -50%) !important;
+		overflow-y: scroll !important;
+	}
 
-    .options {
-        position: absolute;
-        z-index: 2;
-        top: calc(100% + 48px);
-        left: 50%;
-        transform: translateX(-50%) scale(2);
-    }
+	.profile-container {
+		flex-direction: column-reverse;
+	}
 }
 
 @media screen and (orientation:landscape) {
-    .poem-centre {
-        margin-left: auto;
-        margin-right: auto;
-        width: max(30%, 360px);
-        padding: 10px;
-    }
+	.poem-centre {
+		margin-left: auto;
+		margin-right: auto;
+		width: max(30%, 512px);
+		padding: 10px;
+	}
 
-    .poem-centre-wide {
-        margin-left: 30%;
-        width: 60%;
-        padding: 10px;
-    }
+	.poem-centre-wide {
+		width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 10px;
+	}
 
-    .searchbar {
-        width: 50%;
-        line-height: 300%;
-        top: 2px;
-        z-index: 1;
-        flex-grow: 1;
-    }
+	.comment {
+		position: relative;
+		border: 1px solid black;
+		margin-top: 15px;
+		min-width: 300px;
+		width: 50%;
+	}
 
-    .comment {
-        position: relative;
-        border: 1px solid black;
-        margin-top: 15px;
-        min-width: 300px;
-        width: 50%;
-    }
-
-    .div-centre {
-        margin: auto;
-        width: 50%;
-        padding: 10px;
-    }
+	.div-centre {
+		margin: auto;
+		width: 50%;
+		padding: 10px;
+	}
 }

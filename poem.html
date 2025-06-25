@@ -1,80 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Subliminal</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="./styles.css">
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <script src="./editor-document.js"></script>
-  <script src="./Other/component-registrar.js"></script>
-  <script src="./Other/content-warning-template.js"></script>
+	<meta charset="UTF-8">
+	<title>Subliminal</title>
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<link rel="stylesheet" href="./styles.css">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script src="./editor-document.js"></script>
+	<script src="./Other/component-registrar.js"></script>
+	<script src="./Other/content-warning-template.js"></script>
+	<script src="./Other/poem-ghost-template.js"></script>
+	<script src="./Other/poem-load-cover-template.js"></script>
 </head>
- 
-<body style="background: initial;">
-    <div class="title-blur">
-        <h2 class="centre content" id="poemTitle"></h2>
-        <hr>
-    </div>
-    <div id="poemMain" class="poem-centre">
-        <p id="poemContent"></p>
-    </div>
-    <div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
-        <h2>Poem Editor:</h2>
-        <div style="display: flex; column-gap: 8px;">
-            <div class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
-                </div>
-            </div>
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.origin + '/poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
-    </div>
-    <a id="back" href="javascript: window.location.href = window.location.origin + '/contents';" class="back"> <- Back</a>
-    <div onclick="editFrame.style.display = 'block';" class="edit">
-        <svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
-    </div>
+<body>
+	<div class="title-blur">
+		<h2 class="title-header content" id="poemTitle">Poem - By Author</h2>
+		<hr>
+	</div>
+	<div id="poemMain" class="poem-centre">
+		<p id="poemContent">
+			<subliminal-poem-ghost length="30"></subliminal-poem-ghost>
+			<subliminal-poem-load-cover></subliminal-poem-load-cover>
+		</p>
+	</div>
+	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">
+		<h2>Edit poem:</h2>
+		<div style="display: flex; column-gap: 8px;">
+			<button class="popup-button" style="height: 128px; opacity: 0.6;pointer-events: none;">
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem
+				</div>
+			</button>
+			<button class="popup-button" style="height: 128px;" onclick="window.location.href = window.location.origin + '/poem-editor?edit=' + window.location.pathname + '.json' + '&version=2';">
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem
+				</div>
+			</button>
+		</div>
+		<br>
+		<button class="popup-button" onclick="editFrame.close();">Cancel</button>
+	</dialog>
+	<a id="back" href="javascript: window.location.href = window.location.origin + '/contents';" class="back"> &lt;- Back</a>
+	<div onclick="editFrame.showModal();" class="edit">
+		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
+	</div>
 </body>
 <script>
-    let stringToHtml = text => {
-      let htmlObject = document.createElement('temp')
-      htmlObject.innerHTML = text
-      return htmlObject.firstElementChild
-    }
+	async function initialise() {
+		const params = new URLSearchParams(document.location.search)
+		const path = params.get("path")
+		const response = await fetch(window.location.origin + path + ".json")
+		if (!response.ok) {
+			alert("Unexpected network error - Failed to load poem")
+			console.error("Poem load failed:", response.status, response.statusText)
+			return
+		}
+		try {
+			const poemData = await response.json()
+			// Set up title and url bar for vanity
+			window.history.replaceState(null, "Title", path)
+			document.title = "Subliminal - " + poemData.poemName
 
-    async function initialise() {
-        const params = new URLSearchParams(document.location.search)
-        const path = params.get("path")
-        const poemData = await (await fetch(window.location.origin + path + ".json")).json()
-        
-        //Set up title and url bar for vanity
-        window.history.replaceState(null, "Title", path)
-        document.title = "Subliminal - " + poemData.poemName
+			// Display content warning with additions if needed
+			if (poemData.cWarning === true) {
+				document.body.insertBefore(
+					createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
+			}
 
-        //Display content warning with additions if needed
-        if (poemData.cWarning === true) {
-            document.body.insertBefore(
-                createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
-        }
+			// Place poem data into the DOM
+			poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
+			const poemDocument = new EditorDocument(poemData.poemContent)
+			poemDocument.renderHtmlData(poemContent)
+			poemMain.classList.add(poemData.pageStyle)
+			document.body.style.background = poemData.pageBackground
 
-        //Place poem data into the DOM
-        poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
-        poemContent.innerHTML = new EditorDocument(poemData.poemContent).formatToHtml()
-        poemMain.setAttribute("class", poemData.pageStyle) 
-        document.body.style.background = poemData.pageBackground
-
-        //Probably useless since pages are procedurally generated...
-        document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
-        document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
-    }
-    
-    initialise()
+			// Probably useless since pages are procedurally generated...
+			document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
+			document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
+		}
+		catch (e) {
+			alert("Unexpected format error - Failed to load poem. Invalid poem URL?")
+			console.error("Poem parse failed:", e)
+			return
+		}
+	}
+	
+	initialise()
 </script>
 </html>

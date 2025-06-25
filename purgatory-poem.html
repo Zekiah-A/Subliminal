@@ -1,120 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Subliminal - NAME</title>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="./styles.css">
-  <meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
-  <meta name="keywords" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <script src="account.js"></script>
-  <script src="./editor-document.js"></script>
-  <script src="./Other/server.js"></script>
-  <style>
-    .rating-container {
-        user-select: none;
-        display: flex;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 300px;
-        row-gap: 8px;
-        flex-direction: column;
-        padding: 32px;
-        padding-top: 16px;
-    }
+	<meta charset="UTF-8">
+	<title>Subliminal</title>
+	<link rel="icon" href="Resources/AbbstraktDog.ico">
+	<link rel="stylesheet" href="./styles.css">
+	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script src="account.js"></script>
+	<script src="./editor-document.js"></script>
+	<script src="./server.js"></script>
+	<script src="./Other/component-registrar.js"></script>
+	<script src="./Other/poem-ghost-template.js"></script>
+	<script src="./Other/poem-load-cover-template.js"></script>
+	<script src="./Other/account-options-template.js"></script>
+	<style>
+		.rating-container {
+			user-select: none;
+			display: flex;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 300px;
+			row-gap: 8px;
+			flex-direction: column;
+			padding: 32px;
+			padding-top: 16px;
+		}
 
-    .rating-container > div {
-        display: flex;
-        column-gap: 8px;
-    }
+		.rating-container > div {
+			display: flex;
+			column-gap: 8px;
+		}
 
-    .rate-button {
-        background-color: var(--button-opaque);
-        border-radius: 4px;
-        text-align: center;
-        line-height: 48px;
-        height: 48px;
-        flex: 1 1 0px;
-    }
+		.rate-button {
+			background-color: var(--button-opaque);
+			border-radius: 4px;
+			text-align: center;
+			line-height: 48px;
+			height: 48px;
+			flex: 1 1 0px;
+		}
 
-    .action-icon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.6;
-        cursor:pointer;
-    }
+		.title-options {
+			display: flex;
+			column-gap: 8px;
+			position: absolute;
+			right: 24px;
+			top: 50%;
+			transform: translateY(-50%);
+		}
 
-    .action-icon:hover path {
-        transition: .2s all;
-    }
+		.action-icon:hover path {
+			cursor: pointer;
+			transition: .2s all;
+		}
 
-    .action-icon:hover path {
-        stroke-width: 2.5px !important;
-    }
+		.action-icon:hover path {
+			stroke-width: 2.5px !important;
+		}
 
-    @media screen and (orientation:landscape) {
-        #profileFrame {
-            height: 512px;
-            width: 60%;
-        }
-    }
-    </style>
+		@media screen and (orientation:landscape) {
+			#profileFrame {
+				height: 512px;
+				width: 60%;
+			}
+		}
+	</style>
 </head>
-
 <!--<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m16.15 37.75 7.85-4.7 7.85 4.75-2.1-8.9 6.9-6-9.1-.8L24 13.7l-3.55 8.35-9.1.8 6.9 6Zm7.85-1.2-9.3 5.6q-.4.25-.85.225-.45-.025-.8-.275-.35-.25-.525-.65-.175-.4-.075-.9l2.45-10.6-8.2-7.15q-.4-.35-.475-.775-.075-.425.025-.825.1-.4.45-.675t.85-.325l10.85-.95 4.2-10q.2-.45.6-.675.4-.225.8-.225t.8.225q.4.225.6.675l4.2 10 10.85.95q.5.05.85.325t.45.675q.1.4.025.825-.075.425-.475.775l-8.2 7.15 2.45 10.6q.1.5-.075.9t-.525.65q-.35.25-.8.275-.45.025-.85-.225Zm0-10.3Z"/></svg>-->
 <body>
-    <div class="title-blur">
-        <div style="display: flex;">
-            <h2 id="poemTitle" style="display: inline; flex-grow: 1; text-align: end; margin-bottom: 12px;">TITLE</h2>
-            <h2 style="display: inline; margin-bottom: 12px; white-space: pre;"> - By </h2>
-            <h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px;">AUTHOR</h2>
-        </div>
-        <svg id="likeButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 56px;" class="action-icon" onclick="togglePoemLike(this.getAttribute('liked'))">
-            <path id="likePath" d="m12 44 3-15-11-9 14-2 6-14 6 14 14 2-11 9 3 15-12-8Z" style="fill:#ffd500;fill-opacity:1;stroke:#010101;stroke-width:1.8049;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
-        </svg>
-        <svg id="pinButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 16px;" class="action-icon" onclick="togglePoemPin(this.getAttribute('pinned'))">
-            <defs><linearGradient id="a"><stop style="stop-color:red;stop-opacity:1" offset="0"/><stop style="stop-color:red;stop-opacity:1" offset=".7"/><stop style="stop-color:#b1b1b1;stop-opacity:1" offset=".7"/><stop style="stop-color:#909090;stop-opacity:1" offset="1"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="48" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.95894 0 0 .95892 1 1)"/></defs>
-            <path id="pinPath" d="M30 6s0 0 0 0l1 3v1L18 20l-1 1h0-1c-4-1-7-2-10 1v2l8 8-3 4-8 9 9-8 4-3 8 8h2s0 0 0 0c2-3 2-7 1-10 0 0 0 0 0 0l12-15h0l3 1v-1l3-2v-1L34 3h0l-4 3z" style="fill:url(#b);fill-opacity:1;stroke:#010101;stroke-width:1.99677;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
-        </svg>
-        <hr>
-    </div>
-    <div id="poemMain">
-        <p id="poemContent">
-            CONTENT
-        </p>
-        <canvas id="signCanvas" height="96" width="256" style="width: 128px; height: 48px; display: none;"></canvas>
-        <p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
-        <p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
-        <div class="rating-container">
-            <div>
-                <a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Approve })" class="rate-button">Approve</a>
-                <a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: guid, Type: ratingType.Veto })" class="rate-button">Veto</a>
-            </div>
-            <a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
-        </div>
-    </div>
-    <div id="editFrame" style="height: auto; width: max(30%, 360px); display: none;" class="popup">
-        <h2>Poem editor:</h2>
-        <div style="display: flex; column-gap: 8px;">
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + guid;">
-                <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
-            </div>
-            <div class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + guid;">
-                <div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
-            </div>
-        </div>
-        <br>
-        <div class="popup-button" onclick="editFrame.style.display = 'none';">Cancel</div>
-    </div>
-    <div id="profileFrame" style="display: none;" class="popup">
-        <iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
-        <div class="popup-button" onclick="profileFrame.style.display = 'none';">Done</div>
+	<div class="title-blur">
+		<div class="title-header">
+			<h2 id="poemTitle" style="display: inline; flex-grow: 1; text-align: end; margin-bottom: 12px;">Poem</h2>
+			<h2 style="display: inline; margin-bottom: 12px; white-space: pre;"> - By </h2>
+			<h2 id="poemAuthor" style="display: inline; flex-grow: 1; text-align: start; margin-bottom: 12px;">Author</h2>
+		</div>
+		<div class="title-options">
+			<svg id="likeButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 56px;" class="action-icon" onclick="togglePoemLike(this.getAttribute('liked'))">
+				<path id="likePath" d="m12 44 3-15-11-9 14-2 6-14 6 14 14 2-11 9 3 15-12-8Z" style="fill:#ffd500;fill-opacity:1;stroke:var(--text-colour);stroke-width:1.8049;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
+			</svg>
+				<svg id="pinButton" width="32" height="48" xml:space="preserve" viewBox="0 0 48 48" style="right: 16px;" class="action-icon" onclick="togglePoemPin(this.getAttribute('pinned'))">
+				<defs><linearGradient id="a"><stop style="stop-color:red;stop-opacity:1" offset="0"/><stop style="stop-color:red;stop-opacity:1" offset=".7"/><stop style="stop-color:#b1b1b1;stop-opacity:1" offset=".7"/><stop style="stop-color:#909090;stop-opacity:1" offset="1"/></linearGradient><linearGradient xlink:href="#a" id="b" x1="48" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.95894 0 0 .95892 1 1)"/></defs>
+					<path id="pinPath" d="M30 6s0 0 0 0l1 3v1L18 20l-1 1h0-1c-4-1-7-2-10 1v2l8 8-3 4-8 9 9-8 4-3 8 8h2s0 0 0 0c2-3 2-7 1-10 0 0 0 0 0 0l12-15h0l3 1v-1l3-2v-1L34 3h0l-4 3z" style="fill:url(#b);fill-opacity:1;stroke:var(--text-colour);stroke-width:1.99677;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers; fill: transparent;"/>
+			</svg>
+			<account-options></account-options>
+		</div>
+		<hr>
+	</div>
+	<div id="poemMain" class="poem-centre">
+		<p id="poemContent">
+			<subliminal-poem-ghost length="30"></subliminal-poem-ghost>
+			<subliminal-poem-load-cover></subliminal-poem-load-cover>
+		</p>
+		<p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
+		<p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
+		<div id="ratingContainer" class="rating-container" style="visibility: hidden;">
+			<div>
+				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: poemId, Type: ratingType.Approve })" class="rate-button">Approve</a>
+				<a href="#contentWarning" onclick="executeAccountAction(actionType.RatePoem, { PoemKey: poemId, Type: ratingType.Veto })" class="rate-button">Veto</a>
+			</div>
+			<a href="#" style="color: #ff0606; text-align: center;">⚠ Report poem content</a>
+		</div>
+	</div>
+	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">
+		<h2>Edit poem:</h2>
+		<div style="display: flex; column-gap: 8px;">
+			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?amend=' + poemId;">
+				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/AmendMode.png" style="display: block;" height="112" width="112">Amend original poem</div>
+			</button>
+			<button class="popup-button" style="height: 128px;" onclick="window.location.href = '/poem-editor?edit=' + poemId;">
+				<div style="display: flex; flex-direction: column; align-items: center;"><img src="./Resources/InspiredMode.png" style="display: block;" height="112" width="112">New Inspired poem</div>
+			</button>
+		</div>
+		<br>
+		<button class="popup-button" onclick="editFrame.close()">Cancel</button>
+	</dialog>
+	<div id="profileFrame" style="display: none;" class="popup">
+		<iframe id="profileIframe" src="" style="width: 100%; height: calc(100% - 42px);" frameborder="0"></iframe>
+		<button class="popup-button" onclick="profileFrame.style.display = 'none';">Done</button>
 	</div>
 
-    <div id="contentWarning" style="display: none;">
-        <pre class="warning-centre">
+	<div id="contentWarning" style="display: none;">
+		<pre class="warning-centre">
 ___________________________________________________________
 | Disclaimer: This is a poem in the subliminal poem       |
 | purgatory, created in the <a href="./poem-editor">poem editor</a>, and awaiting     |
@@ -137,151 +146,145 @@ ___________________________________________________________
 | <a href="./disclaimer">See Disclaimer -></a>                                       |
 |                                                         |
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-        </pre>
-    </div>  
-    <a href="../../contents" class="back"> <- Back</a>
-    <div onclick="editFrame.style.display = 'block';" class="edit">
-        <svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
-    </div>
+		</pre>
+	</div>  
+	<a href="../../contents" class="back"> &lt;- Back</a>
+	<div onclick="editFrame.showModal()" class="edit">
+		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
+	</div>
 </body>
 <script>
-    const params = new URLSearchParams(document.location.search)
-    const ctx = signCanvas.getContext('2d')
-    const encoder = new TextEncoder()
-    const guid = params.get("guid")
+	const params = new URLSearchParams(document.location.search)
+	const encoder = new TextEncoder()
+	const poemId = params.get("id")
 
-    async function togglePoemLike(liked) {
-        if (!localStorage.liked) {
-            localStorage.liked = JSON.stringify([])
-        }
+	async function togglePoemLike(liked) {
+		if (!localStorage.liked) {
+			localStorage.liked = JSON.stringify([])
+		}
 
-        if (liked == "true") {
-            likeButton.setAttribute("liked", false)
-            likeButton.children[0].style.fill = "transparent"
+		if (liked == "true") {
+			likeButton.setAttribute("liked", false)
+			likeButton.children[0].style.fill = "transparent"
 
-            if (await isLoggedIn()) {
-                executeAccountAction(actionType.UnlikePoem, guid)
-                return
-            }
+			if (await isLoggedIn()) {
+				executeAccountAction(actionType.UnlikePoem, poemId)
+				return
+			}
 
-            let storeLiked = JSON.parse(localStorage.liked)
-            if (storeLiked.indexOf(guid) == -1) return
-            storeLiked.splice(storeLiked.indexOf(guid), 1)
-            localStorage.liked = JSON.stringify(storeLiked)
-            return
-        }
+			let storeLiked = JSON.parse(localStorage.liked)
+			if (storeLiked.indexOf(poemId) == -1) return
+			storeLiked.splice(storeLiked.indexOf(poemId), 1)
+			localStorage.liked = JSON.stringify(storeLiked)
+			return
+		}
 
-        likeButton.setAttribute("liked", true)
-        likeButton.children[0].style.fill = "#ffd500"
+		likeButton.setAttribute("liked", true)
+		likeButton.children[0].style.fill = "#ffd500"
 
-        if (await isLoggedIn()) {
-            executeAccountAction(actionType.LikePoem, guid)
-            return
-        }
+		if (await isLoggedIn()) {
+			executeAccountAction(actionType.LikePoem, poemId)
+			return
+		}
 
-        let storeLiked = JSON.parse(localStorage.liked)
-        storeLiked.push(guid)
-        localStorage.liked = JSON.stringify(storeLiked)
-    }
+		let storeLiked = JSON.parse(localStorage.liked)
+		storeLiked.push(poemId)
+		localStorage.liked = JSON.stringify(storeLiked)
+	}
 
-    function togglePoemPin(pinned) {
-        if (pinned == "true") { 
-            pinButton.setAttribute("pinned", false)
-            pinButton.children[1].style.fill = "transparent"
-            executeAccountAction(actionType.UnpinPoem, guid)
-            return
-        }
+	function togglePoemPin(pinned) {
+		if (pinned == "true") { 
+			pinButton.setAttribute("pinned", false)
+			pinButton.children[1].style.fill = "transparent"
+			executeAccountAction(actionType.UnpinPoem, poemId)
+			return
+		}
 
-        pinButton.setAttribute('pinned', true)
-        pinButton.children[1].style.fill = "url(#b)"
-        executeAccountAction(actionType.PinPoem, guid)
-    }
+		pinButton.setAttribute('pinned', true)
+		pinButton.children[1].style.fill = "url(#b)"
+		executeAccountAction(actionType.PinPoem, poemId)
+	}
 
-    async function initialise() {
-        //init localstorage
-        if (!localStorage.getItem('approved')) 
-            localStorage.approved = new Set()
-        if (!localStorage.getItem('vetoed'))
-            localStorage.vetoed = new Set()
+	async function initialise() {
+		//init localstorage
+		if (!localStorage.getItem("approved")) 
+			localStorage.approved = JSON.stringify(new Set())
+		if (!localStorage.getItem("vetoed"))
+			localStorage.vetoed = JSON.stringify(new Set())
 
-        // You can not pin a poem unless you have an account
-        if (!await isLoggedIn()) {
-            pinButton.onclick = () => {
-                alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
-            }
-        }
+		// You can not pin a poem unless you have an account
+		if (!await isLoggedIn()) {
+			pinButton.onclick = () => {
+				alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
+			}
+		}
 
+		//fetch poem data
+		const res = await fetch(serverBaseAddress + "/purgatory/" + poemId)
+		if (!res.ok) {
+			alert("Failed to load poem")
+			history.back()
+		}
+		const poemData = await res.json()
+		
+		//Set up title for vanity
+		document.title = "Subliminal - " + poemData.poemName
 
-        //fetch poem data
-        let poemData = await (await fetch(serverBaseAddress + "/Purgatory/" + guid)).json()
-        
-        //Set up title for vanity
-        document.title = "Subliminal - " + poemData.poemName
+		//Place poem data into the DOM
+		if (poemData.cWarning === true) {
+			document.body.insertBefore(
+				createFromData("content-warning", { addition: poemData.cWarningAdditions }), contentWarning)
+		}
+		
+		//If author has a GUID (account),link it to the poem
+		if (poemData.authorGuid) {
+			poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
+			poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
+			poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
+			poemAuthor.style.cursor = "pointer"
+			profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.authorGuid
+		}
+		
+		//Set up title
+		poemTitle.textContent = poemData.poemName
+		poemAuthor.textContent = poemData.poemAuthor
+		
+		//Set up main poem content
+		const poemContentObject = JSON.parse(poemData.poemContent)
+		const poemDocument = new EditorDocument(poemContentObject)
+		poemDocument.renderHtmlData(poemContent)
+		poemMain.classList.add(poemData.pageStyle)
+		document.body.style.background = poemData.pageBackground
 
-        //Place poem data into the DOM
-        if (poemData.cWarning === true) {
-            document.body.insertBefore(
-                createFromData("content-warning", { addition: poemData.cWarningAdditions }), contentWarning)
-        }
-        
-        //If author has a GUID (account),link it to the poem
-        if (poemData.authorGuid) {
-            poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
-            poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
-            poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
-            poemAuthor.style.cursor = "pointer"
-            profileIframe.src = "./Other/profile-template-frame.html?guid=" + poemData.authorGuid
-        }
-        
-        //Set up title
-        poemTitle.textContent = poemData.poemName
-        poemAuthor.textContent = poemData.poemAuthor
-        
-        //Set up main poem content
-        poemContent.innerHTML = new EditorDocument(poemData.poemContent).formatToHtml()
-        poemMain.setAttribute("class", poemData.pageStyle) 
-        document.body.style.background = poemData.pageBackground
+		//If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well
+		if (poemData.amends) {
+			amendmentNote.style.display = "block"
+			amendmentLink.href = window.location.origin + 
+				(poemData.amends.includes("/") ? "/poem?path=" + poemData.amends : "purgatory-poem?guid=" + poemData.amends)
+		}
+		else if (poemData.edits) {
+			editNote.style.display = "block"
+			editLink.href = window.location.origin + 
+				(poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
+		}
 
-        //Draw sign canvas bits if it's a signed poem
-        if (poemData.signature) {
-            signCanvas.style.display = "block"
-            ctx.fillStyle = "rgb(0, 0, 0)";
+		// Poem liking  & ratings
+		const accountData = await isLoggedIn() ? await getAccountData() : null
+		const localLiked = localStorage.liked ? JSON.parse(localStorage.liked) : null
 
-            //We decode the base64 back to binary/bytes
-            let buffer = new Uint8Array([...window.atob(poemData.signature)].map(char => char.charCodeAt(0)))
-            let byteI = Math.floor((signCanvas.width * h + w) / 8)
-            let shiftI = w % 8
-            
-            for (let h = 0; h < signCanvas.height; h++) {
-                for (let w = 0; w < signCanvas.width; w++) {
-                    if (buffer[signCanvas.width * h + w] & (1 << shiftI) != 0) ctx.fillRect(w, h, 1, 1)
-                }
-            }
-        }
+		if ((accountData && accountData.likedPoems.includes(poemId)) || (localLiked && localLiked.includes(poemId))) {
+			likeButton.setAttribute("liked", true)
+			likeButton.children[0].style.fill = "#ffd500"
+		}
+		if (accountData) {
+			ratingContainer.style.visibility = "visible"
+		}
 
-        //If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well
-        if (poemData.amends) {
-            amendmentNote.style.display = "block"
-            amendmentLink.href = window.location.origin + 
-                (poemData.amends.includes("/") ? "/poem?path=" + poemData.amends : "purgatory-poem?guid=" + poemData.amends)
-        }
-        else if (poemData.edits) {
-            editNote.style.display = "block"
-            editLink.href = window.location.origin + 
-                (poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
-        }
-
-        if ((await isLoggedIn() && (await getAccountData()).likedPoems.includes(guid)) ||
-            (localStorage.liked && JSON.parse(localStorage.liked) && JSON.parse(localStorage.liked).includes(guid))) {
-            likeButton.setAttribute("liked", true)
-            likeButton.children[0].style.fill = "#ffd500"
-        }
-
-        //Probably useless since pages are procedurally generated...
-        document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
-        document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
-    }
-    
-    initialise()
+		//Probably useless since pages are procedurally generated...
+		document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
+		document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
+	}
+	
+	initialise()
 </script>
 </html>

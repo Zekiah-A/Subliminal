@@ -6,9 +6,6 @@ project.lock.json
 *.pyc
 nupkg/
 
-# Visual Studio Code
-.vscode/
-
 # Rider
 .idea/
 
@@ -45,3 +42,7 @@ msbuild.wrn
 
 # Node
 node_modules/
+
+# Server
+SubliminalServer/Data/
+SubliminalServer/Migrations/

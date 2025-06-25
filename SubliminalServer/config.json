@@ -1,1 +1,8 @@
-{"Certificate":"","Key":"","Port":1234,"UseHttps":false}
+{
+    "Version": 0,
+    "Certificate": null,
+    "Key": null,
+    "Port": 1234,
+    "UseHttps": false,
+    "CorsCookie": false
+}

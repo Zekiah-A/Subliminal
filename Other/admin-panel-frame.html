@@ -1,146 +1,143 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="../styles.css">
-  <script src="../account.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="../styles.css">
+	<script src="../account.js"></script>
 </head>
-<body>
-    <div style="height: fit-content; width: 40%;" class="popup">
-        <h2>Admin controls:</h2>
-        <p>No functions here will work if you are not an admin on subliminal. However, feel free to snoop around and see how we keep the site based!</p>
-        <div style="display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
-            <div class="popup-button" onclick="
-                viewPurgatoryReports()
-            ">View purgatory reports</div>
-            <div class="popup-button" onclick="
-                prompt('Enter poem GUID')
-                prompt('Enter deletion reason')
-                confirm('Are you sure you want to delete {NAME} for {REASON}?')
-            ">Remove purgatory poem</div>
-            <div class="popup-button" onclick="
-                prompt('Enter account GUID')
-                prompt('Enter termination reason')
-                confirm('Are you sure you want to terminate {NAME} for {REASON}?')
-            ">Terminate account</div>
-            <div class="popup-button" onclick="
-                prompt('Enter account GUID')
-                prompt('Award or revoke')
-                prompt(`Enter badge name (${Object.keys(badgeType).join(', ')})`)
-            ">Award or revoke badge</div>
-            <div class="popup-button" onclick="
-                viewPurgatoryPicks()
-            ">View purgatory picks</div>
-            <div class="popup-button" onclick="
-                optionContent.animate([
-                    { maxHeight: '500' },
-                    { maxHeight: '0' }
-                ], {
-                    duration: 200,
-                    iterations: 1
-                })
+<body class="headered-body">
+	<div style="height: fit-content; width: 40%;" class="popup">
+		<h2>Admin controls:</h2>
+		<p>No functions here will work if you are not an admin on subliminal. However, feel free to snoop around and see how we keep the site based!</p>
+		<div style="display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
+			<button class="popup-button" onclick="
+				viewPurgatoryReports()
+			">View purgatory reports</button>
+			<button class="popup-button" onclick="
+				prompt('Enter poem GUID')
+				prompt('Enter deletion reason')
+				confirm('Are you sure you want to delete {NAME} for {REASON}?')
+			">Remove purgatory poem</button>
+			<button class="popup-button" onclick="
+				prompt('Enter account GUID')
+				prompt('Enter termination reason')
+				confirm('Are you sure you want to terminate {NAME} for {REASON}?')
+			">Terminate account</button>
+			<button class="popup-button" onclick="
+				prompt('Enter account GUID')
+				prompt('Award or revoke')
+				prompt(`Enter badge name (${Object.keys(badgeType).join(', ')})`)
+			">Award or revoke badge</button>
+			<button class="popup-button" onclick="
+				viewPurgatoryPicks()
+			">View purgatory picks</button>
+			<button class="popup-button" onclick="
+				optionContent.animate([
+					{ maxHeight: '500' },
+					{ maxHeight: '0' }
+				], {
+					duration: 200,
+					iterations: 1
+				})
 
-                setTimeout(() => {
-                    while (optionContent.firstChild) {
-                        optionContent.removeChild(optionContent.firstChild)
-                    }
-                }, 200)
-            ">Collapse</div>            
-        </div>
-        <br>
-        <div id="optionContent" style="overflow-y: scroll; max-height: 500px;"></div>
-        <div class="popup-button">Done</div>
-        <p style="opacity:0.6;">Be responsible, always be impartial.</p>
-    </div>
+				setTimeout(() => {
+					while (optionContent.firstChild) {
+						optionContent.removeChild(optionContent.firstChild)
+					}
+				}, 200)
+			">Collapse</button>            
+		</div>
+		<br>
+		<div id="optionContent" style="overflow-y: scroll; max-height: 500px;"></div>
+		<button class="popup-button">Done</button>
+		<p style="opacity:0.6;">Be responsible, always be impartial.</p>
+	</div>
 </body>
 <script>
-    function viewPurgatoryReports() {
-        while (optionContent.firstChild) {
-            optionContent.removeChild(optionContent.firstChild)
-        }
+	function viewPurgatoryReports() {
+		while (optionContent.firstChild) {
+			optionContent.removeChild(optionContent.firstChild)
+		}
 
-        optionContent.animate([
-            { maxHeight: '0' },
-            { maxHeight: '500' }
-        ], {
-            duration: 200,
-            iterations: 1
-        })
+		optionContent.animate([
+			{ maxHeight: '0' },
+			{ maxHeight: '500' }
+		], {
+			duration: 200,
+			iterations: 1
+		})
 
-        for (let i = 0; i < 10; i++)
-        {
-            let url = "poemanthology.org/"
-            let reason = "Lorem ipsum dolor sit amet"
+		for (let i = 0; i < 10; i++)
+		{
+			let url = "poemanthology.org/"
+			let reason = "Lorem ipsum dolor sit amet"
 
-            let el = document.createElement("div")
-            el.style.background = randomColour()
-            el.style.border = "1px solid black"
-            el.style.marginBottom = "4px"
-            el.style.borderRadius = "8px"
-            el.style.padding = "8px"
-            el.innerHTML = `
-                <a href=''>View reporter</a>
-                <a href="${url}">View reported poem</a>
-                <p style="text-decoration: underline">"{NAME}" reported {GUID} with reason</p>
-                <p>${reason}</p>
-                <input type="button" value="Delete report">
-            `
+			let el = document.createElement("div")
+			el.style.background = randomColour()
+			el.style.marginBottom = "4px"
+			el.style.borderRadius = "8px"
+			el.style.padding = "8px"
+			el.innerHTML = `
+				<a href=''>View reporter</a>
+				<a href="${url}">View reported poem</a>
+				<p style="text-decoration: underline">"{NAME}" reported {GUID} with reason</p>
+				<p>${reason}</p>
+				<input type="button" value="Delete report">
+			`
 
-            optionContent.appendChild(el)
-        }
-    }
+			optionContent.appendChild(el)
+		}
+	}
 
-    function viewPurgatoryPicks() {
-        while (optionContent.firstChild) {
-            optionContent.removeChild(optionContent.firstChild)
-        }
+	function viewPurgatoryPicks() {
+		while (optionContent.firstChild) {
+			optionContent.removeChild(optionContent.firstChild)
+		}
 
-        optionContent.animate([
-            { maxHeight: '0' },
-            { maxHeight: '500' }
-        ], {
-            duration: 200,
-            iterations: 1
-        })
+		optionContent.animate([
+			{ maxHeight: '0' },
+			{ maxHeight: '500' }
+		], {
+			duration: 200,
+			iterations: 1
+		})
 
-        for (let i = 0; i < 10; i++)
-        {
-            let url = "poemanthology.org/"
-            let reason = "Lorem ipsum dolor sit amet"
+		for (let i = 0; i < 10; i++)
+		{
+			let url = "poemanthology.org/"
+			let reason = "Lorem ipsum dolor sit amet"
 
-            let el = document.createElement("div")
-            el.style.background = randomColour()
-            el.style.border = "1px solid black"
-            el.style.marginBottom = "4px"
-            el.style.borderRadius = "8px"
-            el.style.padding = "8px"
-            el.innerHTML = `
-                <a href=''>View pick poem</a>
-                <span>{TITLE} by {AUTHOR}</span>
-                <input type="button" value="Remove pick">
-            `
+			let el = document.createElement("div")
+			el.style.background = randomColour()
+			el.style.marginBottom = "4px"
+			el.style.borderRadius = "8px"
+			el.style.padding = "8px"
+			el.innerHTML = `
+				<a href=''>View pick poem</a>
+				<span>{TITLE} by {AUTHOR}</span>
+				<input type="button" value="Remove pick">
+			`
 
-            optionContent.appendChild(el)
-        }
+			optionContent.appendChild(el)
+		}
 
-        let el = document.createElement("div")
-            el.style.border = "1px solid black"
-            el.style.borderRadius = "8px"
-            el.style.padding = "8px"
-            el.innerHTML = `
-                <span>Add another pick</span>
-                <input type="text" placeholder="Enter pick GUID">
-                <input type="button" value="Add">
-            `
-            
-        optionContent.appendChild(el)
-    }
+		let el = document.createElement("div")
+			el.style.borderRadius = "8px"
+			el.style.padding = "8px"
+			el.innerHTML = `
+				<span>Add another pick</span>
+				<input type="text" placeholder="Enter pick GUID">
+				<input type="button" value="Add">
+			`
 
-    function randomColour() { 
-        return "hsl(" + 360 * Math.random() + ',' +
-             (25 + 70 * Math.random()) + '%,' + 
-             (85 + 10 * Math.random()) + '%)'
-    }
+		optionContent.appendChild(el)
+	}
+
+	function randomColour() { 
+		return "hsl(" + 360 * Math.random() + ',' +
+			 (25 + 70 * Math.random()) + '%,' + 
+			 (85 + 10 * Math.random()) + '%)'
+	}
 </script>
 </html>
