@@ -18,7 +18,7 @@
 	 *    - /anthologies/anthologyname/poemname
 	 *       - Anthology poem name URL format, will redirect user to /poem?anthology=anthologyname&name=poemname 
 	 */
-	/*const path = location.pathname.replace(/^\/|\/$/g, ""); // trim slashes
+	const path = location.pathname.replace(/^\/|\/$/g, ""); // trim slashes
 	const segments = path.split("/");
 
 	let redirectURL = null;
@@ -61,5 +61,5 @@
 	else {
 		console.warn(`No redirect rule matched for path: ${location.pathname}, redirecting to homepage`);
 		location.replace("/");
-	}*/
+	}
 </script>

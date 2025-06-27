@@ -291,6 +291,7 @@
 	margin: -8px;
 	border-radius: 8px;
 	backdrop-filter: blur(10px);
+	box-shadow: 0 4px 8px #0000004f;
 }
 
 .classics-header.stuck > .searchbar {

@@ -6,15 +6,32 @@ class SubliminalSelect extends HTMLElement {
 	}
 
 	connectedCallback() {
+		if (!this.shadowRoot) {
+			throw new Error("Invalid shadowRoot");
+		}
+
 		this.shadowRoot.innerHTML = html`
-			<span id="selected" class="selected"></span>
-			<span id="arrow" class="arrow">⯆</span>
-			<div id="options" class="options" tabIndex="1" style="display: none;"></div>`
-		const style = document.createElement("style")
+			<button type="button" id="button" class="button" popovertarget="options">
+				<span id="selected" class="selected"></span>
+				<span id="arrow" class="arrow">⯆</span>
+			</button>
+			<dialog popover id="options" class="options" tabIndex="1">
+				<slot></slot>
+			</dialog>`;
+		const style = document.createElement("style");
 		style.innerHTML = css`
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--text-colour: #DADADA;
+				}
+			}
+
 			:host {
+				position: relative;
+			}
+
+			.button {
 				background-color: var(--button-opaque);
-				color: var(--text-colour);
 				border: 1px solid #8f8f9d;
 				border-radius: 4px;
 				cursor: default;
@@ -25,30 +42,30 @@ class SubliminalSelect extends HTMLElement {
 				align-items: center;
 				position: relative;
 				user-select: none;
+				width: 100%;
+				height: 100%;
+				color: var(--text-colour);
 			}
-			:host(:hover) {
-				background-color: #85859269;x
-			}
-			:host(:active) {
-				background-color: #b1b1bb;
+			.button:hover {
+				background-color: #85859269;
 			}
 
 			.options {
 				background-color: var(--button-transparent);
 				border-radius: 4px;
-				margin-top: 8px;
+				margin: 8px 0 0 0;
 				border: 1px solid darkgray;
 				pointer-events: all !important;
-				display: none;
 				user-select: none;
 				position: absolute;
 				width: max-content;
 				top: 100%;
 				backdrop-filter: blur(8px);
 				z-index: 1;
+				color: var(--text-colour);
 			}
 
-			.options > option {
+			.options ::slotted(option) {
 				padding-left: 4px;
 				padding-right: 4px;
 				height: 32px;
@@ -57,11 +74,11 @@ class SubliminalSelect extends HTMLElement {
 				justify-content: center;
 			}
 
-			.options > option[selected] {
+			.options ::slotted(option[selected]) {
 				background-color: darkgray;
 			}
 
-			.options > option:hover {
+			.options ::slotted(option:hover) {
 				background-color: darkgray;
 			}
 
@@ -83,56 +100,41 @@ class SubliminalSelect extends HTMLElement {
 				}
 			}
 		`;
-		this.shadowRoot.append(style)
-		defineAndInject(this, this.shadowRoot)
-		this.tabIndex = "0"
+		this.shadowRoot.append(style);
+		defineAndInject(this, this.shadowRoot);
 
-		function toggleOpen() {
-			const open = optionsElement.style.display == "block"
-			optionsElement.style.display = open ? "none" : "block"
-			arrowElement.style.transform = open ? "none" : "scaleY(-1)"
-			recalcOptionsPosition()
-		}
+		const buttonElement = /**@type {HTMLButtonElement}*/(this.shadowRoot.getElementById("button"));
+		const selectedElement = /**@type {HTMLElement}*/(this.shadowRoot.getElementById("selected"));
+		const optionsElement = /**@type {HTMLDialogElement}*/(this.shadowRoot.getElementById("options"));
+		const arrowElement = /**@type {HTMLElement}*/(this.shadowRoot.getElementById("arrow"));
 
-		const selectedElement = this.shadowRoot.getElementById("selected")
-		const optionsElement = this.shadowRoot.getElementById("options")
-		const arrowElement = this.shadowRoot.getElementById("arrow")
-		this.addEventListener("click", toggleOpen)
-		this.addEventListener("keypress", event => {
-			if (event.key == "Enter") {
-				toggleOpen()
-			}
-		})
-		this.addEventListener("blur", function() {
-			optionsElement.style.display = "none"
-			arrowElement.style.transform = "none"
-		})
-		selectedElement.textContent = this.getAttribute("placeholder") + " "
+		selectedElement.textContent = this.getAttribute("placeholder") + " ";
 
-		const _this = this
+		const _this = this;
 		function recalcOptionsPosition() {
 			const overflowLeft =
-				_this.getBoundingClientRect().left +
-				optionsElement.offsetWidth -
-				window.innerWidth
-			optionsElement.style.left = Math.min(0, -overflowLeft - 8) + "px"
+				_this.getBoundingClientRect().right -
+				optionsElement.offsetWidth;
+			const top = _this.getBoundingClientRect().bottom +
+				window.scrollY;
+
+			optionsElement.style.left = overflowLeft + "px";
+			optionsElement.style.top = top + "px";
 		}
 
-		document.addEventListener("DOMContentLoaded", () => {
-			for (let i = 0; i < this.children.length; i++) {
-				const node = this.children[i]
-
-				if (node instanceof HTMLOptionElement || node instanceof HTMLHRElement) {
-					optionsElement.appendChild(node.cloneNode(true))
-				}
-				else {
-					throw new Error(
-						"Can not create options. Subliminal options child elements must be of either type 'option' or 'hr'",)
-				}
+		optionsElement.addEventListener("toggle", () => {
+			if (optionsElement.matches(":popover-open")) {
+				arrowElement.style.transform = "scaleY(-1)";
+				recalcOptionsPosition();
+			} else {
+				arrowElement.style.transform = "";
 			}
-		})
-		window.addEventListener("resize", recalcOptionsPosition)
+		});
+
+		window.addEventListener("scroll", recalcOptionsPosition);
+		window.addEventListener("resize", recalcOptionsPosition);
+		recalcOptionsPosition();
 	}
 }
 
-customElements.define("subliminal-select", SubliminalSelect)
+customElements.define("subliminal-select", SubliminalSelect);

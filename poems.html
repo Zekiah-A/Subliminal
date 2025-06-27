@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Subliminal</title>
+	<title>Poems | Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="The contents page of the weirdest poetry anthology to ever exist. Manage your account, and search for poems here.">
 	<meta name="keywords" content="Poetry, Contents, Anthology, Subliminal, Search">
@@ -266,17 +266,17 @@
 	addPurgatoryEntries("new")
 
 	filtersBar.addEventListener("mousemove", event => {
-		for (let button of filtersBar.children) {
+		for (const button of filtersBar.children) {
 			button.style.background =
-				"radial-gradient(at left " + (event.screenX - button.offsetLeft) +
-				"px top " + (event.screenY - button.offsetTop) + "px, darkgray, var(--background-opaque)"
+				"radial-gradient(at left " + (event.clientX - button.offsetLeft) +
+				"px top " + (event.clientY - button.offsetTop) + "px, darkgray, var(--background-opaque)"
 		}
 	})
 
 	filtersBar.addEventListener("mouseleave", event => {
 		for (let button of filtersBar.children) {
 			if (button.className === "separator") continue
-			button.style.background = 'none'
+			button.style.background = "none"
 		}
 	})
 </script>

@@ -36,13 +36,12 @@
 			"id": -1,
 			"path": "volume-1",
 			"name": "Volume 1: (Phrenes and Memes)",
-			"description": {},
 			"sections": [
 				{
 					"id": -1,
 					"path": "war-and-phrenics",
 					"name": "War and Phrenics",
-					"description": {},
+					"summary": "A collection of poems based on conflict and mentality",
 					"contents": [
 						{
 							"path": "besusk.json",
@@ -120,7 +119,7 @@
 					"id": -2,
 					"path": "really-stupid-stuff",
 					"name": "Really Stupid Stuff",
-					"description": {},
+					"summary": "Humorous, nonsensical, and utterly ridiculous poems",
 					"contents": [
 						{
 							"path": "bibbilance.json",
@@ -238,7 +237,7 @@
 					"id": -3,
 					"path": "parodies-and-adaptations",
 					"name": "Parodies and Adaptations",
-					"description": {},
+					"summary": "Parodies of iconic poems you learned in school",
 					"contents": [
 						{
 							"path": "the-interlude.json",
@@ -257,31 +256,38 @@
 						},
 						{
 							"path": "tree-stumps.json",
-							"name": "Tree Stumps"
+							"name": "Tree Stumps",
+							"authorId": -7
 						},
 						{
 							"path": "ozyandyas.json",
-							"name": "Ozyandyas"
+							"name": "Ozyandyas",
+							"authorId": -7
 						},
 						{
 							"path": "public-toilet.json",
-							"name": "Public Toilet"
+							"name": "Public Toilet",
+							"authorId": -1
 						},
 						{
 							"path": "ketones.json",
-							"name": "Ketones"
+							"name": "Ketones",
+							"authorId": -7
 						},
 						{
 							"path": "my-first-among-us-game.json",
-							"name": "My first Among Us game"
+							"name": "My first Among Us game",
+							"authorId": -1
 						},
 						{
 							"path": "composed-upon-mount-isso.json",
-							"name": "Composed upon Mount Isso, March 22, 2022"
+							"name": "Composed upon Mount Isso, March 22, 2022",
+							"authorId": -7
 						},
 						{
 							"path": "the-charge-of-the-bike-brigade.json",
-							"name": "The Charge Of The Bike Brigade"
+							"name": "The Charge Of The Bike Brigade",
+							"authorId": -7
 						}
 					]
 				}
@@ -291,105 +297,127 @@
 			"id": -2,
 			"path": "volume-2",
 			"name": "Volume 2: (Idiots and Revelations)",
-			"description": {},
 			"sections": [
 				{
 					"id": -4,
 					"path": "idiots",
 					"name": "Idiots",
-					"description": {},
+					"summary": "Critiques of society, people and culture",
 					"contents": [
 						{
 							"path": "the-great-prison-of-america.json",
-							"name": "The Great Prison Of America"
+							"name": "The Great Prison Of America",
+							"authorId": -3
 						},
 						{
 							"path": "industrial-society.json",
-							"name": "Industrial Society"
+							"name": "Industrial Society",
+							"authorId": -3
 						},
 						{
 							"path": "a-conclusive-thesis-on-modern-day-consumerism.json",
-							"name": "A conclusive thesis on modern day consumerism"
+							"name": "A conclusive thesis on modern day consumerism",
+							"authorId": -1
 						},
 						{
 							"path": "reality.json",
-							"name": "Reality"
+							"name": "Reality",
+							"authorId": -1
 						},
 						{
 							"path": "a-long-road-to-al'mogus.json",
-							"name": "A long road to Al'mogus"
+							"name": "A long road to Al'mogus",
+							"authorId": -1
 						},
 						{
 							"path": "dear-liberals.json",
-							"name": "Dear, liberals"
+							"name": "Dear, liberals",
+							"authorId": -1
 						},
 						{
 							"path": "old-man-consequences.json",
-							"name": "Old Man Consequences"
+							"name": "Old Man Consequences",
+							"authprId": -1
 						},
 						{
 							"path": "i-am-sorrounded-by-idiots.json",
-							"name": "I am sorrounded by Idiots"
+							"name": "I am sorrounded by Idiots",
+							"authorId": -1
 						},
 						{
 							"path": "an-unfortunate-event.json",
-							"name": "An Unfortunate Event"
+							"name": "An Unfortunate Event",
+							"authorId": -3
 						},
 						{
 							"path": "modern-day-brockelhurst.json",
-							"name": "Modern Day Brockelhurst"
+							"name": "Modern Day Brockelhurst",
+							"authorId": -1
 						},
 						{
 							"path": "the-epilogue.json",
-							"name": "The Epilogue"
+							"name": "The Epilogue",
+							"authorId": -3
 						},
 						{
 							"path": "erfolgreich-wenn.json",
-							"name": "Erfolgreich Wenn?"
+							"name": "Erfolgreich Wenn?",
+							"authorId": -3
 						},
 						{
 							"path": "asylum.json",
-							"name": "Asylum"
+							"name": "Asylum",
+							"authorId": -3
 						},
 						{
 							"path": "a-doctor-of-schizophrenia.json",
-							"name": "A doctor of Schizophrenia"
+							"name": "A doctor of Schizophrenia",
+							"authorId": -1
 						},
 						{
 							"path": "five-a-side-footie.json",
-							"name": "Five-a-side Footie"
+							"name": "Five-a-side Footie",
+							"authorId": -1
 						},
 						{
 							"path": "a-gay-encounter.json",
-							"name": "A gay encounter"
+							"name": "A gay encounter",
+							"authorId": -1
 						},
 						{
 							"path": "we-live-in-a-dictatorship.json",
-							"name": "We live in a dictatorship"
+							"name": "We live in a dictatorship",
+							"authorId": -7
 						},
 						{
 							"path": "the-police-cause-all-the-chaos.json",
-							"name": "The police cause all the chaos"
+							"name": "The police cause all the chaos",
+							"authorId": -7
 						},
 						{
 							"path": "suspended-in-h.json",
-							"name": "Suspended in H"
+							"name": "Suspended in H",
+							"authorId": -1
 						},
 						{
 							"path": "mifism.json",
-							"name": "MIFISM"
+							"name": "MIFISM",
+							"authorId": -1
 						},
 						{
 							"path": "litigations.json",
-							"name": "Litigations"
+							"name": "Litigations",
+							"authorId": -1
 						},
 						{
 							"path": "almost-as-stone-as-a-rock.json",
-							"name": "Almost as stone as a rock"
+							"name": "Almost as stone as a rock",
+							"authorId": -1
 						},
 						{
 							"path": "cupcake-bomb.json",
-							"name": "Cupcake Bomb"
+							"name": "Cupcake Bomb",
+							"authorId": -1
 						}
 					]
 				},
@@ -397,7 +425,7 @@
 					"id": -5,
 					"path": "sublime-and-revelation",
 					"name": "Sublime and Revelation",
-					"description": {},
+					"summary": "A collection of poems asking the big questions in life",
 					"contents": [
 						{
 							"path": "babarian.json",
@@ -430,19 +458,22 @@
 					"id": -6,
 					"path": "tales-and-tomes",
 					"name": "Tales and Tomes",
-					"description": {},
+					"summary": "Whimsical, mysterious and epic poems",
 					"contents": [
 						{
 							"path": "the-tale-of-major-korean.json",
-							"name": "The Tale of Major Korean"
+							"name": "The Tale of Major Korean",
+							"authorId": -3
 						},
 						{
 							"path": "the-burial-of-herr-fischer-vi.json",
-							"name": "The Burial of Herr Fischer VI"
+							"name": "The Burial of Herr Fischer VI",
+							"authorId": -3
 						},
 						{
 							"path": "bull-and-bush.json",
-							"name": "Bull and Bush"
+							"name": "Bull and Bush",
+							"authorId": -7
 						}
 					]
 				}
@@ -452,7 +483,7 @@
 			"id": -3,
 			"path": "other",
 			"name": "Other Stuff:",
-			"description": {},
+			"summary": "A collection of short stories, skits and tales",
 			"sections": [
 				{
 					"path": "copypastas",
@@ -465,7 +496,8 @@
 						},
 						{
 							"path": "the-redditor.json",
-							"name": "The Redditor"
+							"name": "The Redditor",
+							"authorId": -3
 						}
 					]
 				}

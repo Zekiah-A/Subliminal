@@ -23,7 +23,7 @@ class SubliminalHeader extends HTMLElement {
 					<account-options id="accountOptions"></account-options>
 				</div>
 			</div>
-			<hr style="margin: 0px; margin-left: 8px; margin-right: 8px;">`
+			<hr>`
 
 		const style = document.createElement("style")
 		style.innerHTML = css`
@@ -38,6 +38,16 @@ class SubliminalHeader extends HTMLElement {
 				background: transparent;
 				z-index: 3;
 				user-select: none;
+				transition: box-shadow .2s;
+			}
+
+			:host(.scrolled) {
+				box-shadow: 0 4px 8px #0000004f;
+			}
+
+			:host(.scrolled) hr {
+				margin-left: 0;
+				margin-right: 0;
 			}
 			
 			:host > div {
@@ -121,6 +131,9 @@ class SubliminalHeader extends HTMLElement {
 				border: none;
 				border-top: 1px solid gray;
 				margin: 0px;
+				margin-left: 8px;
+				margin-right: 8px;
+				transition: margin-left .2s, margin-right .2s;
 			}
 
 			@media screen and (orientation:portrait) {
@@ -190,6 +203,15 @@ class SubliminalHeader extends HTMLElement {
 			console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
 			return
 		}
+
+		window.addEventListener("scroll", (e) => {
+			if (window.scrollY > 0) {
+				this.classList.add("scrolled")			
+			}
+			else {
+				this.classList.remove("scrolled")
+			}
+		})
 	}
 }
 
