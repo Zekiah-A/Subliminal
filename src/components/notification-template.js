@@ -1,4 +1,6 @@
 "use strict";
+import { html, css } from "./component-registrar.js"
+
 class SubliminalNotification extends HTMLElement {
 	constructor() {
 		super()

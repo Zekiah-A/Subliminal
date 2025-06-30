@@ -1,4 +1,4 @@
-namespace SubliminalServer;
+namespace SubliminalServer.Middlewares;
 
 public class RequestSizeLimitMiddleware
 {

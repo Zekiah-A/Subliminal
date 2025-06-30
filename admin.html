@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Admin | Subliminal</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../styles.css">
+	<script type="module" src="src/account-manager.js"></script>
+</head>
+<body class="headered-body">
+	<div style="height: fit-content; width: 40%;" class="popup">
+		<h2>Admin controls:</h2>
+		<p>Actions here will not work unless you are an admin on subliminal. However, feel free to snoop around and see how we keep the site safe!</p>
+		<div style="display: grid; grid-template-rows: auto auto auto; grid-template-columns: auto auto; grid-gap: 8px;">
+			<button type="button" class="popup-button" onclick="
+				viewPurgatoryReports()
+			">View purgatory reports</button>
+			<button type="button" class="popup-button" onclick="
+				prompt('Enter poem ID')
+				prompt('Enter deletion reason')
+				confirm('Are you sure you want to delete {NAME} for {REASON}?')
+			">Remove purgatory poem</button>
+			<button type="button" class="popup-button" onclick="
+				prompt('Enter account ID')
+				prompt('Enter termination reason')
+				confirm('Are you sure you want to terminate {NAME} for {REASON}?')
+			">Terminate account</button>
+			<button type="button" class="popup-button" onclick="
+				prompt('Enter account ID')
+				prompt('Award or revoke')
+				prompt(`Enter badge name (${Object.keys(badgeType).join(', ')})`)
+			">Award or revoke badge</button>
+			<button type="button" class="popup-button" onclick="
+				viewPurgatoryPicks()
+			">View purgatory picks</button>
+			<button type="button" class="popup-button" onclick="
+				optionContent.animate([
+					{ maxHeight: '500' },
+					{ maxHeight: '0' }
+				], {
+					duration: 200,
+					iterations: 1
+				})
+
+				setTimeout(() => {
+					while (optionContent.firstChild) {
+						optionContent.removeChild(optionContent.firstChild)
+					}
+				}, 200)
+			">Collapse</button>            
+		</div>
+		<br>
+		<div id="optionContent" style="overflow-y: scroll; max-height: 500px;"></div>
+		<button type="button" class="popup-button">Done</button>
+		<p style="opacity:0.6;">Be responsible, always be impartial.</p>
+	</div>
+</body>
+</html>

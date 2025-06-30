@@ -1,6 +1,10 @@
 {
 	"type": "static",
 	"version": 1,
+	"title": "Subliminal Classics: Methallyne Blue",
+	"description": "“The methallyne blue analogy of stuff.\n\nProbably the weirdest poetry anthology to ever exist.”\n<img class=\"index-image main-logo\" alt=\"Enlarged subliminal dog logo\" src=\"subliminal-classics/methallyne-blue/cover.png\" width=\"70%\" height=\"70%\">\n<p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup><sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>",
+	"coverImagePath": "cover.png",
+	"license": "CC BY-NC-SA 4.0",
 	"authors": [
 		{
 			"id": -1,
@@ -35,82 +39,82 @@
 		{
 			"id": -1,
 			"path": "volume-1",
-			"name": "Volume 1: (Phrenes and Memes)",
+			"title": "Volume 1 (Phrenes and Memes)",
 			"sections": [
 				{
 					"id": -1,
 					"path": "war-and-phrenics",
-					"name": "War and Phrenics",
+					"title": "War and Phrenics",
 					"summary": "A collection of poems based on conflict and mentality",
 					"contents": [
 						{
 							"path": "besusk.json",
-							"name": "Besusk",
+							"title": "Besusk",
 							"authorId": -3
 						},
 						{
 							"path": "the-sitting-down-of-the-opacity-brigade.json",
-							"name": "Sylable Of Obamama",
+							"title": "Sylable Of Obamama",
 							"authorId": -3
 						},
 						{
 							"path": "venger.json",
-							"name": "Venger",
+							"title": "Venger",
 							"authorId": -1
 						},
 						{
 							"path": "stomped.json",
-							"name": "Stomped",
+							"title": "Stomped",
 							"authorId": -2
 						},
 						{
 							"path": "bamitz.json",
-							"name": "Bamitz",
+							"title": "Bamitz",
 							"authorId": -1
 						},
 						{
 							"path": "seppaku.json",
-							"name": "Seppaku",
+							"title": "Seppaku",
 							"authorId": -3
 						},
 						{
 							"path": "blood-oath.json",
-							"name": "Blood Oath",
+							"title": "Blood Oath",
 							"authorId": -3
 						},
 						{
 							"path": "viiiiibraaanium!.json",
-							"name": "Viiiiibraaanium!",
+							"title": "Viiiiibraaanium!",
 							"authorId": -1
 						},
 						{
 							"path": "happy-old-man.json",
-							"name": "Happy Old Man",
+							"title": "Happy Old Man",
 							"authorId": -1
 						},
 						{
 							"path": "tenacity.json",
-							"name": "Tenacity",
+							"title": "Tenacity",
 							"authorId": -1
 						},
 						{
 							"path": "who-art-in-heaven.json",
-							"name": "Who art in heaven?",
+							"title": "Who art in heaven?",
 							"authorId": -1
 						},
 						{
 							"path": "the-ride.json",
-							"name": "The Ride",
+							"title": "The Ride",
 							"authorId": -4
 						},
 						{
 							"path": "blitzkrieg.json",
-							"name": "BLITZKRIEG",
+							"title": "BLITZKRIEG",
 							"authorId": -1
 						},
 						{
 							"path": "thlassophobia.json",
-							"name": "Thlassophobia",
+							"title": "Thlassophobia",
 							"authorId": -2
 						}
 					]
@@ -118,117 +122,117 @@
 				{
 					"id": -2,
 					"path": "really-stupid-stuff",
-					"name": "Really Stupid Stuff",
+					"title": "Really Stupid Stuff",
 					"summary": "Humorous, nonsensical, and utterly ridiculous poems",
 					"contents": [
 						{
 							"path": "bibbilance.json",
-							"name": "Bibbilance",
+							"title": "Bibbilance",
 							"authorId": -1
 						},
 						{
 							"path": "sylable-of-obamama.json",
-							"name": "Sylable Of Obamama",
+							"title": "Sylable Of Obamama",
 							"authorId": -3
 						},
 						{
 							"path": "hän-vaan-istu.json",
-							"name": "Hän vaan istu",
+							"title": "Hän vaan istu",
 							"authorId": -5
 						},
 						{
 							"path": "organs.json",
-							"name": "Organs",
+							"title": "Organs",
 							"authorId": -3
 						},
 						{
 							"path": "shifty-will.json",
-							"name": "Shifty Will",
+							"title": "Shifty Will",
 							"authorId": -1
 						},
 						{
 							"path": "i-don't-write-poems.json",
-							"name": "I don't write POEMS",
+							"title": "I don't write POEMS",
 							"authorId": -5
 						},
 						{
 							"path": "i-saw-you-at-5:03-on-persely-road.json",
-							"name": "I saw you at 5:03 on Persely Road",
+							"title": "I saw you at 5:03 on Persely Road",
 							"authorId": -1
 						},
 						{
 							"path": "badges-ft-cardi-b.json",
-							"name": "Badges (Ft Cardi B)",
+							"title": "Badges (Ft Cardi B)",
 							"authorId": -6
 						},
 						{
 							"path": "statude-des-amongus.json",
-							"name": "Statude des Amongus",
+							"title": "Statude des Amongus",
 							"authorId": -3
 						},
 						{
 							"path": "08:19:59.json",
-							"name": "08:19:59",
+							"title": "08:19:59",
 							"authorId": -7
 						},
 						{
 							"path": "once-in-princess-selva's-classroom.json",
-							"name": "Once in Princess Selva's classroom",
+							"title": "Once in Princess Selva's classroom",
 							"authorId": -7
 						},
 						{
 							"path": "effavescence.json",
-							"name": "Effavescence",
+							"title": "Effavescence",
 							"authorId": -1
 						},
 						{
 							"path": "creativity.json",
-							"name": "Creativity",
+							"title": "Creativity",
 							"authorId": -3
 						},
 						{
 							"path": "this-is-(not)-the-art-of-war.json",
-							"name": "This is (not) \"the art of war\"",
+							"title": "This is (not) \"the art of war\"",
 							"authorId": -3
 						},
 						{
 							"path": "trolling-my-pen.json",
-							"name": "Trolling my Pen",
+							"title": "Trolling my Pen",
 							"authorId": -1
 						},
 						{
 							"path": "squib-games.json",
-							"name": "Squib Games",
+							"title": "Squib Games",
 							"authorId": -1
 						},
 						{
 							"path": "mr-fisher.json",
-							"name": "Mr Fisher",
+							"title": "Mr Fisher",
 							"authorId": -1
 						},
 						{
 							"path": "skyfall.json",
-							"name": "Skyfall",
+							"title": "Skyfall",
 							"authorId": -1
 						},
 						{
 							"path": "carbo-hydron-of-death.json",
-							"name": "Carbo-Hydron of death",
+							"title": "Carbo-Hydron of death",
 							"authorId": -1
 						},
 						{
 							"path": "soyware.json",
-							"name": "Soyware",
+							"title": "Soyware",
 							"authorId": -1
 						},
 						{
 							"path": "jet-black.json",
-							"name": "Jet Black",
+							"title": "Jet Black",
 							"authorId": -1
 						},
 						{
 							"path": "ten.json",
-							"name": "TEN",
+							"title": "TEN",
 							"authorId": -1
 						}
 					]
@@ -236,57 +240,57 @@
 				{
 					"id": -3,
 					"path": "parodies-and-adaptations",
-					"name": "Parodies and Adaptations",
+					"title": "Parodies and Adaptations",
 					"summary": "Parodies of iconic poems you learned in school",
 					"contents": [
 						{
 							"path": "the-interlude.json",
-							"name": "The Interlude",
+							"title": "The Interlude",
 							"authorId": -1
 						},
 						{
 							"path": "stuff-on-the-iso.json",
-							"name": "Stuff On The Iso",
+							"title": "Stuff On The Iso",
 							"authorId": -1
 						},
 						{
 							"path": "ink.json",
-							"name": "Ink",
+							"title": "Ink",
 							"authorId": -3
 						},
 						{
 							"path": "tree-stumps.json",
-							"name": "Tree Stumps",
+							"title": "Tree Stumps",
 							"authorId": -7
 						},
 						{
 							"path": "ozyandyas.json",
-							"name": "Ozyandyas",
+							"title": "Ozyandyas",
 							"authorId": -7
 						},
 						{
 							"path": "public-toilet.json",
-							"name": "Public Toilet",
+							"title": "Public Toilet",
 							"authorId": -1
 						},
 						{
 							"path": "ketones.json",
-							"name": "Ketones",
+							"title": "Ketones",
 							"authorId": -7
 						},
 						{
 							"path": "my-first-among-us-game.json",
-							"name": "My first Among Us game",
+							"title": "My first Among Us game",
 							"authorId": -1
 						},
 						{
 							"path": "composed-upon-mount-isso.json",
-							"name": "Composed upon Mount Isso, March 22, 2022",
+							"title": "Composed upon Mount Isso, March 22, 2022",
 							"authorId": -7
 						},
 						{
 							"path": "the-charge-of-the-bike-brigade.json",
-							"name": "The Charge Of The Bike Brigade",
+							"title": "The Charge Of The Bike Brigade",
 							"authorId": -7
 						}
 					]
@@ -296,127 +300,127 @@
 		{
 			"id": -2,
 			"path": "volume-2",
-			"name": "Volume 2: (Idiots and Revelations)",
+			"title": "Volume 2 (Idiots and Revelations)",
 			"sections": [
 				{
 					"id": -4,
 					"path": "idiots",
-					"name": "Idiots",
+					"title": "Idiots",
 					"summary": "Critiques of society, people and culture",
 					"contents": [
 						{
 							"path": "the-great-prison-of-america.json",
-							"name": "The Great Prison Of America",
+							"title": "The Great Prison Of America",
 							"authorId": -3
 						},
 						{
 							"path": "industrial-society.json",
-							"name": "Industrial Society",
+							"title": "Industrial Society",
 							"authorId": -3
 						},
 						{
 							"path": "a-conclusive-thesis-on-modern-day-consumerism.json",
-							"name": "A conclusive thesis on modern day consumerism",
+							"title": "A conclusive thesis on modern day consumerism",
 							"authorId": -1
 						},
 						{
 							"path": "reality.json",
-							"name": "Reality",
+							"title": "Reality",
 							"authorId": -1
 						},
 						{
 							"path": "a-long-road-to-al'mogus.json",
-							"name": "A long road to Al'mogus",
+							"title": "A long road to Al'mogus",
 							"authorId": -1
 						},
 						{
 							"path": "dear-liberals.json",
-							"name": "Dear, liberals",
+							"title": "Dear, liberals",
 							"authorId": -1
 						},
 						{
 							"path": "old-man-consequences.json",
-							"name": "Old Man Consequences",
-							"authprId": -1
+							"title": "Old Man Consequences",
+							"authorId": -1
 						},
 						{
 							"path": "i-am-sorrounded-by-idiots.json",
-							"name": "I am sorrounded by Idiots",
+							"title": "I am sorrounded by Idiots",
 							"authorId": -1
 						},
 						{
 							"path": "an-unfortunate-event.json",
-							"name": "An Unfortunate Event",
+							"title": "An Unfortunate Event",
 							"authorId": -3
 						},
 						{
 							"path": "modern-day-brockelhurst.json",
-							"name": "Modern Day Brockelhurst",
+							"title": "Modern Day Brockelhurst",
 							"authorId": -1
 						},
 						{
 							"path": "the-epilogue.json",
-							"name": "The Epilogue",
+							"title": "The Epilogue",
 							"authorId": -3
 						},
 						{
 							"path": "erfolgreich-wenn.json",
-							"name": "Erfolgreich Wenn?",
+							"title": "Erfolgreich Wenn?",
 							"authorId": -3
 						},
 						{
 							"path": "asylum.json",
-							"name": "Asylum",
+							"title": "Asylum",
 							"authorId": -3
 						},
 						{
 							"path": "a-doctor-of-schizophrenia.json",
-							"name": "A doctor of Schizophrenia",
+							"title": "A doctor of Schizophrenia",
 							"authorId": -1
 						},
 						{
 							"path": "five-a-side-footie.json",
-							"name": "Five-a-side Footie",
+							"title": "Five-a-side Footie",
 							"authorId": -1
 						},
 						{
 							"path": "a-gay-encounter.json",
-							"name": "A gay encounter",
+							"title": "A gay encounter",
 							"authorId": -1
 						},
 						{
 							"path": "we-live-in-a-dictatorship.json",
-							"name": "We live in a dictatorship",
+							"title": "We live in a dictatorship",
 							"authorId": -7
 						},
 						{
 							"path": "the-police-cause-all-the-chaos.json",
-							"name": "The police cause all the chaos",
+							"title": "The police cause all the chaos",
 							"authorId": -7
 						},
 						{
 							"path": "suspended-in-h.json",
-							"name": "Suspended in H",
+							"title": "Suspended in H",
 							"authorId": -1
 						},
 						{
 							"path": "mifism.json",
-							"name": "MIFISM",
+							"title": "MIFISM",
 							"authorId": -1
 						},
 						{
 							"path": "litigations.json",
-							"name": "Litigations",
+							"title": "Litigations",
 							"authorId": -1
 						},
 						{
 							"path": "almost-as-stone-as-a-rock.json",
-							"name": "Almost as stone as a rock",
+							"title": "Almost as stone as a rock",
 							"authorId": -1
 						},
 						{
 							"path": "cupcake-bomb.json",
-							"name": "Cupcake Bomb",
+							"title": "Cupcake Bomb",
 							"authorId": -1
 						}
 					]
@@ -424,32 +428,32 @@
 				{
 					"id": -5,
 					"path": "sublime-and-revelation",
-					"name": "Sublime and Revelation",
+					"title": "Sublime and Revelation",
 					"summary": "A collection of poems asking the big questions in life",
 					"contents": [
 						{
 							"path": "babarian.json",
-							"name": "Babarian",
+							"title": "Babarian",
 							"authorId": -1
 						},
 						{
 							"path": "chiss.json",
-							"name": "Chiss",
+							"title": "Chiss",
 							"authorId": -1
 						},
 						{
 							"path": "delly.json",
-							"name": "Delly",
+							"title": "Delly",
 							"authorId": -1
 						},
 						{
 							"path": "spiders.json",
-							"name": "Spiders",
+							"title": "Spiders",
 							"authorId": -1
 						},
 						{
 							"path": "a-morbin'-time.json",
-							"name": "A morbin' Time",
+							"title": "A morbin' Time",
 							"authorId": -3
 						}
 					]
@@ -457,22 +461,22 @@
 				{
 					"id": -6,
 					"path": "tales-and-tomes",
-					"name": "Tales and Tomes",
+					"title": "Tales and Tomes",
 					"summary": "Whimsical, mysterious and epic poems",
 					"contents": [
 						{
 							"path": "the-tale-of-major-korean.json",
-							"name": "The Tale of Major Korean",
+							"title": "The Tale of Major Korean",
 							"authorId": -3
 						},
 						{
 							"path": "the-burial-of-herr-fischer-vi.json",
-							"name": "The Burial of Herr Fischer VI",
+							"title": "The Burial of Herr Fischer VI",
 							"authorId": -3
 						},
 						{
 							"path": "bull-and-bush.json",
-							"name": "Bull and Bush",
+							"title": "Bull and Bush",
 							"authorId": -7
 						}
 					]
@@ -482,21 +486,21 @@
 		{
 			"id": -3,
 			"path": "other",
-			"name": "Other Stuff:",
-			"summary": "A collection of short stories, skits and tales",
+			"title": "Other Stuff",
 			"sections": [
 				{
 					"path": "copypastas",
-					"name": "Copypastas",
-					"content": [
+					"title": "Copypastas",
+					"summary": "A collection of short stories, skits and tales",
+					"contents": [
 						{
 							"path": "a-joke.json",
-							"name": "A Joke",
+							"title": "A Joke",
 							"authorId": -1
 						},
 						{
 							"path": "the-redditor.json",
-							"name": "The Redditor",
+							"title": "The Redditor",
 							"authorId": -3
 						}
 					]

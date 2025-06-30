@@ -1,6 +1,6 @@
-const serverBaseAddress =
+export const serverBaseAddress =
 	localStorage.server || "https://server.poemanthology.org/subliminal"
-const editServerAddress =
+export const editServerAddress =
 	localStorage.editServer || "https://server.poemanthology.org/subliminal/edit"
-const soundsServerAddress =
+export const soundsServerAddress =
 	localStorage.soundsServer || "https://server.poemanthology.org/subliminal/sounds"

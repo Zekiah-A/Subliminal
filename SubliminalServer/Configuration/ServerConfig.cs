@@ -1,4 +1,4 @@
-namespace SubliminalServer;
+namespace SubliminalServer.Configuration;
 
 public class ServerConfig
 {

@@ -1,7 +1,3 @@
-[submodule "SubliminalServer/WatsonWebsocketPlus"]
-	path = SubliminalServer/WatsonWebsocketPlus
-	url = https://github.com/Zekiah-A/WatsonWebsocketPlus.git
-	branch = plus
 [submodule "SubliminalServer/DataProto"]
 	path = SubliminalServer/DataProto
 	url = https://github.com/Zekiah-A/DataProto.git

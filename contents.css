@@ -273,7 +273,7 @@
 	padding-left: 8px;
 }
 
-.classics-header {
+.contents-header {
 	top: 78px;
 	display: flex;
 	column-gap: 8px;
@@ -285,7 +285,7 @@
 	transition: .2s background-color, .2s margin, .2s padding, .2s border;
 }
 
-.classics-header.stuck {
+.contents-header.stuck {
 	border: 1px solid gray;
 	padding: 8px;
 	margin: -8px;
@@ -294,7 +294,7 @@
 	box-shadow: 0 4px 8px #0000004f;
 }
 
-.classics-header.stuck > .searchbar {
+.contents-header.stuck > .searchbar {
 	border-radius: 8px 0 0 8px;
 }
 
@@ -308,7 +308,7 @@
 		flex-grow: 1;
 	}
 
-	.classics-header {
+	.contents-header {
 		top: 64px;
 	}
 

@@ -9,167 +9,168 @@
 	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="styles.css">
 	<link rel="stylesheet" href="index.css">
-	<script src="src/components/component-registrar.js"></script>
-	<script src="src/components/account-options-template.js"></script> 
-	<script src="src/components/header-template.js"></script>
-	<script src="src/components/login-template.js"></script>
-	<script src="src/server.js"></script>
-	<script src="src/account.js"></script>
+	<script type="module" src="src/components/component-registrar.js"></script>
+	<script type="module" src="src/components/account-options-template.js"></script> 
+	<script type="module" src="src/components/header-template.js"></script>
+	<script type="module" src="src/components/login-template.js"></script>
+	<script type="module" src="src/server.js"></script>
+	<script type="module" src="src/account-manager.js"></script>
+	<script type="module" src="src/index.js"></script>
 </head>
 <body class="headered-body">
-	<div id="topBackground"><img src="assets/TopBackground.webp" loading="eager" alt="Subliminal scenery background" class="index-image"></div>
 	<subliminal-header></subliminal-header>
-	<div class="div-centre">
-		<p class="profile-title">Subliminal</p>
-		<p>“The methallyne blue analogy of stuff.</p>
-		<p>Probably the weirdest poetry anthology to ever exist.”</p>
-		<img class="index-image main-logo" alt="Enlarged subliminal dog logo" src="assets/AbbstraktDog.png" width="70%" height="70%" alt="Dog">
-		<p>Beware: <sup>C</sup> <sub>o</sub> <sup>o</sup> <sub>l</sub> <sup>s</sup> <sub>t</sub> <sup>u</sup>
-		<sub>f</sub> <sup>f</sup> <sub>a</sub> <sup>h</sup> <sub>e</sub> <sup>a</sup> <sub>d</sub> <sup>.</sup></p>
-	</div>
-
-	<div style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
-		<p style="padding-left: 5%;" class="profile-title">About Subliminal</p>
-		<section id="aboutSection" class="section elevated">
-		   <div style="flex-grow: 1;">
-				<h3 class="section-title">Subliminal is a place to post poems, writings and creative works.</h3>
-				<p>At the core of subliminal lies an open source project to create a massive repository of creativity in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
-				<p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
-				<p>If it's creative, it belongs on Subliminal.</p>
-			</div>
-			<figure class="presenter-container">
-				<div class="presenter">
-					<img src="assets/AlMogus.webp" alt="Al'Mogus">
-					<p>
-						Earth and Bones, old sticks and stones, <br>
-						Just one long road to Al'mogus. <br>
-						Sandals, seared by the sun-struck path, <br>
-						oh how I wish I had taken the car. <br>
-						All for a land, oh so, so far. <br>
-						Struggling to Al'mogus.<br>
-						<br>
-						A vulture, flew overhead,<br>
-						then dropped down dead! Beating<br>
-						my back like a brick of lead. Yet I<br>
-						Shouted 'hooray', meat for days!<br>
-						On my way to Al'mogus.<br>
-						...
-					</p>
-				</div>
-				<figcaption class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</figcaption>
-			</figure>
+	<main>
+		<section id="topBackground">
+			<img src="assets/top-background.webp" loading="eager" alt="Subliminal scenery background" class="index-image">
 		</section>
-		<section id="aboutInfo" class="section-info">
-			<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Did you know?</div>
-			<ul class="info-list">
-				<li>-> We have over 100 hand crafted curated originals to read and take inspiration from!</li>
-				<li>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</li>
-				<li>-> Free cloud saving, and accounts allow you to access, read and write poems anywhere, across your devices!</li>
-			</ul>
-			<br>
-			<p style="margin-left: 12px;">If you aren't on subliminal, what are you even doing with your life?</p>
-		</section>
-		<p style="padding-left: 5%;" class="profile-title">Get started</p>
-		<section id="getStartedSection" class="section elevated">
-			<figure class="presenter-container">
-				<div class="presenter">
-					<img alt="Account profile" src="assets/AccountProfile.svg">
-				</div>
-				<figcaption class="presenter-caption">Creating a profile for yourself is as cool as it can get!</figcaption>
-			</figure>
-
-			<div style="flex-grow: 1;">
-				<h3 class="section-title">Getting started on subliminal is easy!</h3>
-				<p>Simply navigate to the "poems" page to see all of the contents of the anthology. Here you can also set up an account, or start writing your own poem with the "+add a poem" button whenever you like!</p>
-				<p>If you ever have any questions, check the dictionary and disclaimer pages for more info on what you may find here...</p>
-			</div>
-		</section>
-		<section id="getStartedInfo" class="section-info">
-			<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
-			<p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
-			<ol id="poemProcessSubInfo" onwheel="
-				this.scrollBy({ left: event.deltaY, top: 0, behavior: 'smooth' })
-				if (this.scrollLeft !== 0 && this.scrollLeft < this.offsetWidth) {
-					event.preventDefault()
-				}
-			" style="margin: 0px; padding: 0px;">
-				<li class="elevated">
-					<h4>💡 First…</h4>
-					<p>Burst of inspiration at the most unexpected moment.</p>
-				</li>
-				<li class="elevated">
-					<h4>✍️ Then…</h4>
-					<p>Spontaneous writing, tiring yourself out as you refine your work.</p>
-				</li>
-				<li class="elevated">
-					<h4>😨 But...</h4>
-					<p>Writer's block.</p>
-				</li>
-				<li class="elevated">
-					<h4>✨ Luckily…</h4>
-					<p>A second hope, reading back on some previous works, you are motivated to finish what you started.</p>
-				</li>
-				<li class="elevated">
-					<h4>🎉 Finally!</h4>
-					<p>You completed a poem! Sigh a breath of relief.</p>
-				</li>
-				<li class="elevated">
-					<h4>🗣️ …And afterwards</h4>
-					<p>Tell everyone! Have your teacher, friends, family, read and review your poem!</p>
-				</li>
-			</ol>
-			<ul class="info-list">
-				<li>-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</li>
-				<li>-> That's why subliminal provides a  community where people can share and grow, so we can all can write the poems that future generations will be tortured with in class one day.</li>
-			</ul>
-			<br>
-			<p style="margin-left: 12px;">Poetry may not solve your crippling internet addiction, but it's a step in the right direction!</p>
-		</section>
-		<p style="padding-left: 5%;" class="profile-title">Other stuff</p>
-		<section id="otherSection" class="section section-double">
-			<figure id="rplaceAdSection" class="section elevated" style="margin:0px;">
-				<a href="https://rplace.live">
-					<img src="assets/Advert2.png" alt="A fun game to play in your free time">
+		<section class="div-centre">
+			<h1 class="section-heading">Subliminal</h1>
+			<p>
+				Create, collaborate and critic poems on a single, 
+				unified space for all the world's most wonderful
+				weird and wacky anthologies...
+			</p>
+			<img class="index-image main-logo" alt="Enlarged subliminal dog logo" src="assets/AbbstraktDog.png" width="70%" height="70%" alt="Dog">
+			<section class="join-section">
+				<em class="join-tagline">
+					We have so many poems to explore... What are you waiting for?
+				</em>
+				<a href="/poems" class="button join-button">
+					Take me there!
 				</a>
-				<figcaption style="flex-grow: 1">
-					<p style="font-weight: bold;">Rplace.live: a spinoff of the reddit place event!</p>
-					<p>A game by Zekiah-A and BlobKat, featuring a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
-					<a rel="noopener" target="_blank" href="https://rplace.live">Play now</a>
-				</figcaption>
-			</figure>
-			<figure id="supportAdSection" class="section elevated" style="margin:0px;">
-				<video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
-					<source src="assets/Advert3.webm" type="video/webm">
-				</video>       
-				<figcaption style="flex-grow: 1">
-					<p style="font-weight: bold;">The best waste of money since buying an NFT!</p>
-					<p>Help fund development of subliminal, and support us with our other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
-					<a target="_blank" href="mailto:admin@poemantholoogy.org">Contact us</a>
-				</figcaption>
-			</figure>
+			</section>
 		</section>
-	 </div>
+		<section style="display: flex;flex-direction: column;row-gap: 16px;margin-top: 64px;">
+			<h1 id="about" style="padding-left: 5%;" class="section-heading">
+				<a href="#about">About Subliminal</a>
+			</h1>
+			<section id="aboutSection" class="section elevated">
+			<div style="flex-grow: 1;">
+					<h3 class="section-title">Subliminal is a place to post poems, writings and creative works.</h3>
+					<p>At the core of subliminal lies an open source project to create a massive repository of creativity in one place, where anyone can contribute their own work, no matter how chaotic, critical, or hilarious it may be!</p>
+					<p>Here we value fairness and freedom of expression, because everyone should have the right to be creative.</p>
+					<p>If it's creative, it belongs on Subliminal.</p>
+				</div>
+				<figure class="presenter-container">
+					<div class="presenter">
+						<img src="assets/AlMogus.webp" alt="Al'Mogus">
+						<p>
+							Earth and Bones, old sticks and stones, <br>
+							Just one long road to Al'mogus. <br>
+							Sandals, seared by the sun-struck path, <br>
+							oh how I wish I had taken the car. <br>
+							All for a land, oh so, so far. <br>
+							Struggling to Al'mogus.<br>
+							<br>
+							A vulture, flew overhead,<br>
+							then dropped down dead! Beating<br>
+							my back like a brick of lead. Yet I<br>
+							Shouted 'hooray', meat for days!<br>
+							On my way to Al'mogus.<br>
+							...
+						</p>
+					</div>
+					<figcaption class="presenter-caption">A long road to Al'mogus, a poem about human desire, by Zekiah.</figcaption>
+				</figure>
+			</section>
+			<section id="aboutInfo" class="section-info">
+				<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Did you know?</div>
+				<ul class="info-list">
+					<li>-> We have over 100 hand crafted curated originals to read and take inspiration from!</li>
+					<li>-> There is a full rich-text poem editor, to make your works come to light both literally and visually.</li>
+					<li>-> Free cloud saving, and accounts allow you to access, read and write poems anywhere, across your devices!</li>
+				</ul>
+				<br>
+				<p style="margin-left: 12px;">If you aren't on subliminal, what are you even doing with your life?</p>
+			</section>
+			<h1 id="get-started" style="padding-left: 5%;" class="section-heading">
+				<a href="#get-started">Get started</a>
+			</h1>
+			<section id="getStartedSection" class="section elevated">
+				<figure class="presenter-container">
+					<div class="presenter">
+						<img alt="Account profile" src="assets/AccountProfile.svg">
+					</div>
+					<figcaption class="presenter-caption">Creating a profile for yourself is as cool as it can get!</figcaption>
+				</figure>
+
+				<div style="flex-grow: 1;">
+					<h3 class="section-title">Getting started on subliminal is easy!</h3>
+					<p>Simply navigate to the "poems" page to see all of the contents of the anthology. Here you can also set up an account, or start writing your own poem with the "+add a poem" button whenever you like!</p>
+					<p>If you ever have any questions, check the dictionary and disclaimer pages for more info on what you may find here...</p>
+				</div>
+			</section>
+			<section id="getStartedInfo" class="section-info">
+				<div style="padding-left: 12px;padding-right: 12px;padding-top: 4px;padding-bottom: 4px;background-color: var(--button-transparent);border-radius: 32px; width: fit-content;">Relatable?</div>
+				<p style="margin-left: 12px;">For most of us,  process of writing a poem often looks like this:</p>
+				<ol id="poemProcessSubInfo" onwheel="
+					this.scrollBy({ left: event.deltaY, top: 0, behavior: 'smooth' })
+					if (this.scrollLeft !== 0 && this.scrollLeft < this.offsetWidth) {
+						event.preventDefault()
+					}
+				" style="margin: 0px; padding: 0px;">
+					<li class="elevated">
+						<h4>💡 First…</h4>
+						<p>Burst of inspiration at the most unexpected moment.</p>
+					</li>
+					<li class="elevated">
+						<h4>✍️ Then…</h4>
+						<p>Spontaneous writing, tiring yourself out as you refine your work.</p>
+					</li>
+					<li class="elevated">
+						<h4>😨 But...</h4>
+						<p>Writer's block.</p>
+					</li>
+					<li class="elevated">
+						<h4>✨ Luckily…</h4>
+						<p>A second hope, reading back on some previous works, you are motivated to finish what you started.</p>
+					</li>
+					<li class="elevated">
+						<h4>🎉 Finally!</h4>
+						<p>You completed a poem! Sigh a breath of relief.</p>
+					</li>
+					<li class="elevated">
+						<h4>🗣️ …And afterwards</h4>
+						<p>Tell everyone! Have your teacher, friends, family, read and review your poem!</p>
+					</li>
+				</ol>
+				<ul class="info-list">
+					<li>-> From writers block, to that banger rhyme you were thinking of just slipping out of your mind, writing a creative piece can be brutal.</li>
+					<li>-> That's why subliminal provides a  community where people can share and grow, so we can all can write the poems that future generations will be tortured with in class one day.</li>
+				</ul>
+				<br>
+				<p style="margin-left: 12px;">Poetry may not solve your crippling internet addiction, but it's a step in the right direction!</p>
+			</section>
+			<h1 id="other" style="padding-left: 5%;" class="section-heading">
+				<a href="#other">Other stuff</a>
+			</h1>
+			<section id="otherSection" class="section section-double">
+				<figure id="rplaceAdSection" class="section elevated" style="margin:0px;">
+					<a href="https://rplace.live">
+						<img src="assets/Advert2.png" alt="A fun game to play in your free time">
+					</a>
+					<figcaption style="flex-grow: 1">
+						<p style="font-weight: bold;">Rplace.live: a spinoff of the reddit place event!</p>
+						<p>A game by Zekiah-A and BlobKat, featuring a massive multiplayer canvas, place pixels, collaborate or start pixel wars, to create the most epic canvas arts possible.</p>
+						<a rel="noopener" target="_blank" href="https://rplace.live">Play now</a>
+					</figcaption>
+				</figure>
+				<figure id="supportAdSection" class="section elevated" style="margin:0px;">
+					<video alt="The best waste of money since buying an NFT" autoplay="true" loop="true" muted="true">
+						<source src="assets/Advert3.webm" type="video/webm">
+					</video>       
+					<figcaption style="flex-grow: 1">
+						<p style="font-weight: bold;">The best waste of money since buying an NFT!</p>
+						<p>Help fund development of subliminal, and support us with our other projects by donating, and getting an absolute monstrosity of literature in return, it's almost a good deal!</p>
+						<a target="_blank" href="mailto:admin@poemantholoogy.org">Contact us</a>
+					</figcaption>
+				</figure>
+			</section>
+		</section>
+	</main>
 	 <footer>
 	 	<hr>
-	 	<p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © Zekiah-A 2019-2025</p>
+	 	<p style="padding-left: 8px; padding-right: 8px;">Yeah that's about it. Subliminal, © <a href="https://github.com/Zekiah-A">Zekiah-A</a> 2019-2025</p>
 	 </footer>
 </body>
-<script>
-	"use strict";
-	function handleIntersect(entries, observer) {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				entry.target.classList.add("scroll-in")
-			}
-		})
-	}
-	
-	//A threshold of 0.1 means that when 10% of section is in view, it will be animated.
-	const observer = new IntersectionObserver(handleIntersect, { root: null, rootMargin: '0px', threshold: 0.1 })
-	const observables = [aboutSection, aboutInfo, getStartedSection, getStartedInfo, rplaceAdSection, supportAdSection, poemProcessSubInfo]
-	observables.forEach((element) => {
-		observer.observe(element)
-		element.classList.add("scroll-unseen")
-	})
-</script>
 </html>

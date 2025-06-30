@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubliminalServer", "SubliminalServer\SubliminalServer.csproj", "{E20C300D-6EAB-48C1-A3CF-85F61A1616A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatsonWebsocket", "SubliminalServer\WatsonWebsocketPlus\src\WatsonWebsocket\WatsonWebsocket.csproj", "{DFDA1040-8B9B-43F4-86B0-F85E00F14A5E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProto", "SubliminalServer\DataProto\DataProto\DataProto.csproj", "{581B49F4-E299-45F9-ACDC-DEF5D6C70FCC}"
 EndProject
 Global

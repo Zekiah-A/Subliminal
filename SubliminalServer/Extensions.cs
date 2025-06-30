@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 namespace SubliminalServer;
 
 using System.Text.RegularExpressions;
@@ -13,5 +15,46 @@ public static class Extensions
             appBuilder => appBuilder.UseMiddleware<T>(args)
         );
         return builder;
+    }
+    
+    public static T FindFirstAs<T>(this IEnumerable<Claim> claims, string type) where T : notnull
+    {
+        var claim = claims.FirstOrDefault(claim => claim.Type == type);
+        if (claim == null)
+        {
+            throw new InvalidOperationException($"Claim of type '{type}' was not found.");
+        }
+
+        if (typeof(T) == typeof(string))
+        {
+            return (T)(object)claim.Value;
+        }
+
+        if (typeof(T) == typeof(int))
+        {
+            if (int.TryParse(claim.Value, out var intValue))
+            {
+                return (T)(object)intValue;
+            }
+            
+            throw new FormatException($"Claim value '{claim.Value}' cannot be converted to an integer.");
+        }
+
+        if (typeof(T).IsEnum)
+        {
+            if (Enum.TryParse(typeof(T), claim.Value, true, out var enumValue) && enumValue != null)
+            {
+                return (T)enumValue;
+            }
+            
+            throw new ArgumentException($"Claim value '{claim.Value}' is not a valid value for enum type '{typeof(T).Name}'.");
+        }
+
+        throw new NotSupportedException($"Conversion to type '{typeof(T).Name}' is not supported.");
+    }
+    
+    public static string ToSentenceCase(this string str)
+    {
+        return Regex.Replace(str, "[a-z][A-Z]", match => match.Value[0] + " " + char.ToLower(match.Value[1]));
     }
 }

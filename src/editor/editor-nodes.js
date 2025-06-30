@@ -97,14 +97,14 @@ export class DocumentFragmentNode extends DocumentNode {
 	}
 }
 
-class TextNode extends DocumentNode {
+export class TextNode extends DocumentNode {
 	constructor(text="") {
 		super("text")
 		this.content = text
 	}
 }
 
-class NewLineNode extends DocumentNode {
+export class NewLineNode extends DocumentNode {
 	constructor(count=1) {
 		super("newline")
 		this.count = count

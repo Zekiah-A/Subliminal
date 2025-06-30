@@ -5,7 +5,7 @@
  * @param {object} data Data attributes that element will be instanced with
  * @returns 
  */
-function createFromData(name, data = null) {
+export function createFromData(name, data = null) {
 	let element = document.createElement(name)
 	if (data) {
 		for (const [key, value] of Object.entries(data)) {
@@ -26,7 +26,7 @@ function createFromData(name, data = null) {
  * @param {*} _this The `this` of the custom component
  * @param {*} element The shadow root element used to locate all elements with IDs
  */
-function defineAndInject(_this, element) {
+export function defineAndInject(_this, element) {
 	element.parentDocument = document
 	element.shadowThis = _this
 	if (element.id) _this[element.id] = element
@@ -38,7 +38,7 @@ function defineAndInject(_this, element) {
 	}
 }
 
-function html(strings, ...values) {
+export function html(strings, ...values) {
 	return strings.reduce((result, string, i) => {
 		const value = values[i] !== undefined ? values[i] : ""
 		return result + string + value
@@ -46,7 +46,7 @@ function html(strings, ...values) {
 }
 
 // Custom implementation of the css function
-function css(strings, ...values) {
+export function css(strings, ...values) {
 	return strings.reduce((result, string, i) => {
 		const value = values[i] !== undefined ? values[i] : ""
 		return result + string + value

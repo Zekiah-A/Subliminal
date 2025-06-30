@@ -1,4 +1,6 @@
 "use strict";
+import { html, css, defineAndInject } from "./component-registrar.js"
+
 class SubliminalHeader extends HTMLElement {
 	constructor() {
 		super()
@@ -34,7 +36,7 @@ class SubliminalHeader extends HTMLElement {
 				left: 0;
 				width: 100%;
 				max-width: 100%;
-				backdrop-filter: blur(5px);
+				backdrop-filter: blur(5px) saturate(0.8);
 				background: transparent;
 				z-index: 3;
 				user-select: none;
@@ -197,10 +199,10 @@ class SubliminalHeader extends HTMLElement {
 			}
 		}
 
-		if (this.getAttribute("nologin") || typeof isLoggedIn === "undefined" || typeof isLoggedIn !== "function") {
+		if (this.getAttribute("nologin")) {
 			// TODO: Potentially change right to just display 'The coolest crowdsourced anthology on the web' (delete buttons)
-			this.right.style.display = 'none'
-			console.warn("WARNING: Page has not imported account.js or is requesting nologin. Login UI disabled")
+			this.right.style.display = "none"
+			console.warn("WARNING: Page has not imported account-manager.js or is requesting nologin. Login UI disabled")
 			return
 		}
 

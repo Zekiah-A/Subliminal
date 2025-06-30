@@ -1,4 +1,6 @@
 "use strict";
+import { html, css, defineAndInject } from "./component-registrar.js"
+
 class LoginSignup extends HTMLElement {
 	#nocancel = false
 

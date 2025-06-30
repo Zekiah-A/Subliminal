@@ -1,4 +1,6 @@
 "use strict";
+import { html, css, defineAndInject } from "./component-registrar.js"
+
 class PurgatoryEntry extends HTMLElement {
 	constructor() {
 		super()

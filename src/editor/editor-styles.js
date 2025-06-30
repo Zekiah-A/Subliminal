@@ -1,12 +1,13 @@
-import { DocumentNode } from "./nodes"
+import { DocumentNode } from "./editor-nodes"
 
 /**
  * @class Bold
  * @description Represents bold style
  */
-class BoldStyle extends DocumentNode {
+export class BoldStyle extends DocumentNode {
 	constructor() {
 		super("bold")
+		this.weight = 400;
 	}
 }
 
@@ -14,7 +15,7 @@ class BoldStyle extends DocumentNode {
  * @class Font
  * @description Represents font style
  */
-class FontStyle extends DocumentNode {
+export class FontStyle extends DocumentNode {
 	constructor(name="Arial, Helvetica, sans-serif", size=18) {
 		super("font")
 		this.name = name
@@ -26,7 +27,7 @@ class FontStyle extends DocumentNode {
  * @class Colour
  * @description Represents colour style
  */
-class ColourStyle extends DocumentNode {
+export class ColourStyle extends DocumentNode {
 	constructor(hex="#000") {
 		super("colour")
 		this.hex = hex

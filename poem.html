@@ -8,11 +8,11 @@
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<script src="src/editor-document.js"></script>
-	<script src="src/components/component-registrar.js"></script>
-	<script src="src/components/content-warning-template.js"></script>
-	<script src="src/components/poem-ghost-template.js"></script>
-	<script src="src/components/poem-load-cover-template.js"></script>
+	<script type="module" src="src/editor/editor-document.js"></script>
+	<script type="module" src="src/components/component-registrar.js"></script>
+	<script type="module" src="src/components/content-warning-template.js"></script>
+	<script type="module" src="src/components/poem-ghost-template.js"></script>
+	<script type="module" src="src/components/load-cover-template.js"></script>
 </head>
 <body>
 	<div class="title-blur">
@@ -22,7 +22,7 @@
 	<div id="poemMain" class="poem-centre">
 		<p id="poemContent">
 			<subliminal-poem-ghost length="30"></subliminal-poem-ghost>
-			<subliminal-poem-load-cover></subliminal-poem-load-cover>
+			<subliminal-load-cover></subliminal-load-cover>
 		</p>
 	</div>
 	<dialog id="editFrame" style="width: max(30%, 360px);" class="popup flex-popup">

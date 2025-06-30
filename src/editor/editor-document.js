@@ -1,8 +1,8 @@
 "use strict";
-import { DocumentNode } from "./nodes";
+import { DocumentNode } from "./editor-nodes";
 
 // Code that handles logic for complex poem editor interactions
-const positionMovements = {
+const caretMovements = {
 	up: 0,
 	down: 1,
 	left: 2,
@@ -10,7 +10,7 @@ const positionMovements = {
 	none: 4
 }
 
-const controlKeys = {
+const keyFlags = {
 	shift: 0,
 	ctrl: 1,
 	home: 2,
@@ -19,7 +19,7 @@ const controlKeys = {
 	delete: 32
 }
 
-class EditorDocument {
+export class EditorDocument {
 	/**@type {number}*/position
 	/**@type {{ position: number, end: number, shiftKeyPivot: number }}*/selection
 	/**@type {DocumentFragment|null}*/data

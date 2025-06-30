@@ -8,11 +8,11 @@ internal static partial class Program
     private static void AddProfileEndpoints()
     {
         // Get public facing data for an account, will accept either a username or an account key
-        httpServer.MapGet("/profiles/{profileIdentifier}", (string profileIdentifier, [FromServices] DatabaseContext database) =>
+        httpServer.MapGet("/profiles/{identifier}", (string identifier, [FromServices] DatabaseContext database) =>
         {
-            var account = int.TryParse(profileIdentifier, out var profileId)
+            var account = int.TryParse(identifier, out var profileId)
                 ? database.Accounts.SingleOrDefault(account => account.Id == profileId)
-                : database.Accounts.SingleOrDefault(account => account.Username == profileIdentifier);
+                : database.Accounts.SingleOrDefault(account => account.Username == identifier);
             if (account is null)
             {
                 return Results.NotFound();

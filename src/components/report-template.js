@@ -1,4 +1,6 @@
 "use strict";
+import { html, css } from "./component-registrar.js"
+
 class ReportPopup extends HTMLElement {
 	constructor() {
 		super()

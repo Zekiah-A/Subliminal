@@ -1,4 +1,5 @@
 "use strict";
+import { html, css } from "./component-registrar.js"
 
 class ContentWarning extends HTMLElement {
 	constructor() {

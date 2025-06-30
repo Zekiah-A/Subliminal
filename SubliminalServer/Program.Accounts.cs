@@ -1,37 +1,39 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using SubliminalServer.ApiModel;
 using SubliminalServer.DataModel.Account;
 using SubliminalServer.DataModel.Purgatory;
 using SubliminalServer.DataModel.Report;
+using SubliminalServer.Middlewares;
 
 namespace SubliminalServer;
 
 internal static partial class Program
 {
     // /accounts/{id:int}
-    [GeneratedRegex(@"^\/accounts\/\d+\/report\/*$")]
+    [GeneratedRegex(@"^\/accounts\/\d+\/$")]
     private static partial Regex AccountReportEndpointRegex();
     
     private static void AddAccountEndpoints()
     {
         // Account action endpoints
-        httpServer.MapPost("/accounts/{accountId}/block", ([FromBody] int accountId, [FromServices] DatabaseContext database, HttpContext context) =>
+        httpServer.MapPost("/accounts/{id}/block", (int id, [FromServices] DatabaseContext database, HttpContext context) =>
         {
             throw new NotImplementedException();
         });
 
-        httpServer.MapPost("/accounts/{accountId}/unblock", ([FromBody] int accountId, HttpContext context) =>
+        httpServer.MapPost("/accounts/{id}/unblock", (int id, HttpContext context) =>
         {
             throw new NotImplementedException();
         });
 
-        httpServer.MapPost("/accounts/{accountId}/follow", ([FromBody] int accountId, HttpContext context) =>
+        httpServer.MapPost("/accounts/{id}/follow", (int id, HttpContext context) =>
         {
             throw new NotImplementedException();
         });
 
-        httpServer.MapPost("/accounts/{accountId}/report", (int accountId, [FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
+        httpServer.MapPost("/accounts/{id}/report", (int id, [FromBody] UploadableReport reportUpload, [FromServices] DatabaseContext database, HttpContext context) =>
         {
             var validationIssues = new Dictionary<string, string[]>();
             if (reportUpload.Reason.Length > 300)
@@ -81,15 +83,18 @@ internal static partial class Program
             );
         }
 
-        httpServer.MapPost("/accounts/{accountId}/unfollow", ([FromBody] string userId, HttpContext context) =>
+        httpServer.MapPost("/accounts/{id}/unfollow", (string id, [FromBody] string userId, HttpContext context) =>
         {
             throw new NotImplementedException();
         });
         
         // Personal account endpoints
-        httpServer.MapGet("/accounts/me", (HttpContext context, DatabaseContext dbContext) =>
+        httpServer.MapGet("/accounts/{identifier}", async (string identifier, HttpContext context, DatabaseContext dbContext) =>
         {
-            var account = context.Items["Account"] as AccountData;
+            var accountId = context.User.Claims.FindFirstAs<int>(JwtRegisteredClaimNames.Sub);
+            var targetId = identifier == "me" ? accountId : int.Parse(identifier);
+            var account = await dbContext.Accounts.FindAsync(targetId);
+            
             return Results.Ok(account);
         });
 

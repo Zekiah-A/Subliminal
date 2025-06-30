@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SubliminalServer.DataModel.Account;
 
-namespace SubliminalServer;
+namespace SubliminalServer.Middlewares;
 
 public class EnsuredAuthorizationMiddleware
 {

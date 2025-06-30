@@ -1,4 +1,7 @@
 "use strict";
+import { html, css, defineAndInject } from "./component-registrar.js"
+import { isLoggedIn as getLoginState, getAccountData } from "../account-manager.js"
+
 class AccountOptions extends HTMLElement {
 	constructor() {
 		super()
@@ -57,10 +60,14 @@ class AccountOptions extends HTMLElement {
 			loginSignup.open()
 		})
 
-		isLoggedIn().then((loggedIn) => {
+		getLoginState().then((loggedIn) => {
 			if (loggedIn) {
 				this.loginCallback()
 			}
+		}).catch((err) => {
+			console.error("Error checking login state:", err)
+			this.loginButton.style.display = "block"
+			this.accountOptions.style.display = "none"
 		})
 	}
 

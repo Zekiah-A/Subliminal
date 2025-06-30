@@ -7,6 +7,7 @@ public enum LiveEditClientPacket
 {
     JoinSession,
     CursorPosition,
+    CaretPosition,
     Insertion,
     Deletion,
     Comment,

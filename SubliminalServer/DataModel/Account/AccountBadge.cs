@@ -18,7 +18,7 @@ public class AccountBadge
     // Foreign key AccountData
     public int AccountKey { get; set; }
     
-    // Navigation property to the parent AccounData
+    // Navigation property to the parent AccountData
     public AccountData Account { get; set; }
 }
 

@@ -1,4 +1,6 @@
 "use strict";
+import { html, css, defineAndInject } from "./component-registrar.js"
+
 class SubliminalSelect extends HTMLElement {
 	constructor() {
 		super()
@@ -126,7 +128,8 @@ class SubliminalSelect extends HTMLElement {
 			if (optionsElement.matches(":popover-open")) {
 				arrowElement.style.transform = "scaleY(-1)";
 				recalcOptionsPosition();
-			} else {
+			}
+			else {
 				arrowElement.style.transform = "";
 			}
 		});

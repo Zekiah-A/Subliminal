@@ -1,0 +1,139 @@
+body {
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+input, textarea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+}
+
+.role-grid {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	grid-gap: 8px;
+}
+
+.profile-title-container {
+	display: flex;
+}
+
+.profile-picture {
+	position: relative;
+	height: 200px;
+	width: 200px;
+	display: flex;
+	overflow: clip;
+	border-radius: 4px;
+}
+
+.profile-picture::before {
+	position: absolute;
+	content: "";
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition: .2s opacity;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profile-picture:focus-within > button,
+	.profile-picture:hover > button,
+	.profile-picture:focus-within::before,
+	.profile-picture:hover::before {
+	opacity: 1;
+}
+
+.profile-picture > button {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: max-content;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	transition: .2s opacity;
+	opacity: 0;
+}
+
+#profileName {
+	--contentWidth: 198px;
+	display: inline-block;
+	width: 198px;
+}
+
+#profileUsername {
+	opacity: 0.8;
+	font-weight: bold;
+}
+
+#profileBiography {
+	width: min(442px, 100%);
+	line-break: anywhere;
+	resize: none;
+	margin-top: 8px;
+	min-height: 72px;
+}
+
+#recentWorks {
+	display: flex;
+	flex-direction: column;
+	row-gap: 16px;
+}
+
+#followingAccounts {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 50%;
+	grid-gap: 8px;
+	margin-bottom: 16px;
+}
+
+.profile-details {
+	display:flex;
+	column-gap:16px;
+	flex-direction:column;
+	margin-top:8px
+}
+
+.profile-aside {
+	flex-direction:column;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.editable {
+	position: relative;
+	background-color: transparent;
+	color: var(--text-colour);
+	border: none;
+}
+
+.editable:focus {
+	background-color: #001dff1c;
+	border: 1px solid gray;
+	outline: none;
+	border-radius: 4px;
+}
+.editable::after {
+	content: " ";
+	background-image: url("assets/Edit.svg");
+	background-size: 16px;
+	position: absolute;
+	right: -16px;
+	top: -8px;
+	width: 16px;
+	height: 16px;
+	opacity: 0.2;
+}
+
+@media screen and (orientation:portrait) {
+	#followingAccounts {
+		grid-template-columns: 100%;
+	}
+
+	.profile-title-container {
+		flex-wrap: wrap;
+	}
+}

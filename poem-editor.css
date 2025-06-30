@@ -1,9 +1,20 @@
-#main {
-	position: relative;
-	box-shadow: gray 0px 0px 2px;
-	border-radius: 4px;
-	background-color: var(--background-opaque);
+* {
+	box-sizing: border-box;
 }
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 .tool {
 	margin: 1px;
 	height: 24px;
@@ -238,7 +249,7 @@ display: none;
 	transition: 0.2s color;
 }
 #tagContainer > button:hover {
-color: white;
+	color: white;
 }
 #tagContainer > button::before {
 	content: "";
@@ -302,14 +313,15 @@ color: white;
 }
 .online-editors {
 	position: fixed;
+	margin-top: 16px;
 	left: 16px;
 }
 .online-editors > ul {
 	display: flex;
 	flex-direction: column;
 	list-style-type: none;
-    padding: 0px;
-    margin: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 .online-editors li {
 	position: relative;
@@ -344,10 +356,14 @@ color: white;
 .options div:hover {
 	background-color: darkgray;
 }
+#poemEditor {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: var(--background-opaque);
+}
 @media screen and (orientation: portrait) {
-	#main {
-		margin-bottom: 48px;
-	}
 	.text-tools {
 		position: inherit !important;
 		width: calc(100% - 12px);

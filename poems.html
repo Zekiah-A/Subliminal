@@ -9,15 +9,15 @@
 	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="styles.css">
 	<link rel="stylesheet" href="contents.css">
-	<script src="src/components/component-registrar.js"></script> 
-	<script src="src/components/purgatory-entry-template.js"></script>
-	<script src="src/components/account-options-template.js"></script>
-	<script src="src/components/header-template.js"></script>
-	<script src="src/components/login-template.js"></script>
-	<script src="src/components/select-template.js"></script>
-	<script src="src/editor-document.js"></script>
-	<script src="src/server.js"></script>
-	<script src="src/account.js"></script>
+	<script type="module" src="src/components/component-registrar.js"></script> 
+	<script type="module" src="src/components/purgatory-entry-template.js"></script>
+	<script type="module" src="src/components/account-options-template.js"></script>
+	<script type="module" src="src/components/header-template.js"></script>
+	<script type="module" src="src/components/login-template.js"></script>
+	<script type="module" src="src/components/select-template.js"></script>
+	<script type="module" src="src/editor/editor-document.js"></script>
+	<script type="module" src="src/server.js"></script>
+	<script type="module" src="src/account-manager.js"></script>
 </head>
 <body class="headered-body">
 	<subliminal-header></subliminal-header>
@@ -27,7 +27,7 @@
 
 			</iframe>
 		</div>-->
-		<h1 style="margin-bottom: 0px;">Poem Purgatory:</h1>
+		<h1 style="margin-bottom: 0px;">Poem Purgatory</h1>
 		<section>
 			<div id="filtersBar">
 				<button type="button" onclick="addPurgatoryEntries('new')">
@@ -178,7 +178,7 @@
 			}*/
 			if (!await isLoggedIn()) {
 				purgatoryFlex.innerHTML = `<div class="purgatory-warning">
-						<span>😢 You aren't logged in...<br>Log in or create an account to save liked poems to your profile!</span>
+						<span>😢 You are not logged in...<br>Log in or create an account to save liked poems to your profile!</span>
 					</div>`
 				return
 			}
@@ -208,10 +208,10 @@
 			
 			let extraData = {
 				notification: "Subliminal pick",
-				tooltip: "This poem has been reccomended to you based on your previous activity"
+				tooltip: "This poem has been recommended to you based on your previous activity"
 			}
 			purgatoryFlex.innerHTML = `<div class="purgatory-warning">
-					<span>😢 You aren't logged in...<br>Log in or create an account to see your reccomendations!</span>
+					<span>😢 You are not logged in...<br>Log in or create an account to see your recommendations!</span>
 				</div>`
 		   
 			for (let pickEntry of picks) {

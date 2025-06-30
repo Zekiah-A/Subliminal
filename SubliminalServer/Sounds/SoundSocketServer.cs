@@ -1,11 +1,10 @@
 using DataProto;
-using WatsonWebsocket;
 
 namespace SubliminalServer.Sounds;
 
 public class SoundsSocketServer
 {
-    WatsonWsServer app = new WatsonWsServer(1234);
+    /*WatsonWsServer app = new WatsonWsServer(1234);
     Dictionary<ClientMetadata, SoundsClient> clients = new();
 
     public void Start()
@@ -54,5 +53,5 @@ public class SoundsSocketServer
         };
 
         app.Start();
-    }
+    }*/
 }

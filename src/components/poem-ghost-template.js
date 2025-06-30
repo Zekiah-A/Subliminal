@@ -33,5 +33,4 @@ class PoemGhost extends HTMLElement {
 		}
 	}
 }
-
 customElements.define("subliminal-poem-ghost", PoemGhost)

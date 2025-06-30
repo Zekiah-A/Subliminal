@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using SubliminalServer.Configuration;
+using SubliminalServer.Middlewares;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace SubliminalServer;
@@ -137,8 +139,10 @@ internal static partial class Program
         authRequiredEndpoints = new List<string>();
         rateLimitEndpoints = new Dictionary<string, (int RequestLimit, TimeSpan TimeInterval)>();
         sizeLimitEndpoints = new Dictionary<string, PayloadSize>(); // Should only really be needed on POST endpoints
-        
+
+        AddPoemEndpoints();
         AddPurgatoryEndpoints();
+        AddAnthologyEndpoints();
         AddAuthEndpoints();
         AddAccountEndpoints();
         AddProfileEndpoints();

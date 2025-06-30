@@ -9,13 +9,13 @@
 	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
 	<meta name="keywords" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<script src="account.js"></script>
-	<script src="src/editor-document.js"></script>
-	<script src="src/server.js"></script>
-	<script src="src/components/component-registrar.js"></script>
-	<script src="src/components/poem-ghost-template.js"></script>
-	<script src="src/components/poem-load-cover-template.js"></script>
-	<script src="src/components/account-options-template.js"></script>
+	<script type="module" src="src/editor/editor-document.js"></script>
+	<script type="module" src="src/server.js"></script>
+	<script type="module" src="src/components/component-registrar.js"></script>
+	<script type="module" src="src/components/poem-ghost-template.js"></script>
+	<script type="module" src="src/components/load-cover-template.js"></script>
+	<script type="module" src="src/components/account-options-template.js"></script>
+	<script type="module" src="src/account-manager.js"></script>
 	<style>
 		.rating-container {
 			user-select: none;
@@ -93,7 +93,7 @@
 	<div id="poemMain" class="poem-centre">
 		<p id="poemContent">
 			<subliminal-poem-ghost length="30"></subliminal-poem-ghost>
-			<subliminal-poem-load-cover></subliminal-poem-load-cover>
+			<subliminal-load-cover></subliminal-load-cover>
 		</p>
 		<p id="amendmentNote" style="opacity: 0.2; display: none;">This poem is an amendment of another poem. <a id="amendmentLink" href="#" style="font-size: 100%;">See the original here.</a></p>
 		<p id="editNote" style="opacity: 0.2; display: none;">This poem is an edited version of another poem. <a id="editLink" href="#" style="font-size: 100%;">See the original here.</a></p>
@@ -243,7 +243,7 @@ _______________________________________________________________
 			poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
 			poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
 			poemAuthor.style.cursor = "pointer"
-			profileIframe.src = "./other/profile-template-frame.html?guid=" + poemData.authorGuid
+			profileIframe.src = "./profile-frame.html?guid=" + poemData.authorGuid
 		}
 		
 		//Set up title

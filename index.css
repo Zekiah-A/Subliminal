@@ -3,6 +3,39 @@ body {
 	overflow-y: scroll;
 }
 
+.join-section {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.join-tagline {
+	max-width: 40%;
+}
+
+.join-button {
+	display: block;
+	padding: 8px 16px;
+	font-weight: bold;
+	transition: background-color .2s, transform .2s, box-shadow .2s, background-position .4s;
+	background: linear-gradient(135deg,
+		var(--input-hilight) 0%,
+		var(--input-hilight) 10%,
+		var(--button-opaque) 50%,
+		var(--button-opaque) 100%);
+	background-size: 200% 200%;
+	background-repeat: no-repeat;
+	background-position: 100% 100%;
+	cursor: pointer;
+}
+
+.join-button:hover {
+	transform: scale(1.5) rotate(4deg);
+	background-position: 0% 0%;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+
 .fixed {
 	vertical-align: middle;
 	text-align: center;
@@ -70,6 +103,23 @@ body {
 	margin-right: 5%;
 	align-self: center;
 	column-gap: 16px;
+}
+
+.section-heading {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 42px;
+	margin-top: 0;
+	margin-bottom: 0;
+	display: block;
+	height: min-content;
+}
+
+.section-heading > a {
+	all: inherit;
+	text-decoration: none;
+	padding: 0;
+	cursor: pointer;
 }
 
 /*Special bottom section code*/

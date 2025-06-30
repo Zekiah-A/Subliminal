@@ -1,7 +1,7 @@
 using System.Net;
 using SubliminalServer.DataModel.Account;
 
-namespace SubliminalServer;
+namespace SubliminalServer.Middlewares;
 
 public class RateLimitMiddleware
 {

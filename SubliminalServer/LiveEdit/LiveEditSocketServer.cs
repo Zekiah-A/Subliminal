@@ -1,5 +1,3 @@
-using WatsonWebsocket;
-
 namespace SubliminalServer.LiveEdit;
 
 /// <summary>
@@ -7,16 +5,16 @@ namespace SubliminalServer.LiveEdit;
 /// </summary>
 public class LiveEditSocketServer
 {
-    private readonly WatsonWsServer app;
+    /*private readonly WatsonWsServer app;
     // List of draft guids + draft poem data that currently have clients connected
-    /*private readonly Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();*/
-    private readonly Dictionary<ClientMetadata, LiveEditClient> clients = new();
+    private readonly Dictionary<string, PurgatoryAuthenticatedEntry> sessions = new();
+    private readonly Dictionary<ClientMetadata, LiveEditClient> clients = new();*/
 
     private readonly DirectoryInfo draftsDir = new(@"Drafts");
 
     public LiveEditSocketServer(int port, bool ssl)
     {
-        app = new WatsonWsServer(port);
+        //app = new WatsonWsServer(port);
     }
     
     /*

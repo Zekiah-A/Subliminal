@@ -1,5 +1,7 @@
 "use strict";
-class PoemCanvasEditor extends HTMLElement {
+import { html, css, defineAndInject } from "./component-registrar.js"
+
+export class PoemCanvasEditor extends HTMLElement {
 	document = null
 	canvasScale = 1.5
 	cursor = true
