@@ -26,3 +26,10 @@ observables.forEach((element) => {
 	observer.observe(element)
 	element.classList.add("scroll-unseen")
 })
+
+// Top background parallax
+window.addEventListener("scroll", () => {
+	const scrollY = window.scrollY;
+	const parallax = /**@type {HTMLImageElement}*/(document.querySelector("#topBackground > img"));
+	parallax.style.transform = `translateY(${scrollY * 0.3}px)`;
+});

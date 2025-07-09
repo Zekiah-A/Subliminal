@@ -86,7 +86,7 @@ class SubliminalHeader extends HTMLElement {
 
 			nav > a[current] {
 				background-color: #0074d90d;
-				border-bottom: 4px solid var(--input-hilight);
+				border-bottom: 4px solid var(--input-highlight);
 			}
 
 			span, div {

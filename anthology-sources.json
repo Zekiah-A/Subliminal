@@ -1,0 +1,22 @@
+[
+	{
+		"type": "static",
+		"name": "Subliminal Classics",
+		"baseUrl": "https://raw.githubusercontent.com/poemanthology/subliminal-classics/refs/heads/main",
+		"webpageUrl": "https://github.com/poemanthology/subliminal-classics",
+		"anthologies": [
+			{
+				"type": "static",
+				"name": "Methallyne Blue",
+				"path": "methallyne-blue",
+				"summary": "“The methallyne blue analogy of stuff.\n\nProbably the weirdest poetry anthology to ever exist.”"
+			}
+		]
+	},
+	{
+		"type": "dynamic",
+		"name": "Subliminal",
+		"baseUrl": "https://server.poemanthology.org",
+		"webpageUrl": "https://poemanthology.org"
+	}
+]
