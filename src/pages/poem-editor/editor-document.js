@@ -1,4 +1,5 @@
 "use strict";
+
 import { DocumentNode } from "./editor-nodes";
 
 // Code that handles logic for complex poem editor interactions

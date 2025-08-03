@@ -1,5 +1,6 @@
 "use strict";
 import { html, css, defineAndInject } from "./component-registrar.js"
+import "./account-options-template.js";
 
 class SubliminalHeader extends HTMLElement {
 	constructor() {

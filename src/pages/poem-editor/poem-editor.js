@@ -1,7 +1,8 @@
-import { EditorDocument } from "./editor/editor-document.js";
-import { PoemCanvasEditor } from "./components/poem-canvas-editor-template.js";
-
 "use strict";
+
+import { EditorDocument } from "./editor/editor-document.js";
+import { PoemCanvasEditor } from "../../components/poem-canvas-editor-template.js";
+
 const params = new URLSearchParams(document.location.search);
 const edit = params.get("edit");
 const amend = params.get("amend");

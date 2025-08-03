@@ -2,7 +2,7 @@
 	{
 		"type": "static",
 		"name": "Subliminal Classics",
-		"baseUrl": "https://raw.githubusercontent.com/poemanthology/subliminal-classics/refs/heads/main",
+		"baseUrl": "https://raw.githubusercontent.com/poemanthology/subliminal-classics/refs/heads/main/",
 		"webpageUrl": "https://github.com/poemanthology/subliminal-classics",
 		"anthologies": [
 			{

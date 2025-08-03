@@ -102,7 +102,7 @@ function collapseContentsSection(container) {
 }
 
 async function initialise() {
-	const params = new URLSearchParams(window.location.toString());
+	const params = new URLSearchParams(window.location.search);
 	const anthologyUrl = params.get("url");
 	if (!anthologyUrl || params.get("type") !== "static") {
 		// TODO: This will actually be OK in future when central server just uses 'path' for anthologies
@@ -111,7 +111,7 @@ async function initialise() {
 	}
 
 	try {
-		const contentsUrl = new URL("/contents.json", anthologyUrl);
+		const contentsUrl = `${decodeURIComponent(anthologyUrl)}/contents.json`;
 		const res = await fetch(contentsUrl);
 		if (!res.ok) {
 			throw new Error(`Received response ${res.status} (${res.statusText})`)

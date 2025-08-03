@@ -5,16 +5,18 @@
 	<title>Editing Poem | Subliminal</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href="favicon.ico">
-	<link rel="stylesheet" href="./styles.css" />
-	<link rel="stylesheet" href="./poem-editor.css">
+	<link rel="stylesheet" href="styles.css" />
+	<link rel="stylesheet" href="poem-editor.css">
+	<!-- Components -->
 	<script type="module" src="src/editor/editor-document.js"></script>
-	<script type="module" src="src/components/component-registrar.js"></script>
 	<script type="module" src="src/components/notification-template.js"></script>
 	<script type="module" src="src/components/select-template.js"></script>
 	<script type="module" src="src/components/poem-canvas-editor-template.js"></script>
+	<!-- Services -->
 	<script type="module" src="src/server.js"></script>
 	<script type="module" src="src/account-manager.js"></script>
-	<script type="module" src="src/poem-editor.js"></script>
+	<!-- Entrypoint -->
+	<script type="module" src="src/pages/poem-editor/poem-editor.js"></script>
 </head>
 <body>
 	<dialog id="licenseAgreePopup" class="popup" style="width: max(30%, 500px)">

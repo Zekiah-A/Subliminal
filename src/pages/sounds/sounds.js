@@ -1,3 +1,5 @@
+"use strict";
+
 const clientPackets = {
 	SyncHost: 0,
 	SyncZombie: 1,

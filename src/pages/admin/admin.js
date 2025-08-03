@@ -1,3 +1,5 @@
+"use strict";
+
 function viewPurgatoryReports() {
 	while (optionContent.firstChild) {
 		optionContent.removeChild(optionContent.firstChild)

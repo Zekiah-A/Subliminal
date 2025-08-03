@@ -75,8 +75,8 @@ export class AnthologyListItem extends LitElement {
 			return html``;
 		}
 		const { name, path, type, summary } = this.anthology;
-		const { baseUrl, name: sourceName, webpageUrl } = this.source
-		const anthologyUrl = new URL(path, baseUrl)
+		const { baseUrl, name: sourceName, webpageUrl } = this.source;
+		const anthologyUrl = new URL(baseUrl + "/" + path);
 
 		const params = new URLSearchParams({
 			url: anthologyUrl.toString(),
@@ -85,9 +85,10 @@ export class AnthologyListItem extends LitElement {
 		});
 
 		return html`
+			<link rel="stylesheet" href="/styles.css">
 			<details>
 				<summary>
-					<a href="/anthology/?${params.toString()}">${name}</a>
+					<a href="/anthology?${params.toString()}">${name}</a>
 					${summary ? html`<p>${summary}</p>` : null}
 				</summary>
 				<p class="source-link">

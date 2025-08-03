@@ -8,11 +8,14 @@
 	<link rel="stylesheet" href="./styles.css">
 	<meta name="description" content="">
 	<meta name="keywords" content="">
-	<script type="module" src="src/editor/editor-document.js"></script>
-	<script type="module" src="src/components/component-registrar.js"></script>
+	<!-- Components -->
 	<script type="module" src="src/components/content-warning-template.js"></script>
 	<script type="module" src="src/components/poem-ghost-template.js"></script>
 	<script type="module" src="src/components/load-cover-template.js"></script>
+	<!-- Services -->
+	<script type="module" src="src/pages/poem-editor/editor-document.js"></script>
+	<!-- Entrypoint -->
+	<script type="module" src="src/pages/poem/poem.js"></script>
 </head>
 <body>
 	<div class="title-blur">
@@ -47,46 +50,4 @@
 		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
 	</div>
 </body>
-<script>
-	async function initialise() {
-		const params = new URLSearchParams(document.location.search)
-		const path = params.get("path")
-		const response = await fetch(window.location.origin + path + ".json")
-		if (!response.ok) {
-			alert("Unexpected network error - Failed to load poem")
-			console.error("Poem load failed:", response.status, response.statusText)
-			return
-		}
-		try {
-			const poemData = await response.json()
-			// Set up title and url bar for vanity
-			window.history.replaceState(null, "Title", path)
-			document.title = "Subliminal - " + poemData.poemName
-
-			// Display content warning with additions if needed
-			if (poemData.cWarning === true) {
-				document.body.insertBefore(
-					createFromData("content-warning", { addition: poemData.cWarningAdditions }), back)
-			}
-
-			// Place poem data into the DOM
-			poemTitle.innerText = poemData.poemName + " - By " + poemData.poemAuthor
-			const poemDocument = new EditorDocument(poemData.poemContent)
-			poemDocument.renderHtmlData(poemContent)
-			poemMain.classList.add(poemData.pageStyle)
-			document.body.style.background = poemData.pageBackground
-
-			// Probably useless since pages are procedurally generated...
-			document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
-			document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
-		}
-		catch (e) {
-			alert("Unexpected format error - Failed to load poem. Invalid poem URL?")
-			console.error("Poem parse failed:", e)
-			return
-		}
-	}
-	
-	initialise()
-</script>
 </html>

@@ -1,3 +1,5 @@
+"use strict";
+
 /**@typedef {"fragment"|"text"|"newline"|"bold"|"font"|"colour"} DocumentNodeType*/
 
 export class DocumentNode {

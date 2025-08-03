@@ -9,66 +9,16 @@
 	<meta name="description" content="A poem awaiting judgement, located in the forsaken subliminal poem purgatory...">
 	<meta name="keywords" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<script type="module" src="src/editor/editor-document.js"></script>
-	<script type="module" src="src/server.js"></script>
-	<script type="module" src="src/components/component-registrar.js"></script>
+	<!-- Components -->
 	<script type="module" src="src/components/poem-ghost-template.js"></script>
 	<script type="module" src="src/components/load-cover-template.js"></script>
 	<script type="module" src="src/components/account-options-template.js"></script>
+	<!-- Services -->
+	<script type="module" src="src/pages/poem-editor/editor-document.js"></script>
 	<script type="module" src="src/account-manager.js"></script>
-	<style>
-		.rating-container {
-			user-select: none;
-			display: flex;
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 300px;
-			row-gap: 8px;
-			flex-direction: column;
-			padding: 32px;
-			padding-top: 16px;
-		}
-
-		.rating-container > div {
-			display: flex;
-			column-gap: 8px;
-		}
-
-		.rate-button {
-			background-color: var(--button-opaque);
-			border-radius: 4px;
-			text-align: center;
-			line-height: 48px;
-			height: 48px;
-			flex: 1 1 0px;
-		}
-
-		.title-options {
-			display: flex;
-			column-gap: 8px;
-			position: absolute;
-			right: 24px;
-			top: 50%;
-			transform: translateY(-50%);
-		}
-
-		.action-icon:hover path {
-			cursor: pointer;
-			transition: .2s all;
-		}
-
-		.action-icon:hover path {
-			stroke-width: 2.5px !important;
-		}
-
-		@media screen and (orientation:landscape) {
-			#profileFrame {
-				height: 512px;
-				width: 60%;
-			}
-		}
-	</style>
+	<script type="module" src="src/server.js"></script>
+	<!-- Entrypoint -->
+	<script type="module" src="src/pages/purgatory-poem/purgatory-poem.js"></script>
 </head>
 <!--<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="m16.15 37.75 7.85-4.7 7.85 4.75-2.1-8.9 6.9-6-9.1-.8L24 13.7l-3.55 8.35-9.1.8 6.9 6Zm7.85-1.2-9.3 5.6q-.4.25-.85.225-.45-.025-.8-.275-.35-.25-.525-.65-.175-.4-.075-.9l2.45-10.6-8.2-7.15q-.4-.35-.475-.775-.075-.425.025-.825.1-.4.45-.675t.85-.325l10.85-.95 4.2-10q.2-.45.6-.675.4-.225.8-.225t.8.225q.4.225.6.675l4.2 10 10.85.95q.5.05.85.325t.45.675q.1.4.025.825-.075.425-.475.775l-8.2 7.15 2.45 10.6q.1.5-.075.9t-.525.65q-.35.25-.8.275-.45.025-.85-.225Zm0-10.3Z"/></svg>-->
 <body>
@@ -149,143 +99,9 @@ _______________________________________________________________
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 		</pre>
 	</div>  
-	<a href="../../poems" class="back"> &lt;- Back</a>
+	<a href="/poems" class="back"> &lt;- Back</a>
 	<div onclick="editFrame.showModal()" class="edit">
 		<svg xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-colour);" height="32" width="32" viewBox="0 0 48 48"><path d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"></path></svg>
 	</div>
 </body>
-<script>
-	const params = new URLSearchParams(document.location.search)
-	const encoder = new TextEncoder()
-	const poemId = params.get("id")
-
-	async function togglePoemLike(liked) {
-		if (!localStorage.liked) {
-			localStorage.liked = JSON.stringify([])
-		}
-
-		if (liked == "true") {
-			likeButton.setAttribute("liked", false)
-			likeButton.children[0].style.fill = "transparent"
-
-			if (await isLoggedIn()) {
-				executeAccountAction(actionType.UnlikePoem, poemId)
-				return
-			}
-
-			let storeLiked = JSON.parse(localStorage.liked)
-			if (storeLiked.indexOf(poemId) == -1) return
-			storeLiked.splice(storeLiked.indexOf(poemId), 1)
-			localStorage.liked = JSON.stringify(storeLiked)
-			return
-		}
-
-		likeButton.setAttribute("liked", true)
-		likeButton.children[0].style.fill = "#ffd500"
-
-		if (await isLoggedIn()) {
-			executeAccountAction(actionType.LikePoem, poemId)
-			return
-		}
-
-		let storeLiked = JSON.parse(localStorage.liked)
-		storeLiked.push(poemId)
-		localStorage.liked = JSON.stringify(storeLiked)
-	}
-
-	function togglePoemPin(pinned) {
-		if (pinned == "true") { 
-			pinButton.setAttribute("pinned", false)
-			pinButton.children[1].style.fill = "transparent"
-			executeAccountAction(actionType.UnpinPoem, poemId)
-			return
-		}
-
-		pinButton.setAttribute('pinned', true)
-		pinButton.children[1].style.fill = "url(#b)"
-		executeAccountAction(actionType.PinPoem, poemId)
-	}
-
-	async function initialise() {
-		//init localstorage
-		if (!localStorage.getItem("approved")) 
-			localStorage.approved = JSON.stringify(new Set())
-		if (!localStorage.getItem("vetoed"))
-			localStorage.vetoed = JSON.stringify(new Set())
-
-		// You can not pin a poem unless you have an account
-		if (!await isLoggedIn()) {
-			pinButton.onclick = () => {
-				alert("Sorry!\nYou can not pin this poem your profile without being logged in to an account!")
-			}
-		}
-
-		//fetch poem data
-		const res = await fetch(serverBaseAddress + "/purgatory/" + poemId)
-		if (!res.ok) {
-			alert("Failed to load poem")
-			history.back()
-		}
-		const poemData = await res.json()
-		
-		//Set up title for vanity
-		document.title = "Subliminal - " + poemData.poemName
-
-		//Place poem data into the DOM
-		if (poemData.cWarning === true) {
-			document.body.insertBefore(
-				createFromData("content-warning", { addition: poemData.cWarningAdditions }), contentWarning)
-		}
-		
-		//If author has a GUID (account),link it to the poem
-		if (poemData.authorGuid) {
-			poemAuthor.setAttribute("onclick", "profileFrame.style.display = 'block';")
-			poemAuthor.setAttribute("onmouseover", "this.style.textDecoration = 'underline';")
-			poemAuthor.setAttribute("onmouseleave", "this.style.textDecoration = 'none';")
-			poemAuthor.style.cursor = "pointer"
-			profileIframe.src = "./profile-frame.html?guid=" + poemData.authorGuid
-		}
-		
-		//Set up title
-		poemTitle.textContent = poemData.poemName
-		poemAuthor.textContent = poemData.poemAuthor
-		
-		//Set up main poem content
-		const poemContentObject = JSON.parse(poemData.poemContent)
-		const poemDocument = new EditorDocument(poemContentObject)
-		poemDocument.renderHtmlData(poemContent)
-		poemMain.classList.add(poemData.pageStyle)
-		document.body.style.background = poemData.pageBackground
-
-		//If the poem is an adaptation/amendment, or an edited version of another, then keep track of that as well
-		if (poemData.amends) {
-			amendmentNote.style.display = "block"
-			amendmentLink.href = window.location.origin + 
-				(poemData.amends.includes("/") ? "/poem?path=" + poemData.amends : "purgatory-poem?guid=" + poemData.amends)
-		}
-		else if (poemData.edits) {
-			editNote.style.display = "block"
-			editLink.href = window.location.origin + 
-				(poemData.edits.includes("/") ? "/poem?path=" + poemData.edits : "purgatory-poem?guid=" + poemData.edits)
-		}
-
-		// Poem liking  & ratings
-		const accountData = await isLoggedIn() ? await getAccountData() : null
-		const localLiked = localStorage.liked ? JSON.parse(localStorage.liked) : null
-
-		if ((accountData && accountData.likedPoems.includes(poemId)) || (localLiked && localLiked.includes(poemId))) {
-			likeButton.setAttribute("liked", true)
-			likeButton.children[0].style.fill = "#ffd500"
-		}
-		if (accountData) {
-			ratingContainer.style.visibility = "visible"
-		}
-
-		//Probably useless since pages are procedurally generated...
-		document.querySelector('meta[name="description"]').setAttribute("content", poemData.summary)
-		document.querySelector('meta[name="keywords"]').setAttribute("content", poemData.tags)
-	}
-	
-	initialise()
-</script>
 </html>

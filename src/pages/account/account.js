@@ -1,4 +1,5 @@
 "use strict";
+
 let role = ""
 let avatarUrl = ""
 let number = ""

@@ -1,3 +1,5 @@
+"use strict";
+
 import { DocumentNode } from "./editor-nodes"
 
 /**
